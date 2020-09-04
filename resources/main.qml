@@ -10,4 +10,5 @@ Kirigami.RouterWindow {
     globalDrawer: StaccatoDrawer { wideScreen: root.wideScreen }
 
     LoginRoute {}
+    NoGuildRoute {}
 }

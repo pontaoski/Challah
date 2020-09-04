@@ -5,7 +5,7 @@ State* State::s_instance;
 State::State()
 {
 	s_instance = this;
-	client = new Client;
+	client = Client::mainInstance();
 	guildModel = new GuildModel;
 }
 State::~State()
@@ -20,4 +20,8 @@ State* State::instance()
 bool State::login(const QString &email, const QString &password, const QString &homeserver)
 {
 	return client->login(email, password, homeserver);
+}
+bool State::createGuild(const QString &name)
+{
+	return client->createGuild(name);
 }

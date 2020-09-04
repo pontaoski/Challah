@@ -1,5 +1,6 @@
 #pragma once
 
+#include <QDebug>
 #include <QObject>
 #include "client.hpp"
 
@@ -22,5 +23,8 @@ public:
 	static State* instance();
 
 	Q_INVOKABLE bool login(const QString& email, const QString& password, const QString &homeserver);
+	Q_INVOKABLE bool createGuild(const QString& name);
+	Q_PROPERTY(GuildModel* guildModel READ getGuildModel CONSTANT)
+	GuildModel* getGuildModel() const { return guildModel; }
 };
 

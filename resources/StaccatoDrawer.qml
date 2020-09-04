@@ -1,7 +1,8 @@
 import QtQuick 2.5
 import QtQuick.Layouts 1.1
-import QtQuick.Controls 2.1
+import QtQuick.Controls 2.10
 import org.kde.kirigami 2.11 as Kirigami
+import com.github.HarmonyDevelopment.Staccato 1.0
 
 Kirigami.GlobalDrawer {
     id: drawer
@@ -11,42 +12,61 @@ Kirigami.GlobalDrawer {
     topPadding: 0
     bottomPadding: 0
 
-    width: Kirigami.Units.gridUnit * 15
+    width: 72
 
+    property bool shouldShow: false
     property bool wideScreen: false
-    onWideScreenChanged: if (!wideScreen) drawerOpen = true
-
-    header: Kirigami.AbstractApplicationHeader {
-        id: toolbar
-        visible: drawer.wideScreen
-
-        RowLayout {
-            anchors.fill: parent
-            anchors.leftMargin: Kirigami.Units.largeSpacing
-            anchors.rightMargin: Kirigami.Units.largeSpacing
-
-            Kirigami.Heading {
-                text: "Guilds"
-            }
+    onWideScreenChanged: {
+        if (wideScreen) {
+            drawerOpen = Qt.binding(function() { return shouldShow })
+        } else {
+            drawerOpen = false
         }
     }
+    drawerOpen: shouldShow && wideScreen
 
-    ColumnLayout {
-        spacing: 0
-        Layout.fillWidth: true
-        Layout.leftMargin: -drawer.leftPadding
-        Layout.rightMargin: -drawer.rightPadding
+    contentItem: ScrollView {
+        id: scrollView
 
-        Repeater {
-            model: 20
-            delegate: Rectangle {
-                implicitWidth: 24
-                implicitHeight: 24
-                color: "cyan"
+        Kirigami.Theme.inherit: true
+        anchors.fill: parent
+        ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
+        ScrollBar.vertical.anchors {
+            top: scrollView.top
+            bottom: scrollView.bottom
+        }
+
+        Flickable {
+            contentWidth: 72
+
+            ColumnLayout {
+                width: 72
+                implicitWidth: 72
+
+                Repeater {
+                    model: HState.guildModel
+                    delegate: Rectangle {
+                        implicitWidth: 48
+                        implicitHeight: 48
+                        color: "cyan"
+                        radius: 48 / 2
+
+                        Layout.alignment: Qt.AlignTop | Qt.AlignHCenter
+
+                        ToolTip.text: model['guildName']
+                        ToolTip.visible: maus.containsMouse
+
+                        MouseArea {
+                            id: maus
+                            anchors.fill: parent
+                            hoverEnabled: true
+                        }
+                    }
+                }
             }
         }
     }
 
     modal: !drawer.wideScreen
-    handleVisible: !drawer.wideScreen
+    handleVisible: !drawer.wideScreen && shouldShow
 }

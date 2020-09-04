@@ -7,6 +7,8 @@ QtApplication {
 	protobuf.cpp.grpcIncludePath: "/usr/include/grpc++"
 	protobuf.cpp.includePath: "/usr/include/google/protobuf"
 
+	cpp.cppFlags: ['-Werror=return-type']
+
 	files: [
 		"main.cpp",
 		"state.cpp",
@@ -27,5 +29,5 @@ QtApplication {
 
 	Depends { name: "cpp" }
 	Depends { name: "protobuf.cpp" }
-	Depends { name: "Qt"; submodules: ["gui", "widgets", "quick", "quickcontrols2", "qml"] }
+	Depends { name: "Qt"; submodules: ["gui", "concurrent", "widgets", "quick", "quickcontrols2", "qml"] }
 }

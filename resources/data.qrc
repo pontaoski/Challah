@@ -3,5 +3,7 @@
         <file>main.qml</file>
         <file>LoginRoute.qml</file>
         <file>StaccatoDrawer.qml</file>
+        <file>NoGuildRoute.qml</file>
+        <file>GuildSheet.qml</file>
     </qresource>
 </RCC>
