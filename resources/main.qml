@@ -11,4 +11,5 @@ Kirigami.RouterWindow {
 
     LoginRoute {}
     NoGuildRoute {}
+    ChannelRoute {}
 }

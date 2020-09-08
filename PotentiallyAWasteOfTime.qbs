@@ -8,13 +8,19 @@ QtApplication {
 	protobuf.cpp.includePath: "/usr/include/google/protobuf"
 
 	cpp.cppFlags: ['-Werror=return-type']
+	cpp.cxxLanguageVersion: "c++17"
 
 	files: [
 		"main.cpp",
 		"state.cpp",
 		"client.cpp",
+		"guild.cpp",
+		"channels.cpp",
 		"state.hpp",
 		"client.hpp",
+		"guild.hpp",
+		"channels.hpp",
+		"util.hpp",
 		"resources/data.qrc"
 	]
 

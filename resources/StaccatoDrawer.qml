@@ -60,6 +60,8 @@ Kirigami.GlobalDrawer {
                             id: maus
                             anchors.fill: parent
                             hoverEnabled: true
+
+                            onClicked: root.router.navigateToRoute({"route": "channels", "data": model['channelModel'], "title": model['guildName']})
                         }
                     }
                 }
