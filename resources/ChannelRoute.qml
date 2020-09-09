@@ -13,11 +13,32 @@ Kirigami.PageRoute {
 
         Kirigami.Theme.colorSet: Kirigami.Theme.View
 
+        actions.main: Kirigami.Action {
+            icon.name: "list-add"
+            onTriggered: sheety.open()
+        }
+
         ListView {
+            id: channelsView
             model: Kirigami.PageRouter.data
-            delegate: Kirigami.BasicListItem {
-                text: `#${channelName}`
+
+            delegate: Kirigami.SwipeListItem {
+                QQC2.Label {
+                    text: `#${channelName}`
+                }
+
+                actions: [
+                    Kirigami.Action {
+                        icon.name: "edit-delete"
+                        onTriggered: channelsView.model.deleteChannel(channelID)
+                    }
+                ]
             }
+        }
+
+        ChannelSheet {
+            id: sheety
+            model: channelsView.model
         }
     }
 }

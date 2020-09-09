@@ -6,5 +6,6 @@
         <file>NoGuildRoute.qml</file>
         <file>GuildSheet.qml</file>
         <file>ChannelRoute.qml</file>
+        <file>ChannelSheet.qml</file>
     </qresource>
 </RCC>

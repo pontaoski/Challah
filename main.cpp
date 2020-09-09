@@ -11,6 +11,8 @@ int main(int argc, char *argv[])
 {
 	QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
+	QThreadPool::globalInstance()->setMaxThreadCount(QThread::idealThreadCount() * 8);
+
 	auto app = new QApplication(argc, argv);
 
 	qmlRegisterSingletonType<State>("com.github.HarmonyDevelopment.Staccato", 1, 0, "HState", [](QQmlEngine*, QJSEngine*) -> QObject* { return new State; });

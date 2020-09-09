@@ -20,6 +20,7 @@ QtApplication {
 		"client.hpp",
 		"guild.hpp",
 		"channels.hpp",
+		"util.cpp",
 		"util.hpp",
 		"resources/data.qrc"
 	]

@@ -4,6 +4,8 @@
 #include "client.hpp"
 #include "util.hpp"
 
+#define doContext ClientContext ctx; client->authenticate(ctx)
+
 using grpc::ClientContext;
 
 ChannelsModel::ChannelsModel(QString homeServer, quint64 guildID) : QAbstractListModel(), homeServer(homeServer), guildID(guildID)
@@ -41,10 +43,33 @@ ChannelsModel::ChannelsModel(QString homeServer, quint64 guildID) : QAbstractLis
 
 		while (stream->Read(&msg)) {
 			if (msg.has_created_channel()) {
-
+				QCoreApplication::postEvent(this, new ChannelAddEvent(msg.created_channel()));
+			} else if (msg.has_deleted_channel()) {
+				QCoreApplication::postEvent(this, new ChannelDeleteEvent(msg.deleted_channel()));
 			}
 		}
 	});
+}
+
+void ChannelsModel::customEvent(QEvent *event)
+{
+	if (event->type() == ChannelAddEvent::typeID) {
+		auto ev = reinterpret_cast<ChannelAddEvent*>(event);
+		auto idx = std::find_if(channels.begin(), channels.end(), [=](Channel& chan) { return chan.channelID == ev->data.next_id(); });
+		beginInsertRows(QModelIndex(), idx - channels.begin(), idx - channels.begin());
+		channels.insert(idx, Channel{
+			.channelID = ev->data.location().channel_id(),
+			.name = QString::fromStdString(ev->data.name()),
+			.isCategory = ev->data.is_category()
+		});
+		endInsertRows();
+	} else if (event->type() == ChannelDeleteEvent::typeID) {
+		auto ev = reinterpret_cast<ChannelDeleteEvent*>(event);
+		auto idx = std::find_if(channels.begin(), channels.end(), [=](Channel &chan) { return chan.channelID == ev->data.location().channel_id(); });
+		beginRemoveRows(QModelIndex(), idx - channels.begin(), idx - channels.begin());
+		channels.removeAt(idx - channels.begin());
+		endRemoveRows();
+	}
 }
 
 int ChannelsModel::rowCount(const QModelIndex &parent) const
@@ -79,4 +104,31 @@ QHash<int, QByteArray> ChannelsModel::roleNames() const
 	ret[ChannelIsCategoryRole] = "isCategory";
 
 	return ret;
+}
+
+void ChannelsModel::deleteChannel(quint64 channel)
+{
+	doContext;
+
+	protocol::core::v1::DeleteChannelRequest req;
+	req.set_allocated_location(Location {
+		.guildID = this->guildID,
+		.channelID = channel
+	});
+	google::protobuf::Empty resp;
+	checkStatus(client->coreKit->DeleteChannel(&ctx, req, &resp));
+}
+
+bool ChannelsModel::createChannel(const QString& name)
+{
+	doContext;
+
+	protocol::core::v1::CreateChannelRequest req;
+	req.set_allocated_location(Location {
+		.guildID = this->guildID
+	});
+	req.set_channel_name(name.toStdString());
+
+	protocol::core::v1::CreateChannelResponse resp;
+	return checkStatus(client->coreKit->CreateChannel(&ctx, req, &resp));
 }

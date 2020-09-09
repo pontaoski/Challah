@@ -2,6 +2,11 @@
 
 #include <QAbstractListModel>
 
+#include "core.grpc.pb.h"
+#include "core.pb.h"
+
+#include "util.hpp"
+
 class Client;
 
 struct Channel {
@@ -9,6 +14,10 @@ struct Channel {
 	QString name;
 	bool isCategory;
 };
+
+typedef CarrierEvent<1,protocol::core::v1::GuildEvent_ChannelCreated> ChannelAddEvent;
+
+typedef CarrierEvent<2,protocol::core::v1::GuildEvent_ChannelDeleted> ChannelDeleteEvent;
 
 class ChannelsModel : public QAbstractListModel
 {
@@ -27,9 +36,15 @@ class ChannelsModel : public QAbstractListModel
 		ChannelIsCategoryRole
 	};
 
+protected:
+	Q_INVOKABLE void customEvent(QEvent *event) override;
+
 public:
 	ChannelsModel(QString homeServer, quint64 guildID);
 	int rowCount(const QModelIndex& parent = QModelIndex()) const override;
 	QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
 	QHash<int,QByteArray> roleNames() const override;
+
+	Q_INVOKABLE void deleteChannel(quint64 id);
+	Q_INVOKABLE bool createChannel(const QString& name);
 };
