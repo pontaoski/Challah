@@ -23,8 +23,10 @@ Kirigami.PageRoute {
             model: Kirigami.PageRouter.data
 
             delegate: Kirigami.SwipeListItem {
-                QQC2.Label {
+                contentItem: QQC2.Label {
                     text: `#${channelName}`
+                    anchors.verticalCenter: parent.verticalCenter
+                    verticalAlignment: Text.AlignVCenter
                 }
 
                 actions: [
