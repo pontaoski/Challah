@@ -46,6 +46,12 @@ ChannelsModel::ChannelsModel(QString homeServer, quint64 guildID) : QAbstractLis
 				QCoreApplication::postEvent(this, new ChannelAddEvent(msg.created_channel()));
 			} else if (msg.has_deleted_channel()) {
 				QCoreApplication::postEvent(this, new ChannelDeleteEvent(msg.deleted_channel()));
+			} else if (msg.has_sent_message()) {
+				auto sent = msg.sent_message();
+				auto chanID = sent.message().location().channel_id();
+				if (models.contains(chanID)) {
+					QCoreApplication::postEvent(models[chanID], new MessageSentEvent(sent));
+				}
 			}
 		}
 	});
@@ -92,6 +98,12 @@ QVariant ChannelsModel::data(const QModelIndex &index, int role) const
 		return channels[index.row()].name;
 	case ChannelIsCategoryRole:
 		return channels[index.row()].isCategory;
+	case MessageModelRole:
+		auto id = channels[index.row()].channelID;
+		if (!models.contains(id)) {
+			models[id] = new MessagesModel(const_cast<ChannelsModel*>(this), homeServer, guildID, id);
+		}
+		return QVariant::fromValue(models[id]);
 	}
 
 	return QVariant();
@@ -103,6 +115,7 @@ QHash<int, QByteArray> ChannelsModel::roleNames() const
 	ret[ChannelIDRole] = "channelID";
 	ret[ChannelNameRole] = "channelName";
 	ret[ChannelIsCategoryRole] = "isCategory";
+	ret[MessageModelRole] = "messagesModel";
 
 	return ret;
 }

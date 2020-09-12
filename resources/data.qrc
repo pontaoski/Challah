@@ -7,5 +7,6 @@
         <file>GuildSheet.qml</file>
         <file>ChannelRoute.qml</file>
         <file>ChannelSheet.qml</file>
+        <file>MessagesRoute.qml</file>
     </qresource>
 </RCC>

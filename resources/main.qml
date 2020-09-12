@@ -7,9 +7,12 @@ Kirigami.RouterWindow {
 
     initialRoute: "login"
 
+    pageStack.globalToolBar.showNavigationButtons: 0
+
     globalDrawer: StaccatoDrawer { wideScreen: root.wideScreen }
 
     LoginRoute {}
     NoGuildRoute {}
     ChannelRoute {}
+    MessagesRoute {}
 }

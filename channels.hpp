@@ -5,6 +5,7 @@
 #include "core.grpc.pb.h"
 #include "core.pb.h"
 
+#include "messages.hpp"
 #include "util.hpp"
 
 class Client;
@@ -26,6 +27,7 @@ class ChannelsModel : public QAbstractListModel
 	QString homeServer;
 	quint64 guildID;
 	QList<Channel> channels;
+	mutable QMap<quint64,MessagesModel*> models;
 	friend class Client;
 
 	Client* client;
@@ -33,7 +35,8 @@ class ChannelsModel : public QAbstractListModel
 	enum Roles {
 		ChannelIDRole = Qt::UserRole,
 		ChannelNameRole,
-		ChannelIsCategoryRole
+		ChannelIsCategoryRole,
+		MessageModelRole
 	};
 
 protected:

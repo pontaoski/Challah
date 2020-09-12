@@ -29,6 +29,16 @@ Kirigami.PageRoute {
                     verticalAlignment: Text.AlignVCenter
                 }
 
+                onClicked: {
+                    Kirigami.PageRouter.pushFromHere(
+                        {
+                            "route": "messages",
+                            "data": messagesModel,
+                            "title": `#${channelName}`
+                        }
+                    )
+                }
+
                 actions: [
                     Kirigami.Action {
                         icon.name: "edit-delete"

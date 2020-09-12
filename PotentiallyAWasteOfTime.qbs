@@ -16,12 +16,14 @@ QtApplication {
 		"client.cpp",
 		"guild.cpp",
 		"channels.cpp",
+		"messages.cpp",
 		"state.hpp",
 		"client.hpp",
 		"guild.hpp",
 		"channels.hpp",
 		"util.cpp",
 		"util.hpp",
+		"messages.hpp",
 		"resources/data.qrc"
 	]
 
