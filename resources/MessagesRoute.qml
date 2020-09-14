@@ -66,7 +66,7 @@ Kirigami.PageRoute {
                 }
                 contentItem: RowLayout {
                     QQC2.Label {
-                        text: `${content} ${authorName}`
+                        text: content
 
                         font.pixelSize: Kirigami.Units.gridUnit * (3/4)
 
