@@ -157,3 +157,20 @@ bool ChannelsModel::createChannel(const QString& name)
 	protocol::core::v1::CreateChannelResponse resp;
 	return checkStatus(client->coreKit->CreateChannel(&ctx, req, &resp));
 }
+
+QString ChannelsModel::userName(quint64 id)
+{
+	if (!users.contains(id)) {
+		doContext;
+
+		protocol::profile::v1::GetUserRequest req;
+		req.set_user_id(id);
+
+		protocol::profile::v1::GetUserResponse resp;
+
+		checkStatus(client->profileKit->GetUser(&ctx, req, &resp));
+
+		users[id] = QString::fromStdString(resp.user_name());
+	}
+	return users[id];
+}

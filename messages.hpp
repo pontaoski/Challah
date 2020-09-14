@@ -11,14 +11,14 @@
 struct MessageData
 {
 	QString text;
-	QString authorName;
+	quint64 authorID;
 	quint64 id;
 	QDateTime date;
 
 	static MessageData fromProtobuf(protocol::core::v1::Message& msg) {
 		return MessageData {
 			.text = QString::fromStdString(msg.content()),
-			.authorName = QString::number(msg.author_id()),
+			.authorID = msg.author_id(),
 			.id = msg.location().message_id(),
 			.date = QDateTime::fromTime_t(msg.created_at().seconds())
 		};
@@ -56,7 +56,7 @@ protected:
 	Q_INVOKABLE void customEvent(QEvent *event) override;
 
 public:
-	MessagesModel(QObject *parent, QString homeServer, quint64 guildID, quint64 channelID);
+	MessagesModel(ChannelsModel *parent, QString homeServer, quint64 guildID, quint64 channelID);
 	int rowCount(const QModelIndex& parent = QModelIndex()) const override;
 	QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
 	QHash<int,QByteArray> roleNames() const override;

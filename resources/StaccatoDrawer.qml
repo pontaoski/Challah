@@ -12,7 +12,7 @@ Kirigami.GlobalDrawer {
     topPadding: 0
     bottomPadding: 0
 
-    width: 72
+    width: channelsView.model != null ? 72 + 200 : 72
 
     property bool shouldShow: false
     property bool wideScreen: false
@@ -25,48 +25,127 @@ Kirigami.GlobalDrawer {
     }
     drawerOpen: shouldShow && wideScreen
 
-    contentItem: ScrollView {
-        id: scrollView
+    contentItem: RowLayout {
+        spacing: 0
 
-        Kirigami.Theme.inherit: true
-        anchors.fill: parent
-        ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
-        ScrollBar.vertical.anchors {
-            top: scrollView.top
-            bottom: scrollView.bottom
-        }
+        ScrollView {
+            id: scrollView
 
-        Flickable {
-            contentWidth: 72
+            Kirigami.Theme.inherit: true
+            anchors.fill: parent
+            ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
+            ScrollBar.vertical.anchors {
+                top: scrollView.top
+                bottom: scrollView.bottom
+            }
 
-            ColumnLayout {
-                width: 72
-                implicitWidth: 72
+            Flickable {
+                contentWidth: 72
 
-                Repeater {
-                    model: HState.guildModel
-                    delegate: Rectangle {
-                        implicitWidth: 48
-                        implicitHeight: 48
-                        color: "cyan"
-                        radius: 48 / 2
+                ColumnLayout {
+                    width: 72
+                    implicitWidth: 72
 
-                        Layout.alignment: Qt.AlignTop | Qt.AlignHCenter
+                    Repeater {
+                        model: HState.guildModel
+                        delegate: Rectangle {
+                            implicitWidth: 48
+                            implicitHeight: 48
+                            color: "cyan"
+                            radius: 48 / 2
 
-                        ToolTip.text: model['guildName']
-                        ToolTip.visible: maus.containsMouse
+                            Layout.alignment: Qt.AlignTop | Qt.AlignHCenter
 
-                        MouseArea {
-                            id: maus
-                            anchors.fill: parent
-                            hoverEnabled: true
+                            ToolTip.text: model['guildName']
+                            ToolTip.visible: maus.containsMouse
 
-                            onClicked: root.router.navigateToRoute({"route": "channels", "data": model['channelModel'], "title": model['guildName']})
+                            MouseArea {
+                                id: maus
+                                anchors.fill: parent
+                                hoverEnabled: true
+
+                                onClicked: {
+                                    channelsTitle.text = model['guildName']
+                                    channelsView.model = model['channelModel']
+                                }
+                            }
                         }
                     }
                 }
             }
         }
+        Kirigami.Separator {
+            Layout.fillHeight: true
+
+            visible: channelsView.model != null
+        }
+        ColumnLayout {
+            spacing: 0
+            visible: channelsView.model != null
+
+            Kirigami.ApplicationHeader {
+                z: 2
+                Layout.fillWidth: true
+
+                contentItem: RowLayout {
+                    anchors {
+                        verticalCenter: parent.verticalCenter
+                        left: parent.left
+                        right: parent.right
+                    }
+
+                    Kirigami.Heading {
+                        id: channelsTitle
+                        leftPadding: Kirigami.Units.largeSpacing
+                        text: "Channels"
+                        Layout.fillWidth: true
+                    }
+                    ToolButton {
+                        icon.name: "list-add"
+                        onClicked: sheety.open()
+                    }
+                }
+                pageDelegate: Item {}
+            }
+            ListView {
+                id: channelsView
+
+                z: 1
+
+                Layout.preferredWidth: 198
+                Layout.fillHeight: true
+
+                delegate: Kirigami.SwipeListItem {
+                    contentItem: Label {
+                        text: `#${channelName}`
+                        anchors.verticalCenter: parent.verticalCenter
+                        verticalAlignment: Text.AlignVCenter
+                    }
+
+                    onClicked: {
+                        root.router.navigateToRoute(
+                            {
+                                "route": "messages",
+                                "data": messagesModel,
+                                "title": `#${channelName}`
+                            }
+                        )
+                    }
+
+                    actions: [
+                        Kirigami.Action {
+                            icon.name: "edit-delete"
+                            onTriggered: channelsView.model.deleteChannel(channelID)
+                        }
+                    ]
+                }
+            }
+        }
+    }
+
+    ChannelSheet {
+        id: sheety
+        model: channelsView.model
     }
 
     modal: !drawer.wideScreen

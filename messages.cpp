@@ -1,9 +1,10 @@
+#include "channels.hpp"
 #include "messages.hpp"
 
 using grpc::ClientContext;
 
-MessagesModel::MessagesModel(QObject *parent, QString homeServer, quint64 guildID, quint64 channelID)
-	: QAbstractListModel(parent),
+MessagesModel::MessagesModel(ChannelsModel *parent, QString homeServer, quint64 guildID, quint64 channelID)
+	: QAbstractListModel((QObject*)parent),
 		guildID(guildID),
 		channelID(channelID),
 		homeServer(homeServer)
@@ -40,7 +41,7 @@ QVariant MessagesModel::data(const QModelIndex& index, int role) const
 	case MessageTextRole:
 		return messageData[idx].text;
 	case MessageAuthorRole:
-		return messageData[idx].authorName;
+		return qobject_cast<ChannelsModel*>(parent())->userName(messageData[idx].authorID);
 	case MessageDateRole:
 		return messageData[idx].date;
 	}

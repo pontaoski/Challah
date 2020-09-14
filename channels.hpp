@@ -27,6 +27,7 @@ class ChannelsModel : public QAbstractListModel
 	QString homeServer;
 	quint64 guildID;
 	QList<Channel> channels;
+	QMap<quint64,QString> users;
 	mutable QMap<quint64,MessagesModel*> models;
 	friend class Client;
 
@@ -50,4 +51,5 @@ public:
 
 	Q_INVOKABLE void deleteChannel(quint64 id);
 	Q_INVOKABLE bool createChannel(const QString& name);
+	Q_INVOKABLE QString userName(quint64 id);
 };

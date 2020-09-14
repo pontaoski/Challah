@@ -1,7 +1,15 @@
+#include <QQmlEngine>
+
 #include "guild.hpp"
 #include "channels.hpp"
 
-GuildModel::GuildModel() : QAbstractListModel()
+class GuildModel::Private
+{
+public:
+	QCache<QPair<quint64, QString>, ChannelsModel> models = QCache<QPair<quint64, QString>, ChannelsModel>(10);
+};
+
+GuildModel::GuildModel() : QAbstractListModel(), d(new Private)
 {
 	static bool initted = false;
 	if (!initted) {
@@ -9,6 +17,11 @@ GuildModel::GuildModel() : QAbstractListModel()
 		qRegisterMetaType<Guild>();
 	}
 	connect(this, &GuildModel::addGuild, this, &GuildModel::addGuildHandler, Qt::QueuedConnection);
+}
+
+GuildModel::~GuildModel()
+{
+	delete d;
 }
 
 void GuildModel::addGuildHandler(Guild guild)
@@ -40,7 +53,12 @@ QVariant GuildModel::data(const QModelIndex &index, int role) const
 	case GuildNameRole:
 		return guilds[index.row()].name;
 	case ChannelModelRole:
-		return QVariant::fromValue(new ChannelsModel(guilds[index.row()].homeserver, guilds[index.row()].guildID));
+		auto key = qMakePair(guilds[index.row()].guildID, guilds[index.row()].homeserver);
+		if (!d->models.contains(key)) {
+			d->models.insert(key, new ChannelsModel(guilds[index.row()].homeserver, guilds[index.row()].guildID));
+			QQmlEngine::setObjectOwnership(d->models[key], QQmlEngine::CppOwnership);
+		}
+		return QVariant::fromValue(d->models[key]);
 	}
 
 	return QVariant();

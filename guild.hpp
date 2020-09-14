@@ -22,6 +22,9 @@ class GuildModel : public QAbstractListModel
 {
 	Q_OBJECT
 
+	class Private;
+	mutable Private* d;
+
 	QList<Guild> guilds;
 	friend class Client;
 
@@ -37,6 +40,7 @@ class GuildModel : public QAbstractListModel
 
 public:
 	GuildModel();
+	~GuildModel();
 	int rowCount(const QModelIndex& parent = QModelIndex()) const override;
 	QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
 	QHash<int,QByteArray> roleNames() const override;

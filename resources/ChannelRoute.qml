@@ -13,44 +13,5 @@ Kirigami.PageRoute {
 
         Kirigami.Theme.colorSet: Kirigami.Theme.View
 
-        actions.main: Kirigami.Action {
-            icon.name: "list-add"
-            onTriggered: sheety.open()
-        }
-
-        ListView {
-            id: channelsView
-            model: Kirigami.PageRouter.data
-
-            delegate: Kirigami.SwipeListItem {
-                contentItem: QQC2.Label {
-                    text: `#${channelName}`
-                    anchors.verticalCenter: parent.verticalCenter
-                    verticalAlignment: Text.AlignVCenter
-                }
-
-                onClicked: {
-                    Kirigami.PageRouter.pushFromHere(
-                        {
-                            "route": "messages",
-                            "data": messagesModel,
-                            "title": `#${channelName}`
-                        }
-                    )
-                }
-
-                actions: [
-                    Kirigami.Action {
-                        icon.name: "edit-delete"
-                        onTriggered: channelsView.model.deleteChannel(channelID)
-                    }
-                ]
-            }
-        }
-
-        ChannelSheet {
-            id: sheety
-            model: channelsView.model
-        }
     }
 }

@@ -45,6 +45,16 @@ Kirigami.PageRoute {
             rightMargin: Kirigami.Units.gridUnit
             spacing: Kirigami.Units.gridUnit
 
+            section {
+                criteria: ViewSection.FullString
+                property: "authorName"
+                delegate: Kirigami.Heading {
+                    required property string section
+
+                    level: 4
+                    text: section
+                }
+            }
 
             delegate: QQC2.Control {
                 Kirigami.Theme.colorSet: Kirigami.Theme.Window
@@ -56,7 +66,7 @@ Kirigami.PageRoute {
                 }
                 contentItem: RowLayout {
                     QQC2.Label {
-                        text: content
+                        text: `${content} ${authorName}`
 
                         font.pixelSize: Kirigami.Units.gridUnit * (3/4)
 
