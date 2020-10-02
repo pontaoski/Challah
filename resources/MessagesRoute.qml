@@ -10,7 +10,9 @@ Kirigami.PageRoute {
     cache: true
 
     Kirigami.ScrollablePage {
+        id: messagesRoute
         Kirigami.Theme.colorSet: Kirigami.Theme.View
+        property var model: Kirigami.PageRouter.data
 
         footer: QQC2.ToolBar {
             RowLayout {
@@ -56,29 +58,100 @@ Kirigami.PageRoute {
                 }
             }
 
-            delegate: QQC2.Control {
-                Kirigami.Theme.colorSet: Kirigami.Theme.Window
-                padding: Kirigami.Units.gridUnit * 2
+            delegate: ColumnLayout {
+                QQC2.Control {
+                    id: messageBlock
+                    property bool edit: false
 
-                background: Rectangle {
-                    radius: 4
-                    color: Kirigami.Theme.backgroundColor
+                    padding: Kirigami.Units.gridUnit * 2
+
+                    Layout.minimumWidth: Kirigami.Units.gridUnit * 15
+                    Layout.maximumWidth: Math.max(messagesView.width / 3, Kirigami.Units.gridUnit * 15)
+                    Kirigami.Theme.colorSet: Kirigami.Theme.Window
+
+                    background: Rectangle {
+                        radius: 4
+                        color: Kirigami.Theme.backgroundColor
+
+                        MouseArea {
+                            anchors.fill: parent
+                            acceptedButtons: Qt.RightButton
+                            onClicked: {
+                                if (mouse.button === Qt.RightButton)
+                                    messageMenu.popup()
+                            }
+                        }
+                        QQC2.Menu {
+                            id: messageMenu
+
+                            QQC2.MenuItem {
+                                text: "Edit"
+                                onTriggered: {
+                                    messageBlock.edit = true
+                                }
+                            }
+                            QQC2.MenuItem {
+                                text: "Delete"
+                                onTriggered: {
+                                    messagesRoute.model.deleteMessage(messageID)
+                                }
+                            }
+                        }
+                    }
+                    contentItem: ColumnLayout {
+                        QQC2.Label {
+                            visible: !messageBlock.edit
+                            text: content
+
+                            font.pixelSize: Kirigami.Units.gridUnit * (3/4)
+                            wrapMode: Text.Wrap
+
+                            Layout.alignment: Qt.AlignBottom
+                        }
+                        QQC2.TextField {
+                            visible: messageBlock.edit
+                            text: content
+
+                            Keys.onEscapePressed: messageBlock.edit = false
+
+                            onAccepted: {
+                                messageBlock.edit = false
+                                messagesRoute.model.editMessage(messageID, text)
+                            }
+
+                            Layout.alignment: Qt.AlignBottom
+                        }
+                        QQC2.Label {
+                            text: date.toString()
+                            opacity: 0.5
+
+                            font.pixelSize: Kirigami.Units.gridUnit * (1/2)
+                            Layout.alignment: Qt.AlignBottom | Qt.AlignRight
+                        }
+                    }
                 }
-                contentItem: RowLayout {
-                    QQC2.Label {
-                        text: content
+                Repeater {
+                    model: actions
+                    delegate: MessageAction {}
+                }
+                Repeater {
+                    model: embeds
+                    delegate: Embed {}
+                }
+            }
 
-                        font.pixelSize: Kirigami.Units.gridUnit * (3/4)
-
-                        Layout.alignment: Qt.AlignBottom
-                    }
-                    QQC2.Label {
-                        text: date.toString()
-                        opacity: 0.5
-
-                        font.pixelSize: Kirigami.Units.gridUnit * (1/2)
-                        Layout.alignment: Qt.AlignBottom
-                    }
+            add: Transition {
+                NumberAnimation {
+                    duration: Kirigami.Units.shortDuration
+                    properties: "y"
+                    easing.type: Easing.InOutCubic
+                }
+            }
+            displaced: Transition {
+                NumberAnimation {
+                    duration: Kirigami.Units.shortDuration
+                    properties: "y"
+                    easing.type: Easing.InOutCubic
                 }
             }
         }

@@ -18,7 +18,7 @@ Kirigami.PageRoute {
 
             QQC2.TextField {
                 id: email
-                text: "ilopona@toki.pona"
+                text: "r@r.r"
                 Kirigami.FormData.label: "email:"
             }
             QQC2.TextField {

@@ -21,6 +21,51 @@ void MessagesModel::customEvent(QEvent *event)
 		beginInsertRows(QModelIndex(), 0, 0);
 		messageData.push_front(MessageData::fromProtobuf(msg));
 		endInsertRows();
+	} else if (event->type() == MessageUpdatedEvent::typeID) {
+		auto ev = reinterpret_cast<MessageUpdatedEvent*>(event);
+		auto& msg = ev->data;
+		auto idx = -1;
+		for (auto& message : messageData) {
+			idx++;
+			if (message.id == msg.location().message_id()) {
+				message.editedAt = QDateTime::fromTime_t(msg.edited_at().seconds());
+
+				std::string jsonified;
+				google::protobuf::util::MessageToJsonString(msg, &jsonified, google::protobuf::util::JsonPrintOptions{});
+				auto document = QJsonDocument::fromJson(QByteArray::fromStdString(jsonified));
+
+				if (msg.update_actions()) {
+					message.actions = document["actions"];
+				}
+				if (msg.update_attachments()) {
+					// we don't do attachments rn
+				}
+				if (msg.update_content()) {
+					message.text = QString::fromStdString(msg.content());
+				}
+				if (msg.update_embeds()) {
+					message.embeds = document["embeds"];
+				}
+				dataChanged(index(idx), index(idx));
+				break;
+			}
+		}
+	} else if (event->type() == MessageDeletedEvent::typeID) {
+		auto ev = reinterpret_cast<MessageDeletedEvent*>(event);
+		auto msg = ev->data.location().message_id();
+		auto idx = -1;
+		for (auto& message : messageData) {
+			if (message.id == msg) {
+				idx++;
+				break;
+			}
+			idx++;
+		}
+		if (idx != -1) {
+			beginRemoveRows(QModelIndex(), idx, idx);
+			messageData.removeAt(idx);
+			endRemoveRows();
+		}
 	}
 }
 
@@ -44,6 +89,12 @@ QVariant MessagesModel::data(const QModelIndex& index, int role) const
 		return qobject_cast<ChannelsModel*>(parent())->userName(messageData[idx].authorID);
 	case MessageDateRole:
 		return messageData[idx].date;
+	case MessageEmbedsRole:
+		return messageData[idx].embeds;
+	case MessageActionsRole:
+		return messageData[idx].actions;
+	case MessageIDRole:
+		return QString::number(messageData[idx].id);
 	}
 
 	return QVariant();
@@ -55,6 +106,9 @@ QHash<int,QByteArray> MessagesModel::roleNames() const
 	ret[MessageTextRole] = "content";
 	ret[MessageAuthorRole] = "authorName";
 	ret[MessageDateRole] = "date";
+	ret[MessageEmbedsRole] = "embeds";
+	ret[MessageActionsRole] = "actions";
+	ret[MessageIDRole] = "messageID";
 
 	return ret;
 }
@@ -114,4 +168,51 @@ void MessagesModel::fetchMore(const QModelIndex& parent)
 		}
 		endInsertRows();
 	}
+}
+
+void MessagesModel::triggerAction(const QString &name, const QString &data)
+{
+	ClientContext ctx;
+	client->authenticate(ctx);
+
+	protocol::core::v1::TriggerActionRequest req;
+	req.set_action_id(name.toStdString());
+	req.set_action_data(data.toStdString());
+	google::protobuf::Empty resp;
+
+	checkStatus(client->coreKit->TriggerAction(&ctx, req, &resp));
+}
+
+void MessagesModel::editMessage(const QString& id, const QString &content)
+{
+	ClientContext ctx;
+	client->authenticate(ctx);
+
+	protocol::core::v1::UpdateMessageRequest req;
+	req.set_allocated_location(Location {
+		.guildID = guildID,
+		.channelID = channelID,
+		.messageID = id.toULongLong()
+	});
+	req.set_content(content.toStdString());
+	req.set_update_content(true);
+	google::protobuf::Empty resp;
+
+	checkStatus(client->coreKit->UpdateMessage(&ctx, req, &resp));
+}
+
+void MessagesModel::deleteMessage(const QString& id)
+{
+	ClientContext ctx;
+	client->authenticate(ctx);
+
+	protocol::core::v1::DeleteMessageRequest req;
+	req.set_allocated_location(Location {
+		.guildID = guildID,
+		.channelID = channelID,
+		.messageID = id.toULongLong()
+	});
+	google::protobuf::Empty resp;
+
+	checkStatus(client->coreKit->DeleteMessage(&ctx, req, &resp));
 }

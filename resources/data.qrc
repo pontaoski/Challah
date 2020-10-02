@@ -1,6 +1,7 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
+        <file>Embed.qml</file>
         <file>LoginRoute.qml</file>
         <file>StaccatoDrawer.qml</file>
         <file>NoGuildRoute.qml</file>
@@ -8,5 +9,8 @@
         <file>ChannelRoute.qml</file>
         <file>ChannelSheet.qml</file>
         <file>MessagesRoute.qml</file>
+        <file>MessageAction.qml</file>
+        <file>MenuActionComponent.qml</file>
+        <file>RecursiveMenuActionComponent.qml</file>
     </qresource>
 </RCC>

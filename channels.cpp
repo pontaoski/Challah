@@ -52,6 +52,18 @@ ChannelsModel::ChannelsModel(QString homeServer, quint64 guildID) : QAbstractLis
 				if (models.contains(chanID)) {
 					QCoreApplication::postEvent(models[chanID], new MessageSentEvent(sent));
 				}
+			} else if (msg.has_edited_message()) {
+				auto updated = msg.edited_message();
+				auto chanID = updated.location().channel_id();
+				if (models.contains(chanID)) {
+					QCoreApplication::postEvent(models[chanID], new MessageUpdatedEvent(updated));
+				}
+			} else if (msg.has_deleted_message()) {
+				auto deleted = msg.deleted_message();
+				auto chanID = deleted.location().channel_id();
+				if (models.contains(chanID)) {
+					QCoreApplication::postEvent(models[chanID], new MessageDeletedEvent(deleted));
+				}
 			}
 		}
 	});
