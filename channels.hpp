@@ -19,6 +19,8 @@ struct Channel {
 typedef CarrierEvent<1,protocol::core::v1::GuildEvent_ChannelCreated> ChannelAddEvent;
 
 typedef CarrierEvent<2,protocol::core::v1::GuildEvent_ChannelDeleted> ChannelDeleteEvent;
+typedef CarrierEvent<6,protocol::core::v1::GuildEvent_MemberJoined> MemberJoinEvent;
+typedef CarrierEvent<6,protocol::core::v1::GuildEvent_MemberLeft> MemberLeftEvent;
 
 class ChannelsModel : public QAbstractListModel
 {

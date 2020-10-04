@@ -80,7 +80,7 @@ Kirigami.PageRoute {
                             anchors.fill: parent
                             acceptedButtons: Qt.RightButton
                             onClicked: {
-                                if (mouse.button === Qt.RightButton)
+                                if ((messagesRoute.model.userID() == authorID || messagesRoute.model.isOwner()) && mouse.button === Qt.RightButton)
                                     messageMenu.popup()
                             }
                         }
@@ -89,12 +89,14 @@ Kirigami.PageRoute {
 
                             QQC2.MenuItem {
                                 text: "Edit"
+                                visible: messagesRoute.model.userID() == authorID
                                 onTriggered: {
                                     messageBlock.edit = true
                                 }
                             }
                             QQC2.MenuItem {
                                 text: "Delete"
+                                visible: messagesRoute.model.userID() == authorID || messagesRoute.model.isOwner()
                                 onTriggered: {
                                     messagesRoute.model.deleteMessage(messageID)
                                 }

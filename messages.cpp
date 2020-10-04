@@ -10,6 +10,20 @@ MessagesModel::MessagesModel(ChannelsModel *parent, QString homeServer, quint64 
 		homeServer(homeServer)
 {
 	client = Client::instanceForHomeserver(homeServer);
+
+	{
+		ClientContext ctx;
+		client->authenticate(ctx);
+
+		protocol::core::v1::GetGuildRequest req;
+		req.set_allocated_location(Location {
+			.guildID = guildID
+		});
+		protocol::core::v1::GetGuildResponse resp;
+		if (checkStatus(client->coreKit->GetGuild(&ctx, req, &resp))) {
+			isGuildOwner = client->userID == resp.guild_owner();
+		}
+	}
 }
 
 void MessagesModel::customEvent(QEvent *event)
@@ -87,6 +101,8 @@ QVariant MessagesModel::data(const QModelIndex& index, int role) const
 		return messageData[idx].text;
 	case MessageAuthorRole:
 		return qobject_cast<ChannelsModel*>(parent())->userName(messageData[idx].authorID);
+	case MessageAuthorIDRole:
+		return QString::number(messageData[idx].authorID);
 	case MessageDateRole:
 		return messageData[idx].date;
 	case MessageEmbedsRole:
@@ -105,6 +121,7 @@ QHash<int,QByteArray> MessagesModel::roleNames() const
 	QHash<int,QByteArray> ret;
 	ret[MessageTextRole] = "content";
 	ret[MessageAuthorRole] = "authorName";
+	ret[MessageAuthorIDRole] = "authorID";
 	ret[MessageDateRole] = "date";
 	ret[MessageEmbedsRole] = "embeds";
 	ret[MessageActionsRole] = "actions";

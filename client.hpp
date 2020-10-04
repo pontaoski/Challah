@@ -24,7 +24,6 @@ class Client : public QObject
 	static Client* mainClient;
 	static QMap<QString,Client*> clients;
 
-	quint64 userID;
 	std::string userToken;
 
 	QString homeserver;
@@ -42,6 +41,7 @@ private:
 	Client();
 
 public:
+	quint64 userID;
 	static Client* mainInstance();
 	static Client* instanceForHomeserver(const QString& homeserver);
 	bool login(const QString& email, const QString& password, const QString& homeserver);

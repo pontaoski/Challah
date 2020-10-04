@@ -57,6 +57,7 @@ class MessagesModel : public QAbstractListModel
 	friend class Client;
 
 	bool atEnd = false;
+	bool isGuildOwner = false;
 
 	Client* client;
 
@@ -65,6 +66,7 @@ class MessagesModel : public QAbstractListModel
 		MessageEmbedsRole,
 		MessageActionsRole,
 		MessageAuthorRole,
+		MessageAuthorIDRole,
 		MessageDateRole,
 		MessageIDRole
 	};
@@ -80,6 +82,8 @@ public:
 	bool canFetchMore(const QModelIndex& parent) const override;
 	void fetchMore(const QModelIndex& parent) override;
 
+	Q_INVOKABLE bool isOwner() { return isGuildOwner; }
+	Q_INVOKABLE QString userID() { return QString::number(client->userID); }
 	Q_INVOKABLE void sendMessage(const QString& content);
 	Q_INVOKABLE void editMessage(const QString& id, const QString& content);
 	Q_INVOKABLE void deleteMessage(const QString& id);
