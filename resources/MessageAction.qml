@@ -6,6 +6,9 @@ import QtQuick.Controls 2.10 as QQC2
 import com.github.HarmonyDevelopment.Staccato 1.0
 
 Loader {
+    id: rootAction
+    property string messageID
+
     Component {
         id: buttonComponent
 
@@ -39,6 +42,8 @@ Loader {
                 onClicked: {
                     if (modelData.url) {
                         Qt.openUrlExternally(modelData.url)
+                    } else {
+                        rootAction.triggerAction(modelData["id"], "")
                     }
                 }
 
@@ -61,10 +66,15 @@ Loader {
 
         RowLayout {
             QQC2.TextField {
+                id: smallEntryField
+
                 Layout.fillWidth: true
             }
             QQC2.Button {
                 text: "Submit"
+                onClicked: {
+                    rootAction.triggerAction(modelData["id"], smallEntryField.text)
+                }
             }
         }
     }
@@ -73,12 +83,18 @@ Loader {
 
         ColumnLayout {
             QQC2.TextArea {
+                id: largeEntryField
+
                 Layout.fillWidth: true
             }
             QQC2.Button {
                 text: "Submit"
 
                 Layout.alignment: Qt.AlignBottom | Qt.AlignRight
+
+                onClicked: {
+                    rootAction.triggerAction(modelData["id"], largeEntryField.text)
+                }
             }
         }
     }
@@ -87,15 +103,26 @@ Loader {
 
         RowLayout {
             QQC2.ComboBox {
+                id: dropdownBox
+
                 model: modelData.children
                 textRole: "text"
+                valueRole: "id"
 
                 Layout.fillWidth: true
             }
             QQC2.Button {
                 text: "Submit"
+
+                onClicked: {
+                    rootAction.triggerAction(modelData["id"], dropdownBox.currentValue)
+                }
             }
         }
+    }
+
+    function triggerAction(name, data) {
+        messagesRoute.model.triggerAction(messageID, name, data)
     }
 
     sourceComponent: {

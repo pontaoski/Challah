@@ -41,7 +41,9 @@ QQC2.Control {
 
         Repeater {
             model: modelData.actions
-            delegate: MessageAction {}
+            delegate: MessageAction {
+                messageID: messageDelegate.modelMessageID
+            }
         }
     }
 

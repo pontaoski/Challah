@@ -170,14 +170,21 @@ void MessagesModel::fetchMore(const QModelIndex& parent)
 	}
 }
 
-void MessagesModel::triggerAction(const QString &name, const QString &data)
+void MessagesModel::triggerAction(const QString& messageID, const QString &name, const QString &data)
 {
 	ClientContext ctx;
 	client->authenticate(ctx);
 
 	protocol::core::v1::TriggerActionRequest req;
+	req.set_allocated_location(Location {
+		.guildID = guildID,
+		.channelID = channelID,
+		.messageID = messageID.toULongLong()
+	});
 	req.set_action_id(name.toStdString());
-	req.set_action_data(data.toStdString());
+	if (data != QString()) {
+		req.set_action_data(data.toStdString());
+	}
 	google::protobuf::Empty resp;
 
 	checkStatus(client->coreKit->TriggerAction(&ctx, req, &resp));

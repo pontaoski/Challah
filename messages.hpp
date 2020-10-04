@@ -83,5 +83,5 @@ public:
 	Q_INVOKABLE void sendMessage(const QString& content);
 	Q_INVOKABLE void editMessage(const QString& id, const QString& content);
 	Q_INVOKABLE void deleteMessage(const QString& id);
-	Q_INVOKABLE void triggerAction(const QString& name, const QString& data);
+	Q_INVOKABLE void triggerAction(const QString& messageID, const QString& name, const QString& data);
 };

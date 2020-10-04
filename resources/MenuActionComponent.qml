@@ -21,6 +21,8 @@ QQC2.Menu {
 
             QQC2.MenuItem {
                 text: modelData.text
+
+                onTriggered: rootAction.triggerAction(modelData["id"], "")
             }
         }
     }

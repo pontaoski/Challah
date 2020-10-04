@@ -59,6 +59,9 @@ Kirigami.PageRoute {
             }
 
             delegate: ColumnLayout {
+                id: messageDelegate
+                property string modelMessageID: messageID
+
                 QQC2.Control {
                     id: messageBlock
                     property bool edit: false
@@ -132,7 +135,9 @@ Kirigami.PageRoute {
                 }
                 Repeater {
                     model: actions
-                    delegate: MessageAction {}
+                    delegate: MessageAction {
+                        messageID: messageDelegate.modelMessageID
+                    }
                 }
                 Repeater {
                     model: embeds
