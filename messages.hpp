@@ -68,6 +68,7 @@ class MessagesModel : public QAbstractListModel
 		MessageAuthorRole,
 		MessageAuthorAvatarRole,
 		MessageAuthorIDRole,
+		MessageAuthorNextIDRole,
 		MessageDateRole,
 		MessageIDRole
 	};

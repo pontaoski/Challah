@@ -50,7 +50,7 @@ Kirigami.PageRoute {
             section {
                 criteria: ViewSection.FullString
                 property: "authorName"
-                delegate: RowLayout {
+                delegate: Item {
                     required property string section
                     required property string authorAvatar
 
@@ -58,15 +58,16 @@ Kirigami.PageRoute {
                         name: parent.section
                         source: parent.authorAvatar
 
-                        Layout.preferredHeight: Kirigami.Units.gridUnit * 1.5
-                        Layout.preferredWidth: Kirigami.Units.gridUnit * 1.5
-                    }
-                    Kirigami.Heading {
-                        level: 4
-                        text: parent.section
+                        width: Kirigami.Units.gridUnit * 2
+                        height: Kirigami.Units.gridUnit * 2
 
-                        Layout.fillWidth: true
+                        anchors {
+                            bottom: parent.top
+                        }
                     }
+
+                    width: 0
+                    height: 0
                 }
             }
 
@@ -82,6 +83,7 @@ Kirigami.PageRoute {
 
                     Layout.minimumWidth: Kirigami.Units.gridUnit * 3
                     Layout.maximumWidth: applicationWindow().wideScreen ? Math.max(messagesView.width / 3, Kirigami.Units.gridUnit * 15) : (messagesView.width * 0.9)
+                    Layout.leftMargin: Kirigami.Units.gridUnit * 2 + Kirigami.Units.largeSpacing
                     Kirigami.Theme.colorSet: Kirigami.Theme.Window
 
                     implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset, implicitContentWidth + leftPadding + rightPadding)
@@ -119,6 +121,15 @@ Kirigami.PageRoute {
                         }
                     }
                     contentItem: ColumnLayout {
+                        QQC2.Label {
+                            visible: authorID != nextAuthor
+                            text: authorName
+
+                            font.pixelSize: Kirigami.Units.gridUnit * (4/5)
+                            wrapMode: Text.Wrap
+
+                            Layout.alignment: Qt.AlignTop
+                        }
                         QQC2.Label {
                             visible: !messageBlock.edit
                             text: content
