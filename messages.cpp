@@ -101,6 +101,8 @@ QVariant MessagesModel::data(const QModelIndex& index, int role) const
 		return messageData[idx].text;
 	case MessageAuthorRole:
 		return qobject_cast<ChannelsModel*>(parent())->userName(messageData[idx].authorID);
+	case MessageAuthorAvatarRole:
+		return qobject_cast<ChannelsModel*>(parent())->avatarURL(messageData[idx].authorID);
 	case MessageAuthorIDRole:
 		return QString::number(messageData[idx].authorID);
 	case MessageDateRole:
@@ -121,6 +123,7 @@ QHash<int,QByteArray> MessagesModel::roleNames() const
 	QHash<int,QByteArray> ret;
 	ret[MessageTextRole] = "content";
 	ret[MessageAuthorRole] = "authorName";
+	ret[MessageAuthorAvatarRole] = "authorAvatar";
 	ret[MessageAuthorIDRole] = "authorID";
 	ret[MessageDateRole] = "date";
 	ret[MessageEmbedsRole] = "embeds";

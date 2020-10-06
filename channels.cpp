@@ -8,9 +8,53 @@
 
 using grpc::ClientContext;
 
+MembersModel::MembersModel(QString homeserver, quint64 guildID, ChannelsModel* model) : QAbstractListModel(), homeServer(homeserver), guildID(guildID), model(model)
+{
+	client = Client::instanceForHomeserver(homeServer);
+
+	ClientContext ctx;
+	client->authenticate(ctx);
+
+	protocol::core::v1::GetGuildMembersRequest req;
+	req.set_allocated_location(Location {
+		.guildID = guildID
+	});
+	protocol::core::v1::GetGuildMembersResponse resp;
+
+	checkStatus(client->coreKit->GetGuildMembers(&ctx, req, &resp));
+
+	for (auto member : resp.members()) {
+		members << member;
+	}
+}
+
+int MembersModel::rowCount(const QModelIndex& parent) const
+{
+	Q_UNUSED(parent)
+
+	return members.count();
+}
+
+QVariant MembersModel::data(const QModelIndex& index, int role) const
+{
+	if (!checkIndex(index))
+		return QVariant();
+
+	switch (role)
+	{
+	case MemberNameRole:
+		return model->userName(members[index.row()]);
+	case MemberAvatarRole:
+		return model->avatarURL(members[index.row()]);
+	}
+
+	return QVariant();
+}
+
 ChannelsModel::ChannelsModel(QString homeServer, quint64 guildID) : QAbstractListModel(), homeServer(homeServer), guildID(guildID)
 {
 	client = Client::instanceForHomeserver(homeServer);
+	members = new MembersModel(homeServer, guildID, this);
 
 	ClientContext ctx;
 	client->authenticate(ctx);
@@ -64,6 +108,10 @@ ChannelsModel::ChannelsModel(QString homeServer, quint64 guildID) : QAbstractLis
 				if (models.contains(chanID)) {
 					QCoreApplication::postEvent(models[chanID], new MessageDeletedEvent(deleted));
 				}
+			} else if (msg.has_joined_member()) {
+				QCoreApplication::postEvent(members, new MemberJoinEvent(msg.joined_member()));
+			} else if (msg.has_left_member()) {
+				QCoreApplication::postEvent(members, new MemberLeftEvent(msg.left_member()));
 			}
 		}
 	});
@@ -183,6 +231,25 @@ QString ChannelsModel::userName(quint64 id)
 		checkStatus(client->profileKit->GetUser(&ctx, req, &resp));
 
 		users[id] = QString::fromStdString(resp.user_name());
+		avatars[id] = QString::fromStdString(resp.user_avatar());
 	}
 	return users[id];
+}
+
+QString ChannelsModel::avatarURL(quint64 id)
+{
+	if (!users.contains(id)) {
+		doContext;
+
+		protocol::profile::v1::GetUserRequest req;
+		req.set_user_id(id);
+
+		protocol::profile::v1::GetUserResponse resp;
+
+		checkStatus(client->profileKit->GetUser(&ctx, req, &resp));
+
+		users[id] = QString::fromStdString(resp.user_name());
+		avatars[id] = QString::fromStdString(resp.user_avatar());
+	}
+	return avatars[id];
 }

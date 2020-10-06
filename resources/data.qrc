@@ -4,6 +4,7 @@
         <file>Embed.qml</file>
         <file>LoginRoute.qml</file>
         <file>StaccatoDrawer.qml</file>
+        <file>RightDrawer.qml</file>
         <file>NoGuildRoute.qml</file>
         <file>GuildSheet.qml</file>
         <file>ChannelRoute.qml</file>

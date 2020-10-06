@@ -67,6 +67,9 @@ Kirigami.GlobalDrawer {
                                 onClicked: {
                                     channelsTitle.text = model['guildName']
                                     channelsView.model = model['channelModel']
+
+                                    applicationWindow().contextDrawer.model = model['channelModel'].members
+                                    applicationWindow().contextDrawer.shouldShow = true
                                 }
                             }
                         }

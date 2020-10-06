@@ -66,6 +66,7 @@ class MessagesModel : public QAbstractListModel
 		MessageEmbedsRole,
 		MessageActionsRole,
 		MessageAuthorRole,
+		MessageAuthorAvatarRole,
 		MessageAuthorIDRole,
 		MessageDateRole,
 		MessageIDRole

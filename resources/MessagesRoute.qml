@@ -50,11 +50,23 @@ Kirigami.PageRoute {
             section {
                 criteria: ViewSection.FullString
                 property: "authorName"
-                delegate: Kirigami.Heading {
+                delegate: RowLayout {
                     required property string section
+                    required property string authorAvatar
 
-                    level: 4
-                    text: section
+                    Kirigami.Avatar {
+                        name: parent.section
+                        source: parent.authorAvatar
+
+                        Layout.preferredHeight: Kirigami.Units.gridUnit * 1.5
+                        Layout.preferredWidth: Kirigami.Units.gridUnit * 1.5
+                    }
+                    Kirigami.Heading {
+                        level: 4
+                        text: parent.section
+
+                        Layout.fillWidth: true
+                    }
                 }
             }
 
@@ -68,9 +80,12 @@ Kirigami.PageRoute {
 
                     padding: Kirigami.Units.gridUnit * 2
 
-                    Layout.minimumWidth: Kirigami.Units.gridUnit * 15
-                    Layout.maximumWidth: Math.max(messagesView.width / 3, Kirigami.Units.gridUnit * 15)
+                    Layout.minimumWidth: Kirigami.Units.gridUnit * 3
+                    Layout.maximumWidth: applicationWindow().wideScreen ? Math.max(messagesView.width / 3, Kirigami.Units.gridUnit * 15) : (messagesView.width * 0.9)
                     Kirigami.Theme.colorSet: Kirigami.Theme.Window
+
+                    implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset, implicitContentWidth + leftPadding + rightPadding)
+                    implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset, implicitContentHeight + topPadding + bottomPadding)
 
                     background: Rectangle {
                         radius: 4
@@ -112,6 +127,7 @@ Kirigami.PageRoute {
                             wrapMode: Text.Wrap
 
                             Layout.alignment: Qt.AlignBottom
+                            Layout.maximumWidth: messageBlock.Layout.maximumWidth * 0.9
                         }
                         QQC2.TextField {
                             visible: messageBlock.edit
@@ -127,7 +143,7 @@ Kirigami.PageRoute {
                             Layout.alignment: Qt.AlignBottom
                         }
                         QQC2.Label {
-                            text: date.toString()
+                            text: `${("0"+date.getHours()).slice(-2)}:${("0"+date.getMinutes()).slice(-2)}`
                             opacity: 0.5
 
                             font.pixelSize: Kirigami.Units.gridUnit * (1/2)

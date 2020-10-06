@@ -10,6 +10,7 @@ Kirigami.RouterWindow {
     pageStack.globalToolBar.showNavigationButtons: 0
 
     globalDrawer: StaccatoDrawer { wideScreen: root.wideScreen }
+    contextDrawer: RightDrawer { wideScreen: root.wideScreen }
 
     LoginRoute {}
     NoGuildRoute {}

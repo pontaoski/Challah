@@ -3,6 +3,7 @@
 
 #include "state.hpp"
 #include "client.hpp"
+#include "util.hpp"
 
 using grpc::ClientContext;
 
@@ -19,12 +20,7 @@ void Client::refreshGuilds()
 	auto req = protocol::core::v1::GetGuildListRequest{};
 	protocol::core::v1::GetGuildListResponse resp;
 
-	auto status = coreKit->GetGuildList(&ctx, req, &resp);
-	if (!status.ok())
-	{
-		qDebug() << status.error_code();
-		qDebug() << status.error_details().c_str();
-		qDebug() << status.error_message().c_str();
+	if (!checkStatus(coreKit->GetGuildList(&ctx, req, &resp))) {
 		return;
 	}
 
@@ -90,12 +86,7 @@ GuildRepl Client::guildInfo(quint64 id)
 
 	auto repl = protocol::core::v1::GetGuildResponse {};
 
-	auto status = coreKit->GetGuild(&ctx, req, &repl);
-	if (!status.ok()) {
-		qDebug() << status.error_code();
-		qDebug() << status.error_details().c_str();
-		qDebug() << status.error_message().c_str();
-
+	if (!checkStatus(coreKit->GetGuild(&ctx, req, &repl))) {
 		return GuildRepl{};
 	}
 
@@ -120,12 +111,7 @@ void Client::federateOtherClient(Client* client, const QString& target)
 	req.set_target(target.toStdString());
 	auto repl = protocol::foundation::v1::FederateReply{};
 
-	auto status = foundationKit->Federate(&ctx, req, &repl);
-	if (!status.ok()) {
-		qDebug() << status.error_code();
-		qDebug() << status.error_details().c_str();
-		qDebug() << status.error_message().c_str();
-
+	if (!checkStatus(foundationKit->Federate(&ctx, req, &repl))) {
 		return;
 	}
 
@@ -139,13 +125,7 @@ void Client::federateOtherClient(Client* client, const QString& target)
 
 	auto repl2 = protocol::foundation::v1::Session {};
 
-	status = client->foundationKit->Login(&ctx2, req2, &repl2);
-
-	if (!status.ok()) {
-		qDebug() << status.error_code();
-		qDebug() << status.error_details().c_str();
-		qDebug() << status.error_message().c_str();
-
+	if (!checkStatus(client->foundationKit->Login(&ctx2, req2, &repl2))) {
 		return;
 	}
 
@@ -166,12 +146,7 @@ bool Client::createGuild(const QString &name)
 
 	auto resp = protocol::core::v1::CreateGuildResponse{};
 
-	auto status = coreKit->CreateGuild(&ctx, req, &resp);
-	if (!status.ok()) {
-		qDebug() << status.error_code();
-		qDebug() << status.error_details().c_str();
-		qDebug() << status.error_message().c_str();
-
+	if (!checkStatus(coreKit->CreateGuild(&ctx, req, &resp))) {
 		return false;
 	}
 
@@ -184,12 +159,7 @@ bool Client::createGuild(const QString &name)
 
 	auto resp2 = protocol::core::v1::AddGuildToGuildListResponse{};
 	
-	status = coreKit->AddGuildToGuildList(&ctx2, req2, &resp2);
-	if (!status.ok()) {
-		qDebug() << status.error_code();
-		qDebug() << status.error_details().c_str();
-		qDebug() << status.error_message().c_str();
-
+	if (!checkStatus(coreKit->AddGuildToGuildList(&ctx2, req2, &resp2))) {
 		return false;
 	}
 
@@ -216,13 +186,7 @@ bool Client::login(const QString &email, const QString &password, const QString 
 	ClientContext ctx;
 	protocol::foundation::v1::Session repl;
 
-	auto status = foundationKit->Login(&ctx, req, &repl);
-	if (!status.ok())
-	{
-		qDebug() << status.error_code();
-		qDebug() << status.error_details().c_str();
-		qDebug() << status.error_message().c_str();
-
+	if (!checkStatus(foundationKit->Login(&ctx, req, &repl))) {
 		return false;
 	}
 
