@@ -25,3 +25,17 @@ bool State::createGuild(const QString &name)
 {
 	return client->createGuild(name);
 }
+bool State::joinGuild(const QString &inviteLink)
+{
+	auto str = inviteLink;
+	str.remove(0, 10);
+	auto split = str.split("/");
+	if (split.length() != 2) {
+		return false;
+	}
+	auto homeserver = split[0];
+	auto invite = split[1];
+
+	auto client = Client::instanceForHomeserver(homeserver);
+	return client->joinInvite(invite);
+}

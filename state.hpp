@@ -24,6 +24,7 @@ public:
 
 	Q_INVOKABLE bool login(const QString& email, const QString& password, const QString &homeserver);
 	Q_INVOKABLE bool createGuild(const QString& name);
+	Q_INVOKABLE bool joinGuild(const QString& inviteLink);
 	Q_PROPERTY(GuildModel* guildModel READ getGuildModel CONSTANT)
 	GuildModel* getGuildModel() const { return guildModel; }
 };

@@ -12,6 +12,10 @@ Kirigami.RouterWindow {
     globalDrawer: StaccatoDrawer { wideScreen: root.wideScreen }
     contextDrawer: RightDrawer { wideScreen: root.wideScreen }
 
+    property var guildSheet: GuildSheet {
+        id: guildSheet
+    }
+
     LoginRoute {}
     NoGuildRoute {}
     ChannelRoute {}

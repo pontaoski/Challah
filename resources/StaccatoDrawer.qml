@@ -46,6 +46,21 @@ Kirigami.GlobalDrawer {
                     width: 72
                     implicitWidth: 72
 
+                    Rectangle {
+                        implicitWidth: 48
+                        implicitHeight: 48
+                        color: Kirigami.Theme.backgroundColor
+                        radius: 48 / 2
+
+                        ToolButton {
+                            anchors.fill: parent
+                            icon.name: "list-add"
+                            onClicked: guildSheet.openAndClear()
+                        }
+
+                        Layout.alignment: Qt.AlignTop | Qt.AlignHCenter
+                    }
+
                     Repeater {
                         model: HState.guildModel
                         delegate: Rectangle {

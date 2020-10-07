@@ -44,6 +44,7 @@ public:
 	quint64 userID;
 	static Client* mainInstance();
 	static Client* instanceForHomeserver(const QString& homeserver);
+	bool joinInvite(const QString& invite);
 	bool login(const QString& email, const QString& password, const QString& homeserver);
 	bool createGuild(const QString& name);
 	GuildRepl guildInfo(quint64 id);

@@ -23,13 +23,9 @@ Kirigami.PageRoute {
 
             helpfulAction: Kirigami.Action {
                 iconName: "list-add"
-                text: "Create Guild..."
-                onTriggered: sheety.open()
+                text: "Join or Create Guild..."
+                onTriggered: guildSheet.openAndClear()
             }
-        }
-
-        GuildSheet {
-            id: sheety
         }
     }
 }

@@ -166,6 +166,40 @@ bool Client::createGuild(const QString &name)
 	return true;
 }
 
+bool Client::joinInvite(const QString& invite)
+{
+	protocol::core::v1::JoinGuildResponse resp;
+	{
+		ClientContext ctx;
+		authenticate(ctx);
+
+		protocol::core::v1::JoinGuildRequest req;
+		req.set_invite_id(invite.toStdString());
+
+		if (!checkStatus(coreKit->JoinGuild(&ctx, req, &resp))) {
+			return false;
+		}
+	}
+	{
+		ClientContext ctx;
+		authenticate(ctx);
+
+		auto client = mainInstance();
+
+		protocol::core::v1::AddGuildToGuildListRequest req;
+		req.set_guild_id(resp.location().guild_id());
+		req.set_homeserver(homeserver.toStdString());
+
+		protocol::core::v1::AddGuildToGuildListResponse resp2;
+		
+		if (!checkStatus(client->coreKit->AddGuildToGuildList(&ctx, req, &resp2))) {
+			return false;
+		}
+	}
+
+	return true;
+}
+
 bool Client::login(const QString &email, const QString &password, const QString &hs)
 {
 	client = grpc::CreateChannel(hs.toStdString(), grpc::InsecureChannelCredentials());
