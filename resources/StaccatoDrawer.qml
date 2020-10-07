@@ -78,13 +78,33 @@ Kirigami.GlobalDrawer {
                                 id: maus
                                 anchors.fill: parent
                                 hoverEnabled: true
-
+                                acceptedButtons: Qt.LeftButton | Qt.RightButton
                                 onClicked: {
+                                    if (mouse.button === Qt.RightButton) {
+                                        guildMenu.popup()
+                                        return
+                                    }
+
                                     channelsTitle.text = model['guildName']
                                     channelsView.model = model['channelModel']
 
                                     applicationWindow().contextDrawer.model = model['channelModel'].members
                                     applicationWindow().contextDrawer.shouldShow = true
+                                }
+                            }
+
+                            Menu {
+                                id: guildMenu
+
+                                MenuItem {
+                                    text: model['isOwner'] ? "Delete" : "Leave"
+                                    onTriggered: {
+                                        if (HState.leaveGuild(model['homeserver'], model['guildID'], model['isOwner'])) {
+                                            root.showPassiveNotification("Left guild")
+                                        } else {
+                                            root.showPassiveNotification("Failed to leave guild")
+                                        }
+                                    }
                                 }
                             }
                         }

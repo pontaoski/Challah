@@ -17,6 +17,7 @@ GuildModel::GuildModel() : QAbstractListModel(), d(new Private)
 		qRegisterMetaType<Guild>();
 	}
 	connect(this, &GuildModel::addGuild, this, &GuildModel::addGuildHandler, Qt::QueuedConnection);
+	connect(this, &GuildModel::removeGuild, this, &GuildModel::removeGuildHandler, Qt::QueuedConnection);
 }
 
 GuildModel::~GuildModel()
@@ -35,6 +36,23 @@ void GuildModel::addGuildHandler(Guild guild)
 	endInsertRows();
 }
 
+void GuildModel::removeGuildHandler(const QString &homeserver, quint64 id)
+{
+	auto idx = -1;
+	for (auto& guild : guilds) {
+		if (guild.guildID == id && guild.homeserver == homeserver) {
+			idx++;
+			break;
+		}
+		idx++;
+	}
+	if (idx != -1) {
+		beginRemoveRows(QModelIndex(), idx, idx);
+		guilds.removeAt(idx);
+		endRemoveRows();
+	}
+}
+
 int GuildModel::rowCount(const QModelIndex &parent) const
 {
 	Q_UNUSED(parent)
@@ -49,9 +67,13 @@ QVariant GuildModel::data(const QModelIndex &index, int role) const
 	switch (role)
 	{
 	case GuildIDRole:
-		return guilds[index.row()].guildID;
+		return QString::number(guilds[index.row()].guildID);
 	case GuildNameRole:
 		return guilds[index.row()].name;
+	case IsOwnerRole:
+		return guilds[index.row()].ownerID == Client::instanceForHomeserver(guilds[index.row()].homeserver)->userID;
+	case HomeserverRole:
+		return guilds[index.row()].homeserver;
 	case ChannelModelRole:
 		auto key = qMakePair(guilds[index.row()].guildID, guilds[index.row()].homeserver);
 		if (!d->models.contains(key)) {
@@ -70,6 +92,8 @@ QHash<int, QByteArray> GuildModel::roleNames() const
 	ret[GuildIDRole] = "guildID";
 	ret[GuildNameRole] = "guildName";
 	ret[ChannelModelRole] = "channelModel";
+	ret[IsOwnerRole] = "isOwner";
+	ret[HomeserverRole] = "homeserver";
 
 	return ret;
 }

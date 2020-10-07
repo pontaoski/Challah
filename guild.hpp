@@ -6,6 +6,7 @@ class Client;
 
 struct Guild {
 	quint64 guildID;
+	quint64 ownerID;
 	QString homeserver;
 	QString name;
 	QString picture;
@@ -14,6 +15,7 @@ struct Guild {
 Q_DECLARE_METATYPE(Guild)
 
 struct GuildRepl {
+	quint64 ownerID;
 	QString name;
 	QString picture;
 };
@@ -30,12 +32,16 @@ class GuildModel : public QAbstractListModel
 
 	Q_SIGNAL void addGuild(Guild data);
 	Q_SLOT void addGuildHandler(Guild data);
+	Q_SIGNAL void removeGuild(const QString& homeserver, quint64 id);
+	Q_SLOT void removeGuildHandler(const QString& homeserver, quint64 id);
 
 	enum Roles {
 		GuildIDRole = Qt::UserRole,
 		GuildNameRole,
 		GuildPictureRole,
-		ChannelModelRole
+		ChannelModelRole,
+		HomeserverRole,
+		IsOwnerRole
 	};
 
 public:

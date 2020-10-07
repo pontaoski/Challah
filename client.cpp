@@ -34,6 +34,7 @@ void Client::refreshGuilds()
 
 		State::instance()->guildModel->guilds << Guild {
 			.guildID = guild.guild_id(),
+			.ownerID = data.ownerID,
 			.homeserver = QString::fromStdString(guild.host()),
 			.name = data.name,
 			.picture = data.picture,
@@ -91,6 +92,7 @@ GuildRepl Client::guildInfo(quint64 id)
 	}
 
 	return GuildRepl {
+		.ownerID = repl.guild_owner(),
 		.name = QString::fromStdString(repl.guild_name()),
 		.picture = QString::fromStdString(repl.guild_picture()),
 	};
@@ -181,10 +183,10 @@ bool Client::joinInvite(const QString& invite)
 		}
 	}
 	{
-		ClientContext ctx;
-		authenticate(ctx);
-
 		auto client = mainInstance();
+
+		ClientContext ctx;
+		client->authenticate(ctx);
 
 		protocol::core::v1::AddGuildToGuildListRequest req;
 		req.set_guild_id(resp.location().guild_id());
@@ -195,6 +197,53 @@ bool Client::joinInvite(const QString& invite)
 		if (!checkStatus(client->coreKit->AddGuildToGuildList(&ctx, req, &resp2))) {
 			return false;
 		}
+	}
+
+	return true;
+}
+
+bool Client::leaveGuild(quint64 id, bool isOwner)
+{
+	if (!isOwner) {
+		ClientContext ctx;
+		authenticate(ctx);
+
+		protocol::core::v1::LeaveGuildRequest req;
+		req.set_allocated_location(Location {
+			.guildID = id,
+		});
+		google::protobuf::Empty resp;
+
+		if (!checkStatus(coreKit->LeaveGuild(&ctx, req, &resp))) {
+			return false;
+		}
+	} else {
+		ClientContext ctx;
+		authenticate(ctx);
+
+		protocol::core::v1::DeleteGuildRequest req;
+		req.set_allocated_location(Location {
+			.guildID = id,
+		});
+		google::protobuf::Empty resp;
+
+		if (!checkStatus(coreKit->DeleteGuild(&ctx, req, &resp))) {
+			return false;
+		}
+	}
+
+	auto client = mainInstance();
+
+	ClientContext ctx;
+	client->authenticate(ctx);
+
+	protocol::core::v1::RemoveGuildFromGuildListRequest req;
+	req.set_guild_id(id);
+	req.set_homeserver(homeserver.toStdString());
+	protocol::core::v1::RemoveGuildFromGuildListResponse resp;
+
+	if (!checkStatus(client->coreKit->RemoveGuildFromGuildList(&ctx, req, &resp))) {
+		return false;
 	}
 
 	return true;
@@ -243,10 +292,15 @@ bool Client::login(const QString &email, const QString &password, const QString 
 
 				Q_EMIT State::instance()->guildModel->addGuild(Guild {
 					.guildID = guild.guild_id(),
+					.ownerID = data.ownerID,
 					.homeserver = QString::fromStdString(guild.homeserver()),
 					.name = data.name,
 					.picture = data.picture,
 				});
+			} else if (msg.has_guild_removed_from_list()) {
+				auto guild = msg.guild_removed_from_list();
+
+				Q_EMIT State::instance()->guildModel->removeGuild(QString::fromStdString(guild.homeserver()), guild.guild_id());
 			}
 		}
 	});

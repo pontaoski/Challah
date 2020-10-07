@@ -39,3 +39,9 @@ bool State::joinGuild(const QString &inviteLink)
 	auto client = Client::instanceForHomeserver(homeserver);
 	return client->joinInvite(invite);
 }
+bool State::leaveGuild(const QString &homeserver, const QString &id, bool isOwner)
+{
+	auto actualID = id.toULongLong();
+
+	return Client::instanceForHomeserver(homeserver)->leaveGuild(actualID, isOwner);
+}

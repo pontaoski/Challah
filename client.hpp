@@ -47,6 +47,7 @@ public:
 	bool joinInvite(const QString& invite);
 	bool login(const QString& email, const QString& password, const QString& homeserver);
 	bool createGuild(const QString& name);
+	bool leaveGuild(quint64 id, bool isOwner);
 	GuildRepl guildInfo(quint64 id);
 	void refreshGuilds();
 };
