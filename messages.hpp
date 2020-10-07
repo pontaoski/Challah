@@ -20,6 +20,7 @@ struct MessageData
 	QJsonValue actions;
 	QJsonValue embeds;
 	QDateTime editedAt;
+	quint64 replyTo;
 
 	static MessageData fromProtobuf(protocol::core::v1::Message& msg) {
 		std::string jsonified;
@@ -32,7 +33,9 @@ struct MessageData
 			.id = msg.location().message_id(),
 			.date = QDateTime::fromTime_t(msg.created_at().seconds()),
 			.actions = document["actions"],
-			.embeds = document["embeds"]
+			.embeds = document["embeds"],
+			.editedAt = QDateTime(),
+			.replyTo = msg.in_reply_to()
 		};
 	}
 };
@@ -70,6 +73,7 @@ class MessagesModel : public QAbstractListModel
 		MessageAuthorIDRole,
 		MessageAuthorNextIDRole,
 		MessageDateRole,
+		MessageReplyToRole,
 		MessageIDRole
 	};
 
@@ -86,7 +90,8 @@ public:
 
 	Q_INVOKABLE bool isOwner() { return isGuildOwner; }
 	Q_INVOKABLE QString userID() { return QString::number(client->userID); }
-	Q_INVOKABLE void sendMessage(const QString& content);
+	Q_INVOKABLE QVariantMap peekMessage(const QString& id);
+	Q_INVOKABLE void sendMessage(const QString& content, const QString& replyTo);
 	Q_INVOKABLE void editMessage(const QString& id, const QString& content);
 	Q_INVOKABLE void deleteMessage(const QString& id);
 	Q_INVOKABLE void triggerAction(const QString& messageID, const QString& name, const QString& data);

@@ -117,6 +117,8 @@ QVariant MessagesModel::data(const QModelIndex& index, int role) const
 		return messageData[idx].actions;
 	case MessageIDRole:
 		return QString::number(messageData[idx].id);
+	case MessageReplyToRole:
+		return messageData[idx].replyTo != 0 ? QString::number(messageData[idx].replyTo) : QVariant();
 	}
 
 	return QVariant();
@@ -134,11 +136,12 @@ QHash<int,QByteArray> MessagesModel::roleNames() const
 	ret[MessageActionsRole] = "actions";
 	ret[MessageIDRole] = "messageID";
 	ret[MessageAuthorNextIDRole] = "nextAuthor";
+	ret[MessageReplyToRole] = "replyToID";
 
 	return ret;
 }
 
-void MessagesModel::sendMessage(const QString& message)
+void MessagesModel::sendMessage(const QString& message, const QString &replyTo)
 {
 	ClientContext ctx;
 	client->authenticate(ctx);
@@ -150,6 +153,9 @@ void MessagesModel::sendMessage(const QString& message)
 		.channelID = channelID
 	});
 	req.set_content(message.toStdString());
+	if (replyTo != QString()) {
+		req.set_in_reply_to(replyTo.toULongLong());
+	}
 
 	google::protobuf::Empty empty;
 
@@ -247,4 +253,37 @@ void MessagesModel::deleteMessage(const QString& id)
 	google::protobuf::Empty resp;
 
 	checkStatus(client->coreKit->DeleteMessage(&ctx, req, &resp));
+}
+
+QVariantMap MessagesModel::peekMessage(const QString& id)
+{
+	quint64 actualID = id.toULongLong();
+	for (const auto& item : messageData) {
+		if (item.id == actualID) {
+			return {
+				{ "authorName", qobject_cast<ChannelsModel*>(parent())->userName(item.authorID) },
+				{ "content", item.text }
+			};
+		}
+	}
+
+	ClientContext ctx;
+	client->authenticate(ctx);
+
+	protocol::core::v1::GetMessageRequest req;
+	req.set_allocated_location(Location {
+		.guildID = guildID,
+		.channelID = channelID,
+		.messageID = actualID
+	});
+	protocol::core::v1::GetMessageResponse resp;
+
+	if (!checkStatus(client->coreKit->GetMessage(&ctx, req, &resp))) {
+		return QVariantMap();
+	}
+
+	return {
+		{ "authorName", qobject_cast<ChannelsModel*>(parent())->userName(resp.message().author_id()) },
+		{ "content", QString::fromStdString(resp.message().content()) }
+	};
 }
