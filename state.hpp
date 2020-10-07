@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2020 Carson Black <uhhadd@gmail.com>
+//
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 #pragma once
 
 #include <QDebug>
@@ -29,4 +33,3 @@ public:
 	Q_PROPERTY(GuildModel* guildModel READ getGuildModel CONSTANT)
 	GuildModel* getGuildModel() const { return guildModel; }
 };
-

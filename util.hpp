@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2020 Carson Black <uhhadd@gmail.com>
+//
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 #pragma once
 
 #include <QtCore>
