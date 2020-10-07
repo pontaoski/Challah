@@ -153,7 +153,7 @@ QVariant ChannelsModel::data(const QModelIndex &index, int role) const
 	switch (role)
 	{
 	case ChannelIDRole:
-		return channels[index.row()].channelID;
+		return QString::number(channels[index.row()].channelID);
 	case ChannelNameRole:
 		return channels[index.row()].name;
 	case ChannelIsCategoryRole:
@@ -180,14 +180,14 @@ QHash<int, QByteArray> ChannelsModel::roleNames() const
 	return ret;
 }
 
-void ChannelsModel::deleteChannel(quint64 channel)
+void ChannelsModel::deleteChannel(const QString& channel)
 {
 	doContext;
 
 	protocol::core::v1::DeleteChannelRequest req;
 	req.set_allocated_location(Location {
 		.guildID = this->guildID,
-		.channelID = channel
+		.channelID = channel.toULongLong()
 	});
 
 	google::protobuf::Empty resp;
