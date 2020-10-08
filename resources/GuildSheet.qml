@@ -23,9 +23,10 @@ Kirigami.OverlaySheet {
         items: [cards, makeGuild, joinGuild]
     }
 
-    QQC2.SwipeView {
+    StackLayout {
         id: swipeView
-        interactive: false
+
+        height: children[currentIndex].implicitHeight
 
         RowLayout {
             id: cards
