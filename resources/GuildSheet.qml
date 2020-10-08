@@ -5,7 +5,7 @@
 import QtQuick 2.10
 import QtQuick.Window 2.10
 import QtQuick.Layouts 1.10
-import org.kde.kirigami 2.13 as Kirigami
+import org.kde.kirigami 2.14 as Kirigami
 import QtQuick.Controls 2.10 as QQC2
 import com.github.HarmonyDevelopment.Staccato 1.0
 
@@ -18,13 +18,20 @@ Kirigami.OverlaySheet {
         this.open()
     }
 
+    property Kirigami.SizeGroup sizeGroup: Kirigami.SizeGroup {
+        mode: Kirigami.SizeGroup.Width
+        items: [cards, makeGuild, joinGuild]
+    }
+
     QQC2.SwipeView {
         id: swipeView
         interactive: false
 
         RowLayout {
+            id: cards
             anchors.centerIn: parent
 
+            Item { implicitWidth: Kirigami.Units.largeSpacing }
             Kirigami.Card {
                 implicitWidth: Kirigami.Units.gridUnit * 5
                 implicitHeight: Kirigami.Units.gridUnit * 10
@@ -73,8 +80,10 @@ Kirigami.OverlaySheet {
                     }
                 }
             }
+            Item { implicitWidth: Kirigami.Units.largeSpacing }
         }
         Kirigami.FormLayout {
+            id: makeGuild
             QQC2.TextField {
                 id: name
 
@@ -94,6 +103,7 @@ Kirigami.OverlaySheet {
             }
         }
         Kirigami.FormLayout {
+            id: joinGuild
             QQC2.TextField {
                 id: invite
 
