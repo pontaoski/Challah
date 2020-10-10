@@ -17,6 +17,7 @@ QtApplication {
 		"guild.cpp",
 		"channels.cpp",
 		"messages.cpp",
+		"invites.cpp",
 		"state.hpp",
 		"client.hpp",
 		"guild.hpp",
@@ -24,6 +25,7 @@ QtApplication {
 		"util.cpp",
 		"util.hpp",
 		"messages.hpp",
+		"invites.hpp",
 		"resources/data.qrc"
 	]
 

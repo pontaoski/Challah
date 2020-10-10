@@ -27,6 +27,7 @@ typedef CarrierEvent<6,protocol::core::v1::GuildEvent_MemberJoined> MemberJoinEv
 typedef CarrierEvent<7,protocol::core::v1::GuildEvent_MemberLeft> MemberLeftEvent;
 
 class ChannelsModel;
+class InviteModel;
 class MembersModel : public QAbstractListModel
 {
 	Q_OBJECT
@@ -105,4 +106,5 @@ public:
 	Q_INVOKABLE bool createChannel(const QString& name);
 	Q_INVOKABLE QString userName(quint64 id);
 	Q_INVOKABLE QString avatarURL(quint64 id);
+	Q_INVOKABLE InviteModel* invitesModel();
 };

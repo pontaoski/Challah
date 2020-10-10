@@ -1,6 +1,7 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
+        <file>Invites.qml</file>
         <file>Embed.qml</file>
         <file>LoginRoute.qml</file>
         <file>StaccatoDrawer.qml</file>

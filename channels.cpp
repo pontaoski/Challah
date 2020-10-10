@@ -5,6 +5,7 @@
 #include <QtConcurrent>
 #include "channels.hpp"
 
+#include "invites.hpp"
 #include "client.hpp"
 #include "util.hpp"
 
@@ -256,4 +257,9 @@ QString ChannelsModel::avatarURL(quint64 id)
 		avatars[id] = QString::fromStdString(resp.user_avatar());
 	}
 	return avatars[id];
+}
+
+InviteModel* ChannelsModel::invitesModel()
+{
+	return new InviteModel(this, homeServer, guildID);
 }

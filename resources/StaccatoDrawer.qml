@@ -143,6 +143,10 @@ Kirigami.GlobalDrawer {
                         Layout.fillWidth: true
                     }
                     ToolButton {
+                        icon.name: "settings-configure"
+                        onClicked: root.pageStack.layers.push(Qt.resolvedUrl("Invites.qml"), {"inviteModel": channelsView.model.invitesModel()})
+                    }
+                    ToolButton {
                         icon.name: "list-add"
                         onClicked: sheety.open()
                     }
