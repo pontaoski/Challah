@@ -18,6 +18,7 @@ QtApplication {
 		"channels.cpp",
 		"messages.cpp",
 		"invites.cpp",
+		"overlappingpanels.cpp",
 		"state.hpp",
 		"client.hpp",
 		"guild.hpp",
@@ -26,6 +27,7 @@ QtApplication {
 		"util.hpp",
 		"messages.hpp",
 		"invites.hpp",
+		"overlappingpanels.hpp",
 		"resources/data.qrc"
 	]
 
