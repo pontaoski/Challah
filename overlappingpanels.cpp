@@ -1,17 +1,5 @@
 #include "overlappingpanels.hpp"
 
-// The horizontal center of the centre sheet must be in the outer 1/7ths of the area
-// in order to transition state change.
-const int THRESHOLD_FACTOR = 7;
-
-// The hang factor determines how much of the centre sheet will be visible.
-// The current hang factor is 10, which means the outermost 10% of a side will be
-// shown.
-const int HANG_FACTOR = 10;
-
-const int PANEL_OPEN_MS = 250;
-const int PANEL_CLOSE_MS = 200;
-
 const QEasingCurve FLING_CURVE = [](){
 	QEasingCurve curve;
 	curve.setType(QEasingCurve::BezierSpline);
@@ -47,6 +35,7 @@ OverlappingPanels::OverlappingPanels(QQuickItem* parent) : QQuickItem(parent)
 	});
 
 	setAcceptedMouseButtons(Qt::LeftButton);
+	setAcceptTouchEvents(true);
 }
 
 void OverlappingPanels::handlePositionChange()
@@ -110,84 +99,6 @@ qreal OverlappingPanels::stateOffset() const
 	}
 
 	return 0;
-}
-
-bool OverlappingPanels::mouseEvent(EventKind kind, QMouseEvent* event)
-{
-	static bool down = false;
-	static bool inThreshold = false;
-
-	if (kind == EventKind::Down) {
-		down = true;
-		m_previousPoint = event->pos();
-
-		if (m_state == State::Left) {
-			const auto leftThreshold = (width() / THRESHOLD_FACTOR);
-			if (event->pos().x() <= leftThreshold) {
-				inThreshold = true;
-			} else {
-				inThreshold = false;
-			}
-		} else if (m_state == State::Right) {
-			const auto rightThreshold = (width() - (width() / THRESHOLD_FACTOR));
-			if (event->pos().x() >= rightThreshold) {
-				inThreshold = true;
-			} else {
-				inThreshold = false;
-			}
-		} else {
-			inThreshold = false;
-		}
-
-		return true;
-	} else if (kind == EventKind::Up) {
-		down = false;
-
-		if (inThreshold) {
-			m_state = State::Center;
-			m_translation = QPointF();
-			goToState(false);
-
-			return true;
-		}
-
-		// Adjusted is the horizontal center of the centre panel
-		const auto adjusted = m_centerPanel->x() + (width() / 2);
-
-		const auto leftThreshold = (width() / THRESHOLD_FACTOR);
-		const auto rightThreshold = (width() - (width() / THRESHOLD_FACTOR));
-
-		// If adjusted is to the left of the left threshold...
-		if (adjusted <= leftThreshold) {
-			m_state = State::Left;
-		}
-		// If adjusted is to the right of the right threshold...
-		else if (adjusted >= rightThreshold) {
-			m_state = State::Right;
-		}
-		// If it's neither...
-		else {
-			m_state = State::Center;
-		}
-
-		m_translation = QPointF();
-
-		goToState(true);
-
-		return true;
-	} else if (kind == EventKind::Move && down) {
-		auto delta = m_previousPoint - event->pos();
-		m_previousPoint = event->pos();
-
-		inThreshold = false;
-
-		m_translation += delta;
-		handlePositionChange();
-
-		return true;
-	}
-
-	return false;
 }
 
 QQuickItem* OverlappingPanels::centerPanel() const
