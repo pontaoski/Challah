@@ -45,6 +45,10 @@ public:
 	template <typename T>
 	bool handlePointerEvent(EventKind kind, T event)
 	{
+		if (m_expanded) {
+			return false;
+		}
+
 		static bool down = false;
 		static bool inThreshold = false;
 
@@ -132,6 +136,10 @@ public:
 	void mouseReleaseEvent(QMouseEvent *event) override { handlePointerEvent(Up, event) ? event->accept() : event->ignore(); };
 	void mouseMoveEvent(QMouseEvent *event) override { handlePointerEvent(Move, event) ? event->accept() : event->ignore(); };
 	void touchEvent(QTouchEvent *event) override {
+		if (m_expanded) {
+			event->ignore();
+			return;
+		}
 		if (event->touchPoints().length() == 0) {
 			event->ignore();
 			return;
@@ -154,9 +162,13 @@ public:
 	}
 
 	QVariantAnimation* m_animation;
+	QVariantAnimation* m_expansionAnimation;
+	qreal m_expansionFromWidth;
+	qreal m_expansionFromX;
 	State m_state = Center;
 	QPoint m_previousPoint = QPoint(0, 0);
 	QPointF m_translation;
+	bool m_expanded = false;
 
 	QList<QMetaObject::Connection> m_centerPanelConnections;
 	QQuickItem* m_centerPanel = nullptr;

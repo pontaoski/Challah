@@ -14,14 +14,69 @@ const QEasingCurve TAP_CURVE = [](){
 	return curve;
 }();
 
+auto linearlyInterpolateDouble(double one, double two, double factor) {
+	return one + (two - one) * factor;
+};
+
+
 OverlappingPanels::OverlappingPanels(QQuickItem* parent) : QQuickItem(parent)
 {
 	m_animation = new QVariantAnimation(this);
 	connect(this, &QQuickItem::widthChanged, [=]() { handlePositionChange(); });
 	connect(this, &QQuickItem::heightChanged, [=]() { handlePositionChange(); });
 
+	m_expansionAnimation = new QVariantAnimation(this);
+
+	m_expansionAnimation->setStartValue(0.0);
+	m_expansionAnimation->setEndValue(1.0);
+	m_expansionAnimation->setEasingCurve(TAP_CURVE);
+
+	connect(m_expansionAnimation, &QVariantAnimation::valueChanged, [=](const QVariant& value) {
+		auto progress = value.toReal();
+
+		if (m_expanded) {
+			auto targetWidth = width() - m_leftPanel->implicitWidth() - m_rightPanel->implicitWidth();
+
+			auto currentWidth = linearlyInterpolateDouble(m_expansionFromWidth, targetWidth, progress);
+			auto currentX = linearlyInterpolateDouble(m_expansionFromX, m_leftPanel->implicitWidth(), progress);
+
+			m_centerPanel->blockSignals(true);
+			m_centerPanel->setX(currentX);
+			m_centerPanel->setWidth(currentWidth);
+			m_centerPanel->blockSignals(false);
+		} else {
+			auto targetWidth = width();
+
+			auto currentWidth = linearlyInterpolateDouble(m_expansionFromWidth, targetWidth, progress);
+			auto currentX = linearlyInterpolateDouble(m_expansionFromX, 0, progress);
+
+			m_centerPanel->blockSignals(true);
+			m_centerPanel->setX(currentX);
+			m_centerPanel->setWidth(currentWidth);
+			m_centerPanel->blockSignals(false);
+		}
+	});
+	connect(m_expansionAnimation, &QVariantAnimation::finished, [=]() {
+		if (!m_expanded) {
+			m_leftPanel->blockSignals(true);
+			m_rightPanel->blockSignals(true);
+
+			m_leftPanel->setVisible(false);
+			m_rightPanel->setVisible(false);
+
+			m_rightPanel->setPosition(QPointF(0, 0));
+			m_rightPanel->setWidth(width() - (width() / HANG_FACTOR));
+
+			m_leftPanel->setPosition(QPointF(width() - m_leftPanel->width(), 0));
+			m_leftPanel->setWidth(width() - (width() / HANG_FACTOR));
+
+			m_leftPanel->blockSignals(false);
+			m_rightPanel->blockSignals(false);
+		}
+	});
+
 	connect(m_animation, &QVariantAnimation::valueChanged, [=](const QVariant& value) {
-		if (m_animation->state() != QAbstractAnimation::Stopped) {
+		if (m_animation->state() != QAbstractAnimation::Stopped && m_expansionAnimation->state() != QAbstractAnimation::Running) {
 			m_centerPanel->setX(value.toReal());
 		}
 	});
@@ -40,6 +95,83 @@ OverlappingPanels::OverlappingPanels(QQuickItem* parent) : QQuickItem(parent)
 
 void OverlappingPanels::handlePositionChange()
 {
+	if (m_leftPanel == nullptr && m_centerPanel == nullptr && m_rightPanel == nullptr) {
+		return;
+	}
+
+	if (m_expansionAnimation->state() == QAbstractAnimation::Running) {
+		return;
+	}
+
+	if (m_leftPanel->implicitWidth() + m_centerPanel->implicitWidth() + m_rightPanel->implicitWidth() <= width()) {
+		if (!m_expanded) {
+			m_expanded = true;
+			m_expansionFromWidth = m_centerPanel->width();
+			m_expansionFromX = m_centerPanel->x();
+
+			m_centerPanel->setOpacity(1.0);
+			m_expansionAnimation->start();
+
+			m_leftPanel->blockSignals(true);
+			m_rightPanel->blockSignals(true);
+
+			m_leftPanel->setWidth(m_leftPanel->implicitWidth());
+			m_rightPanel->setWidth(m_rightPanel->implicitWidth());
+
+			m_leftPanel->setPosition(QPointF(0, 0));
+			m_rightPanel->setPosition(QPointF(m_leftPanel->width() + (width() - m_leftPanel->implicitWidth() - m_rightPanel->implicitWidth()), 0));
+
+			m_leftPanel->setVisible(true);
+			m_rightPanel->setVisible(true);
+
+			m_leftPanel->blockSignals(false);
+			m_rightPanel->blockSignals(false);
+			return;
+		}
+
+		m_leftPanel->setVisible(true);
+		m_rightPanel->setVisible(true);
+
+		m_leftPanel->blockSignals(true);
+		m_rightPanel->blockSignals(true);
+		m_centerPanel->blockSignals(true);
+
+		m_leftPanel->setWidth(m_leftPanel->implicitWidth());
+		m_rightPanel->setWidth(m_rightPanel->implicitWidth());
+		m_centerPanel->setWidth(width() - m_leftPanel->implicitWidth() - m_rightPanel->implicitWidth());
+
+		m_leftPanel->setPosition(QPointF(0, 0));
+		m_centerPanel->setPosition(QPointF(m_leftPanel->width(), 0));
+		m_rightPanel->setPosition(QPointF(m_leftPanel->width() + m_centerPanel->width(), 0));
+
+		m_leftPanel->blockSignals(false);
+		m_rightPanel->blockSignals(false);
+		m_centerPanel->blockSignals(false);
+
+		return;
+	} else if (m_expanded) {
+		m_expanded = false;
+		m_state = State::Center;
+
+		m_leftPanel->blockSignals(true);
+		m_rightPanel->blockSignals(true);
+
+		m_leftPanel->setWidth(width() / 2);
+		m_rightPanel->setWidth(width() / 2);
+
+		m_leftPanel->setX(0);
+		m_rightPanel->setX(width() - m_rightPanel->width());
+
+		m_leftPanel->blockSignals(false);
+		m_rightPanel->blockSignals(false);
+
+		m_expansionFromWidth = m_centerPanel->width();
+		m_expansionFromX = m_centerPanel->x();
+
+		m_expansionAnimation->start();
+		return;
+	}
+
 	auto clamped = stateOffset() + (-m_translation.x());
 	if (m_state == State::Left && clamped <= stateOffset()) {
 		clamped = stateOffset();
@@ -161,10 +293,46 @@ void OverlappingPanels::setRightPanel(QQuickItem* item)
 
 		item->stackBefore(m_centerPanel);
 
-		m_rightPanelConnections << connect(this, &QQuickItem::widthChanged, [=]() { item->setWidth(width() - (width() / HANG_FACTOR)); });
-		m_rightPanelConnections << connect(this, &QQuickItem::heightChanged, [=]() { item->setHeight(height()); });
-		m_rightPanelConnections << connect(item, &QQuickItem::widthChanged, [=]() { item->setWidth(width() - (width() / HANG_FACTOR)); handlePositionChange(); });
-		m_rightPanelConnections << connect(item, &QQuickItem::heightChanged, [=]() { item->setHeight(height()); handlePositionChange(); });
+		m_rightPanelConnections << connect(this, &QQuickItem::widthChanged, [=]() {
+			if (m_expansionAnimation->state() == QAbstractAnimation::Running) {
+				return;
+			}
+			if (m_expanded) {
+				handlePositionChange();
+				return;
+			}
+			item->setWidth(width() - (width() / HANG_FACTOR));
+		});
+		m_rightPanelConnections << connect(this, &QQuickItem::heightChanged, [=]() {
+			if (m_expansionAnimation->state() == QAbstractAnimation::Running) {
+				return;
+			}
+			if (m_expanded) {
+				handlePositionChange();
+				return;
+			}
+			item->setHeight(height());
+		});
+		m_rightPanelConnections << connect(item, &QQuickItem::widthChanged, [=]() {
+			if (m_expansionAnimation->state() == QAbstractAnimation::Running) {
+				return;
+			}
+			if (m_expanded) {
+				handlePositionChange();
+				return;
+			}
+			item->setWidth(width() - (width() / HANG_FACTOR)); handlePositionChange();
+		});
+		m_rightPanelConnections << connect(item, &QQuickItem::heightChanged, [=]() {
+			if (m_expansionAnimation->state() == QAbstractAnimation::Running) {
+				return;
+			}
+			if (m_expanded) {
+				handlePositionChange();
+				return;
+			}
+			item->setHeight(height()); handlePositionChange();
+		});
 
 		Q_EMIT rightPanelChanged();
 	}
@@ -197,16 +365,48 @@ void OverlappingPanels::setLeftPanel(QQuickItem* item)
 		item->stackBefore(m_centerPanel);
 
 		m_leftPanelConnections << connect(this, &QQuickItem::widthChanged, [=]() {
+			if (m_expansionAnimation->state() == QAbstractAnimation::Running) {
+				return;
+			}
+			if (m_expanded) {
+				handlePositionChange();
+				return;
+			}
 			item->setWidth(width() - (width() / HANG_FACTOR));
 			item->setPosition(QPointF(width() - item->width(), 0));
 		});
-		m_leftPanelConnections << connect(this, &QQuickItem::heightChanged, [=]() { item->setHeight(height()); });
+		m_leftPanelConnections << connect(this, &QQuickItem::heightChanged, [=]() {
+			if (m_expansionAnimation->state() == QAbstractAnimation::Running) {
+				return;
+			}
+			if (m_expanded) {
+				handlePositionChange();
+				return;
+			}
+			item->setHeight(height());
+		});
 		m_leftPanelConnections << connect(item, &QQuickItem::widthChanged, [=]() {
+			if (m_expansionAnimation->state() == QAbstractAnimation::Running) {
+				return;
+			}
+			if (m_expanded) {
+				handlePositionChange();
+				return;
+			}
 			item->setWidth(width() - (width() / HANG_FACTOR));
 			item->setPosition(QPointF(width() - item->width(), 0));
 			handlePositionChange();
 		});
-		m_leftPanelConnections << connect(item, &QQuickItem::heightChanged, [=]() { item->setHeight(height()); handlePositionChange(); });
+		m_leftPanelConnections << connect(item, &QQuickItem::heightChanged, [=]() {
+			if (m_expansionAnimation->state() == QAbstractAnimation::Running) {
+				return;
+			}
+			if (m_expanded) {
+				handlePositionChange();
+				return;
+			}
+			item->setHeight(height()); handlePositionChange();
+		});
 
 		Q_EMIT leftPanelChanged();
 	}
