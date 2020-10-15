@@ -8,192 +8,174 @@ import QtQuick.Controls 2.10
 import org.kde.kirigami 2.11 as Kirigami
 import com.github.HarmonyDevelopment.Staccato 1.0
 
-Kirigami.GlobalDrawer {
-    id: drawer
+Item {
+	id: drawer
 
-    leftPadding: 0
-    rightPadding: 0
-    topPadding: 0
-    bottomPadding: 0
+	implicitWidth: shouldShow ? (channelsView.model != null ? 72 + 200 : 72) : 0
+	property bool shouldShow: false
 
-    width: channelsView.model != null ? 72 + 200 : 72
+	RowLayout {
+		spacing: 0
+		anchors.fill: parent
 
-    property bool shouldShow: false
-    property bool wideScreen: false
-    onWideScreenChanged: {
-        if (wideScreen) {
-            drawerOpen = Qt.binding(function() { return shouldShow })
-        } else {
-            drawerOpen = false
-        }
-    }
-    drawerOpen: shouldShow && wideScreen
+		ScrollView {
+			id: scrollView
 
-    contentItem: RowLayout {
-        spacing: 0
+			Kirigami.Theme.inherit: true
+			anchors.fill: parent
+			ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
+			ScrollBar.vertical.anchors {
+				top: scrollView.top
+				bottom: scrollView.bottom
+			}
 
-        ScrollView {
-            id: scrollView
+			Flickable {
+				contentWidth: 72
 
-            Kirigami.Theme.inherit: true
-            anchors.fill: parent
-            ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
-            ScrollBar.vertical.anchors {
-                top: scrollView.top
-                bottom: scrollView.bottom
-            }
+				ColumnLayout {
+					width: 72
+					implicitWidth: 72
 
-            Flickable {
-                contentWidth: 72
+					Rectangle {
+						implicitWidth: 48
+						implicitHeight: 48
+						color: Kirigami.Theme.backgroundColor
+						radius: 48 / 2
 
-                ColumnLayout {
-                    width: 72
-                    implicitWidth: 72
+						ToolButton {
+							anchors.fill: parent
+							icon.name: "list-add"
+							onClicked: guildSheet.openAndClear()
+						}
 
-                    Rectangle {
-                        implicitWidth: 48
-                        implicitHeight: 48
-                        color: Kirigami.Theme.backgroundColor
-                        radius: 48 / 2
+						Layout.alignment: Qt.AlignTop | Qt.AlignHCenter
+					}
 
-                        ToolButton {
-                            anchors.fill: parent
-                            icon.name: "list-add"
-                            onClicked: guildSheet.openAndClear()
-                        }
+					Repeater {
+						model: HState.guildModel
+						delegate: Rectangle {
+							implicitWidth: 48
+							implicitHeight: 48
+							color: "cyan"
+							radius: 48 / 2
 
-                        Layout.alignment: Qt.AlignTop | Qt.AlignHCenter
-                    }
+							Layout.alignment: Qt.AlignTop | Qt.AlignHCenter
 
-                    Repeater {
-                        model: HState.guildModel
-                        delegate: Rectangle {
-                            implicitWidth: 48
-                            implicitHeight: 48
-                            color: "cyan"
-                            radius: 48 / 2
+							ToolTip.text: model['guildName']
+							ToolTip.visible: maus.containsMouse
 
-                            Layout.alignment: Qt.AlignTop | Qt.AlignHCenter
+							MouseArea {
+								id: maus
+								anchors.fill: parent
+								hoverEnabled: true
+								acceptedButtons: Qt.LeftButton | Qt.RightButton
+								onClicked: {
+									if (mouse.button === Qt.RightButton) {
+										guildMenu.popup()
+										return
+									}
 
-                            ToolTip.text: model['guildName']
-                            ToolTip.visible: maus.containsMouse
+									channelsTitle.text = model['guildName']
+									channelsView.model = model['channelModel']
 
-                            MouseArea {
-                                id: maus
-                                anchors.fill: parent
-                                hoverEnabled: true
-                                acceptedButtons: Qt.LeftButton | Qt.RightButton
-                                onClicked: {
-                                    if (mouse.button === Qt.RightButton) {
-                                        guildMenu.popup()
-                                        return
-                                    }
+									rightHandDrawer.model = model['channelModel'].members
+								}
+							}
 
-                                    channelsTitle.text = model['guildName']
-                                    channelsView.model = model['channelModel']
+							Menu {
+								id: guildMenu
 
-                                    applicationWindow().contextDrawer.model = model['channelModel'].members
-                                    applicationWindow().contextDrawer.shouldShow = true
-                                }
-                            }
+								MenuItem {
+									text: model['isOwner'] ? "Delete" : "Leave"
+									onTriggered: {
+										if (HState.leaveGuild(model['homeserver'], model['guildID'], model['isOwner'])) {
+											root.showPassiveNotification("Left guild")
+										} else {
+											root.showPassiveNotification("Failed to leave guild")
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		Kirigami.Separator {
+			Layout.fillHeight: true
 
-                            Menu {
-                                id: guildMenu
+			visible: channelsView.model != null
+		}
+		ColumnLayout {
+			spacing: 0
+			visible: channelsView.model != null
 
-                                MenuItem {
-                                    text: model['isOwner'] ? "Delete" : "Leave"
-                                    onTriggered: {
-                                        if (HState.leaveGuild(model['homeserver'], model['guildID'], model['isOwner'])) {
-                                            root.showPassiveNotification("Left guild")
-                                        } else {
-                                            root.showPassiveNotification("Failed to leave guild")
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        Kirigami.Separator {
-            Layout.fillHeight: true
+			Kirigami.ApplicationHeader {
+				z: 2
+				Layout.fillWidth: true
 
-            visible: channelsView.model != null
-        }
-        ColumnLayout {
-            spacing: 0
-            visible: channelsView.model != null
+				contentItem: RowLayout {
+					anchors {
+						verticalCenter: parent.verticalCenter
+						left: parent.left
+						right: parent.right
+					}
 
-            Kirigami.ApplicationHeader {
-                z: 2
-                Layout.fillWidth: true
+					Kirigami.Heading {
+						id: channelsTitle
+						leftPadding: Kirigami.Units.largeSpacing
+						text: "Channels"
+						Layout.fillWidth: true
+					}
+					ToolButton {
+						icon.name: "settings-configure"
+						onClicked: root.pageStack.layers.push(Qt.resolvedUrl("Invites.qml"), {"inviteModel": channelsView.model.invitesModel()})
+					}
+					ToolButton {
+						icon.name: "list-add"
+						onClicked: sheety.open()
+					}
+				}
+				pageDelegate: Item {}
+			}
+			ListView {
+				id: channelsView
 
-                contentItem: RowLayout {
-                    anchors {
-                        verticalCenter: parent.verticalCenter
-                        left: parent.left
-                        right: parent.right
-                    }
+				z: 1
 
-                    Kirigami.Heading {
-                        id: channelsTitle
-                        leftPadding: Kirigami.Units.largeSpacing
-                        text: "Channels"
-                        Layout.fillWidth: true
-                    }
-                    ToolButton {
-                        icon.name: "settings-configure"
-                        onClicked: root.pageStack.layers.push(Qt.resolvedUrl("Invites.qml"), {"inviteModel": channelsView.model.invitesModel()})
-                    }
-                    ToolButton {
-                        icon.name: "list-add"
-                        onClicked: sheety.open()
-                    }
-                }
-                pageDelegate: Item {}
-            }
-            ListView {
-                id: channelsView
+				Layout.preferredWidth: 198
+				Layout.fillHeight: true
 
-                z: 1
+				delegate: Kirigami.SwipeListItem {
+					contentItem: Label {
+						text: `#${channelName}`
+						anchors.verticalCenter: parent.verticalCenter
+						verticalAlignment: Text.AlignVCenter
+					}
 
-                Layout.preferredWidth: 198
-                Layout.fillHeight: true
+					onClicked: {
+						routerInstance.navigateToRoute(
+							{
+								"route": "messages",
+								"data": messagesModel,
+								"title": `#${channelName}`
+							}
+						)
+					}
 
-                delegate: Kirigami.SwipeListItem {
-                    contentItem: Label {
-                        text: `#${channelName}`
-                        anchors.verticalCenter: parent.verticalCenter
-                        verticalAlignment: Text.AlignVCenter
-                    }
+					actions: [
+						Kirigami.Action {
+							icon.name: "edit-delete"
+							onTriggered: channelsView.model.deleteChannel(channelID)
+						}
+					]
+				}
+			}
+		}
+	}
 
-                    onClicked: {
-                        root.router.navigateToRoute(
-                            {
-                                "route": "messages",
-                                "data": messagesModel,
-                                "title": `#${channelName}`
-                            }
-                        )
-                    }
-
-                    actions: [
-                        Kirigami.Action {
-                            icon.name: "edit-delete"
-                            onTriggered: channelsView.model.deleteChannel(channelID)
-                        }
-                    ]
-                }
-            }
-        }
-    }
-
-    ChannelSheet {
-        id: sheety
-        model: channelsView.model
-    }
-
-    modal: !drawer.wideScreen
-    handleVisible: !drawer.wideScreen && shouldShow
+	ChannelSheet {
+		id: sheety
+		model: channelsView.model
+	}
 }

@@ -5,23 +5,42 @@
 import QtQuick 2.10
 import QtQuick.Window 2.10
 import org.kde.kirigami 2.13 as Kirigami
+import com.github.HarmonyDevelopment.Staccato 1.0
 
-Kirigami.RouterWindow {
-    id: root
+Kirigami.ApplicationWindow {
+	id: root
 
-    initialRoute: "login"
+	minimumWidth: 400
 
-    pageStack.globalToolBar.showNavigationButtons: 0
+	pageStack.globalToolBar.showNavigationButtons: 0
 
-    globalDrawer: StaccatoDrawer { wideScreen: root.wideScreen }
-    contextDrawer: RightDrawer { wideScreen: root.wideScreen }
+	OverlappingPanels {
+		anchors.fill: parent
 
-    property var guildSheet: GuildSheet {
-        id: guildSheet
-    }
+		leftPanel: RightDrawer { id: rightHandDrawer }
+		centerPanel: Kirigami.ColumnView {
+			id: colView
+			implicitWidth: 400
+			onImplicitWidthChanged: implicitWidth = 400
+			columnResizeMode: Kirigami.ColumnView.SingleColumn
 
-    LoginRoute {}
-    NoGuildRoute {}
-    ChannelRoute {}
-    MessagesRoute {}
+			Kirigami.PageRouter {
+				id: routerInstance
+
+				initialRoute: "login"
+				pageStack: colView
+
+				property var guildSheet: GuildSheet {
+					id: guildSheet
+				}
+
+				LoginRoute {}
+				NoGuildRoute {}
+				ChannelRoute {}
+				MessagesRoute {}
+			}
+		}
+		rightPanel: StaccatoDrawer { id: leftHandDrawer }
+	}
+
 }

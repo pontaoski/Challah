@@ -258,10 +258,39 @@ void OverlappingPanels::setCenterPanel(QQuickItem* item)
 		item->stackAfter(m_leftPanel);
 		item->stackAfter(m_rightPanel);
 
-		m_centerPanelConnections << connect(this, &QQuickItem::widthChanged, [=]() { item->setWidth(width()); });
-		m_centerPanelConnections << connect(this, &QQuickItem::heightChanged, [=]() { item->setHeight(height()); });
-		m_centerPanelConnections << connect(item, &QQuickItem::widthChanged, [=]() { item->setWidth(width()); handlePositionChange(); });
-		m_centerPanelConnections << connect(item, &QQuickItem::heightChanged, [=]() { item->setHeight(height()); handlePositionChange(); });
+		m_centerPanelConnections << connect(item, &QQuickItem::implicitWidthChanged, [=]() {
+			if (m_expansionAnimation->state() == QAbstractAnimation::Running) {
+				return;
+			}
+			handlePositionChange();
+		});
+		m_centerPanelConnections << connect(this, &QQuickItem::widthChanged, [=]() {
+			if (m_expansionAnimation->state() == QAbstractAnimation::Running) {
+				return;
+			}
+			if (m_expanded) {
+				handlePositionChange();
+				return;
+			}
+			item->setWidth(width());
+			item->setHeight(height());
+		});
+		m_centerPanelConnections << connect(this, &QQuickItem::heightChanged, [=]() {
+			item->setHeight(height());
+		});
+		m_centerPanelConnections << connect(item, &QQuickItem::widthChanged, [=]() {
+			if (m_expansionAnimation->state() == QAbstractAnimation::Running) {
+				return;
+			}
+			if (m_expanded) {
+				handlePositionChange();
+				return;
+			}
+			item->setHeight(height());
+		});
+		m_centerPanelConnections << connect(item, &QQuickItem::heightChanged, [=]() {
+			item->setHeight(height());
+		});
 
 		Q_EMIT centerPanelChanged();
 	}
@@ -293,6 +322,12 @@ void OverlappingPanels::setRightPanel(QQuickItem* item)
 
 		item->stackBefore(m_centerPanel);
 
+		m_rightPanelConnections << connect(item, &QQuickItem::implicitWidthChanged, [=]() {
+			if (m_expansionAnimation->state() == QAbstractAnimation::Running) {
+				return;
+			}
+			handlePositionChange();
+		});
 		m_rightPanelConnections << connect(this, &QQuickItem::widthChanged, [=]() {
 			if (m_expansionAnimation->state() == QAbstractAnimation::Running) {
 				return;
@@ -304,13 +339,6 @@ void OverlappingPanels::setRightPanel(QQuickItem* item)
 			item->setWidth(width() - (width() / HANG_FACTOR));
 		});
 		m_rightPanelConnections << connect(this, &QQuickItem::heightChanged, [=]() {
-			if (m_expansionAnimation->state() == QAbstractAnimation::Running) {
-				return;
-			}
-			if (m_expanded) {
-				handlePositionChange();
-				return;
-			}
 			item->setHeight(height());
 		});
 		m_rightPanelConnections << connect(item, &QQuickItem::widthChanged, [=]() {
@@ -321,17 +349,10 @@ void OverlappingPanels::setRightPanel(QQuickItem* item)
 				handlePositionChange();
 				return;
 			}
-			item->setWidth(width() - (width() / HANG_FACTOR)); handlePositionChange();
+			item->setWidth(width() - (width() / HANG_FACTOR));
 		});
 		m_rightPanelConnections << connect(item, &QQuickItem::heightChanged, [=]() {
-			if (m_expansionAnimation->state() == QAbstractAnimation::Running) {
-				return;
-			}
-			if (m_expanded) {
-				handlePositionChange();
-				return;
-			}
-			item->setHeight(height()); handlePositionChange();
+			item->setHeight(height());
 		});
 
 		Q_EMIT rightPanelChanged();
@@ -364,6 +385,12 @@ void OverlappingPanels::setLeftPanel(QQuickItem* item)
 
 		item->stackBefore(m_centerPanel);
 
+		m_leftPanelConnections << connect(item, &QQuickItem::implicitWidthChanged, [=]() {
+			if (m_expansionAnimation->state() == QAbstractAnimation::Running) {
+				return;
+			}
+			handlePositionChange();
+		});
 		m_leftPanelConnections << connect(this, &QQuickItem::widthChanged, [=]() {
 			if (m_expansionAnimation->state() == QAbstractAnimation::Running) {
 				return;
@@ -376,13 +403,6 @@ void OverlappingPanels::setLeftPanel(QQuickItem* item)
 			item->setPosition(QPointF(width() - item->width(), 0));
 		});
 		m_leftPanelConnections << connect(this, &QQuickItem::heightChanged, [=]() {
-			if (m_expansionAnimation->state() == QAbstractAnimation::Running) {
-				return;
-			}
-			if (m_expanded) {
-				handlePositionChange();
-				return;
-			}
 			item->setHeight(height());
 		});
 		m_leftPanelConnections << connect(item, &QQuickItem::widthChanged, [=]() {
@@ -395,17 +415,9 @@ void OverlappingPanels::setLeftPanel(QQuickItem* item)
 			}
 			item->setWidth(width() - (width() / HANG_FACTOR));
 			item->setPosition(QPointF(width() - item->width(), 0));
-			handlePositionChange();
 		});
 		m_leftPanelConnections << connect(item, &QQuickItem::heightChanged, [=]() {
-			if (m_expansionAnimation->state() == QAbstractAnimation::Running) {
-				return;
-			}
-			if (m_expanded) {
-				handlePositionChange();
-				return;
-			}
-			item->setHeight(height()); handlePositionChange();
+			item->setHeight(height());
 		});
 
 		Q_EMIT leftPanelChanged();
