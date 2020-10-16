@@ -11,7 +11,7 @@ import com.github.HarmonyDevelopment.Staccato 1.0
 Item {
 	id: drawer
 
-	implicitWidth: model !== null ? 300 : 0
+	implicitWidth: model !== null ? 200 : 0
 
 	Kirigami.Theme.inherit: true
 	Kirigami.Theme.colorSet: Kirigami.Theme.View
@@ -73,8 +73,8 @@ Item {
 						name: display
 						source: decoration
 
-						Layout.preferredWidth: Kirigami.Units.gridUnit * 2
-						Layout.preferredHeight: Kirigami.Units.gridUnit * 2
+						Layout.preferredWidth: Math.floor(Kirigami.Units.gridUnit * 1.75)
+						Layout.preferredHeight: Math.floor(Kirigami.Units.gridUnit * 1.75)
 					}
 					Label {
 						text: display

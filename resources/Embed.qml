@@ -15,6 +15,9 @@ QQC2.Control {
     topPadding: Kirigami.Units.largeSpacing * 2
     bottomPadding: Kirigami.Units.largeSpacing * 2
 
+	Kirigami.Theme.inherit: true
+	Kirigami.Theme.colorSet: Kirigami.Theme.Window
+
     background: Kirigami.ShadowedRectangle {
         radius: 5
         border {
@@ -32,16 +35,34 @@ QQC2.Control {
         Kirigami.Heading {
             level: 3
             text: modelData.title
+			textFormat: TextEdit.MarkdownText
             wrapMode: Text.Wrap
 
             Layout.fillWidth: true
         }
         QQC2.Label {
             text: modelData.body
+			textFormat: TextEdit.MarkdownText
             wrapMode: Text.Wrap
 
             Layout.fillWidth: true
         }
+
+		Repeater {
+			model: modelData.fields
+
+			ColumnLayout {
+				QQC2.Label {
+					text: modelData.title
+					textFormat: TextEdit.MarkdownText
+					font.bold: true
+				}
+				QQC2.Label {
+					text: modelData.body
+					textFormat: TextEdit.MarkdownText
+				}
+			}
+		}
 
         Repeater {
             model: modelData.actions

@@ -42,9 +42,11 @@ Kirigami.PageRoute {
                             Kirigami.Heading {
                                 level: 3
                                 text: replyingBar.replyingToAuthor
+								textFormat: TextEdit.MarkdownText
                             }
                             QQC2.Label {
                                 text: replyingBar.replyingToContent
+								textFormat: TextEdit.MarkdownText
 
                                 Layout.fillWidth: true
                             }
@@ -119,7 +121,6 @@ Kirigami.PageRoute {
             }
 
             delegate: QQC2.SwipeDelegate {
-                background: null
                 padding: 0
                 swipe.right: RowLayout {
                     Kirigami.Icon {
@@ -137,6 +138,34 @@ Kirigami.PageRoute {
                     replyingBar.replyingToContent = content
                     swipe.close()
                 }
+
+				background: MouseArea {
+					acceptedButtons: Qt.RightButton
+					onClicked: {
+						if ((messagesRoute.model.userID() == authorID || messagesRoute.model.isOwner()) && mouse.button === Qt.RightButton)
+							messageMenu.popup()
+					}
+
+					QQC2.Menu {
+						id: messageMenu
+
+						QQC2.MenuItem {
+							text: "Edit"
+							visible: messagesRoute.model.userID() == authorID
+							onTriggered: {
+								messageBlock.edit = true
+							}
+						}
+						QQC2.MenuItem {
+							text: "Delete"
+							visible: messagesRoute.model.userID() == authorID || messagesRoute.model.isOwner()
+							onTriggered: {
+								messagesRoute.model.deleteMessage(messageID)
+							}
+						}
+					}
+				}
+
                 contentItem: ColumnLayout {
                     id: messageDelegate
                     property string modelMessageID: messageID
@@ -144,6 +173,7 @@ Kirigami.PageRoute {
                     QQC2.Control {
                         id: messageBlock
                         property bool edit: false
+						visible: content != ""
 
                         padding: Kirigami.Units.largeSpacing * 2
 
@@ -158,33 +188,6 @@ Kirigami.PageRoute {
                         background: Rectangle {
                             radius: 4
                             color: Kirigami.Theme.backgroundColor
-
-                            MouseArea {
-                                anchors.fill: parent
-                                acceptedButtons: Qt.RightButton
-                                onClicked: {
-                                    if ((messagesRoute.model.userID() == authorID || messagesRoute.model.isOwner()) && mouse.button === Qt.RightButton)
-                                        messageMenu.popup()
-                                }
-                            }
-                            QQC2.Menu {
-                                id: messageMenu
-
-                                QQC2.MenuItem {
-                                    text: "Edit"
-                                    visible: messagesRoute.model.userID() == authorID
-                                    onTriggered: {
-                                        messageBlock.edit = true
-                                    }
-                                }
-                                QQC2.MenuItem {
-                                    text: "Delete"
-                                    visible: messagesRoute.model.userID() == authorID || messagesRoute.model.isOwner()
-                                    onTriggered: {
-                                        messagesRoute.model.deleteMessage(messageID)
-                                    }
-                                }
-                            }
                         }
                         contentItem: ColumnLayout {
                             QQC2.Label {
@@ -192,6 +195,7 @@ Kirigami.PageRoute {
                                 text: authorName
 
                                 font.pixelSize: Kirigami.Units.gridUnit * (4/5)
+								font.pointSize: -1
                                 wrapMode: Text.Wrap
 
                                 Layout.alignment: Qt.AlignTop
@@ -218,12 +222,14 @@ Kirigami.PageRoute {
                                         text: parent.peeked["authorName"] || ""
                                         elide: Text.ElideRight
                                         color: Kirigami.Theme.highlightColor
+										textFormat: TextEdit.MarkdownText
 
                                         Layout.fillWidth: true
                                     }
                                     QQC2.Label {
                                         text: parent.peeked["content"] || ""
                                         elide: Text.ElideRight
+										textFormat: TextEdit.MarkdownText
 
                                         Layout.fillWidth: true
                                     }
@@ -236,8 +242,10 @@ Kirigami.PageRoute {
                                 QQC2.Label {
                                     visible: !messageBlock.edit
                                     text: content
+									textFormat: TextEdit.MarkdownText
 
                                     font.pixelSize: Kirigami.Units.gridUnit * (3/4)
+									font.pointSize: -1
                                     wrapMode: Text.Wrap
 
                                     Layout.alignment: Qt.AlignBottom
@@ -262,6 +270,7 @@ Kirigami.PageRoute {
                                     opacity: 0.5
 
                                     font.pixelSize: Kirigami.Units.gridUnit * (1/2)
+									font.pointSize: -1
                                     Layout.alignment: Qt.AlignBottom | Qt.AlignRight
                                 }
                             }
