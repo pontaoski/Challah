@@ -14,6 +14,23 @@ Item {
 	implicitWidth: shouldShow ? (channelsView.model != null ? 72 + 200 : 72) : 0
 	property bool shouldShow: false
 
+	Rectangle {
+		anchors.fill: parent
+
+		Kirigami.Theme.inherit: true
+		Kirigami.Theme.colorSet: Kirigami.Theme.View
+
+		color: Kirigami.Theme.backgroundColor
+
+		Kirigami.Separator {
+			anchors {
+				top: parent.top
+				right: parent.right
+				bottom: parent.bottom
+			}
+		}
+	}
+
 	RowLayout {
 		spacing: 0
 		anchors.fill: parent
@@ -129,7 +146,7 @@ Item {
 					}
 					ToolButton {
 						icon.name: "settings-configure"
-						onClicked: root.pageStack.layers.push(Qt.resolvedUrl("Invites.qml"), {"inviteModel": channelsView.model.invitesModel()})
+						onClicked: colView.layers.push(Qt.resolvedUrl("Invites.qml"), {"inviteModel": channelsView.model.invitesModel()})
 					}
 					ToolButton {
 						icon.name: "list-add"
@@ -142,6 +159,9 @@ Item {
 				id: channelsView
 
 				z: 1
+
+				Kirigami.Theme.inherit: true
+				Kirigami.Theme.colorSet: Kirigami.Theme.View
 
 				Layout.preferredWidth: 198
 				Layout.fillHeight: true

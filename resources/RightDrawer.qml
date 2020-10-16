@@ -16,6 +16,20 @@ Item {
 	Kirigami.Theme.inherit: true
 	Kirigami.Theme.colorSet: Kirigami.Theme.View
 
+	Rectangle {
+		anchors.fill: parent
+
+		color: Kirigami.Theme.backgroundColor
+
+		Kirigami.Separator {
+			anchors {
+				top: parent.top
+				left: parent.left
+				bottom: parent.bottom
+			}
+		}
+	}
+
 	property var model: null
 
 	ColumnLayout {
@@ -44,6 +58,9 @@ Item {
 
 		ListView {
 			model: drawer.model
+
+			Kirigami.Theme.inherit: true
+			Kirigami.Theme.colorSet: Kirigami.Theme.View
 
 			Layout.fillWidth: true
 			Layout.fillHeight: true

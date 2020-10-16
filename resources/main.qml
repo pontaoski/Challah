@@ -10,7 +10,8 @@ import com.github.HarmonyDevelopment.Staccato 1.0
 Kirigami.ApplicationWindow {
 	id: root
 
-	minimumWidth: 400
+	minimumWidth: 500
+	width: 1000
 
 	pageStack.globalToolBar.showNavigationButtons: 0
 
@@ -18,17 +19,22 @@ Kirigami.ApplicationWindow {
 		anchors.fill: parent
 
 		leftPanel: RightDrawer { id: rightHandDrawer }
-		centerPanel: Kirigami.ColumnView {
+		centerPanel: Kirigami.PageRow {
 			id: colView
 			implicitWidth: 400
 			onImplicitWidthChanged: implicitWidth = 400
-			columnResizeMode: Kirigami.ColumnView.SingleColumn
+			columnView {
+				columnResizeMode: Kirigami.ColumnView.SingleColumn
+			}
+			globalToolBar {
+				style: Kirigami.ApplicationHeaderStyle.ToolBar
+			}
 
 			Kirigami.PageRouter {
 				id: routerInstance
 
 				initialRoute: "login"
-				pageStack: colView
+				pageStack: colView.columnView
 
 				property var guildSheet: GuildSheet {
 					id: guildSheet
