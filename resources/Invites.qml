@@ -33,6 +33,8 @@ Kirigami.ScrollablePage {
 	Kirigami.OverlaySheet {
 		id: createInvitesSheet
 
+		parent: applicationWindow().overlay
+
 		Kirigami.FormLayout {
 			QQC2.TextField {
 				id: inviteField

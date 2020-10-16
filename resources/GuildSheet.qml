@@ -12,6 +12,8 @@ import com.github.HarmonyDevelopment.Staccato 1.0
 Kirigami.OverlaySheet {
     id: rooty
 
+	parent: applicationWindow().overlay
+
     function openAndClear() {
         swipeView.currentIndex = 0
         name.text = invite.text = ""
