@@ -26,6 +26,9 @@ public:
 
 	static State* instance();
 
+	Q_SIGNAL void loggedIn();
+
+	Q_INVOKABLE bool startupLogin();
 	Q_INVOKABLE bool login(const QString& email, const QString& password, const QString &homeserver);
 	Q_INVOKABLE bool createGuild(const QString& name);
 	Q_INVOKABLE bool joinGuild(const QString& inviteLink);

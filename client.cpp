@@ -16,7 +16,7 @@ void Client::authenticate(grpc::ClientContext &ctx)
 	ctx.AddMetadata("auth", userToken);
 }
 
-void Client::refreshGuilds()
+bool Client::refreshGuilds()
 {
 	ClientContext ctx;
 	authenticate(ctx);
@@ -25,7 +25,7 @@ void Client::refreshGuilds()
 	protocol::core::v1::GetGuildListResponse resp;
 
 	if (!checkStatus(coreKit->GetGuildList(&ctx, req, &resp))) {
-		return;
+		return false;
 	}
 
 	State::instance()->guildModel->guilds.clear();
@@ -46,6 +46,7 @@ void Client::refreshGuilds()
 	}
 
 	State::instance()->guildModel->endResetModel();
+	return true;
 }
 
 Client::Client() : QObject()
@@ -164,7 +165,7 @@ bool Client::createGuild(const QString &name)
 	req2.set_homeserver(homeserver.toStdString());
 
 	auto resp2 = protocol::core::v1::AddGuildToGuildListResponse{};
-	
+
 	if (!checkStatus(coreKit->AddGuildToGuildList(&ctx2, req2, &resp2))) {
 		return false;
 	}
@@ -197,7 +198,7 @@ bool Client::joinInvite(const QString& invite)
 		req.set_homeserver(homeserver.toStdString());
 
 		protocol::core::v1::AddGuildToGuildListResponse resp2;
-		
+
 		if (!checkStatus(client->coreKit->AddGuildToGuildList(&ctx, req, &resp2))) {
 			return false;
 		}
@@ -253,6 +254,60 @@ bool Client::leaveGuild(quint64 id, bool isOwner)
 	return true;
 }
 
+bool Client::consumeToken(const QString& token, quint64 userID, const QString& homeserver)
+{
+	client = grpc::CreateChannel(homeserver.toStdString(), grpc::InsecureChannelCredentials());
+	clients[homeserver] = this;
+
+	this->homeserver = homeserver;
+	this->userID = userID;
+	this->userToken = token.toStdString();
+
+	coreKit = protocol::core::v1::CoreService::NewStub(client);
+	foundationKit = protocol::foundation::v1::FoundationService::NewStub(client);
+	profileKit = protocol::profile::v1::ProfileService::NewStub(client);
+
+	if (!refreshGuilds()) {
+		return false;
+	}
+
+	QtConcurrent::run([=]() {
+		runEvents();
+	});
+
+	return true;
+}
+
+void Client::runEvents()
+{
+	ClientContext ctx;
+	authenticate(ctx);
+
+	protocol::core::v1::StreamHomeserverEventsRequest req;
+	auto stream = coreKit->StreamHomeserverEvents(&ctx, req);
+	protocol::core::v1::HomeserverEvent msg;
+
+	while (stream->Read(&msg)) {
+		if (msg.has_guild_added_to_list()) {
+			auto guild = msg.guild_added_to_list();
+
+			auto data = Client::instanceForHomeserver(QString::fromStdString(guild.homeserver()))->guildInfo(guild.guild_id());
+
+			Q_EMIT State::instance()->guildModel->addGuild(Guild {
+				.guildID = guild.guild_id(),
+				.ownerID = data.ownerID,
+				.homeserver = QString::fromStdString(guild.homeserver()),
+				.name = data.name,
+				.picture = data.picture,
+			});
+		} else if (msg.has_guild_removed_from_list()) {
+			auto guild = msg.guild_removed_from_list();
+
+			Q_EMIT State::instance()->guildModel->removeGuild(QString::fromStdString(guild.homeserver()), guild.guild_id());
+		}
+	}
+}
+
 bool Client::login(const QString &email, const QString &password, const QString &hs)
 {
 	client = grpc::CreateChannel(hs.toStdString(), grpc::InsecureChannelCredentials());
@@ -280,33 +335,13 @@ bool Client::login(const QString &email, const QString &password, const QString 
 	userToken = repl.session_token();
 	userID = repl.user_id();
 
+	QSettings settings;
+	settings.setValue("state/token", QString::fromStdString(repl.session_token()));
+	settings.setValue("state/homeserver", hs);
+	settings.setValue("state/userid", userID);
+
 	QtConcurrent::run([=]() {
-		ClientContext ctx;
-		authenticate(ctx);
-
-		protocol::core::v1::StreamHomeserverEventsRequest req;
-		auto stream = coreKit->StreamHomeserverEvents(&ctx, req);
-		protocol::core::v1::HomeserverEvent msg;
-
-		while (stream->Read(&msg)) {
-			if (msg.has_guild_added_to_list()) {
-				auto guild = msg.guild_added_to_list();
-
-				auto data = Client::instanceForHomeserver(QString::fromStdString(guild.homeserver()))->guildInfo(guild.guild_id());
-
-				Q_EMIT State::instance()->guildModel->addGuild(Guild {
-					.guildID = guild.guild_id(),
-					.ownerID = data.ownerID,
-					.homeserver = QString::fromStdString(guild.homeserver()),
-					.name = data.name,
-					.picture = data.picture,
-				});
-			} else if (msg.has_guild_removed_from_list()) {
-				auto guild = msg.guild_removed_from_list();
-
-				Q_EMIT State::instance()->guildModel->removeGuild(QString::fromStdString(guild.homeserver()), guild.guild_id());
-			}
-		}
+		runEvents();
 	});
 
 	refreshGuilds();

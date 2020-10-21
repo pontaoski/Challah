@@ -30,10 +30,25 @@ Kirigami.ApplicationWindow {
 				style: Kirigami.ApplicationHeaderStyle.ToolBar
 			}
 
+			Connections {
+				target: HState
+				function onLoggedIn() {
+					routerInstance.navigateToRoute("no-guild")
+					leftHandDrawer.shouldShow = true
+				}
+			}
+
 			Kirigami.PageRouter {
 				id: routerInstance
 
-				initialRoute: "login"
+				initialRoute: {
+					if (HState.startupLogin()) {
+						leftHandDrawer.shouldShow = true
+						return "no-guild"
+					} else {
+						return "login"
+					}
+				}
 				pageStack: colView.columnView
 
 				property var guildSheet: GuildSheet {

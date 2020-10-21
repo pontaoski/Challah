@@ -40,8 +40,6 @@ Kirigami.PageRoute {
                 onClicked: {
                     if (HState.login(email.text, password.text, homeserver.text)) {
                         root.showPassiveNotification("Logged in")
-                        Kirigami.PageRouter.navigateToRoute("no-guild")
-						leftHandDrawer.shouldShow = true
                     } else {
                         root.showPassiveNotification("Failed to log in")
                     }

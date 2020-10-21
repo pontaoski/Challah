@@ -21,6 +21,8 @@
 
 #include "guild.hpp"
 
+class State;
+
 class Client : public QObject
 {
 	Q_OBJECT
@@ -31,6 +33,8 @@ class Client : public QObject
 	std::string userToken;
 
 	QString homeserver;
+
+	friend class State;
 
 public:
 	std::shared_ptr<grpc_impl::Channel> client;
@@ -43,6 +47,7 @@ private:
 	void federateOtherClient(Client* client, const QString& target);
 
 	Client();
+	void runEvents();
 
 public:
 	quint64 userID;
@@ -53,5 +58,6 @@ public:
 	bool createGuild(const QString& name);
 	bool leaveGuild(quint64 id, bool isOwner);
 	GuildRepl guildInfo(quint64 id);
-	void refreshGuilds();
+	bool consumeToken(const QString& token, quint64 userID, const QString& homeserver);
+	bool refreshGuilds();
 };
