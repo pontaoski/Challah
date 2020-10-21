@@ -123,6 +123,12 @@ QVariant MessagesModel::data(const QModelIndex& index, int role) const
 		return QString::number(messageData[idx].id);
 	case MessageReplyToRole:
 		return messageData[idx].replyTo != 0 ? QString::number(messageData[idx].replyTo) : QVariant();
+	case MessageCombinedAuthorIDAvatarRole:
+		return QStringList{
+			QString::number(messageData[idx].authorID),
+			qobject_cast<ChannelsModel*>(parent())->avatarURL(messageData[idx].authorID),
+			qobject_cast<ChannelsModel*>(parent())->userName(messageData[idx].authorID)
+		}.join("\t");
 	}
 
 	return QVariant();
@@ -141,6 +147,7 @@ QHash<int,QByteArray> MessagesModel::roleNames() const
 	ret[MessageIDRole] = "messageID";
 	ret[MessageAuthorNextIDRole] = "nextAuthor";
 	ret[MessageReplyToRole] = "replyToID";
+	ret[MessageCombinedAuthorIDAvatarRole] = "authorIDAndAvatar";
 
 	return ret;
 }

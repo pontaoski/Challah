@@ -98,14 +98,13 @@ Kirigami.PageRoute {
 
             section {
                 criteria: ViewSection.FullString
-                property: "authorName"
+                property: "authorIDAndAvatar"
                 delegate: Item {
-                    required property string section
-                    required property string authorAvatar
+					required property var section
 
                     Kirigami.Avatar {
-                        name: parent.section
-                        source: parent.authorAvatar
+                        name: parent.section.split("\t")[2]
+                        source: parent.section.split("\t")[1]
 
                         width: Kirigami.Units.gridUnit * 2
                         height: Kirigami.Units.gridUnit * 2
