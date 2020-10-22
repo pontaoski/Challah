@@ -61,6 +61,30 @@ Item {
 
 						ToolButton {
 							anchors.fill: parent
+							icon.name: "application-menu"
+							onClicked: appMenu.open()
+						}
+
+						Menu {
+							id: appMenu
+
+							MenuItem {
+								text: "Log Out"
+								onTriggered: routerInstance.navigateToRoute("login")
+							}
+						}
+
+						Layout.alignment: Qt.AlignTop | Qt.AlignHCenter
+					}
+
+					Rectangle {
+						implicitWidth: 48
+						implicitHeight: 48
+						color: Kirigami.Theme.backgroundColor
+						radius: 48 / 2
+
+						ToolButton {
+							anchors.fill: parent
 							icon.name: "list-add"
 							onClicked: guildSheet.openAndClear()
 						}
