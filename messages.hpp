@@ -6,6 +6,7 @@
 
 #include <QAbstractListModel>
 #include <QJsonDocument>
+#include <optional>
 
 #include <google/protobuf/util/json_util.h>
 
@@ -26,10 +27,40 @@ struct MessageData
 	QDateTime editedAt;
 	quint64 replyTo;
 
+	struct Override
+	{
+		QString name;
+		QString avatar;
+
+		enum Reason {
+			Plurality,
+			Bridge,
+			Webhook
+		};
+		Reason reason;
+	};
+	std::optional<Override> overrides;
+
 	static MessageData fromProtobuf(protocol::core::v1::Message& msg) {
 		std::string jsonified;
 		google::protobuf::util::MessageToJsonString(msg, &jsonified, google::protobuf::util::JsonPrintOptions{});
 		auto document = QJsonDocument::fromJson(QByteArray::fromStdString(jsonified));
+
+		qDebug() << msg.has_overrides();
+
+		std::optional<Override> overrides;
+		if (msg.has_overrides()) {
+			overrides = Override{};
+			overrides->name = QString::fromStdString(msg.overrides().name());
+			overrides->avatar = QString::fromStdString(msg.overrides().avatar());
+			if (msg.overrides().has_system_plurality()) {
+				overrides->reason = Override::Plurality;
+			} else if (msg.overrides().has_webhook()) {
+				overrides->reason = Override::Webhook;
+			} else if (msg.overrides().has_bridge()) {
+				overrides->reason = Override::Bridge;
+			}
+		}
 
 		return MessageData {
 			.text = QString::fromStdString(msg.content()),
@@ -39,7 +70,8 @@ struct MessageData
 			.actions = document["actions"],
 			.embeds = document["embeds"],
 			.editedAt = QDateTime(),
-			.replyTo = msg.in_reply_to()
+			.replyTo = msg.in_reply_to(),
+			.overrides = overrides
 		};
 	}
 };
@@ -75,7 +107,7 @@ class MessagesModel : public QAbstractListModel
 		MessageAuthorRole,
 		MessageAuthorAvatarRole,
 		MessageAuthorIDRole,
-		MessageAuthorNextIDRole,
+		MessageShouldDisplayAuthorInfo,
 		MessageDateRole,
 		MessageReplyToRole,
 		MessageIDRole,

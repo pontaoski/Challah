@@ -190,7 +190,7 @@ Kirigami.PageRoute {
                         }
                         contentItem: ColumnLayout {
                             QQC2.Label {
-                                visible: authorID != nextAuthor
+                                visible: shouldShowAuthorInfo
                                 text: authorName
 
                                 font.pixelSize: Kirigami.Units.gridUnit * (4/5)

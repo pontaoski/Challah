@@ -99,20 +99,54 @@ QVariant MessagesModel::data(const QModelIndex& index, int role) const
 
 	auto idx = index.row();
 
+	auto author = [=]() {
+		if (messageData[idx].overrides.has_value()) {
+			return messageData[idx].overrides->name;
+		}
+		return qobject_cast<ChannelsModel*>(parent())->userName(messageData[idx].authorID);
+	};
+	auto avatar = [=]() {
+		if (messageData[idx].overrides.has_value()) {
+			return messageData[idx].overrides->avatar;
+		}
+		return qobject_cast<ChannelsModel*>(parent())->avatarURL(messageData[idx].authorID);
+	};
+	auto isNextDifferent = [=]() {
+		if (messageData.length() <= (idx+1))
+			return true;
+
+		if (messageData[idx].overrides.has_value() != messageData[idx+1].overrides.has_value())
+			return true;
+
+		if ((!messageData[idx].overrides.has_value()) == (!messageData[idx+1].overrides.has_value()))
+			return false;
+
+		const auto& lhs = messageData[idx].overrides.value();
+		const auto& rhs = messageData[idx+1].overrides.value();
+
+		if (lhs.avatar != rhs.avatar)
+			return true;
+
+		if (lhs.name != rhs.name)
+			return true;
+
+		return false;
+	};
+
 	switch (role)
 	{
 	case MessageTextRole:
 		return messageData[idx].text;
 	case MessageAuthorRole:
-		return qobject_cast<ChannelsModel*>(parent())->userName(messageData[idx].authorID);
+		return author();
 	case MessageAuthorAvatarRole:
-		return qobject_cast<ChannelsModel*>(parent())->avatarURL(messageData[idx].authorID);
+		return avatar();
 	case MessageAuthorIDRole:
 		return QString::number(messageData[idx].authorID);
-	case MessageAuthorNextIDRole:
+	case MessageShouldDisplayAuthorInfo:
 		if (messageData.length() <= (idx+1))
-			return QString();
-		return QString::number(messageData[idx+1].authorID);
+			return true;
+		return (messageData[idx+1].authorID != messageData[idx].authorID) or isNextDifferent();
 	case MessageDateRole:
 		return messageData[idx].date;
 	case MessageEmbedsRole:
@@ -126,8 +160,8 @@ QVariant MessagesModel::data(const QModelIndex& index, int role) const
 	case MessageCombinedAuthorIDAvatarRole:
 		return QStringList{
 			QString::number(messageData[idx].authorID),
-			qobject_cast<ChannelsModel*>(parent())->avatarURL(messageData[idx].authorID),
-			qobject_cast<ChannelsModel*>(parent())->userName(messageData[idx].authorID)
+			avatar(),
+			author()
 		}.join("\t");
 	}
 
@@ -145,7 +179,7 @@ QHash<int,QByteArray> MessagesModel::roleNames() const
 	ret[MessageEmbedsRole] = "embeds";
 	ret[MessageActionsRole] = "actions";
 	ret[MessageIDRole] = "messageID";
-	ret[MessageAuthorNextIDRole] = "nextAuthor";
+	ret[MessageShouldDisplayAuthorInfo] = "shouldShowAuthorInfo";
 	ret[MessageReplyToRole] = "replyToID";
 	ret[MessageCombinedAuthorIDAvatarRole] = "authorIDAndAvatar";
 
@@ -168,7 +202,7 @@ void MessagesModel::sendMessage(const QString& message, const QString &replyTo)
 		req.set_in_reply_to(replyTo.toULongLong());
 	}
 
-	google::protobuf::Empty empty;
+	protocol::core::v1::SendMessageResponse empty;
 
 	client->coreKit->SendMessage(&ctx, req, &empty);
 }
