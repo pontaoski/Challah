@@ -46,8 +46,6 @@ struct MessageData
 		google::protobuf::util::MessageToJsonString(msg, &jsonified, google::protobuf::util::JsonPrintOptions{});
 		auto document = QJsonDocument::fromJson(QByteArray::fromStdString(jsonified));
 
-		qDebug() << msg.has_overrides();
-
 		std::optional<Override> overrides;
 		if (msg.has_overrides()) {
 			overrides = Override{};

@@ -29,7 +29,6 @@ bool State::startupLogin()
 	QVariant hs = settings.value("state/homeserver");
 	QVariant userID = settings.value("state/userid");
 	if (token.isValid() && hs.isValid() && userID.isValid()) {
-		qDebug() << "Trying to log into" << hs << "with user token" << token << "for user" << userID;
 		if (client->consumeToken(token.toString(), userID.value<quint64>(), hs.toString())) {
 			return true;
 		}
