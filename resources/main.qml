@@ -18,7 +18,8 @@ Kirigami.ApplicationWindow {
 	OverlappingPanels {
 		anchors.fill: parent
 
-		leftPanel: RightDrawer { id: rightHandDrawer }
+		leftPanel: StaccatoDrawer { id: leftHandDrawer }
+		rightPanel: RightDrawer { id: rightHandDrawer }
 		centerPanel: Kirigami.PageRow {
 			id: colView
 			implicitWidth: 400
@@ -61,7 +62,6 @@ Kirigami.ApplicationWindow {
 				MessagesRoute {}
 			}
 		}
-		rightPanel: StaccatoDrawer { id: leftHandDrawer }
 	}
 
 }

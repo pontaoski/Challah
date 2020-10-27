@@ -66,11 +66,11 @@ OverlappingPanels::OverlappingPanels(QQuickItem* parent) : QQuickItem(parent)
 			m_leftPanel->setVisible(false);
 			m_rightPanel->setVisible(false);
 
-			m_rightPanel->setPosition(QPointF(0, 0));
-			m_rightPanel->setWidth(width() - (width() / HANG_FACTOR));
-
-			m_leftPanel->setPosition(QPointF(width() - m_leftPanel->width(), 0));
+			m_leftPanel->setPosition(QPointF(0, 0));
 			m_leftPanel->setWidth(width() - (width() / HANG_FACTOR));
+
+			m_rightPanel->setWidth(width() - (width() / HANG_FACTOR));
+			m_rightPanel->setPosition(QPointF(width() - m_rightPanel->width(), 0));
 
 			m_leftPanel->blockSignals(false);
 			m_rightPanel->blockSignals(false);
@@ -187,11 +187,11 @@ void OverlappingPanels::handlePositionChange()
 	auto containerHorizontalCenter = (width() / 2);
 	auto itemHorizontalCenter = clamped + containerHorizontalCenter;
 	if (itemHorizontalCenter < containerHorizontalCenter) {
-		m_leftPanel->setVisible(true);
-		m_rightPanel->setVisible(false);
-	} else if (itemHorizontalCenter > containerHorizontalCenter) {
 		m_rightPanel->setVisible(true);
 		m_leftPanel->setVisible(false);
+	} else if (itemHorizontalCenter > containerHorizontalCenter) {
+		m_leftPanel->setVisible(true);
+		m_rightPanel->setVisible(false);
 	} else {
 		m_leftPanel->setVisible(false);
 		m_rightPanel->setVisible(false);
@@ -320,8 +320,6 @@ void OverlappingPanels::setRightPanel(QQuickItem* item)
 		item->setWidth(width() - (width() / HANG_FACTOR));
 		item->setHeight(height());
 
-		qDebug() << width() << (width() - (width() / HANG_FACTOR));
-
 		item->stackBefore(m_centerPanel);
 
 		m_rightPanelConnections << connect(item, &QQuickItem::implicitWidthChanged, [=]() {
@@ -339,6 +337,7 @@ void OverlappingPanels::setRightPanel(QQuickItem* item)
 				return;
 			}
 			item->setWidth(width() - (width() / HANG_FACTOR));
+			item->setPosition(QPointF(width() - item->width(), 0));
 		});
 		m_rightPanelConnections << connect(this, &QQuickItem::heightChanged, [=]() {
 			item->setHeight(height());
@@ -352,6 +351,7 @@ void OverlappingPanels::setRightPanel(QQuickItem* item)
 				return;
 			}
 			item->setWidth(width() - (width() / HANG_FACTOR));
+			item->setPosition(QPointF(width() - item->width(), 0));
 		});
 		m_rightPanelConnections << connect(item, &QQuickItem::heightChanged, [=]() {
 			item->setHeight(height());
@@ -402,7 +402,7 @@ void OverlappingPanels::setLeftPanel(QQuickItem* item)
 				return;
 			}
 			item->setWidth(width() - (width() / HANG_FACTOR));
-			item->setPosition(QPointF(width() - item->width(), 0));
+			item->setPosition(QPointF(0, 0));
 		});
 		m_leftPanelConnections << connect(this, &QQuickItem::heightChanged, [=]() {
 			item->setHeight(height());
@@ -416,7 +416,7 @@ void OverlappingPanels::setLeftPanel(QQuickItem* item)
 				return;
 			}
 			item->setWidth(width() - (width() / HANG_FACTOR));
-			item->setPosition(QPointF(width() - item->width(), 0));
+			item->setPosition(QPointF(0, 0));
 		});
 		m_leftPanelConnections << connect(item, &QQuickItem::heightChanged, [=]() {
 			item->setHeight(height());

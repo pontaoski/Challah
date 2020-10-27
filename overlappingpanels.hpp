@@ -19,8 +19,8 @@ class OverlappingPanels : public QQuickItem
 {
 	Q_OBJECT
 
-	Q_PROPERTY(QQuickItem* leftPanel READ rightPanel WRITE setRightPanel NOTIFY rightPanelChanged REQUIRED)
-	Q_PROPERTY(QQuickItem* rightPanel READ leftPanel WRITE setLeftPanel NOTIFY leftPanelChanged REQUIRED)
+	Q_PROPERTY(QQuickItem* leftPanel READ leftPanel WRITE setLeftPanel NOTIFY rightPanelChanged REQUIRED)
+	Q_PROPERTY(QQuickItem* rightPanel READ rightPanel WRITE setRightPanel NOTIFY leftPanelChanged REQUIRED)
 	Q_PROPERTY(QQuickItem* centerPanel READ centerPanel WRITE setCenterPanel NOTIFY centerPanelChanged REQUIRED)
 
 	void handlePositionChange();
@@ -61,6 +61,7 @@ public:
 		if (kind == EventKind::Down) {
 			down = true;
 			setPreviousPoint(event->pos());
+			m_swipeState = NotStarted;
 
 			if (m_state == State::Left) {
 				const auto leftThreshold = (width() / THRESHOLD_FACTOR);
@@ -184,8 +185,6 @@ public:
 		handlePointerEvent(kind, &point) ? event->accept() : event->ignore();
 	}
 	bool childMouseEventFilter(QQuickItem* item, QEvent *event) override {
-		qDebug() << event;
-
 		switch (event->type()) {
 		case QEvent::MouseMove:
 			return handlePointerEvent(Move, static_cast<QMouseEvent*>(event));
