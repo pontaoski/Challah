@@ -10,7 +10,7 @@ import com.github.HarmonyDevelopment.Staccato 1.0
 Kirigami.ApplicationWindow {
 	id: root
 
-	minimumWidth: 500
+	minimumWidth: 300
 	width: 1000
 
 	pageStack.globalToolBar.showNavigationButtons: 0
