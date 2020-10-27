@@ -31,6 +31,8 @@ OverlappingPanels::OverlappingPanels(QQuickItem* parent) : QQuickItem(parent)
 	m_expansionAnimation->setEndValue(1.0);
 	m_expansionAnimation->setEasingCurve(TAP_CURVE);
 
+	setFiltersChildMouseEvents(true);
+
 	connect(m_expansionAnimation, &QVariantAnimation::valueChanged, [=](const QVariant& value) {
 		auto progress = value.toReal();
 

@@ -42,6 +42,12 @@ public:
 		Right
 	};
 
+	enum SwipeState {
+		NotStarted,
+		Horizontal,
+		Vertical
+	};
+
 	template <typename T>
 	bool handlePointerEvent(EventKind kind, T event)
 	{
@@ -74,7 +80,7 @@ public:
 				inThreshold = false;
 			}
 
-			return true;
+			return false;
 		} else if (kind == EventKind::Up) {
 			down = false;
 
@@ -82,9 +88,16 @@ public:
 				m_state = State::Center;
 				m_translation = QPointF();
 				goToState(false);
+				m_swipeState = NotStarted;
 
 				return true;
 			}
+
+			if (m_translation == QPointF() or m_swipeState != SwipeState::Horizontal) {
+				return false;
+			}
+			m_swipeState = NotStarted;
+
 
 			// Adjusted is the horizontal center of the centre panel
 			const auto adjusted = m_centerPanel->x() + (width() / 2);
@@ -111,8 +124,18 @@ public:
 
 			return true;
 		} else if (kind == EventKind::Move && down) {
-			auto delta = m_previousPoint - event->pos();
+			if (m_swipeState == SwipeState::Vertical) {
+				return false;
+			}
+			QPointF delta = m_previousPoint - event->pos();
+			if (m_swipeState == SwipeState::NotStarted) {
+				if (qAbs(delta.x()) < qAbs(delta.y())) {
+					m_swipeState = SwipeState::Vertical;
+					return false;
+				}
+			}
 			setPreviousPoint(event->pos());
+			m_swipeState = SwipeState::Horizontal;
 
 			inThreshold = false;
 
@@ -160,6 +183,20 @@ public:
 		}
 		handlePointerEvent(kind, &point) ? event->accept() : event->ignore();
 	}
+	bool childMouseEventFilter(QQuickItem* item, QEvent *event) override {
+		qDebug() << event;
+
+		switch (event->type()) {
+		case QEvent::MouseMove:
+			return handlePointerEvent(Move, static_cast<QMouseEvent*>(event));
+		case QEvent::MouseButtonPress:
+			return handlePointerEvent(Down, static_cast<QMouseEvent*>(event));
+		case QEvent::MouseButtonRelease:
+			return handlePointerEvent(Up, static_cast<QMouseEvent*>(event));
+		}
+
+		return false;
+	}
 
 	QVariantAnimation* m_animation;
 	QVariantAnimation* m_expansionAnimation;
@@ -169,6 +206,7 @@ public:
 	QPoint m_previousPoint = QPoint(0, 0);
 	QPointF m_translation;
 	bool m_expanded = false;
+	SwipeState m_swipeState = SwipeState::NotStarted;
 
 	QList<QMetaObject::Connection> m_centerPanelConnections;
 	QQuickItem* m_centerPanel = nullptr;
