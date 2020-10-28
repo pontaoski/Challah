@@ -1,5 +1,5 @@
 QtApplication {
-	name: "Stakkato"
+	name: "Murmur"
 
 	protobuf.cpp.useGrpc: true
 	protobuf.cpp.libraryPath: "/usr/lib64/libprotobuf.so.22"
