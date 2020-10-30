@@ -31,4 +31,4 @@ Pull requests are the easiest and preferred method to contribute to any repo at 
 2. Create a new branch specific to the issue you are working on with ``git checkout -b feature_name``. This action will separate the new feature from any other changes you may do and will make it easier to edit or amend (read more [here](https://guides.github.com/introduction/flow/)). 
 3. Add your files on the new branch
 4. Commit locally and push to the new branch with ``git push -u origin feature_name``
-5. Go to GIthub and make a pull request, please include all the information possible. 
+5. Go to Github and make a pull request, please include all the information possible. 
