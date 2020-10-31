@@ -13,12 +13,6 @@ Required dependecies:
 Then run
 
 
-## Usage
-
-## Docker-compose
-See the [harmony-development/orchestration](https://github.com/harmony-development/orchestration) repo for more details on a docker-compose setup.
-
-
 # How to contribute
 This projects welcomes contributions and corrections. Before contributing, please make sure you have read the guidelines below. 
 If you decide to contribute anything, please do the following:
