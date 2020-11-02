@@ -185,13 +185,28 @@ public:
 		handlePointerEvent(kind, &point) ? event->accept() : event->ignore();
 	}
 	bool childMouseEventFilter(QQuickItem* item, QEvent *event) override {
-		switch (event->type()) {
-		case QEvent::MouseMove:
-			return handlePointerEvent(Move, static_cast<QMouseEvent*>(event));
-		case QEvent::MouseButtonPress:
-			return handlePointerEvent(Down, static_cast<QMouseEvent*>(event));
-		case QEvent::MouseButtonRelease:
-			return handlePointerEvent(Up, static_cast<QMouseEvent*>(event));
+		auto map = [this, item](QMouseEvent* ev) -> QMouseEvent {
+			return QMouseEvent(
+				ev->type(),
+				item->mapToItem(this, ev->localPos()),
+				ev->windowPos(),
+				ev->screenPos(),
+				ev->button(),
+				ev->buttons(),
+				ev->modifiers(),
+				ev->source()
+			);
+		};
+
+		if (event->type() == QEvent::MouseMove) {
+			auto mapped = map(static_cast<QMouseEvent*>(event));
+			return handlePointerEvent(Move, &mapped);
+		} else if (event->type() == QEvent::MouseButtonPress) {
+			auto mapped = map(static_cast<QMouseEvent*>(event));
+			return handlePointerEvent(Down, &mapped);
+		} else if (event->type() == QEvent::MouseButtonRelease) {
+			auto mapped = map(static_cast<QMouseEvent*>(event));
+			return handlePointerEvent(Up, &mapped);
 		}
 
 		return false;
