@@ -15,4 +15,7 @@
         <file>MenuActionComponent.qml</file>
         <file>RecursiveMenuActionComponent.qml</file>
     </qresource>
+    <qresource prefix="/img">
+        <file>com.github.Harmony.Murmur.svg</file>
+    </qresource>
 </RCC>
