@@ -25,6 +25,7 @@ typedef CarrierEvent<1,protocol::core::v1::GuildEvent_ChannelCreated> ChannelAdd
 typedef CarrierEvent<2,protocol::core::v1::GuildEvent_ChannelDeleted> ChannelDeleteEvent;
 typedef CarrierEvent<6,protocol::core::v1::GuildEvent_MemberJoined> MemberJoinEvent;
 typedef CarrierEvent<7,protocol::core::v1::GuildEvent_MemberLeft> MemberLeftEvent;
+typedef CarrierEvent<8,protocol::core::v1::GuildEvent_GuildUpdated> GuildUpdateEvent;
 
 class ChannelsModel;
 class InviteModel;
@@ -35,8 +36,11 @@ class MembersModel : public QAbstractListModel
 	QString homeServer;
 	quint64 guildID;
 	QVector<quint64> members;
+	QString _name;
+	QString _picture;
 
 	friend class Client;
+	friend class ChannelsModel;
 	Client* client;
 	ChannelsModel* model;
 
@@ -44,6 +48,9 @@ class MembersModel : public QAbstractListModel
 		MemberNameRole = Qt::DisplayRole,
 		MemberAvatarRole = Qt::DecorationRole,
 	};
+
+	Q_PROPERTY(QString name READ name NOTIFY nameChanged)
+	Q_PROPERTY(QString picture READ picture NOTIFY pictureChanged)
 
 protected:
 	void customEvent(QEvent *event) override {
@@ -59,10 +66,21 @@ protected:
 			beginRemoveRows(QModelIndex(), idx - members.begin(), idx - members.begin());
 			members.removeAt(idx - members.begin());
 			endRemoveRows();
+		} else if (event->type() == GuildUpdateEvent::typeID) {
+			auto ev = reinterpret_cast<GuildUpdateEvent*>(event);
+			if (ev->data.update_name()) {
+				_name = QString::fromStdString(ev->data.name());
+				Q_EMIT nameChanged();
+			}
 		}
 	}
 
 public:
+	Q_SIGNAL void nameChanged();
+	Q_SIGNAL void pictureChanged();
+	QString name() const { return _name; }
+	QString picture() const { return _picture; }
+
 	MembersModel(QString homeServer, quint64 guildID, ChannelsModel* model);
 	int rowCount(const QModelIndex& parent = QModelIndex()) const override;
 	QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;

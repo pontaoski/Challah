@@ -11,7 +11,7 @@ import com.github.HarmonyDevelopment.Staccato 1.0
 Item {
 	id: drawer
 
-	implicitWidth: model !== null ? 200 : 0
+	implicitWidth: model !== null ? 250 : 0
 
 	Kirigami.Theme.inherit: true
 	Kirigami.Theme.colorSet: Kirigami.Theme.View
@@ -40,7 +40,7 @@ Item {
 			z: 2
 			Layout.fillWidth: true
 
-			contentItem: RowLayout {
+			contentItem: ColumnLayout {
 				anchors {
 					verticalCenter: parent.verticalCenter
 					left: parent.left
@@ -57,13 +57,68 @@ Item {
 		}
 
 		ListView {
+			id: listy
+
 			model: drawer.model
+			clip: true
 
 			Kirigami.Theme.inherit: true
 			Kirigami.Theme.colorSet: Kirigami.Theme.View
 
 			Layout.fillWidth: true
 			Layout.fillHeight: true
+
+			header: Control {
+				leftPadding: Kirigami.Units.largeSpacing
+				topPadding: Kirigami.Units.largeSpacing
+				bottomPadding: Kirigami.Units.largeSpacing
+				Kirigami.Theme.colorSet: Kirigami.Theme.Header
+
+				width: parent.width
+
+				background: Rectangle {
+					color: Kirigami.Theme.backgroundColor
+					Kirigami.Theme.colorSet: Kirigami.Theme.Header
+
+					Kirigami.Separator {
+						anchors {
+							left: parent.left
+							top: parent.top
+							bottom: parent.bottom
+						}
+					}
+				}
+
+				contentItem: RowLayout {
+					Kirigami.Theme.colorSet: Kirigami.Theme.Header
+					Kirigami.Avatar {
+						source: drawer.model.picture
+						name: drawer.model.name
+
+						Layout.preferredWidth: Kirigami.Units.gridUnit * 2.5
+						Layout.preferredHeight: Kirigami.Units.gridUnit * 2.5
+					}
+					ColumnLayout {
+						Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
+
+						Item { Layout.fillHeight: true }
+						Kirigami.Heading {
+							text: drawer.model.name
+							level: 2
+
+							Layout.alignment: Qt.AlignBottom
+						}
+						Label {
+							text: "%1 members".arg(listy.count)
+							opacity: 0.7
+
+							Layout.alignment: Qt.AlignTop
+						}
+						Item { Layout.fillHeight: true }
+					}
+					Item { Layout.fillWidth: true }
+				}
+			}
 
 			delegate: Kirigami.AbstractListItem {
 				hoverEnabled: false
@@ -73,8 +128,8 @@ Item {
 						name: display
 						source: decoration
 
-						Layout.preferredWidth: Math.floor(Kirigami.Units.gridUnit * 1.75)
-						Layout.preferredHeight: Math.floor(Kirigami.Units.gridUnit * 1.75)
+						Layout.preferredWidth: Kirigami.Units.gridUnit * 2
+						Layout.preferredHeight: Kirigami.Units.gridUnit * 2
 					}
 					Label {
 						text: display

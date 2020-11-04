@@ -8,6 +8,7 @@
 #include "invites.hpp"
 #include "client.hpp"
 #include "util.hpp"
+#include "state.hpp"
 
 #define doContext ClientContext ctx; client->authenticate(ctx)
 
@@ -60,6 +61,14 @@ ChannelsModel::ChannelsModel(QString homeServer, quint64 guildID) : QAbstractLis
 {
 	client = Client::instanceForHomeserver(homeServer);
 	members = new MembersModel(homeServer, guildID, this);
+
+	auto& guilds = State::instance()->getGuildModel()->guilds;
+	for (auto guild : guilds) {
+		if (guild.homeserver == homeServer && guild.guildID == guildID) {
+			members->_name = guild.name;
+			members->_picture = guild.picture;
+		}
+	}
 
 	ClientContext ctx;
 	client->authenticate(ctx);
@@ -117,6 +126,8 @@ ChannelsModel::ChannelsModel(QString homeServer, quint64 guildID) : QAbstractLis
 				QCoreApplication::postEvent(members, new MemberJoinEvent(msg.joined_member()));
 			} else if (msg.has_left_member()) {
 				QCoreApplication::postEvent(members, new MemberLeftEvent(msg.left_member()));
+			} else if (msg.has_edited_guild()) {
+				QCoreApplication::postEvent(members, new GuildUpdateEvent(msg.edited_guild()));
 			}
 		}
 	});

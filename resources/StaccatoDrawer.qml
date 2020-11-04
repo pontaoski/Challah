@@ -5,7 +5,7 @@
 import QtQuick 2.5
 import QtQuick.Layouts 1.1
 import QtQuick.Controls 2.10
-import org.kde.kirigami 2.11 as Kirigami
+import org.kde.kirigami 2.13 as Kirigami
 import com.github.HarmonyDevelopment.Staccato 1.0
 
 Item {
@@ -94,11 +94,12 @@ Item {
 
 					Repeater {
 						model: HState.guildModel
-						delegate: Rectangle {
+						delegate: Kirigami.Avatar {
 							implicitWidth: 48
 							implicitHeight: 48
-							color: "cyan"
-							radius: 48 / 2
+
+							name: model['guildName']
+							source: model['picture']
 
 							Layout.alignment: Qt.AlignTop | Qt.AlignHCenter
 

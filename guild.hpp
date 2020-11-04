@@ -24,6 +24,8 @@ struct GuildRepl {
 	QString picture;
 };
 
+class ChannelsModel;
+
 class GuildModel : public QAbstractListModel
 {
 	Q_OBJECT
@@ -33,6 +35,7 @@ class GuildModel : public QAbstractListModel
 
 	QList<Guild> guilds;
 	friend class Client;
+	friend class ChannelsModel;
 
 	Q_SIGNAL void addGuild(Guild data);
 	Q_SLOT void addGuildHandler(Guild data);
@@ -45,7 +48,8 @@ class GuildModel : public QAbstractListModel
 		GuildPictureRole,
 		ChannelModelRole,
 		HomeserverRole,
-		IsOwnerRole
+		IsOwnerRole,
+		PictureRole
 	};
 
 public:

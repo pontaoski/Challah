@@ -78,6 +78,8 @@ QVariant GuildModel::data(const QModelIndex &index, int role) const
 		return guilds[index.row()].ownerID == Client::instanceForHomeserver(guilds[index.row()].homeserver)->userID;
 	case HomeserverRole:
 		return guilds[index.row()].homeserver;
+	case PictureRole:
+		return guilds[index.row()].picture;
 	case ChannelModelRole:
 		auto key = qMakePair(guilds[index.row()].guildID, guilds[index.row()].homeserver);
 		if (!d->models.contains(key)) {
@@ -98,6 +100,7 @@ QHash<int, QByteArray> GuildModel::roleNames() const
 	ret[ChannelModelRole] = "channelModel";
 	ret[IsOwnerRole] = "isOwner";
 	ret[HomeserverRole] = "homeserver";
+	ret[PictureRole] = "picture";
 
 	return ret;
 }
