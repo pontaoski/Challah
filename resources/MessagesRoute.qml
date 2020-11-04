@@ -121,6 +121,10 @@ Kirigami.PageRoute {
 
 			delegate: QQC2.Control {
 				padding: 0
+				topPadding: 0
+				leftPadding: 0
+				rightPadding: 0
+				bottomPadding: 0
 
 				background: MouseArea {
 					acceptedButtons: Qt.RightButton
