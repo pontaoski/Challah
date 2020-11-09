@@ -133,6 +133,29 @@ ChannelsModel::ChannelsModel(QString homeServer, quint64 guildID) : QAbstractLis
 	});
 }
 
+void ChannelsModel::moveChannelFromTo(int from, int to)
+{
+	auto fromChan = channels[from];
+	doContext;
+	protocol::core::v1::UpdateChannelOrderRequest req;
+	google::protobuf::Empty resp;
+	req.set_allocated_location(Location {
+		guildID,
+		fromChan.channelID
+	});
+
+	if (to == 0) {
+		req.set_next_id(channels[0].channelID);
+	} else if (to + 1 == channels.length()) {
+		req.set_previous_id(channels[to].channelID);
+	} else {
+		req.set_previous_id(channels[to-1].channelID);
+		req.set_next_id(channels[to+1].channelID);
+	}
+
+	checkStatus(client->coreKit->UpdateChannelOrder(&ctx, req, &resp));
+}
+
 void ChannelsModel::customEvent(QEvent *event)
 {
 	if (event->type() == ChannelAddEvent::typeID) {

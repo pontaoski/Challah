@@ -6,12 +6,13 @@ import QtQuick 2.5
 import QtQuick.Layouts 1.1
 import QtQuick.Controls 2.10
 import org.kde.kirigami 2.13 as Kirigami
+import QtQml.Models 2.15
 import com.github.HarmonyDevelopment.Staccato 1.0
 
 Item {
 	id: drawer
 
-	implicitWidth: shouldShow ? (channelsView.model != null ? 72 + 200 : 72) : 0
+	implicitWidth: shouldShow ? (channelsModel.model != null ? 72 + 200 : 72) : 0
 	property bool shouldShow: false
 
 	Rectangle {
@@ -118,7 +119,7 @@ Item {
 									}
 
 									channelsTitle.text = model['guildName']
-									channelsView.model = model['channelModel']
+									channelsModel.model = model['channelModel']
 
 									rightHandDrawer.model = model['channelModel'].members
 								}
@@ -146,11 +147,11 @@ Item {
 		Kirigami.Separator {
 			Layout.fillHeight: true
 
-			visible: channelsView.model != null
+			visible: channelsModel.model != null
 		}
 		ColumnLayout {
 			spacing: 0
-			visible: channelsView.model != null
+			visible: channelsModel.model != null
 
 			Kirigami.ApplicationHeader {
 				z: 2
@@ -171,7 +172,7 @@ Item {
 					}
 					ToolButton {
 						icon.name: "settings-configure"
-						onClicked: colView.layers.push(Qt.resolvedUrl("Invites.qml"), {"inviteModel": channelsView.model.invitesModel()})
+						onClicked: colView.layers.push(Qt.resolvedUrl("Invites.qml"), {"inviteModel": channelsModel.model.invitesModel()})
 					}
 					ToolButton {
 						icon.name: "list-add"
@@ -181,8 +182,6 @@ Item {
 				pageDelegate: Item {}
 			}
 			ListView {
-				id: channelsView
-
 				z: 1
 
 				Kirigami.Theme.inherit: true
@@ -191,29 +190,92 @@ Item {
 				Layout.preferredWidth: 198
 				Layout.fillHeight: true
 
-				delegate: Kirigami.SwipeListItem {
-					contentItem: Label {
-						text: `#${channelName}`
-						anchors.verticalCenter: parent.verticalCenter
-						verticalAlignment: Text.AlignVCenter
+				moveDisplaced: Transition {
+					YAnimator {
+						duration: Kirigami.Units.longDuration
+						easing.type: Easing.InOutQuad
 					}
+				}
 
-					onClicked: {
-						routerInstance.navigateToRoute(
-							{
-								"route": "messages",
-								"data": messagesModel,
-								"title": `#${channelName}`
-							}
-						)
-					}
+				model: DelegateModel {
+					id: channelsModel
 
-					actions: [
-						Kirigami.Action {
-							icon.name: "edit-delete"
-							onTriggered: channelsView.model.deleteChannel(channelID)
+					delegate: Item {
+						id: itemer
+						implicitWidth: swipeyDelegate.implicitWidth
+						implicitHeight: swipeyDelegate.implicitHeight
+						anchors {
+							left: parent.left
+							right: parent.right
 						}
-					]
+
+						Drag.active: dragArea.held
+						Drag.source: this
+						Drag.hotSpot.x: width / 2
+						Drag.hotSpot.y: height / 2
+
+						Kirigami.SwipeListItem {
+							id: swipeyDelegate
+							anchors.fill: parent
+
+							contentItem: RowLayout {
+								Label {
+									text: `#${channelName}`
+									anchors.verticalCenter: parent.verticalCenter
+									verticalAlignment: Text.AlignVCenter
+								}
+							}
+
+							onClicked: {
+								routerInstance.navigateToRoute(
+									{
+										"route": "messages",
+										"data": messagesModel,
+										"title": `#${channelName}`
+									}
+								)
+							}
+
+							actions: [
+								Kirigami.Action {
+									icon.name: "edit-delete"
+									onTriggered: channelsModel.model.deleteChannel(channelID)
+								}
+							]
+						}
+
+						MouseArea {
+							id: dragArea
+
+							property bool held: false
+							anchors.fill: swipeyDelegate
+
+							drag.target: held ? itemer : undefined
+							drag.axis: Drag.YAxis
+
+							onPressAndHold: {
+								itemer.z = 0
+								held = true
+							}
+							onReleased: {
+								itemer.z = 999
+								held = false
+								channelsModel.model.moveChannelFromTo(index, itemer.DelegateModel.itemsIndex)
+								channelsModel.items.move(itemer.DelegateModel.itemsIndex, itemer.DelegateModel.itemsIndex)
+							}
+
+							DropArea {
+								anchors.fill: parent
+
+								onEntered: {
+									channelsModel.items.move(
+										drag.source.DelegateModel.itemsIndex,
+										itemer.DelegateModel.itemsIndex
+									)
+								}
+							}
+						}
+					}
 				}
 			}
 		}
@@ -221,6 +283,6 @@ Item {
 
 	ChannelSheet {
 		id: sheety
-		model: channelsView.model
+		model: channelsModel.model
 	}
 }
