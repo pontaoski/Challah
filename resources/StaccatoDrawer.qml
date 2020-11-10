@@ -253,6 +253,15 @@ Item {
 							drag.target: held ? itemer : undefined
 							drag.axis: Drag.YAxis
 
+							onClicked: {
+								routerInstance.navigateToRoute(
+									{
+										"route": "messages",
+										"data": messagesModel,
+										"title": `#${channelName}`
+									}
+								)
+							}
 							onPressAndHold: {
 								itemer.z = 0
 								held = true
