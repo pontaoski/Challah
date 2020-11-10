@@ -91,7 +91,7 @@ Item {
 
 				contentItem: RowLayout {
 					Kirigami.Theme.colorSet: Kirigami.Theme.Header
-					Kirigami.Avatar {
+					Avatar {
 						source: drawer.model.picture
 						name: drawer.model.name
 
@@ -124,7 +124,7 @@ Item {
 				hoverEnabled: false
 				highlighted: false
 				contentItem: RowLayout {
-					Kirigami.Avatar {
+					Avatar {
 						name: display
 						source: decoration
 

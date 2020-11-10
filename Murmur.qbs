@@ -28,6 +28,8 @@ QtApplication {
 		"messages.hpp",
 		"invites.hpp",
 		"overlappingpanels.hpp",
+		"avatar.cpp",
+		"avatar.hpp",
 		"resources/data.qrc"
 	]
 

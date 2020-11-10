@@ -95,7 +95,7 @@ Item {
 
 					Repeater {
 						model: HState.guildModel
-						delegate: Kirigami.Avatar {
+						delegate: Avatar {
 							implicitWidth: 48
 							implicitHeight: 48
 
