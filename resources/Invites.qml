@@ -75,11 +75,11 @@ Kirigami.ScrollablePage {
 		delegate: Kirigami.SwipeListItem {
 			contentItem: ColumnLayout {
 				QQC2.Label {
-					text: `Invite ID: ${inviteID}`
+					text: qsTr("Invite ID: %1").arg(inviteID)
 					verticalAlignment: Text.AlignVCenter
 				}
 				QQC2.Label {
-					text: possibleUses > 0 ? `Possible Uses: ${possibleUses} | Uses : ${uses} ` : `Possible Uses: Infinite | Uses : ${uses}`
+					text: possibleUses > 0 ? qsTr("Possible Uses: %1 | Uses: %2 ").arg(possibleUses).arg(uses) : qsTr("Possible Uses: Infinite | Uses : %1").arg(uses)
 					verticalAlignment: Text.AlignVCenter
 				}
 				anchors.verticalCenter: parent.verticalCenter

@@ -136,6 +136,21 @@
         <extracomment>the invite couldn&apos;t be created successfully</extracomment>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../resources/Invites.qml" line="78"/>
+        <source>Invite ID: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../resources/Invites.qml" line="82"/>
+        <source>Possible Uses: %1 | Uses: %2 </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../resources/Invites.qml" line="82"/>
+        <source>Possible Uses: Infinite | Uses : %1</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>LoginRoute</name>
