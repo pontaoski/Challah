@@ -133,8 +133,10 @@ Item {
 									text: model['isOwner'] ? qsTr("Delete") : qsTr("Leave")
 									onTriggered: {
 										if (HState.leaveGuild(model['homeserver'], model['guildID'], model['isOwner'])) {
+											//: guild leaving succeeded
 											root.showPassiveNotification(qsTr("Left guild"))
 										} else {
+											//: guild leaving failed
 											root.showPassiveNotification(qsTr("Failed to leave guild"))
 										}
 									}

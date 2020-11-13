@@ -30,13 +30,15 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../resources/ChannelSheet.qml" line="28"/>
+        <location filename="../resources/ChannelSheet.qml" line="29"/>
         <source>Created channel</source>
+        <extracomment>the channel has been successfully created</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../resources/ChannelSheet.qml" line="30"/>
+        <location filename="../resources/ChannelSheet.qml" line="32"/>
         <source>Failed to create channel</source>
+        <extracomment>the channel failed to be created</extracomment>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -74,28 +76,32 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../resources/GuildSheet.qml" line="99"/>
+        <location filename="../resources/GuildSheet.qml" line="100"/>
         <source>Created guild</source>
+        <extracomment>guild has been successfully created</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../resources/GuildSheet.qml" line="101"/>
+        <location filename="../resources/GuildSheet.qml" line="103"/>
         <source>Failed to make guild</source>
+        <extracomment>creating the guild failed</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../resources/GuildSheet.qml" line="117"/>
+        <location filename="../resources/GuildSheet.qml" line="119"/>
         <source>Join</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../resources/GuildSheet.qml" line="121"/>
+        <location filename="../resources/GuildSheet.qml" line="124"/>
         <source>Joined guild</source>
+        <extracomment>guild has been successfully joined</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../resources/GuildSheet.qml" line="123"/>
+        <location filename="../resources/GuildSheet.qml" line="127"/>
         <source>Failed to join guild</source>
+        <extracomment>joining the guild failed</extracomment>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -127,13 +133,15 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../resources/Invites.qml" line="60"/>
+        <location filename="../resources/Invites.qml" line="61"/>
         <source>Created invite</source>
+        <extracomment>the invite was created successfully</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../resources/Invites.qml" line="62"/>
+        <location filename="../resources/Invites.qml" line="64"/>
         <source>Failed to create invite</source>
+        <extracomment>the invite couldn&apos;t be created successfully</extracomment>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -178,13 +186,15 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../resources/LoginRoute.qml" line="68"/>
+        <location filename="../resources/LoginRoute.qml" line="69"/>
         <source>Logged in</source>
+        <extracomment>the user logged in successfully</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../resources/LoginRoute.qml" line="70"/>
+        <location filename="../resources/LoginRoute.qml" line="72"/>
         <source>Failed to log in</source>
+        <extracomment>login failed</extracomment>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -266,17 +276,19 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../resources/StaccatoDrawer.qml" line="136"/>
+        <location filename="../resources/StaccatoDrawer.qml" line="137"/>
         <source>Left guild</source>
+        <extracomment>guild leaving succeeded</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../resources/StaccatoDrawer.qml" line="138"/>
+        <location filename="../resources/StaccatoDrawer.qml" line="140"/>
         <source>Failed to leave guild</source>
+        <extracomment>guild leaving failed</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../resources/StaccatoDrawer.qml" line="172"/>
+        <location filename="../resources/StaccatoDrawer.qml" line="174"/>
         <source>Channels</source>
         <translation type="unfinished"></translation>
     </message>

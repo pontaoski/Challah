@@ -57,8 +57,10 @@ Kirigami.ScrollablePage {
 
 				onClicked: {
 					if (invitePage.inviteModel.createInvite(inviteField.text, inviteCount.Kirigami.FormData.checked ? inviteCount.value : -1)) {
+						//: the invite was created successfully
 						applicationWindow().showPassiveNotification(qsTr("Created invite"))
 					} else {
+						//: the invite couldn't be created successfully
 						applicationWindow().showPassiveNotification(qsTr("Failed to create invite"))
 					}
 					createInvitesSheet.close()

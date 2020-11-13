@@ -65,8 +65,10 @@ Kirigami.PageRoute {
 					text: qsTr("Login")
 					onClicked: {
 						if (HState.login(email.text, password.text, homeserver.text)) {
+							//: the user logged in successfully
 							root.showPassiveNotification(qsTr("Logged in"))
 						} else {
+							//: login failed
 							root.showPassiveNotification(qsTr("Failed to log in"))
 						}
 					}

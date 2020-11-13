@@ -96,8 +96,10 @@ Kirigami.OverlaySheet {
 
                 onClicked: {
                     if (HState.createGuild(name.text)) {
+						//: guild has been successfully created
                         root.showPassiveNotification(qsTr("Created guild"))
                     } else {
+						//: creating the guild failed
                         root.showPassiveNotification(qsTr("Failed to make guild"))
                     }
                     rooty.close()
@@ -118,8 +120,10 @@ Kirigami.OverlaySheet {
 
                 onClicked: {
                     if (HState.joinGuild(invite.text)) {
+						//: guild has been successfully joined
                         root.showPassiveNotification(qsTr("Joined guild"))
                     } else {
+						//: joining the guild failed
                         root.showPassiveNotification(qsTr("Failed to join guild"))
                     }
                     rooty.close()
