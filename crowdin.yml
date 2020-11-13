@@ -1,0 +1,3 @@
+files:
+  - source: /po/Murmur_en.ts
+    translation: /po/Murmur_%two_letters_code%.ts
