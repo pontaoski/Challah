@@ -15,6 +15,17 @@ Kirigami.ApplicationWindow {
 
 	pageStack.globalToolBar.showNavigationButtons: 0
 
+	QtObject {
+		id: fauxApplicationWindow
+		property alias pageStack: colView
+		property alias globalDrawer: root.globalDrawer
+		property alias contextDrawer: root.contextDrawer
+	}
+
+	function applicationWindow() {
+		return fauxApplicationWindow
+	}
+
 	OverlappingPanels {
 		anchors.fill: parent
 
