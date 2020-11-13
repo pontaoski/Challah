@@ -1,20 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="pt-BR" sourcelanguage="en">
+<TS version="2.1" language="pt" sourcelanguage="en">
   <context>
     <name>Avatar</name>
     <message>
       <location filename="../resources/Avatar.qml" line="94"/>
       <source>%1 — %2</source>
       <translation type="unfinished">%1 — %2</translation>
-    </message>
-  </context>
-  <context>
-    <name>ChannelRoute</name>
-    <message>
-      <location filename="../resources/ChannelRoute.qml" line="16"/>
-      <source>Channels</source>
-      <translation type="unfinished">Channels</translation>
     </message>
   </context>
   <context>
@@ -143,6 +135,21 @@
       <source>Failed to create invite</source>
       <extracomment>the invite couldn&apos;t be created successfully</extracomment>
       <translation type="unfinished">Failed to create invite</translation>
+    </message>
+    <message>
+      <location filename="../resources/Invites.qml" line="78"/>
+      <source>Invite ID: %1</source>
+      <translation type="unfinished">Invite ID: %1</translation>
+    </message>
+    <message>
+      <location filename="../resources/Invites.qml" line="82"/>
+      <source>Possible Uses: %1 | Uses: %2 </source>
+      <translation type="unfinished">Possible Uses: %1 | Uses: %2 </translation>
+    </message>
+    <message>
+      <location filename="../resources/Invites.qml" line="82"/>
+      <source>Possible Uses: Infinite | Uses : %1</source>
+      <translation type="unfinished">Possible Uses: Infinite | Uses : %1</translation>
     </message>
   </context>
   <context>
