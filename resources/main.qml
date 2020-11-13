@@ -69,7 +69,6 @@ Kirigami.ApplicationWindow {
 
 				LoginRoute {}
 				NoGuildRoute {}
-				ChannelRoute {}
 				MessagesRoute {}
 			}
 		}

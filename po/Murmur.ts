@@ -10,14 +10,6 @@
     </message>
 </context>
 <context>
-    <name>ChannelRoute</name>
-    <message>
-        <location filename="../resources/ChannelRoute.qml" line="16"/>
-        <source>Channels</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>ChannelSheet</name>
     <message>
         <location filename="../resources/ChannelSheet.qml" line="21"/>
