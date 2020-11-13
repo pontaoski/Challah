@@ -10,19 +10,11 @@
     </message>
   </context>
   <context>
-    <name>ChannelRoute</name>
-    <message>
-      <location filename="../resources/ChannelRoute.qml" line="16"/>
-      <source>Channels</source>
-      <translation type="unfinished">Channels</translation>
-    </message>
-  </context>
-  <context>
     <name>ChannelSheet</name>
     <message>
       <location filename="../resources/ChannelSheet.qml" line="21"/>
       <source>Channel Name:</source>
-      <translation type="unfinished">Channel Name:</translation>
+      <translation>Csatorna neve:</translation>
     </message>
     <message>
       <location filename="../resources/ChannelSheet.qml" line="24"/>
@@ -143,6 +135,21 @@
       <source>Failed to create invite</source>
       <extracomment>the invite couldn&apos;t be created successfully</extracomment>
       <translation type="unfinished">Failed to create invite</translation>
+    </message>
+    <message>
+      <location filename="../resources/Invites.qml" line="78"/>
+      <source>Invite ID: %1</source>
+      <translation type="unfinished">Invite ID: %1</translation>
+    </message>
+    <message>
+      <location filename="../resources/Invites.qml" line="82"/>
+      <source>Possible Uses: %1 | Uses: %2 </source>
+      <translation type="unfinished">Possible Uses: %1 | Uses: %2 </translation>
+    </message>
+    <message>
+      <location filename="../resources/Invites.qml" line="82"/>
+      <source>Possible Uses: Infinite | Uses : %1</source>
+      <translation type="unfinished">Possible Uses: Infinite | Uses : %1</translation>
     </message>
   </context>
   <context>
