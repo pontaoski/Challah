@@ -1,20 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="zh-CN" sourcelanguage="en">
+<TS version="2.1" language="zh-TW" sourcelanguage="en">
   <context>
     <name>Avatar</name>
     <message>
       <location filename="../resources/Avatar.qml" line="94"/>
       <source>%1 — %2</source>
-      <translation>%1 — %2</translation>
-    </message>
-  </context>
-  <context>
-    <name>ChannelRoute</name>
-    <message>
-      <location filename="../resources/ChannelRoute.qml" line="16"/>
-      <source>Channels</source>
-      <translation>频道</translation>
+      <translation type="unfinished">%1 — %2</translation>
     </message>
   </context>
   <context>
@@ -22,24 +14,24 @@
     <message>
       <location filename="../resources/ChannelSheet.qml" line="21"/>
       <source>Channel Name:</source>
-      <translation>频道名称：</translation>
+      <translation type="unfinished">Channel Name:</translation>
     </message>
     <message>
       <location filename="../resources/ChannelSheet.qml" line="24"/>
       <source>Create Channel</source>
-      <translation>创建频道</translation>
+      <translation type="unfinished">Create Channel</translation>
     </message>
     <message>
       <location filename="../resources/ChannelSheet.qml" line="29"/>
       <source>Created channel</source>
       <extracomment>the channel has been successfully created</extracomment>
-      <translation>成功创建频道</translation>
+      <translation type="unfinished">Created channel</translation>
     </message>
     <message>
       <location filename="../resources/ChannelSheet.qml" line="32"/>
       <source>Failed to create channel</source>
       <extracomment>the channel failed to be created</extracomment>
-      <translation>创建频道失败</translation>
+      <translation type="unfinished">Failed to create channel</translation>
     </message>
   </context>
   <context>
@@ -48,13 +40,13 @@
       <location filename="../resources/ComposeBar.qml" line="59"/>
       <source>Write a message...</source>
       <extracomment>Placeholder text for the message field</extracomment>
-      <translation>撰写一条消息...</translation>
+      <translation type="unfinished">Write a message...</translation>
     </message>
     <message>
       <location filename="../resources/ComposeBar.qml" line="75"/>
       <source>Send</source>
       <extracomment>Send the message in the text field</extracomment>
-      <translation>发送</translation>
+      <translation type="unfinished">Send</translation>
     </message>
   </context>
   <context>
@@ -63,46 +55,46 @@
       <location filename="../resources/GuildSheet.qml" line="54"/>
       <location filename="../resources/GuildSheet.qml" line="95"/>
       <source>Create Guild</source>
-      <translation>创建公会</translation>
+      <translation type="unfinished">Create Guild</translation>
     </message>
     <message>
       <location filename="../resources/GuildSheet.qml" line="78"/>
       <source>Join Guild</source>
-      <translation>加入公会</translation>
+      <translation type="unfinished">Join Guild</translation>
     </message>
     <message>
       <location filename="../resources/GuildSheet.qml" line="92"/>
       <source>Guild Name:</source>
-      <translation>公会名称：</translation>
+      <translation type="unfinished">Guild Name:</translation>
     </message>
     <message>
       <location filename="../resources/GuildSheet.qml" line="100"/>
       <source>Created guild</source>
       <extracomment>guild has been successfully created</extracomment>
-      <translation>成功创建公会</translation>
+      <translation type="unfinished">Created guild</translation>
     </message>
     <message>
       <location filename="../resources/GuildSheet.qml" line="103"/>
       <source>Failed to make guild</source>
       <extracomment>creating the guild failed</extracomment>
-      <translation>创建公会失败</translation>
+      <translation type="unfinished">Failed to make guild</translation>
     </message>
     <message>
       <location filename="../resources/GuildSheet.qml" line="119"/>
       <source>Join</source>
-      <translation>加入</translation>
+      <translation type="unfinished">Join</translation>
     </message>
     <message>
       <location filename="../resources/GuildSheet.qml" line="124"/>
       <source>Joined guild</source>
       <extracomment>guild has been successfully joined</extracomment>
-      <translation>成功加入公会</translation>
+      <translation type="unfinished">Joined guild</translation>
     </message>
     <message>
       <location filename="../resources/GuildSheet.qml" line="127"/>
       <source>Failed to join guild</source>
       <extracomment>joining the guild failed</extracomment>
-      <translation>加入公会失败</translation>
+      <translation type="unfinished">Failed to join guild</translation>
     </message>
   </context>
   <context>
@@ -110,17 +102,17 @@
     <message>
       <location filename="../resources/Invites.qml" line="14"/>
       <source>Invites</source>
-      <translation>邀请</translation>
+      <translation type="unfinished">Invites</translation>
     </message>
     <message>
       <location filename="../resources/Invites.qml" line="21"/>
       <source>Create Invite...</source>
-      <translation>创建邀请</translation>
+      <translation type="unfinished">Create Invite...</translation>
     </message>
     <message>
       <location filename="../resources/Invites.qml" line="42"/>
       <source>Invite ID:</source>
-      <translation>邀请码：</translation>
+      <translation type="unfinished">Invite ID:</translation>
     </message>
     <message>
       <location filename="../resources/Invites.qml" line="52"/>
@@ -143,6 +135,21 @@
       <source>Failed to create invite</source>
       <extracomment>the invite couldn&apos;t be created successfully</extracomment>
       <translation type="unfinished">Failed to create invite</translation>
+    </message>
+    <message>
+      <location filename="../resources/Invites.qml" line="78"/>
+      <source>Invite ID: %1</source>
+      <translation type="unfinished">Invite ID: %1</translation>
+    </message>
+    <message>
+      <location filename="../resources/Invites.qml" line="82"/>
+      <source>Possible Uses: %1 | Uses: %2 </source>
+      <translation type="unfinished">Possible Uses: %1 | Uses: %2 </translation>
+    </message>
+    <message>
+      <location filename="../resources/Invites.qml" line="82"/>
+      <source>Possible Uses: Infinite | Uses : %1</source>
+      <translation type="unfinished">Possible Uses: Infinite | Uses : %1</translation>
     </message>
   </context>
   <context>
@@ -263,12 +270,12 @@
     <message>
       <location filename="../resources/StaccatoDrawer.qml" line="74"/>
       <source>Log Out</source>
-      <translation>登出</translation>
+      <translation type="unfinished">Log Out</translation>
     </message>
     <message>
       <location filename="../resources/StaccatoDrawer.qml" line="133"/>
       <source>Delete</source>
-      <translation>删除</translation>
+      <translation type="unfinished">Delete</translation>
     </message>
     <message>
       <location filename="../resources/StaccatoDrawer.qml" line="133"/>
