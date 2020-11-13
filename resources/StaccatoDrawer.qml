@@ -40,7 +40,8 @@ Item {
 			id: scrollView
 
 			Kirigami.Theme.inherit: true
-			anchors.fill: parent
+			Layout.preferredWidth: 72
+			Layout.fillHeight: true
 			ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
 			ScrollBar.vertical.anchors {
 				top: scrollView.top
@@ -152,6 +153,7 @@ Item {
 		ColumnLayout {
 			spacing: 0
 			visible: channelsModel.model != null
+			Layout.fillWidth: true
 
 			Kirigami.ApplicationHeader {
 				z: 2
@@ -188,6 +190,8 @@ Item {
 				Kirigami.Theme.colorSet: Kirigami.Theme.View
 
 				Layout.preferredWidth: 198
+				Layout.fillWidth: true
+				Layout.rightMargin: 1
 				Layout.fillHeight: true
 
 				moveDisplaced: Transition {
@@ -221,7 +225,6 @@ Item {
 							contentItem: RowLayout {
 								Label {
 									text: `#${channelName}`
-									anchors.verticalCenter: parent.verticalCenter
 									verticalAlignment: Text.AlignVCenter
 								}
 							}

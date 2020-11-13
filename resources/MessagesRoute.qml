@@ -18,73 +18,7 @@ Kirigami.PageRoute {
 		Kirigami.Theme.colorSet: Kirigami.Theme.View
 		property var model: Kirigami.PageRouter.data
 
-		footer: QQC2.ToolBar {
-			position: QQC2.ToolBar.Footer
-
-			ColumnLayout {
-				anchors {
-					left: parent.left
-					right: parent.right
-				}
-				QQC2.Control {
-					id: replyingBar
-					visible: replyingToID !== ""
-					property string replyingToID: ""
-					property string replyingToAuthor: ""
-					property string replyingToContent: ""
-
-					padding: Kirigami.Units.gridUnit
-					contentItem: RowLayout {
-						Kirigami.Icon {
-							source: "dialog-messages"
-						}
-						ColumnLayout {
-							Kirigami.Heading {
-								level: 3
-								text: replyingBar.replyingToAuthor
-								textFormat: TextEdit.MarkdownText
-							}
-							QQC2.Label {
-								text: replyingBar.replyingToContent
-								textFormat: TextEdit.MarkdownText
-
-								Layout.fillWidth: true
-							}
-							Layout.fillWidth: true
-						}
-						QQC2.ToolButton {
-							flat: true
-							icon.name: "dialog-close"
-							onClicked: replyingBar.replyingToID = ""
-						}
-					}
-
-					Layout.fillWidth: true
-				}
-				RowLayout {
-					QQC2.TextField {
-						id: messageField
-						placeholderText: "Write a message..."
-
-						Layout.fillWidth: true
-
-						function send() {
-							Kirigami.PageRouter.data.sendMessage(text, replyingBar.replyingToID)
-							text = ""
-							replyingBar.replyingToID = ""
-						}
-
-						Keys.onEscapePressed: replyingBar.replyingToID = ""
-
-						onAccepted: send()
-					}
-					QQC2.Button {
-						text: "Send"
-						onClicked: messageField.send()
-					}
-				}
-			}
-		}
+		footer: ComposeBar {}
 
 		ListView {
 			id: messagesView
@@ -282,6 +216,7 @@ Kirigami.PageRoute {
 						model: embeds
 						delegate: Embed {
 							Layout.leftMargin: Kirigami.Units.gridUnit * 2 + Kirigami.Units.largeSpacing
+							Layout.maximumWidth: (applicationWindow().wideScreen ? Math.max(messagesView.width / 3, Kirigami.Units.gridUnit * 15) : (messagesView.width * 0.9)) - Layout.leftMargin
 						}
 					}
 				}

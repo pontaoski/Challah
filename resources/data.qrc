@@ -2,19 +2,20 @@
     <qresource prefix="/">
         <file>main.qml</file>
         <file>Avatar.qml</file>
-        <file>Invites.qml</file>
-        <file>Embed.qml</file>
-        <file>LoginRoute.qml</file>
-        <file>StaccatoDrawer.qml</file>
-        <file>RightDrawer.qml</file>
-        <file>NoGuildRoute.qml</file>
-        <file>GuildSheet.qml</file>
         <file>ChannelRoute.qml</file>
         <file>ChannelSheet.qml</file>
-        <file>MessagesRoute.qml</file>
-        <file>MessageAction.qml</file>
+        <file>ComposeBar.qml</file>
+        <file>Embed.qml</file>
+        <file>GuildSheet.qml</file>
+        <file>Invites.qml</file>
+        <file>LoginRoute.qml</file>
         <file>MenuActionComponent.qml</file>
+        <file>MessageAction.qml</file>
+        <file>MessagesRoute.qml</file>
+        <file>NoGuildRoute.qml</file>
         <file>RecursiveMenuActionComponent.qml</file>
+        <file>RightDrawer.qml</file>
+        <file>StaccatoDrawer.qml</file>
     </qresource>
     <qresource prefix="/img">
         <file>com.github.Harmony.Murmur.svg</file>

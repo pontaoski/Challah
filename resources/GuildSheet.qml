@@ -32,7 +32,6 @@ Kirigami.OverlaySheet {
 
         RowLayout {
             id: cards
-            anchors.centerIn: parent
 
             Item { implicitWidth: Kirigami.Units.largeSpacing }
             Kirigami.Card {

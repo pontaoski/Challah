@@ -52,14 +52,20 @@ QQC2.Control {
 			model: modelData.fields
 
 			ColumnLayout {
+				Layout.fillWidth: true
+
 				QQC2.Label {
 					text: modelData.title
 					textFormat: TextEdit.MarkdownText
 					font.bold: true
+					wrapMode: Text.Wrap
+					Layout.fillWidth: true
 				}
 				QQC2.Label {
 					text: modelData.body
 					textFormat: TextEdit.MarkdownText
+					wrapMode: Text.Wrap
+					Layout.fillWidth: true
 				}
 			}
 		}
