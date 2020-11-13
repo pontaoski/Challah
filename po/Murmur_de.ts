@@ -139,17 +139,17 @@
     <message>
       <location filename="../resources/Invites.qml" line="78"/>
       <source>Invite ID: %1</source>
-      <translation type="unfinished">Invite ID: %1</translation>
+      <translation>Einladungs-ID: %1</translation>
     </message>
     <message>
       <location filename="../resources/Invites.qml" line="82"/>
       <source>Possible Uses: %1 | Uses: %2 </source>
-      <translation type="unfinished">Possible Uses: %1 | Uses: %2 </translation>
+      <translation>Mögliche Verwendungen: %1 | Verwendungen: %2 </translation>
     </message>
     <message>
       <location filename="../resources/Invites.qml" line="82"/>
       <source>Possible Uses: Infinite | Uses : %1</source>
-      <translation type="unfinished">Possible Uses: Infinite | Uses : %1</translation>
+      <translation>Mögliche Verwendungen: Unendlich | Verwendungen: %1</translation>
     </message>
   </context>
   <context>
