@@ -49,7 +49,8 @@ Item {
 
 				Kirigami.Heading {
 					leftPadding: Kirigami.Units.largeSpacing
-					text: "Guild Info"
+					//: a heading for the right drawer which shows guild info
+					text: qsTr("Guild Info")
 					Layout.fillWidth: true
 				}
 			}
@@ -109,7 +110,7 @@ Item {
 							Layout.alignment: Qt.AlignBottom
 						}
 						Label {
-							text: "%1 members".arg(listy.count)
+							text: qsTr("%L1 members").arg(listy.count)
 							opacity: 0.7
 
 							Layout.alignment: Qt.AlignTop

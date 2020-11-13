@@ -11,14 +11,14 @@ import com.github.HarmonyDevelopment.Staccato 1.0
 
 Kirigami.ScrollablePage {
 	id: invitePage
-	title: "Invites"
+	title: qsTr("Invites")
 
 	property var inviteModel
 
 	actions {
 		main: Kirigami.Action {
 			iconName: "list-add"
-			text: "Create Invite..."
+			text: qsTr("Create Invite...")
 			onTriggered: {
 				inviteField.text = ""
 				inviteCount.value = 0
@@ -39,7 +39,7 @@ Kirigami.ScrollablePage {
 			QQC2.TextField {
 				id: inviteField
 
-				Kirigami.FormData.label: "Invite ID:"
+				Kirigami.FormData.label: qsTr("Invite ID:")
 			}
 			QQC2.SpinBox {
 				id: inviteCount
@@ -49,17 +49,17 @@ Kirigami.ScrollablePage {
 				to: 1000000
 				stepSize: 1
 
-				Kirigami.FormData.label: "Restrict uses:"
+				Kirigami.FormData.label: qsTr("Restrict uses:")
 				Kirigami.FormData.checkable: true
 			}
 			QQC2.Button {
-				text: "Create Invite"
+				text: qsTr("Create Invite")
 
 				onClicked: {
 					if (invitePage.inviteModel.createInvite(inviteField.text, inviteCount.Kirigami.FormData.checked ? inviteCount.value : -1)) {
-						applicationWindow().showPassiveNotification("Created invite")
+						applicationWindow().showPassiveNotification(qsTr("Created invite"))
 					} else {
-						applicationWindow().showPassiveNotification("Failed to create invite")
+						applicationWindow().showPassiveNotification(qsTr("Failed to create invite"))
 					}
 					createInvitesSheet.close()
 				}

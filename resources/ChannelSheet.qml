@@ -18,16 +18,16 @@ Kirigami.OverlaySheet {
         QQC2.TextField {
             id: texty
 
-            Kirigami.FormData.label: "Channel Name:"
+            Kirigami.FormData.label: qsTr("Channel Name:")
         }
         QQC2.Button {
-            text: "Create Channel"
+            text: qsTr("Create Channel")
 
             onClicked: {
                 if (rooty.model.createChannel(texty.text)) {
-                    root.showPassiveNotification("Created channel")
+                    root.showPassiveNotification(qsTr("Created channel"))
                 } else {
-                    root.showPassiveNotification("Failed to create channel")
+                    root.showPassiveNotification(qsTr("Failed to create channel"))
                 }
                 rooty.close()
             }

@@ -91,7 +91,7 @@ QQC2.Control {
     implicitHeight: Kirigami.Units.iconSizes.large
 
     Accessible.role: !!actions.main ? Accessible.Button : Accessible.Graphic
-    Accessible.name: !!actions.main ? i18n("%1 — %2").arg(name).arg(actions.main.text) : name
+    Accessible.name: !!actions.main ? qsTr("%1 — %2").arg(name).arg(actions.main.text) : name
     Accessible.focusable: !!actions.main
     Accessible.onPressAction: {
         avatarRoot.actions.main.trigger()

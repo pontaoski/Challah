@@ -13,7 +13,7 @@ Kirigami.PageRoute {
     cache: true
 
     Kirigami.ScrollablePage {
-        title: "Channels"
+        title: qsTr("Channels")
 
         Kirigami.Theme.colorSet: Kirigami.Theme.View
 

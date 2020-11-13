@@ -75,7 +75,7 @@ Loader {
                 Layout.fillWidth: true
             }
             QQC2.Button {
-                text: "Submit"
+                text: qsTr("Submit")
                 onClicked: {
                     rootAction.triggerAction(modelData["id"], smallEntryField.text)
                 }
@@ -92,7 +92,7 @@ Loader {
                 Layout.fillWidth: true
             }
             QQC2.Button {
-                text: "Submit"
+                text: qsTr("Submit")
 
                 Layout.alignment: Qt.AlignBottom | Qt.AlignRight
 
@@ -116,7 +116,7 @@ Loader {
                 Layout.fillWidth: true
             }
             QQC2.Button {
-                text: "Submit"
+                text: qsTr("Submit")
 
                 onClicked: {
                     rootAction.triggerAction(modelData["id"], dropdownBox.currentValue)

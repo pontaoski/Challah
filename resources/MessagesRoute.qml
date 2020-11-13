@@ -71,21 +71,21 @@ Kirigami.PageRoute {
 						id: messageMenu
 
 						QQC2.MenuItem {
-							text: "Edit"
+							text: qsTr("Edit")
 							visible: messagesRoute.model.userID() == authorID
 							onTriggered: {
 								messageBlock.edit = true
 							}
 						}
 						QQC2.MenuItem {
-							text: "Delete"
+							text: qsTr("Delete")
 							visible: messagesRoute.model.userID() == authorID || messagesRoute.model.isOwner()
 							onTriggered: {
 								messagesRoute.model.deleteMessage(messageID)
 							}
 						}
 						QQC2.MenuItem {
-							text: "Reply"
+							text: qsTr("Reply")
 							onTriggered: {
 								replyingBar.replyingToID = messageID
 								replyingBar.replyingToAuthor = authorName

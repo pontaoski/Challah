@@ -14,7 +14,7 @@ Kirigami.PageRoute {
 	cache: false
 
 	Kirigami.Page {
-		title: "Login"
+		title: qsTr("Login")
 
 		Kirigami.Theme.colorSet: Kirigami.Theme.View
 
@@ -35,7 +35,7 @@ Kirigami.PageRoute {
 			}
 
 			Kirigami.Heading {
-				text: "Welcome to Murmur"
+				text: qsTr("Welcome to Murmur")
 				horizontalAlignment: Text.AlignHCenter
 
 				Layout.fillWidth: true
@@ -44,28 +44,30 @@ Kirigami.PageRoute {
 			Kirigami.FormLayout {
 				QQC2.TextField {
 					id: email
-					placeholderText: "email@address.com"
+					//: placeholder for email
+					placeholderText: qsTr("email@address.com")
 					// text: "r@r.r"
-					Kirigami.FormData.label: "Email:"
+					Kirigami.FormData.label: qsTr("Email:")
 				}
 				QQC2.TextField {
 					id: homeserver
-					placeholderText: "harmonyapp.io:2289"
+					//: placeholder for provider domain
+					placeholderText: qsTr("harmonyapp.io:2289")
 					// text: "localhost:2289"
-					Kirigami.FormData.label: "Homeserver:"
+					Kirigami.FormData.label: qsTr("Homeserver:")
 				}
 				Kirigami.PasswordField {
 					id: password
 					// text: "10kekeAke"
-					Kirigami.FormData.label: "Password:"
+					Kirigami.FormData.label: qsTr("Password:")
 				}
 				QQC2.Button {
-					text: "Login"
+					text: qsTr("Login")
 					onClicked: {
 						if (HState.login(email.text, password.text, homeserver.text)) {
-							root.showPassiveNotification("Logged in")
+							root.showPassiveNotification(qsTr("Logged in"))
 						} else {
-							root.showPassiveNotification("Failed to log in")
+							root.showPassiveNotification(qsTr("Failed to log in"))
 						}
 					}
 				}

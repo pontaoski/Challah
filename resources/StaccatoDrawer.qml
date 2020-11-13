@@ -71,7 +71,7 @@ Item {
 							id: appMenu
 
 							MenuItem {
-								text: "Log Out"
+								text: qsTr("Log Out")
 								onTriggered: routerInstance.navigateToRoute("login")
 							}
 						}
@@ -130,12 +130,12 @@ Item {
 								id: guildMenu
 
 								MenuItem {
-									text: model['isOwner'] ? "Delete" : "Leave"
+									text: model['isOwner'] ? qsTr("Delete") : qsTr("Leave")
 									onTriggered: {
 										if (HState.leaveGuild(model['homeserver'], model['guildID'], model['isOwner'])) {
-											root.showPassiveNotification("Left guild")
+											root.showPassiveNotification(qsTr("Left guild"))
 										} else {
-											root.showPassiveNotification("Failed to leave guild")
+											root.showPassiveNotification(qsTr("Failed to leave guild"))
 										}
 									}
 								}
@@ -169,7 +169,7 @@ Item {
 					Kirigami.Heading {
 						id: channelsTitle
 						leftPadding: Kirigami.Units.largeSpacing
-						text: "Channels"
+						text: qsTr("Channels")
 						Layout.fillWidth: true
 					}
 					ToolButton {

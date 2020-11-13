@@ -51,7 +51,7 @@ Kirigami.OverlaySheet {
                     }
 
                     QQC2.Button {
-                        text: "Create Guild"
+                        text: qsTr("Create Guild")
                         onClicked: swipeView.currentIndex = 1
 
                         Layout.alignment: Qt.AlignHCenter
@@ -75,7 +75,7 @@ Kirigami.OverlaySheet {
                     }
 
                     QQC2.Button {
-                        text: "Join Guild"
+                        text: qsTr("Join Guild")
                         onClicked: swipeView.currentIndex = 2
 
                         Layout.alignment: Qt.AlignHCenter
@@ -89,16 +89,16 @@ Kirigami.OverlaySheet {
             QQC2.TextField {
                 id: name
 
-                Kirigami.FormData.label: "Guild Name:"
+                Kirigami.FormData.label: qsTr("Guild Name:")
             }
             QQC2.Button {
-                text: "Create Guild"
+                text: qsTr("Create Guild")
 
                 onClicked: {
                     if (HState.createGuild(name.text)) {
-                        root.showPassiveNotification("Created guild")
+                        root.showPassiveNotification(qsTr("Created guild"))
                     } else {
-                        root.showPassiveNotification("Failed to make guild")
+                        root.showPassiveNotification(qsTr("Failed to make guild"))
                     }
                     rooty.close()
                 }
@@ -114,13 +114,13 @@ Kirigami.OverlaySheet {
                 Kirigami.FormData.label: "Invite Link:"
             }
             QQC2.Button {
-                text: "Join"
+                text: qsTr("Join")
 
                 onClicked: {
                     if (HState.joinGuild(invite.text)) {
-                        root.showPassiveNotification("Joined guild")
+                        root.showPassiveNotification(qsTr("Joined guild"))
                     } else {
-                        root.showPassiveNotification("Failed to join guild")
+                        root.showPassiveNotification(qsTr("Failed to join guild"))
                     }
                     rooty.close()
                 }

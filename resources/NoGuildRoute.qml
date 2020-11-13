@@ -13,21 +13,21 @@ Kirigami.PageRoute {
     cache: false
 
     Kirigami.Page {
-        title: "Guilds"
+        title: qsTr("Guilds")
 
         globalToolBarStyle: Kirigami.ApplicationHeaderStyle.None
 
         Kirigami.Theme.colorSet: Kirigami.Theme.View
 
         Kirigami.PlaceholderMessage {
-            text: "Click a guild to get chatting."
+            text: qsTr("Click a guild to get chatting.")
             icon.name: "view-conversation-balloon"
 
             anchors.centerIn: parent
 
             helpfulAction: Kirigami.Action {
                 iconName: "list-add"
-                text: "Join or Create Guild..."
+                text: qsTr("Join or Create Guild...")
                 onTriggered: guildSheet.openAndClear()
             }
         }

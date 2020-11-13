@@ -55,7 +55,8 @@ QQC2.ToolBar {
 		RowLayout {
 			QQC2.TextField {
 				id: messageField
-				placeholderText: "Write a message..."
+				//: Placeholder text for the message field
+				placeholderText: qsTr("Write a message...")
 
 				Layout.fillWidth: true
 
@@ -70,7 +71,8 @@ QQC2.ToolBar {
 				onAccepted: send()
 			}
 			QQC2.Button {
-				text: "Send"
+				//: Send the message in the text field
+				text: qsTr("Send")
 				onClicked: messageField.send()
 			}
 		}
