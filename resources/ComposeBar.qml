@@ -65,15 +65,21 @@ QQC2.ToolBar {
 					text = ""
 					replyingBar.replyingToID = ""
 				}
+				background: null
 
 				Keys.onEscapePressed: replyingBar.replyingToID = ""
 
 				onAccepted: send()
 			}
 			QQC2.Button {
-				//: Send the message in the text field
-				text: qsTr("Send")
+				icon.name: "document-send"
+				hoverEnabled: true
 				onClicked: messageField.send()
+
+				QQC2.ToolTip.delay: Kirigami.Units.shortDuration
+				QQC2.ToolTip.visible: hovered
+				//: Send the message in the text field
+				QQC2.ToolTip.text: qsTr("Send")
 			}
 		}
 	}

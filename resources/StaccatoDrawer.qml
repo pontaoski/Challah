@@ -55,26 +55,26 @@ Item {
 					width: 72
 					implicitWidth: 72
 
-					Rectangle {
-						implicitWidth: 48
-						implicitHeight: 48
-						color: Kirigami.Theme.backgroundColor
-						radius: 48 / 2
+					Kirigami.ApplicationHeader {
+						Layout.fillWidth: true
 
-						ToolButton {
+						contentItem: ToolButton {
 							anchors.fill: parent
 							icon.name: "application-menu"
 							onClicked: appMenu.open()
-						}
 
-						Menu {
-							id: appMenu
+							Layout.fillWidth: true
 
-							MenuItem {
-								text: qsTr("Log Out")
-								onTriggered: routerInstance.navigateToRoute("login")
+							Menu {
+								id: appMenu
+
+								MenuItem {
+									text: qsTr("Log Out")
+									onTriggered: routerInstance.navigateToRoute("login")
+								}
 							}
 						}
+						pageDelegate: Item {}
 
 						Layout.alignment: Qt.AlignTop | Qt.AlignHCenter
 					}
