@@ -213,6 +213,30 @@ Kirigami.PageRoute {
 							smooth: true
 							mipmap: true
 
+							QQC2.Popup {
+								id: imagePopup
+
+								anchors.centerIn: QQC2.Overlay.overlay
+								modal: true
+								QQC2.Overlay.modal: Rectangle {
+									color: "#000000"
+									opacity: 0.7
+								}
+
+								Image {
+									id: popupImage
+									source: HState.transformHMCURL(modelData)
+								}
+
+								width: popupImage.implicitWidth
+								height: popupImage.implicitHeight
+							}
+
+							MouseArea {
+								anchors.fill: parent
+								onClicked: imagePopup.open()
+							}
+
 							Layout.leftMargin: Kirigami.Units.gridUnit * 2 + Kirigami.Units.largeSpacing
 							Layout.maximumHeight: Layout.maximumWidth
 							Layout.maximumWidth: (applicationWindow().wideScreen ? Math.max(messagesView.width / 3, Kirigami.Units.gridUnit * 15) : (messagesView.width * 0.9)) - Layout.leftMargin
