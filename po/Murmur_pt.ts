@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="pt" sourcelanguage="en">
+<TS version="2.1" language="pt-BR" sourcelanguage="en">
   <context>
     <name>Avatar</name>
     <message>
@@ -37,16 +37,24 @@
   <context>
     <name>ComposeBar</name>
     <message>
-      <location filename="../resources/ComposeBar.qml" line="59"/>
+      <location filename="../resources/ComposeBar.qml" line="49"/>
+      <location filename="../resources/ComposeBar.qml" line="113"/>
       <source>Write a message...</source>
       <extracomment>Placeholder text for the message field</extracomment>
       <translation type="unfinished">Write a message...</translation>
     </message>
     <message>
-      <location filename="../resources/ComposeBar.qml" line="75"/>
+      <location filename="../resources/ComposeBar.qml" line="62"/>
+      <location filename="../resources/ComposeBar.qml" line="146"/>
       <source>Send</source>
       <extracomment>Send the message in the text field</extracomment>
       <translation type="unfinished">Send</translation>
+    </message>
+    <message>
+      <location filename="../resources/ComposeBar.qml" line="136"/>
+      <source>Add attachment...</source>
+      <extracomment>Send the message in the text field</extracomment>
+      <translation type="unfinished">Add attachment...</translation>
     </message>
   </context>
   <context>
@@ -268,7 +276,7 @@
   <context>
     <name>StaccatoDrawer</name>
     <message>
-      <location filename="../resources/StaccatoDrawer.qml" line="74"/>
+      <location filename="../resources/StaccatoDrawer.qml" line="72"/>
       <source>Log Out</source>
       <translation type="unfinished">Log Out</translation>
     </message>
