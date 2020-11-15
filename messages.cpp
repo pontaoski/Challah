@@ -2,6 +2,11 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
+#include <QHttpMultiPart>
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
+#include <QNetworkReply>
+
 #include "channels.hpp"
 #include "messages.hpp"
 
@@ -13,6 +18,7 @@ MessagesModel::MessagesModel(ChannelsModel *parent, QString homeServer, quint64 
 		channelID(channelID),
 		homeServer(homeServer)
 {
+	nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
 	client = Client::instanceForHomeserver(homeServer);
 
 	{
@@ -56,7 +62,12 @@ void MessagesModel::customEvent(QEvent *event)
 					message.actions = document["actions"];
 				}
 				if (msg.update_attachments()) {
-					// we don't do attachments rn
+					auto msgAttaches = msg.attachments();
+					QStringList attachments;
+					for (auto attach : msgAttaches) {
+						attachments << QString::fromStdString(attach);
+					}
+					message.attachments = attachments;
 				}
 				if (msg.update_content()) {
 					message.text = QString::fromStdString(msg.content());
@@ -157,6 +168,8 @@ QVariant MessagesModel::data(const QModelIndex& index, int role) const
 		return QString::number(messageData[idx].id);
 	case MessageReplyToRole:
 		return messageData[idx].replyTo != 0 ? QString::number(messageData[idx].replyTo) : QVariant();
+	case MessageAttachmentsRole:
+		return messageData[idx].attachments;
 	case MessageCombinedAuthorIDAvatarRole:
 		return QStringList{
 			QString::number(messageData[idx].authorID),
@@ -182,11 +195,12 @@ QHash<int,QByteArray> MessagesModel::roleNames() const
 	ret[MessageShouldDisplayAuthorInfo] = "shouldShowAuthorInfo";
 	ret[MessageReplyToRole] = "replyToID";
 	ret[MessageCombinedAuthorIDAvatarRole] = "authorIDAndAvatar";
+	ret[MessageAttachmentsRole] = "attachments";
 
 	return ret;
 }
 
-void MessagesModel::sendMessage(const QString& message, const QString &replyTo)
+void MessagesModel::sendMessage(const QString& message, const QString &replyTo, const QStringList& attachments)
 {
 	ClientContext ctx;
 	client->authenticate(ctx);
@@ -200,6 +214,10 @@ void MessagesModel::sendMessage(const QString& message, const QString &replyTo)
 	req.set_content(message.toStdString());
 	if (replyTo != QString()) {
 		req.set_in_reply_to(replyTo.toULongLong());
+	}
+
+	for (auto attachment : attachments) {
+		req.add_attachments(attachment.toStdString());
 	}
 
 	protocol::core::v1::SendMessageResponse empty;
@@ -331,4 +349,44 @@ QVariantMap MessagesModel::peekMessage(const QString& id)
 		{ "authorName", qobject_cast<ChannelsModel*>(parent())->userName(resp.message().author_id()) },
 		{ "content", QString::fromStdString(resp.message().content()) }
 	};
+}
+
+QString MessagesModel::uploadFile(const QUrl& url)
+{
+	QHttpMultiPart *mp = new QHttpMultiPart(QHttpMultiPart::FormDataType);
+
+	QFile* file(new QFile(url.toLocalFile()));
+	file->open(QIODevice::ReadOnly);
+
+	QHttpPart filePart;
+	filePart.setBodyDevice(file);
+	filePart.setHeader(QNetworkRequest::ContentDispositionHeader, QString("form-data; name=\"file\""));
+	filePart.setHeader(QNetworkRequest::ContentTypeHeader, "multipart/form-data");
+
+	mp->append(filePart);
+
+	QUrlQuery query;
+	query.addQueryItem("filename", url.fileName());
+	query.addQueryItem("contentType", QMimeDatabase().mimeTypeForFile(url.toLocalFile()).name());
+
+	QUrl reqUrl("http://" + homeServer + "/_harmony/media/upload?" + query.query());
+	QNetworkRequest req(reqUrl);
+	req.setRawHeader(QByteArrayLiteral("Authorization"), QString::fromStdString(client->userToken).toLocal8Bit());
+
+	auto reply = nam->post(req, mp);
+	while (!reply->isFinished()) {
+		QCoreApplication::processEvents();
+	}
+
+	auto data = reply->readAll();
+
+	delete mp;
+	delete file;
+	delete reply;
+
+	if (reply->error() != QNetworkReply::NoError) {
+		return QString();
+	}
+
+	return QString("hmc://%1/%2").arg(homeServer).arg(QJsonDocument::fromJson(data)["id"].toString());
 }

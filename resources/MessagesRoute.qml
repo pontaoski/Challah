@@ -206,6 +206,19 @@ Kirigami.PageRoute {
 						}
 					}
 					Repeater {
+						model: attachments
+						delegate: Image {
+							source: HState.transformHMCURL(modelData)
+							fillMode: Image.PreserveAspectCrop
+							smooth: true
+							mipmap: true
+
+							Layout.leftMargin: Kirigami.Units.gridUnit * 2 + Kirigami.Units.largeSpacing
+							Layout.maximumHeight: Layout.maximumWidth
+							Layout.maximumWidth: (applicationWindow().wideScreen ? Math.max(messagesView.width / 3, Kirigami.Units.gridUnit * 15) : (messagesView.width * 0.9)) - Layout.leftMargin
+						}
+					}
+					Repeater {
 						model: actions
 						delegate: MessageAction {
 							messageID: messageDelegate.modelMessageID

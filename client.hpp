@@ -30,13 +30,12 @@ class Client : public QObject
 	static Client* mainClient;
 	static QMap<QString,Client*> clients;
 
-	std::string userToken;
-
 	QString homeserver;
 
 	friend class State;
 
 public:
+	std::string userToken;
 	std::shared_ptr<grpc_impl::Channel> client;
 	std::unique_ptr<protocol::core::v1::CoreService::Stub> coreKit;
 	std::unique_ptr<protocol::foundation::v1::FoundationService::Stub> foundationKit;

@@ -41,6 +41,8 @@ struct MessageData
 	};
 	std::optional<Override> overrides;
 
+	QStringList attachments;
+
 	static MessageData fromProtobuf(protocol::core::v1::Message& msg) {
 		std::string jsonified;
 		google::protobuf::util::MessageToJsonString(msg, &jsonified, google::protobuf::util::JsonPrintOptions{});
@@ -60,6 +62,12 @@ struct MessageData
 			}
 		}
 
+		auto msgAttaches = msg.attachments();
+		QStringList attachments;
+		for (auto attach : msgAttaches) {
+			attachments << QString::fromStdString(attach);
+		}
+
 		return MessageData {
 			.text = QString::fromStdString(msg.content()),
 			.authorID = msg.author_id(),
@@ -69,7 +77,8 @@ struct MessageData
 			.embeds = document["embeds"],
 			.editedAt = QDateTime(),
 			.replyTo = msg.in_reply_to(),
-			.overrides = overrides
+			.overrides = overrides,
+			.attachments = attachments
 		};
 	}
 };
@@ -79,6 +88,7 @@ typedef CarrierEvent<4,protocol::core::v1::GuildEvent_MessageUpdated> MessageUpd
 typedef CarrierEvent<5,protocol::core::v1::GuildEvent_MessageDeleted> MessageDeletedEvent;
 
 class ChannelsModel;
+class QNetworkAccessManager;
 
 class MessagesModel : public QAbstractListModel
 {
@@ -89,6 +99,7 @@ class MessagesModel : public QAbstractListModel
 	quint64 channelID;
 
 	QList<MessageData> messageData;
+	QSharedPointer<QNetworkAccessManager> nam;
 
 	friend class ChannelsModel;
 	friend class Client;
@@ -109,6 +120,7 @@ class MessagesModel : public QAbstractListModel
 		MessageDateRole,
 		MessageReplyToRole,
 		MessageIDRole,
+		MessageAttachmentsRole,
 		MessageCombinedAuthorIDAvatarRole
 	};
 
@@ -126,8 +138,9 @@ public:
 	Q_INVOKABLE bool isOwner() { return isGuildOwner; }
 	Q_INVOKABLE QString userID() { return QString::number(client->userID); }
 	Q_INVOKABLE QVariantMap peekMessage(const QString& id);
-	Q_INVOKABLE void sendMessage(const QString& content, const QString& replyTo);
+	Q_INVOKABLE void sendMessage(const QString& content, const QString& replyTo, const QStringList& attachments);
 	Q_INVOKABLE void editMessage(const QString& id, const QString& content);
 	Q_INVOKABLE void deleteMessage(const QString& id);
 	Q_INVOKABLE void triggerAction(const QString& messageID, const QString& name, const QString& data);
+	Q_INVOKABLE QString uploadFile(const QUrl& path);
 };
