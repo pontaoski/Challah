@@ -176,7 +176,7 @@ Item {
 					}
 					ToolButton {
 						icon.name: "settings-configure"
-						onClicked: colView.layers.push(Qt.resolvedUrl("Invites.qml"), {"inviteModel": channelsModel.model.invitesModel()})
+						onClicked: root.pageStack.layers.push(Qt.resolvedUrl("Invites.qml"), {"inviteModel": channelsModel.model.invitesModel()})
 					}
 					ToolButton {
 						icon.name: "list-add"
