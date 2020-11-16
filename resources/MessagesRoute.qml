@@ -213,31 +213,70 @@ Kirigami.PageRoute {
 							smooth: true
 							mipmap: true
 
-							QQC2.Popup {
-								id: imagePopup
+							Component {
+								id: imagePopupComponent
 
-								anchors.centerIn: QQC2.Overlay.overlay
-								modal: true
-								QQC2.Overlay.modal: Rectangle {
-									color: "#000000"
-									opacity: 0.7
+								QQC2.Popup {
+									id: imagePopup
+
+									anchors.centerIn: QQC2.Overlay.overlay
+									modal: true
+
+									background: Item {}
+									Image {
+										id: popupImage
+										source: HState.transformHMCURL(modelData)
+										x: (parent.QQC2.Overlay.overlay.width / 2) - (this.implicitWidth / 2)
+										y: (parent.QQC2.Overlay.overlay.height / 2) - (this.implicitHeight / 2)
+
+										PinchArea {
+											anchors.fill: parent
+											pinch.target: popupImage
+											pinch.minimumRotation: -360
+											pinch.maximumRotation: 360
+											pinch.minimumScale: 0.1
+											pinch.maximumScale: 10
+											pinch.dragAxis: Pinch.XAndYAxis
+										}
+										MouseArea {
+											drag.target: parent
+											anchors.fill: parent
+											onWheel: {
+												if (wheel.modifiers & Qt.ControlModifier) {
+													popupImage.rotation += wheel.angleDelta.y / 120 * 5
+													if (Math.abs(popupImage.rotation) < 4)
+														popupImage.rotation = 0
+												} else {
+													popupImage.rotation += wheel.angleDelta.x / 120
+													if (Math.abs(popupImage.rotation) < 0.6)
+														popupImage.rotation = 0
+													var scaleBefore = popupImage.scale
+													popupImage.scale += popupImage.scale * wheel.angleDelta.y / 120 / 10
+												}
+											}
+										}
+									}
+
+									width: QQC2.Overlay.overlay.width
+									height: QQC2.Overlay.overlay.height
+
+									onClosed: {
+										this.destroy()
+									}
 								}
-
-								Image {
-									id: popupImage
-									source: HState.transformHMCURL(modelData)
-								}
-
-								width: popupImage.implicitWidth
-								height: popupImage.implicitHeight
 							}
 
 							MouseArea {
 								anchors.fill: parent
-								onClicked: imagePopup.open()
+								onClicked: {
+									let item = imagePopupComponent.createObject(messageDelegate)
+									item.open()
+								}
 							}
 
 							Layout.leftMargin: Kirigami.Units.gridUnit * 2 + Kirigami.Units.largeSpacing
+							Layout.preferredWidth: implicitWidth
+							Layout.preferredHeight: implicitHeight
 							Layout.maximumHeight: Layout.maximumWidth
 							Layout.maximumWidth: (applicationWindow().wideScreen ? Math.max(messagesView.width / 3, Kirigami.Units.gridUnit * 15) : (messagesView.width * 0.9)) - Layout.leftMargin
 						}
