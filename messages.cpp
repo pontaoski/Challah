@@ -200,7 +200,7 @@ QHash<int,QByteArray> MessagesModel::roleNames() const
 	return ret;
 }
 
-void MessagesModel::sendMessage(const QString& message, const QString &replyTo, const QStringList& attachments)
+void MessagesModel::sendMessageFull(const QString& message, const QString &replyTo, const QStringList& attachments, const SendAs& as)
 {
 	ClientContext ctx;
 	client->authenticate(ctx);
@@ -218,6 +218,27 @@ void MessagesModel::sendMessage(const QString& message, const QString &replyTo, 
 
 	for (auto attachment : attachments) {
 		req.add_attachments(attachment.toStdString());
+	}
+
+	if (std::holds_alternative<Nobody>(as)) {
+
+	} else if (std::holds_alternative<Fronter>(as)) {
+		auto& fronter = std::get<Fronter>(as);
+
+		auto override = new protocol::core::v1::Override();
+		override->set_name(fronter.name.toStdString());
+		override->set_allocated_system_plurality(new google::protobuf::Empty{});
+
+		req.set_allocated_overrides(override);
+
+	} else if (std::holds_alternative<RoleplayCharacter>(as)) {
+		auto& character = std::get<RoleplayCharacter>(as);
+
+		auto override = new protocol::core::v1::Override();
+		override->set_name(character.name.toStdString());
+		override->set_user_defined("Roleplay");
+
+		req.set_allocated_overrides(override);
 	}
 
 	protocol::core::v1::SendMessageResponse empty;

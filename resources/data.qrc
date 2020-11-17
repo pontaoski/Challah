@@ -15,6 +15,9 @@
         <file>RecursiveMenuActionComponent.qml</file>
         <file>RightDrawer.qml</file>
         <file>StaccatoDrawer.qml</file>
+        <file>MurmurSettings.qml</file>
+        <file>UISettings.qml</file>
+        <file>qmldir</file>
     </qresource>
     <qresource prefix="/img">
         <file>com.github.Harmony.Murmur.svg</file>

@@ -69,6 +69,10 @@ Item {
 								id: appMenu
 
 								MenuItem {
+									text: qsTr("Settings")
+									onTriggered: root.pageStack.layers.push(Qt.resolvedUrl("MurmurSettings.qml"), {})
+								}
+								MenuItem {
 									text: qsTr("Log Out")
 									onTriggered: routerInstance.navigateToRoute("login")
 								}

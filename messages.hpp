@@ -124,6 +124,16 @@ class MessagesModel : public QAbstractListModel
 		MessageCombinedAuthorIDAvatarRole
 	};
 
+	struct Fronter {
+		QString name;
+	};
+	struct RoleplayCharacter {
+		QString name;
+	};
+
+	using Nobody = std::monostate;
+	using SendAs = std::variant<Nobody, Fronter, RoleplayCharacter>;
+
 protected:
 	Q_INVOKABLE void customEvent(QEvent *event) override;
 
@@ -138,7 +148,23 @@ public:
 	Q_INVOKABLE bool isOwner() { return isGuildOwner; }
 	Q_INVOKABLE QString userID() { return QString::number(client->userID); }
 	Q_INVOKABLE QVariantMap peekMessage(const QString& id);
-	Q_INVOKABLE void sendMessage(const QString& content, const QString& replyTo, const QStringList& attachments);
+	Q_INVOKABLE void sendMessageFull(const QString& content, const QString& replyTo, const QStringList& attachments, const SendAs& as);
+	Q_INVOKABLE void sendMessage(const QString& content, const QString& replyTo, const QStringList& attachments)
+	{
+		sendMessageFull(content, replyTo, attachments, SendAs(Nobody{}));
+	}
+	Q_INVOKABLE void sendMessageAsSystem(const QString& content, const QString& replyTo, const QStringList& attachments, const QString& memberName)
+	{
+		sendMessageFull(content, replyTo, attachments, SendAs(Fronter {
+			.name = memberName
+		}));
+	}
+	Q_INVOKABLE void sendMessageAsRoleplay(const QString& content, const QString& replyTo, const QStringList& attachments, const QString& characterName)
+	{
+		sendMessageFull(content, replyTo, attachments, SendAs(RoleplayCharacter {
+			.name = characterName
+		}));
+	}
 	Q_INVOKABLE void editMessage(const QString& id, const QString& content);
 	Q_INVOKABLE void deleteMessage(const QString& id);
 	Q_INVOKABLE void triggerAction(const QString& messageID, const QString& name, const QString& data);

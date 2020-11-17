@@ -107,6 +107,15 @@ QQC2.ToolBar {
 			Layout.fillWidth: true
 		}
 		RowLayout {
+			QQC2.ComboBox {
+				id: settingsCombo
+				model: [{
+					"name": qsTr("Default"),
+					"kind": "default"
+				}].concat(uiSettings.personas)
+				visible: uiSettings.personas.length > 0
+				textRole: "name"
+			}
 			QQC2.TextField {
 				id: messageField
 				//: Placeholder text for the message field
@@ -115,7 +124,18 @@ QQC2.ToolBar {
 				Layout.fillWidth: true
 
 				function send() {
-					Kirigami.PageRouter.data.sendMessage(text, replyingBar.replyingToID, [])
+					if (uiSettings.personas.length == 0) {
+						Kirigami.PageRouter.data.sendMessage(text, replyingBar.replyingToID, [])
+					} else {
+						switch (settingsCombo.model[settingsCombo.currentIndex].kind) {
+						case "default":
+							Kirigami.PageRouter.data.sendMessage(text, replyingBar.replyingToID, []); break
+						case "roleplay":
+							Kirigami.PageRouter.data.sendMessageAsRoleplay(text, replyingBar.replyingToID, [], settingsCombo.model[settingsCombo.currentIndex].name); break
+						case "plurality":
+							Kirigami.PageRouter.data.sendMessageAsSystem(text, replyingBar.replyingToID, [], settingsCombo.model[settingsCombo.currentIndex].name); break
+						}
+					}
 					text = ""
 					replyingBar.replyingToID = ""
 				}
