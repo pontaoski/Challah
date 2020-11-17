@@ -40,6 +40,21 @@ QtApplication {
 	]
 
 	Group {
+		files: ["resources/com.github.harmony-development.Murmur.svg"]
+		qbs.install: qbs.targetOS.contains("linux")
+		qbs.installDir: "share/icons/hicolor/scalable/apps"
+	}
+
+	Group {
+		files: ["com.github.harmony-development.Murmur.desktop"]
+		qbs.install: qbs.targetOS.contains("linux")
+		qbs.installDir: "share/applications"
+	}
+
+	qbs.install: qbs.targetOS.contains("linux")
+	qbs.installDir: "bin"
+
+	Group {
 		name: "Translation files"
 		files: ["po/*.ts"]
 	}

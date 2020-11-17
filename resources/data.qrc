@@ -20,6 +20,6 @@
         <file>qmldir</file>
     </qresource>
     <qresource prefix="/img">
-        <file>com.github.Harmony.Murmur.svg</file>
+        <file>com.github.harmony-development.Murmur.svg</file>
     </qresource>
 </RCC>
