@@ -46,6 +46,12 @@ QtApplication {
 	}
 
 	Group {
+		files: ["com.github.harmony-development.Murmur.appdata.xml"]
+		qbs.install: qbs.targetOS.contains("linux")
+		qbs.installDir: "share/metainfo"
+	}
+
+	Group {
 		files: ["com.github.harmony-development.Murmur.desktop"]
 		qbs.install: qbs.targetOS.contains("linux")
 		qbs.installDir: "share/applications"
