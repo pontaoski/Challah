@@ -372,7 +372,7 @@ QVariantMap MessagesModel::peekMessage(const QString& id)
 	};
 }
 
-QString MessagesModel::uploadFile(const QUrl& url)
+void MessagesModel::uploadFile(const QUrl& url, QJSValue then, QJSValue elseDo, QJSValue progress, QJSValue finally)
 {
 	QHttpMultiPart *mp = new QHttpMultiPart(QHttpMultiPart::FormDataType);
 
@@ -395,19 +395,25 @@ QString MessagesModel::uploadFile(const QUrl& url)
 	req.setRawHeader(QByteArrayLiteral("Authorization"), QString::fromStdString(client->userToken).toLocal8Bit());
 
 	auto reply = nam->post(req, mp);
-	while (!reply->isFinished()) {
-		QCoreApplication::processEvents();
-	}
 
-	auto data = reply->readAll();
+	connect(reply, &QNetworkReply::uploadProgress, this, [=](qint64 sent, qint64 total) mutable {
+		progress.call(QList<QJSValue>{ QJSValue(double(sent) / double(total)) });
+	});
+	connect(reply, &QNetworkReply::finished, this, [=]() mutable {
+		auto data = reply->readAll();
 
-	delete mp;
-	delete file;
-	delete reply;
+		delete mp;
+		delete file;
+		delete reply;
 
-	if (reply->error() != QNetworkReply::NoError) {
-		return QString();
-	}
+		if (reply->error() != QNetworkReply::NoError) {
+			elseDo.call();
+			finally.call();
+			return;
+		}
 
-	return QString("hmc://%1/%2").arg(homeServer).arg(QJsonDocument::fromJson(data)["id"].toString());
+		then.call(QList<QJSValue>{ QString("hmc://%1/%2").arg(homeServer).arg(QJsonDocument::fromJson(data)["id"].toString()) });
+		finally.call();
+		return;
+	});
 }

@@ -51,9 +51,22 @@ QQC2.ToolBar {
 					Layout.fillWidth: true
 
 					function send() {
-						messageField.Kirigami.PageRouter.data.sendMessage(text, replyingBar.replyingToID, [messageField.Kirigami.PageRouter.data.uploadFile(uploadSheet.pendingUpload)])
+						let incomingText = text
+						let replyingTo = replyingBar.replyingToID
 						text = ""
 						replyingBar.replyingToID = ""
+						messageField.Kirigami.PageRouter.data.uploadFile(
+							uploadSheet.pendingUpload,
+							function(url) {
+								messageField.Kirigami.PageRouter.data.sendMessage(incomingText, replyingTo, [url])
+							},
+							function() {
+								root.showPassiveNotification(qsTr("Failed to upload file"))
+							},
+							function(progress) {},
+							function() {}
+						)
+						uploadSheet.close()
 					}
 
 					onAccepted: send()

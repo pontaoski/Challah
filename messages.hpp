@@ -6,6 +6,7 @@
 
 #include <QAbstractListModel>
 #include <QJsonDocument>
+#include <QJSValue>
 #include <optional>
 
 #include <google/protobuf/util/json_util.h>
@@ -168,5 +169,5 @@ public:
 	Q_INVOKABLE void editMessage(const QString& id, const QString& content);
 	Q_INVOKABLE void deleteMessage(const QString& id);
 	Q_INVOKABLE void triggerAction(const QString& messageID, const QString& name, const QString& data);
-	Q_INVOKABLE QString uploadFile(const QUrl& path);
+	Q_INVOKABLE void uploadFile(const QUrl& path, QJSValue then, QJSValue elseDo, QJSValue progress, QJSValue finally);
 };
