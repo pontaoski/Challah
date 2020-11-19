@@ -90,48 +90,11 @@ ChannelsModel::ChannelsModel(QString homeServer, quint64 guildID) : QAbstractLis
 		};
 	}
 
-	QtConcurrent::run([=]() {
-		ClientContext ctx;
-		client->authenticate(ctx);
-
-		protocol::core::v1::StreamGuildEventsRequest req;
-		req.set_allocated_location(Location { .guildID = guildID });
-		auto stream = client->coreKit->StreamGuildEvents(&ctx, req);
-		protocol::core::v1::GuildEvent msg;
-
-		while (stream->Read(&msg)) {
-			if (msg.has_created_channel()) {
-				QCoreApplication::postEvent(this, new ChannelAddEvent(msg.created_channel()));
-			} else if (msg.has_deleted_channel()) {
-				QCoreApplication::postEvent(this, new ChannelDeleteEvent(msg.deleted_channel()));
-			} else if (msg.has_sent_message()) {
-				auto sent = msg.sent_message();
-				auto chanID = sent.message().location().channel_id();
-				if (models.contains(chanID)) {
-					QCoreApplication::postEvent(models[chanID], new MessageSentEvent(sent));
-				}
-			} else if (msg.has_edited_message()) {
-				auto updated = msg.edited_message();
-				auto chanID = updated.location().channel_id();
-				if (models.contains(chanID)) {
-					QCoreApplication::postEvent(models[chanID], new MessageUpdatedEvent(updated));
-				}
-			} else if (msg.has_deleted_message()) {
-				auto deleted = msg.deleted_message();
-				auto chanID = deleted.location().channel_id();
-				if (models.contains(chanID)) {
-					QCoreApplication::postEvent(models[chanID], new MessageDeletedEvent(deleted));
-				}
-			} else if (msg.has_joined_member()) {
-				QCoreApplication::postEvent(members, new MemberJoinEvent(msg.joined_member()));
-			} else if (msg.has_left_member()) {
-				QCoreApplication::postEvent(members, new MemberLeftEvent(msg.left_member()));
-			} else if (msg.has_edited_guild()) {
-				QCoreApplication::postEvent(members, new GuildUpdateEvent(msg.edited_guild()));
-			}
-		}
-	});
+	client->subscribeGuild(guildID);
+	instances.insert(qMakePair(homeServer, guildID), this);
 }
+
+QMap<QPair<QString,quint64>,ChannelsModel*> ChannelsModel::instances;
 
 void ChannelsModel::moveChannelFromTo(int from, int to)
 {
@@ -158,8 +121,8 @@ void ChannelsModel::moveChannelFromTo(int from, int to)
 
 void ChannelsModel::customEvent(QEvent *event)
 {
-	if (event->type() == ChannelAddEvent::typeID) {
-		auto ev = reinterpret_cast<ChannelAddEvent*>(event);
+	if (event->type() == ChannelCreatedEvent::typeID) {
+		auto ev = reinterpret_cast<ChannelCreatedEvent*>(event);
 		auto idx = (std::find_if(channels.begin(), channels.end(), [=](Channel& chan) { return chan.channelID == ev->data.previous_id(); }) - channels.begin());
 		idx++;
 		beginInsertRows(QModelIndex(), idx, idx);
@@ -169,12 +132,38 @@ void ChannelsModel::customEvent(QEvent *event)
 			.isCategory = ev->data.is_category()
 		});
 		endInsertRows();
-	} else if (event->type() == ChannelDeleteEvent::typeID) {
-		auto ev = reinterpret_cast<ChannelDeleteEvent*>(event);
+	} else if (event->type() == ChannelDeletedEvent::typeID) {
+		auto ev = reinterpret_cast<ChannelDeletedEvent*>(event);
 		auto idx = std::find_if(channels.begin(), channels.end(), [=](Channel &chan) { return chan.channelID == ev->data.location().channel_id(); });
 		beginRemoveRows(QModelIndex(), idx - channels.begin(), idx - channels.begin());
 		channels.removeAt(idx - channels.begin());
 		endRemoveRows();
+	} else if (event->type() == MessageUpdatedEvent::typeID) {
+		auto ev = reinterpret_cast<MessageUpdatedEvent*>(event);
+
+		auto chanID = ev->data.location().channel_id();
+		if (models.contains(chanID)) {
+			QCoreApplication::postEvent(models[chanID], new MessageUpdatedEvent(ev->data));
+		}
+	} else if (event->type() == MessageDeletedEvent::typeID) {
+		auto ev = reinterpret_cast<MessageDeletedEvent*>(event);
+
+		auto chanID = ev->data.location().channel_id();
+		if (models.contains(chanID)) {
+			QCoreApplication::postEvent(models[chanID], new MessageDeletedEvent(ev->data));
+		}
+	} else if (event->type() == MemberJoinedEvent::typeID) {
+		auto ev = reinterpret_cast<MemberJoinedEvent*>(event);
+
+		QCoreApplication::postEvent(members, new MemberJoinedEvent(ev->data));
+	} else if (event->type() == MemberLeftEvent::typeID) {
+		auto ev = reinterpret_cast<MemberLeftEvent*>(event);
+
+		QCoreApplication::postEvent(members, new MemberLeftEvent(ev->data));
+	} else if (event->type() == GuildUpdatedEvent::typeID) {
+		auto ev = reinterpret_cast<GuildUpdatedEvent*>(event);
+
+		QCoreApplication::postEvent(members, new GuildUpdatedEvent(ev->data));
 	}
 }
 

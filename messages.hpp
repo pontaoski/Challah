@@ -84,10 +84,6 @@ struct MessageData
 	}
 };
 
-typedef CarrierEvent<3,protocol::core::v1::GuildEvent_MessageSent> MessageSentEvent;
-typedef CarrierEvent<4,protocol::core::v1::GuildEvent_MessageUpdated> MessageUpdatedEvent;
-typedef CarrierEvent<5,protocol::core::v1::GuildEvent_MessageDeleted> MessageDeletedEvent;
-
 class ChannelsModel;
 class QNetworkAccessManager;
 
