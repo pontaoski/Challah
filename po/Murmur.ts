@@ -38,20 +38,30 @@
     <name>ComposeBar</name>
     <message>
         <location filename="../resources/ComposeBar.qml" line="49"/>
-        <location filename="../resources/ComposeBar.qml" line="113"/>
+        <location filename="../resources/ComposeBar.qml" line="135"/>
         <source>Write a message...</source>
         <extracomment>Placeholder text for the message field</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../resources/ComposeBar.qml" line="62"/>
-        <location filename="../resources/ComposeBar.qml" line="146"/>
+        <location filename="../resources/ComposeBar.qml" line="64"/>
+        <source>Failed to upload file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../resources/ComposeBar.qml" line="75"/>
+        <location filename="../resources/ComposeBar.qml" line="179"/>
         <source>Send</source>
         <extracomment>Send the message in the text field</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../resources/ComposeBar.qml" line="136"/>
+        <location filename="../resources/ComposeBar.qml" line="126"/>
+        <source>Default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../resources/ComposeBar.qml" line="169"/>
         <source>Add attachment...</source>
         <extracomment>Send the message in the text field</extracomment>
         <translation type="unfinished"></translation>
@@ -242,6 +252,45 @@
     </message>
 </context>
 <context>
+    <name>MurmurSettings</name>
+    <message>
+        <location filename="../resources/MurmurSettings.qml" line="14"/>
+        <source>Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../resources/MurmurSettings.qml" line="23"/>
+        <source>Personas</source>
+        <extracomment>Personas are alternate identities; e.g. for roleplay reasons</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../resources/MurmurSettings.qml" line="25"/>
+        <source>New Persona</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../resources/MurmurSettings.qml" line="38"/>
+        <source>Persona Name:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../resources/MurmurSettings.qml" line="44"/>
+        <source>Roleplay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../resources/MurmurSettings.qml" line="53"/>
+        <source>Persona Kind:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../resources/MurmurSettings.qml" line="56"/>
+        <source>Create</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>NoGuildRoute</name>
     <message>
         <location filename="../resources/NoGuildRoute.qml" line="16"/>
@@ -277,33 +326,38 @@
     <name>StaccatoDrawer</name>
     <message>
         <location filename="../resources/StaccatoDrawer.qml" line="72"/>
+        <source>Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../resources/StaccatoDrawer.qml" line="76"/>
         <source>Log Out</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../resources/StaccatoDrawer.qml" line="133"/>
+        <location filename="../resources/StaccatoDrawer.qml" line="137"/>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../resources/StaccatoDrawer.qml" line="133"/>
+        <location filename="../resources/StaccatoDrawer.qml" line="137"/>
         <source>Leave</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../resources/StaccatoDrawer.qml" line="137"/>
+        <location filename="../resources/StaccatoDrawer.qml" line="141"/>
         <source>Left guild</source>
         <extracomment>guild leaving succeeded</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../resources/StaccatoDrawer.qml" line="140"/>
+        <location filename="../resources/StaccatoDrawer.qml" line="144"/>
         <source>Failed to leave guild</source>
         <extracomment>guild leaving failed</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../resources/StaccatoDrawer.qml" line="174"/>
+        <location filename="../resources/StaccatoDrawer.qml" line="178"/>
         <source>Channels</source>
         <translation type="unfinished"></translation>
     </message>
