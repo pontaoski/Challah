@@ -100,19 +100,19 @@
     <message>
       <location filename="../resources/GuildSheet.qml" line="119"/>
       <source>Join</source>
-      <translation type="unfinished">Join</translation>
+      <translation>Dołącz</translation>
     </message>
     <message>
       <location filename="../resources/GuildSheet.qml" line="124"/>
       <source>Joined guild</source>
       <extracomment>guild has been successfully joined</extracomment>
-      <translation type="unfinished">Joined guild</translation>
+      <translation>Dołączono do gildii</translation>
     </message>
     <message>
       <location filename="../resources/GuildSheet.qml" line="127"/>
       <source>Failed to join guild</source>
       <extracomment>joining the guild failed</extracomment>
-      <translation type="unfinished">Failed to join guild</translation>
+      <translation>Nie udało się dołączyć do gildii</translation>
     </message>
   </context>
   <context>
@@ -120,107 +120,101 @@
     <message>
       <location filename="../resources/Invites.qml" line="14"/>
       <source>Invites</source>
-      <translation type="unfinished">Invites</translation>
+      <translation>Zaproszenia</translation>
     </message>
     <message>
       <location filename="../resources/Invites.qml" line="21"/>
       <source>Create Invite...</source>
-      <translation type="unfinished">Create Invite...</translation>
+      <translation>Utwórz Zaproszenie...</translation>
     </message>
     <message>
       <location filename="../resources/Invites.qml" line="42"/>
       <source>Invite ID:</source>
-      <translation type="unfinished">Invite ID:</translation>
+      <translation>ID Zaproszenia:</translation>
     </message>
     <message>
       <location filename="../resources/Invites.qml" line="52"/>
       <source>Restrict uses:</source>
-      <translation type="unfinished">Restrict uses:</translation>
+      <translation>Ogranicz użycie:</translation>
     </message>
     <message>
       <location filename="../resources/Invites.qml" line="56"/>
       <source>Create Invite</source>
-      <translation type="unfinished">Create Invite</translation>
+      <translation>Utwórz Zaproszenie</translation>
     </message>
     <message>
       <location filename="../resources/Invites.qml" line="61"/>
       <source>Created invite</source>
       <extracomment>the invite was created successfully</extracomment>
-      <translation type="unfinished">Created invite</translation>
+      <translation>Utworzone zaproszenie</translation>
     </message>
     <message>
       <location filename="../resources/Invites.qml" line="64"/>
       <source>Failed to create invite</source>
       <extracomment>the invite couldn&apos;t be created successfully</extracomment>
-      <translation type="unfinished">Failed to create invite</translation>
+      <translation>Nie udało się stworzyć zaproszenia</translation>
     </message>
     <message>
       <location filename="../resources/Invites.qml" line="78"/>
       <source>Invite ID: %1</source>
-      <translation type="unfinished">Invite ID: %1</translation>
+      <translation>ID Zaproszenia: %1</translation>
     </message>
     <message>
       <location filename="../resources/Invites.qml" line="82"/>
       <source>Possible Uses: %1 | Uses: %2 </source>
-      <translation type="unfinished">Possible Uses: %1 | Uses: %2 </translation>
+      <translation>Możliwe użycia: %1 | Użycia: %2 </translation>
     </message>
     <message>
       <location filename="../resources/Invites.qml" line="82"/>
       <source>Possible Uses: Infinite | Uses : %1</source>
-      <translation type="unfinished">Possible Uses: Infinite | Uses : %1</translation>
+      <translation>Możliwe użycia: Nieskończone | Użycia: %1</translation>
     </message>
   </context>
   <context>
     <name>LoginRoute</name>
     <message>
       <location filename="../resources/LoginRoute.qml" line="17"/>
-      <location filename="../resources/LoginRoute.qml" line="65"/>
+      <location filename="../resources/LoginRoute.qml" line="64"/>
       <source>Login</source>
-      <translation type="unfinished">Login</translation>
+      <translation>Zaloguj się</translation>
     </message>
     <message>
       <location filename="../resources/LoginRoute.qml" line="38"/>
       <source>Welcome to Murmur</source>
-      <translation type="unfinished">Welcome to Murmur</translation>
+      <translation>Witaj w Murmur</translation>
     </message>
     <message>
       <location filename="../resources/LoginRoute.qml" line="48"/>
       <source>email@address.com</source>
       <extracomment>placeholder for email</extracomment>
-      <translation type="unfinished">email@address.com</translation>
+      <translation>adres@email.pl</translation>
     </message>
     <message>
       <location filename="../resources/LoginRoute.qml" line="50"/>
       <source>Email:</source>
-      <translation type="unfinished">Email:</translation>
+      <translation>Email:</translation>
     </message>
     <message>
-      <location filename="../resources/LoginRoute.qml" line="55"/>
-      <source>harmonyapp.io:2289</source>
-      <extracomment>placeholder for provider domain</extracomment>
-      <translation type="unfinished">harmonyapp.io:2289</translation>
-    </message>
-    <message>
-      <location filename="../resources/LoginRoute.qml" line="57"/>
+      <location filename="../resources/LoginRoute.qml" line="56"/>
       <source>Homeserver:</source>
-      <translation type="unfinished">Homeserver:</translation>
+      <translation>Serwer Domowy:</translation>
     </message>
     <message>
-      <location filename="../resources/LoginRoute.qml" line="62"/>
+      <location filename="../resources/LoginRoute.qml" line="61"/>
       <source>Password:</source>
-      <translation type="unfinished">Password:</translation>
+      <translation>Hasło:</translation>
     </message>
     <message>
-      <location filename="../resources/LoginRoute.qml" line="69"/>
+      <location filename="../resources/LoginRoute.qml" line="68"/>
       <source>Logged in</source>
       <extracomment>the user logged in successfully</extracomment>
-      <translation type="unfinished">Logged in</translation>
+      <translation>Zalogowane</translation>
     </message>
     <message>
-      <location filename="../resources/LoginRoute.qml" line="72"/>
+      <location filename="../resources/LoginRoute.qml" line="71"/>
       <source>Failed to log in</source>
       <extracomment>login failed</extracomment>
-      <translation type="unfinished">Failed to log in</translation>
+      <translation>Nie udało się zalogować</translation>
     </message>
   </context>
   <context>
@@ -230,7 +224,7 @@
       <location filename="../resources/MessageAction.qml" line="95"/>
       <location filename="../resources/MessageAction.qml" line="119"/>
       <source>Submit</source>
-      <translation type="unfinished">Submit</translation>
+      <translation>Wyślij</translation>
     </message>
   </context>
   <context>
@@ -238,17 +232,17 @@
     <message>
       <location filename="../resources/MessagesRoute.qml" line="74"/>
       <source>Edit</source>
-      <translation type="unfinished">Edit</translation>
+      <translation>Edytuj</translation>
     </message>
     <message>
       <location filename="../resources/MessagesRoute.qml" line="81"/>
       <source>Delete</source>
-      <translation type="unfinished">Delete</translation>
+      <translation>Usuń</translation>
     </message>
     <message>
       <location filename="../resources/MessagesRoute.qml" line="88"/>
       <source>Reply</source>
-      <translation type="unfinished">Reply</translation>
+      <translation>Odpowiedz</translation>
     </message>
   </context>
   <context>
@@ -256,38 +250,38 @@
     <message>
       <location filename="../resources/MurmurSettings.qml" line="14"/>
       <source>Settings</source>
-      <translation type="unfinished">Settings</translation>
+      <translation>Ustawienia</translation>
     </message>
     <message>
       <location filename="../resources/MurmurSettings.qml" line="23"/>
       <source>Personas</source>
       <extracomment>Personas are alternate identities; e.g. for roleplay reasons</extracomment>
-      <translation type="unfinished">Personas</translation>
+      <translation>Persony</translation>
     </message>
     <message>
       <location filename="../resources/MurmurSettings.qml" line="25"/>
       <source>New Persona</source>
-      <translation type="unfinished">New Persona</translation>
+      <translation>Nowa Persona</translation>
     </message>
     <message>
       <location filename="../resources/MurmurSettings.qml" line="38"/>
       <source>Persona Name:</source>
-      <translation type="unfinished">Persona Name:</translation>
+      <translation>Nazwa Persony:</translation>
     </message>
     <message>
       <location filename="../resources/MurmurSettings.qml" line="44"/>
       <source>Roleplay</source>
-      <translation type="unfinished">Roleplay</translation>
+      <translation>Odgrywanie Ról</translation>
     </message>
     <message>
       <location filename="../resources/MurmurSettings.qml" line="53"/>
       <source>Persona Kind:</source>
-      <translation type="unfinished">Persona Kind:</translation>
+      <translation>Typ Persony:</translation>
     </message>
     <message>
       <location filename="../resources/MurmurSettings.qml" line="56"/>
       <source>Create</source>
-      <translation type="unfinished">Create</translation>
+      <translation>Utwórz</translation>
     </message>
   </context>
   <context>
@@ -295,17 +289,17 @@
     <message>
       <location filename="../resources/NoGuildRoute.qml" line="16"/>
       <source>Guilds</source>
-      <translation type="unfinished">Guilds</translation>
+      <translation>Gildie</translation>
     </message>
     <message>
       <location filename="../resources/NoGuildRoute.qml" line="23"/>
       <source>Click a guild to get chatting.</source>
-      <translation type="unfinished">Click a guild to get chatting.</translation>
+      <translation>Kliknij na gildię, aby zacząć czatować.</translation>
     </message>
     <message>
       <location filename="../resources/NoGuildRoute.qml" line="30"/>
       <source>Join or Create Guild...</source>
-      <translation type="unfinished">Join or Create Guild...</translation>
+      <translation>Dołącz lub Utwórz Gildię...</translation>
     </message>
   </context>
   <context>
@@ -314,12 +308,12 @@
       <location filename="../resources/RightDrawer.qml" line="53"/>
       <source>Guild Info</source>
       <extracomment>a heading for the right drawer which shows guild info</extracomment>
-      <translation type="unfinished">Guild Info</translation>
+      <translation>Informacje o Gildii</translation>
     </message>
     <message>
       <location filename="../resources/RightDrawer.qml" line="113"/>
       <source>%L1 members</source>
-      <translation type="unfinished">%L1 members</translation>
+      <translation>%L1 członków</translation>
     </message>
   </context>
   <context>
@@ -327,39 +321,39 @@
     <message>
       <location filename="../resources/StaccatoDrawer.qml" line="72"/>
       <source>Settings</source>
-      <translation type="unfinished">Settings</translation>
+      <translation>Ustawienia</translation>
     </message>
     <message>
       <location filename="../resources/StaccatoDrawer.qml" line="76"/>
       <source>Log Out</source>
-      <translation type="unfinished">Log Out</translation>
+      <translation>Wyloguj się</translation>
     </message>
     <message>
       <location filename="../resources/StaccatoDrawer.qml" line="137"/>
       <source>Delete</source>
-      <translation type="unfinished">Delete</translation>
+      <translation>Usuń</translation>
     </message>
     <message>
       <location filename="../resources/StaccatoDrawer.qml" line="137"/>
       <source>Leave</source>
-      <translation type="unfinished">Leave</translation>
+      <translation>Opuść</translation>
     </message>
     <message>
       <location filename="../resources/StaccatoDrawer.qml" line="141"/>
       <source>Left guild</source>
       <extracomment>guild leaving succeeded</extracomment>
-      <translation type="unfinished">Left guild</translation>
+      <translation>Opuszczono gildię</translation>
     </message>
     <message>
       <location filename="../resources/StaccatoDrawer.qml" line="144"/>
       <source>Failed to leave guild</source>
       <extracomment>guild leaving failed</extracomment>
-      <translation type="unfinished">Failed to leave guild</translation>
+      <translation>Nie udało się opuścić gildii</translation>
     </message>
     <message>
       <location filename="../resources/StaccatoDrawer.qml" line="178"/>
       <source>Channels</source>
-      <translation type="unfinished">Channels</translation>
+      <translation>Kanały</translation>
     </message>
   </context>
 </TS>
