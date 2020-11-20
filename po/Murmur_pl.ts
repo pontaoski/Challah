@@ -6,7 +6,7 @@
     <message>
       <location filename="../resources/Avatar.qml" line="94"/>
       <source>%1 — %2</source>
-      <translation type="unfinished">%1 — %2</translation>
+      <translation>%1 — %2</translation>
     </message>
   </context>
   <context>
@@ -14,24 +14,24 @@
     <message>
       <location filename="../resources/ChannelSheet.qml" line="21"/>
       <source>Channel Name:</source>
-      <translation type="unfinished">Channel Name:</translation>
+      <translation>Nazwa Kanału:</translation>
     </message>
     <message>
       <location filename="../resources/ChannelSheet.qml" line="24"/>
       <source>Create Channel</source>
-      <translation type="unfinished">Create Channel</translation>
+      <translation>Stwórz Kanał</translation>
     </message>
     <message>
       <location filename="../resources/ChannelSheet.qml" line="29"/>
       <source>Created channel</source>
       <extracomment>the channel has been successfully created</extracomment>
-      <translation type="unfinished">Created channel</translation>
+      <translation>Utworzony Kanał</translation>
     </message>
     <message>
       <location filename="../resources/ChannelSheet.qml" line="32"/>
       <source>Failed to create channel</source>
       <extracomment>the channel failed to be created</extracomment>
-      <translation type="unfinished">Failed to create channel</translation>
+      <translation>Nie udało się stworzyć kanału</translation>
     </message>
   </context>
   <context>
@@ -41,30 +41,30 @@
       <location filename="../resources/ComposeBar.qml" line="135"/>
       <source>Write a message...</source>
       <extracomment>Placeholder text for the message field</extracomment>
-      <translation type="unfinished">Write a message...</translation>
+      <translation>Napisz wiadomość...</translation>
     </message>
     <message>
       <location filename="../resources/ComposeBar.qml" line="64"/>
       <source>Failed to upload file</source>
-      <translation type="unfinished">Failed to upload file</translation>
+      <translation>Nie udało się przesłać pliku</translation>
     </message>
     <message>
       <location filename="../resources/ComposeBar.qml" line="75"/>
       <location filename="../resources/ComposeBar.qml" line="179"/>
       <source>Send</source>
       <extracomment>Send the message in the text field</extracomment>
-      <translation type="unfinished">Send</translation>
+      <translation>Wyślij</translation>
     </message>
     <message>
       <location filename="../resources/ComposeBar.qml" line="126"/>
       <source>Default</source>
-      <translation type="unfinished">Default</translation>
+      <translation>Domyślny</translation>
     </message>
     <message>
       <location filename="../resources/ComposeBar.qml" line="169"/>
       <source>Add attachment...</source>
       <extracomment>Send the message in the text field</extracomment>
-      <translation type="unfinished">Add attachment...</translation>
+      <translation>Dodaj załącznik...</translation>
     </message>
   </context>
   <context>
@@ -73,29 +73,29 @@
       <location filename="../resources/GuildSheet.qml" line="54"/>
       <location filename="../resources/GuildSheet.qml" line="95"/>
       <source>Create Guild</source>
-      <translation type="unfinished">Create Guild</translation>
+      <translation>Stwórz Gildię</translation>
     </message>
     <message>
       <location filename="../resources/GuildSheet.qml" line="78"/>
       <source>Join Guild</source>
-      <translation type="unfinished">Join Guild</translation>
+      <translation>Dołącz do Gildii</translation>
     </message>
     <message>
       <location filename="../resources/GuildSheet.qml" line="92"/>
       <source>Guild Name:</source>
-      <translation type="unfinished">Guild Name:</translation>
+      <translation>Nazwa Gildii:</translation>
     </message>
     <message>
       <location filename="../resources/GuildSheet.qml" line="100"/>
       <source>Created guild</source>
       <extracomment>guild has been successfully created</extracomment>
-      <translation type="unfinished">Created guild</translation>
+      <translation>Utworzona gildia</translation>
     </message>
     <message>
       <location filename="../resources/GuildSheet.qml" line="103"/>
       <source>Failed to make guild</source>
       <extracomment>creating the guild failed</extracomment>
-      <translation type="unfinished">Failed to make guild</translation>
+      <translation>Nie udało się utworzyć gildii</translation>
     </message>
     <message>
       <location filename="../resources/GuildSheet.qml" line="119"/>
