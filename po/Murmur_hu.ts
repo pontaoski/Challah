@@ -174,7 +174,7 @@
     <name>LoginRoute</name>
     <message>
       <location filename="../resources/LoginRoute.qml" line="17"/>
-      <location filename="../resources/LoginRoute.qml" line="65"/>
+      <location filename="../resources/LoginRoute.qml" line="64"/>
       <source>Login</source>
       <translation>Bejelentkezés</translation>
     </message>
@@ -195,29 +195,23 @@
       <translation>Email:</translation>
     </message>
     <message>
-      <location filename="../resources/LoginRoute.qml" line="55"/>
-      <source>harmonyapp.io:2289</source>
-      <extracomment>placeholder for provider domain</extracomment>
-      <translation>harmonyapp.io:2289</translation>
-    </message>
-    <message>
-      <location filename="../resources/LoginRoute.qml" line="57"/>
+      <location filename="../resources/LoginRoute.qml" line="56"/>
       <source>Homeserver:</source>
       <translation>Homeszerver:</translation>
     </message>
     <message>
-      <location filename="../resources/LoginRoute.qml" line="62"/>
+      <location filename="../resources/LoginRoute.qml" line="61"/>
       <source>Password:</source>
       <translation>Jelszó:</translation>
     </message>
     <message>
-      <location filename="../resources/LoginRoute.qml" line="69"/>
+      <location filename="../resources/LoginRoute.qml" line="68"/>
       <source>Logged in</source>
       <extracomment>the user logged in successfully</extracomment>
       <translation>Bejelentkezett</translation>
     </message>
     <message>
-      <location filename="../resources/LoginRoute.qml" line="72"/>
+      <location filename="../resources/LoginRoute.qml" line="71"/>
       <source>Failed to log in</source>
       <extracomment>login failed</extracomment>
       <translation>Bejelentkezés sikertelen</translation>
