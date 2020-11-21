@@ -10,9 +10,7 @@ InviteModel::InviteModel(ChannelsModel *parent, QString homeServer, quint64 guil
 	client->authenticate(ctx);
 
 	protocol::core::v1::GetGuildInvitesRequest req;
-	req.set_allocated_location(Location {
-		.guildID = guildID
-	});
+	req.set_guild_id(guildID);
 	protocol::core::v1::GetGuildInvitesResponse resp;
 
 	if (checkStatus(client->coreKit->GetGuildInvites(&ctx, req, &resp))) {
@@ -68,9 +66,7 @@ bool InviteModel::createInvite(const QString& id, qint32 possibleUses)
 	client->authenticate(ctx);
 
 	protocol::core::v1::CreateInviteRequest req;
-	req.set_allocated_location(Location {
-		.guildID = guildID
-	});
+	req.set_guild_id(guildID);
 	req.set_name(id.toStdString());
 	req.set_possible_uses(possibleUses);
 	protocol::core::v1::CreateInviteResponse resp;
@@ -96,9 +92,7 @@ bool InviteModel::deleteInvite(const QString& id)
 	client->authenticate(ctx);
 
 	protocol::core::v1::DeleteInviteRequest req;
-	req.set_allocated_location(Location {
-		.guildID = guildID
-	});
+	req.set_guild_id(guildID);
 	req.set_invite_id(id.toStdString());
 	google::protobuf::Empty resp;
 

@@ -26,9 +26,7 @@ MessagesModel::MessagesModel(ChannelsModel *parent, QString homeServer, quint64 
 		client->authenticate(ctx);
 
 		protocol::core::v1::GetGuildRequest req;
-		req.set_allocated_location(Location {
-			.guildID = guildID
-		});
+		req.set_guild_id(guildID);
 		protocol::core::v1::GetGuildResponse resp;
 		if (checkStatus(client->coreKit->GetGuild(&ctx, req, &resp))) {
 			isGuildOwner = client->userID == resp.guild_owner();
@@ -51,7 +49,7 @@ void MessagesModel::customEvent(QEvent *event)
 		auto idx = -1;
 		for (auto& message : messageData) {
 			idx++;
-			if (message.id == msg.location().message_id()) {
+			if (message.id == msg.message_id()) {
 				message.editedAt = QDateTime::fromTime_t(msg.edited_at().seconds());
 
 				std::string jsonified;
@@ -81,7 +79,7 @@ void MessagesModel::customEvent(QEvent *event)
 		}
 	} else if (event->type() == MessageDeletedEvent::typeID) {
 		auto ev = reinterpret_cast<MessageDeletedEvent*>(event);
-		auto msg = ev->data.location().message_id();
+		auto msg = ev->data.message_id();
 		auto idx = -1;
 		for (auto& message : messageData) {
 			if (message.id == msg) {
@@ -207,10 +205,8 @@ void MessagesModel::sendMessageFull(const QString& message, const QString &reply
 
 	protocol::core::v1::SendMessageRequest req;
 
-	req.set_allocated_location(Location {
-		.guildID = guildID,
-		.channelID = channelID
-	});
+	req.set_guild_id(guildID);
+	req.set_channel_id(channelID);
 	req.set_content(message.toStdString());
 	if (replyTo != QString()) {
 		req.set_in_reply_to(replyTo.toULongLong());
@@ -261,10 +257,8 @@ void MessagesModel::fetchMore(const QModelIndex& parent)
 	client->authenticate(ctx);
 
 	protocol::core::v1::GetChannelMessagesRequest req;
-	req.set_allocated_location(Location {
-		.guildID = guildID,
-		.channelID = channelID
-	});
+	req.set_guild_id(guildID);
+	req.set_channel_id(channelID);
 	protocol::core::v1::GetChannelMessagesResponse resp;
 
 	if (!messageData.isEmpty()) {
@@ -291,11 +285,9 @@ void MessagesModel::triggerAction(const QString& messageID, const QString &name,
 	client->authenticate(ctx);
 
 	protocol::core::v1::TriggerActionRequest req;
-	req.set_allocated_location(Location {
-		.guildID = guildID,
-		.channelID = channelID,
-		.messageID = messageID.toULongLong()
-	});
+	req.set_guild_id(guildID);
+	req.set_channel_id(channelID);
+	req.set_message_id(messageID.toULongLong());
 	req.set_action_id(name.toStdString());
 	if (data != QString()) {
 		req.set_action_data(data.toStdString());
@@ -311,11 +303,9 @@ void MessagesModel::editMessage(const QString& id, const QString &content)
 	client->authenticate(ctx);
 
 	protocol::core::v1::UpdateMessageRequest req;
-	req.set_allocated_location(Location {
-		.guildID = guildID,
-		.channelID = channelID,
-		.messageID = id.toULongLong()
-	});
+	req.set_guild_id(guildID);
+	req.set_channel_id(channelID);
+	req.set_message_id(id.toULongLong());
 	req.set_content(content.toStdString());
 	req.set_update_content(true);
 	google::protobuf::Empty resp;
@@ -329,11 +319,9 @@ void MessagesModel::deleteMessage(const QString& id)
 	client->authenticate(ctx);
 
 	protocol::core::v1::DeleteMessageRequest req;
-	req.set_allocated_location(Location {
-		.guildID = guildID,
-		.channelID = channelID,
-		.messageID = id.toULongLong()
-	});
+	req.set_guild_id(guildID);
+	req.set_channel_id(channelID);
+	req.set_message_id(id.toULongLong());
 	google::protobuf::Empty resp;
 
 	checkStatus(client->coreKit->DeleteMessage(&ctx, req, &resp));
@@ -355,11 +343,9 @@ QVariantMap MessagesModel::peekMessage(const QString& id)
 	client->authenticate(ctx);
 
 	protocol::core::v1::GetMessageRequest req;
-	req.set_allocated_location(Location {
-		.guildID = guildID,
-		.channelID = channelID,
-		.messageID = actualID
-	});
+	req.set_guild_id(guildID);
+	req.set_channel_id(channelID);
+	req.set_message_id(actualID);
 	protocol::core::v1::GetMessageResponse resp;
 
 	if (!checkStatus(client->coreKit->GetMessage(&ctx, req, &resp))) {

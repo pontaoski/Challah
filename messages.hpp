@@ -72,7 +72,7 @@ struct MessageData
 		return MessageData {
 			.text = QString::fromStdString(msg.content()),
 			.authorID = msg.author_id(),
-			.id = msg.location().message_id(),
+			.id = msg.message_id(),
 			.date = QDateTime::fromTime_t(msg.created_at().seconds()),
 			.actions = document["actions"],
 			.embeds = document["embeds"],

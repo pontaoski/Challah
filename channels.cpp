@@ -22,9 +22,7 @@ MembersModel::MembersModel(QString homeserver, quint64 guildID, ChannelsModel* m
 	client->authenticate(ctx);
 
 	protocol::core::v1::GetGuildMembersRequest req;
-	req.set_allocated_location(Location {
-		.guildID = guildID
-	});
+	req.set_guild_id(guildID);
 	protocol::core::v1::GetGuildMembersResponse resp;
 
 	checkStatus(client->coreKit->GetGuildMembers(&ctx, req, &resp));
@@ -74,9 +72,7 @@ ChannelsModel::ChannelsModel(QString homeServer, quint64 guildID) : QAbstractLis
 	client->authenticate(ctx);
 
 	protocol::core::v1::GetGuildChannelsRequest req;
-	req.set_allocated_location(Location{
-		.guildID = guildID,
-	});
+	req.set_guild_id(guildID);
 
 	protocol::core::v1::GetGuildChannelsResponse resp;
 	checkStatus(client->coreKit->GetGuildChannels(&ctx, req, &resp));
@@ -102,10 +98,8 @@ void ChannelsModel::moveChannelFromTo(int from, int to)
 	doContext;
 	protocol::core::v1::UpdateChannelOrderRequest req;
 	google::protobuf::Empty resp;
-	req.set_allocated_location(Location {
-		guildID,
-		fromChan.channelID
-	});
+	req.set_guild_id(guildID);
+	req.set_channel_id(fromChan.channelID);
 
 	if (to == 0) {
 		req.set_next_id(channels[0].channelID);
@@ -127,28 +121,35 @@ void ChannelsModel::customEvent(QEvent *event)
 		idx++;
 		beginInsertRows(QModelIndex(), idx, idx);
 		channels.insert(idx, Channel{
-			.channelID = ev->data.location().channel_id(),
+			.channelID = ev->data.channel_id(),
 			.name = QString::fromStdString(ev->data.name()),
 			.isCategory = ev->data.is_category()
 		});
 		endInsertRows();
 	} else if (event->type() == ChannelDeletedEvent::typeID) {
 		auto ev = reinterpret_cast<ChannelDeletedEvent*>(event);
-		auto idx = std::find_if(channels.begin(), channels.end(), [=](Channel &chan) { return chan.channelID == ev->data.location().channel_id(); });
+		auto idx = std::find_if(channels.begin(), channels.end(), [=](Channel &chan) { return chan.channelID == ev->data.channel_id(); });
 		beginRemoveRows(QModelIndex(), idx - channels.begin(), idx - channels.begin());
 		channels.removeAt(idx - channels.begin());
 		endRemoveRows();
+	} else if (event->type() == MessageSentEvent::typeID) {
+		auto ev = reinterpret_cast<MessageSentEvent*>(event);
+
+		auto chanID = ev->data.message().channel_id();
+		if (models.contains(chanID)) {
+			QCoreApplication::postEvent(models[chanID], new MessageSentEvent(ev->data));
+		}
 	} else if (event->type() == MessageUpdatedEvent::typeID) {
 		auto ev = reinterpret_cast<MessageUpdatedEvent*>(event);
 
-		auto chanID = ev->data.location().channel_id();
+		auto chanID = ev->data.channel_id();
 		if (models.contains(chanID)) {
 			QCoreApplication::postEvent(models[chanID], new MessageUpdatedEvent(ev->data));
 		}
 	} else if (event->type() == MessageDeletedEvent::typeID) {
 		auto ev = reinterpret_cast<MessageDeletedEvent*>(event);
 
-		auto chanID = ev->data.location().channel_id();
+		auto chanID = ev->data.channel_id();
 		if (models.contains(chanID)) {
 			QCoreApplication::postEvent(models[chanID], new MessageDeletedEvent(ev->data));
 		}
@@ -213,10 +214,8 @@ void ChannelsModel::deleteChannel(const QString& channel)
 	doContext;
 
 	protocol::core::v1::DeleteChannelRequest req;
-	req.set_allocated_location(Location {
-		.guildID = this->guildID,
-		.channelID = channel.toULongLong()
-	});
+	req.set_guild_id(this->guildID);
+	req.set_channel_id(channel.toULongLong());
 
 	google::protobuf::Empty resp;
 	checkStatus(client->coreKit->DeleteChannel(&ctx, req, &resp));
@@ -236,9 +235,7 @@ bool ChannelsModel::createChannel(const QString& name)
 	}
 
 	protocol::core::v1::CreateChannelRequest req;
-	req.set_allocated_location(Location {
-		.guildID = this->guildID
-	});
+	req.set_guild_id(this->guildID);
 	req.set_channel_name(name.toStdString());
 	req.set_previous_id(last);
 
