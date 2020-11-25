@@ -65,14 +65,14 @@ Item {
 
 							Layout.fillWidth: true
 
-							Menu {
+							ResponsiveMenu {
 								id: appMenu
 
-								MenuItem {
+								ResponsiveMenuItem {
 									text: qsTr("Settings")
 									onTriggered: root.pageStack.layers.push(Qt.resolvedUrl("MurmurSettings.qml"), {})
 								}
-								MenuItem {
+								ResponsiveMenuItem {
 									text: qsTr("Log Out")
 									onTriggered: routerInstance.navigateToRoute("login")
 								}
@@ -119,7 +119,7 @@ Item {
 								acceptedButtons: Qt.LeftButton | Qt.RightButton
 								onClicked: {
 									if (mouse.button === Qt.RightButton) {
-										guildMenu.popup()
+										guildMenu.open()
 										return
 									}
 
@@ -130,10 +130,10 @@ Item {
 								}
 							}
 
-							Menu {
+							ResponsiveMenu {
 								id: guildMenu
 
-								MenuItem {
+								ResponsiveMenuItem {
 									text: model['isOwner'] ? qsTr("Delete") : qsTr("Leave")
 									onTriggered: {
 										if (HState.leaveGuild(model['homeserver'], model['guildID'], model['isOwner'])) {

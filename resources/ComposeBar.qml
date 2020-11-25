@@ -12,6 +12,7 @@ import com.github.HarmonyDevelopment.Staccato 1.0
 
 QQC2.ToolBar {
 	position: QQC2.ToolBar.Footer
+	property alias replies: replyingBar
 
 	FileDialog {
 		id: fileDialog

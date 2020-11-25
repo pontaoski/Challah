@@ -17,6 +17,8 @@
         <file>StaccatoDrawer.qml</file>
         <file>MurmurSettings.qml</file>
         <file>UISettings.qml</file>
+        <file>ResponsiveMenu.qml</file>
+        <file>ResponsiveMenuItem.qml</file>
         <file>qmldir</file>
     </qresource>
     <qresource prefix="/img">

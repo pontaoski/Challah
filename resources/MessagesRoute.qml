@@ -18,7 +18,7 @@ Kirigami.PageRoute {
 		Kirigami.Theme.colorSet: Kirigami.Theme.View
 		property var model: Kirigami.PageRouter.data
 
-		footer: ComposeBar {}
+		footer: ComposeBar { id: composeBar }
 
 		ListView {
 			id: messagesView
@@ -63,33 +63,31 @@ Kirigami.PageRoute {
 				background: MouseArea {
 					acceptedButtons: Qt.RightButton
 					onClicked: {
-						if ((messagesRoute.model.userID() == authorID || messagesRoute.model.isOwner()) && mouse.button === Qt.RightButton)
-							messageMenu.popup()
+						messageMenu.open()
 					}
 
-					QQC2.Menu {
+					ResponsiveMenu {
 						id: messageMenu
-
-						QQC2.MenuItem {
+						ResponsiveMenuItem {
 							text: qsTr("Edit")
 							visible: messagesRoute.model.userID() == authorID
 							onTriggered: {
 								messageBlock.edit = true
 							}
 						}
-						QQC2.MenuItem {
+						ResponsiveMenuItem {
 							text: qsTr("Delete")
 							visible: messagesRoute.model.userID() == authorID || messagesRoute.model.isOwner()
 							onTriggered: {
 								messagesRoute.model.deleteMessage(messageID)
 							}
 						}
-						QQC2.MenuItem {
+						ResponsiveMenuItem {
 							text: qsTr("Reply")
 							onTriggered: {
-								replyingBar.replyingToID = messageID
-								replyingBar.replyingToAuthor = authorName
-								replyingBar.replyingToContent = content
+								composeBar.replies.replyingToID = messageID
+								composeBar.replies.replyingToAuthor = authorName
+								composeBar.replies.replyingToContent = content
 							}
 						}
 					}
