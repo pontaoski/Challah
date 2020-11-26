@@ -1,9 +1,3 @@
-import qbs.FileInfo
-import qbs.ModUtils
-import qbs.TextFile
-import qbs.Utilities
-import qbs.Xml
-
 QtApplication {
 	name: "Murmur"
 
@@ -17,25 +11,8 @@ QtApplication {
 	cpp.cxxLanguageVersion: "c++17"
 
 	files: [
-		"main.cpp",
-		"state.cpp",
-		"client.cpp",
-		"guild.cpp",
-		"channels.cpp",
-		"messages.cpp",
-		"invites.cpp",
-		"overlappingpanels.cpp",
-		"state.hpp",
-		"client.hpp",
-		"guild.hpp",
-		"channels.hpp",
-		"util.cpp",
-		"util.hpp",
-		"messages.hpp",
-		"invites.hpp",
-		"overlappingpanels.hpp",
-		"avatar.cpp",
-		"avatar.hpp",
+		"*.cpp",
+		"*.hpp",
 		"resources/data.qrc"
 	]
 
