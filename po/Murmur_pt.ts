@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="pt" sourcelanguage="en">
+<TS version="2.1" language="pt-BR" sourcelanguage="en">
   <context>
     <name>Avatar</name>
     <message>
@@ -37,31 +37,37 @@
   <context>
     <name>ComposeBar</name>
     <message>
-      <location filename="../resources/ComposeBar.qml" line="49"/>
-      <location filename="../resources/ComposeBar.qml" line="135"/>
+      <location filename="../resources/ComposeBar.qml" line="50"/>
+      <location filename="../resources/ComposeBar.qml" line="137"/>
       <source>Write a message...</source>
       <extracomment>Placeholder text for the message field</extracomment>
       <translation type="unfinished">Write a message...</translation>
     </message>
     <message>
-      <location filename="../resources/ComposeBar.qml" line="64"/>
+      <location filename="../resources/ComposeBar.qml" line="65"/>
       <source>Failed to upload file</source>
       <translation type="unfinished">Failed to upload file</translation>
     </message>
     <message>
-      <location filename="../resources/ComposeBar.qml" line="75"/>
-      <location filename="../resources/ComposeBar.qml" line="179"/>
+      <location filename="../resources/ComposeBar.qml" line="76"/>
+      <location filename="../resources/ComposeBar.qml" line="187"/>
       <source>Send</source>
       <extracomment>Send the message in the text field</extracomment>
       <translation type="unfinished">Send</translation>
     </message>
     <message>
-      <location filename="../resources/ComposeBar.qml" line="126"/>
+      <location filename="../resources/ComposeBar.qml" line="127"/>
       <source>Default</source>
       <translation type="unfinished">Default</translation>
     </message>
     <message>
-      <location filename="../resources/ComposeBar.qml" line="169"/>
+      <location filename="../resources/ComposeBar.qml" line="140"/>
+      <source>You do not have permissions to send a message to this channel.</source>
+      <extracomment>Placeholder text for the message field when the user isn&apos;t allowed to send a message</extracomment>
+      <translation type="unfinished">You do not have permissions to send a message to this channel.</translation>
+    </message>
+    <message>
+      <location filename="../resources/ComposeBar.qml" line="176"/>
       <source>Add attachment...</source>
       <extracomment>Send the message in the text field</extracomment>
       <translation type="unfinished">Add attachment...</translation>
@@ -230,17 +236,17 @@
   <context>
     <name>MessagesRoute</name>
     <message>
-      <location filename="../resources/MessagesRoute.qml" line="74"/>
+      <location filename="../resources/MessagesRoute.qml" line="72"/>
       <source>Edit</source>
       <translation type="unfinished">Edit</translation>
     </message>
     <message>
-      <location filename="../resources/MessagesRoute.qml" line="81"/>
+      <location filename="../resources/MessagesRoute.qml" line="79"/>
       <source>Delete</source>
       <translation type="unfinished">Delete</translation>
     </message>
     <message>
-      <location filename="../resources/MessagesRoute.qml" line="88"/>
+      <location filename="../resources/MessagesRoute.qml" line="86"/>
       <source>Reply</source>
       <translation type="unfinished">Reply</translation>
     </message>
