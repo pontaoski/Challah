@@ -14,7 +14,7 @@
     <message>
       <location filename="../resources/ChannelSheet.qml" line="21"/>
       <source>Channel Name:</source>
-      <translation type="unfinished">Channel Name:</translation>
+      <translation>Nama Channel:</translation>
     </message>
     <message>
       <location filename="../resources/ChannelSheet.qml" line="24"/>
