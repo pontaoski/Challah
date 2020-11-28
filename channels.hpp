@@ -5,6 +5,7 @@
 #pragma once
 
 #include <QAbstractListModel>
+#include <QQmlPropertyMap>
 
 #include "core.grpc.pb.h"
 #include "core.pb.h"
@@ -19,13 +20,6 @@ struct Channel {
 	QString name;
 	bool isCategory;
 };
-
-typedef CarrierEvent<1,protocol::core::v1::GuildEvent_ChannelCreated> ChannelAddEvent;
-
-typedef CarrierEvent<2,protocol::core::v1::GuildEvent_ChannelDeleted> ChannelDeleteEvent;
-typedef CarrierEvent<6,protocol::core::v1::GuildEvent_MemberJoined> MemberJoinEvent;
-typedef CarrierEvent<7,protocol::core::v1::GuildEvent_MemberLeft> MemberLeftEvent;
-typedef CarrierEvent<8,protocol::core::v1::GuildEvent_GuildUpdated> GuildUpdateEvent;
 
 class ChannelsModel;
 class InviteModel;
@@ -54,8 +48,8 @@ class MembersModel : public QAbstractListModel
 
 protected:
 	void customEvent(QEvent *event) override {
-		if (event->type() == MemberJoinEvent::typeID) {
-			auto ev = reinterpret_cast<MemberJoinEvent*>(event);
+		if (event->type() == MemberJoinedEvent::typeID) {
+			auto ev = reinterpret_cast<MemberJoinedEvent*>(event);
 			beginInsertRows(QModelIndex(), members.length(), members.length());
 			members << ev->data.member_id();
 			endInsertRows();
@@ -66,8 +60,8 @@ protected:
 			beginRemoveRows(QModelIndex(), idx - members.begin(), idx - members.begin());
 			members.removeAt(idx - members.begin());
 			endRemoveRows();
-		} else if (event->type() == GuildUpdateEvent::typeID) {
-			auto ev = reinterpret_cast<GuildUpdateEvent*>(event);
+		} else if (event->type() == GuildUpdatedEvent::typeID) {
+			auto ev = reinterpret_cast<GuildUpdatedEvent*>(event);
 			if (ev->data.update_name()) {
 				_name = QString::fromStdString(ev->data.name());
 				Q_EMIT nameChanged();
@@ -97,6 +91,8 @@ class ChannelsModel : public QAbstractListModel
 	QMap<quint64,QString> avatars;
 	mutable QMap<quint64,MessagesModel*> models;
 	friend class Client;
+	static QMap<QPair<QString,quint64>,ChannelsModel*> instances;
+	QQmlPropertyMap* permissions;
 
 	Client* client;
 	MembersModel* members;
@@ -109,16 +105,21 @@ class ChannelsModel : public QAbstractListModel
 	};
 
 	Q_PROPERTY(MembersModel* members READ getMembers CONSTANT FINAL)
+	Q_PROPERTY(QQmlPropertyMap* permissions MEMBER permissions CONSTANT FINAL)
 
 protected:
 	Q_INVOKABLE void customEvent(QEvent *event) override;
 
 public:
 	ChannelsModel(QString homeServer, quint64 guildID);
+	~ChannelsModel() { instances.remove(qMakePair(homeServer, guildID)); }
 	int rowCount(const QModelIndex& parent = QModelIndex()) const override;
 	QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
 	QHash<int,QByteArray> roleNames() const override;
 	MembersModel* getMembers() const { return members; }
+	static ChannelsModel* modelFor(QString& homeserver, quint64 guild) {
+		return instances.value(qMakePair(homeserver, guild));
+	}
 
 	Q_INVOKABLE void deleteChannel(const QString& id);
 	Q_INVOKABLE bool createChannel(const QString& name);

@@ -6,6 +6,8 @@
 
 #include <QAbstractListModel>
 #include <QJsonDocument>
+#include <QJSValue>
+#include <QQmlPropertyMap>
 #include <optional>
 
 #include <google/protobuf/util/json_util.h>
@@ -71,7 +73,7 @@ struct MessageData
 		return MessageData {
 			.text = QString::fromStdString(msg.content()),
 			.authorID = msg.author_id(),
-			.id = msg.location().message_id(),
+			.id = msg.message_id(),
 			.date = QDateTime::fromTime_t(msg.created_at().seconds()),
 			.actions = document["actions"],
 			.embeds = document["embeds"],
@@ -82,10 +84,6 @@ struct MessageData
 		};
 	}
 };
-
-typedef CarrierEvent<3,protocol::core::v1::GuildEvent_MessageSent> MessageSentEvent;
-typedef CarrierEvent<4,protocol::core::v1::GuildEvent_MessageUpdated> MessageUpdatedEvent;
-typedef CarrierEvent<5,protocol::core::v1::GuildEvent_MessageDeleted> MessageDeletedEvent;
 
 class ChannelsModel;
 class QNetworkAccessManager;
@@ -100,6 +98,7 @@ class MessagesModel : public QAbstractListModel
 
 	QList<MessageData> messageData;
 	QSharedPointer<QNetworkAccessManager> nam;
+	QQmlPropertyMap* permissions;
 
 	friend class ChannelsModel;
 	friend class Client;
@@ -108,6 +107,8 @@ class MessagesModel : public QAbstractListModel
 	bool isGuildOwner = false;
 
 	Client* client;
+
+	Q_PROPERTY(QQmlPropertyMap* permissions MEMBER permissions CONSTANT FINAL)
 
 	enum Roles {
 		MessageTextRole = Qt::UserRole,
@@ -124,6 +125,16 @@ class MessagesModel : public QAbstractListModel
 		MessageCombinedAuthorIDAvatarRole
 	};
 
+	struct Fronter {
+		QString name;
+	};
+	struct RoleplayCharacter {
+		QString name;
+	};
+
+	using Nobody = std::monostate;
+	using SendAs = std::variant<Nobody, Fronter, RoleplayCharacter>;
+
 protected:
 	Q_INVOKABLE void customEvent(QEvent *event) override;
 
@@ -138,9 +149,25 @@ public:
 	Q_INVOKABLE bool isOwner() { return isGuildOwner; }
 	Q_INVOKABLE QString userID() { return QString::number(client->userID); }
 	Q_INVOKABLE QVariantMap peekMessage(const QString& id);
-	Q_INVOKABLE void sendMessage(const QString& content, const QString& replyTo, const QStringList& attachments);
+	Q_INVOKABLE void sendMessageFull(const QString& content, const QString& replyTo, const QStringList& attachments, const SendAs& as);
+	Q_INVOKABLE void sendMessage(const QString& content, const QString& replyTo, const QStringList& attachments)
+	{
+		sendMessageFull(content, replyTo, attachments, SendAs(Nobody{}));
+	}
+	Q_INVOKABLE void sendMessageAsSystem(const QString& content, const QString& replyTo, const QStringList& attachments, const QString& memberName)
+	{
+		sendMessageFull(content, replyTo, attachments, SendAs(Fronter {
+			.name = memberName
+		}));
+	}
+	Q_INVOKABLE void sendMessageAsRoleplay(const QString& content, const QString& replyTo, const QStringList& attachments, const QString& characterName)
+	{
+		sendMessageFull(content, replyTo, attachments, SendAs(RoleplayCharacter {
+			.name = characterName
+		}));
+	}
 	Q_INVOKABLE void editMessage(const QString& id, const QString& content);
 	Q_INVOKABLE void deleteMessage(const QString& id);
 	Q_INVOKABLE void triggerAction(const QString& messageID, const QString& name, const QString& data);
-	Q_INVOKABLE QString uploadFile(const QUrl& path);
+	Q_INVOKABLE void uploadFile(const QUrl& path, QJSValue then, QJSValue elseDo, QJSValue progress, QJSValue finally);
 };

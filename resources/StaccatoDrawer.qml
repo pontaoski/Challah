@@ -65,10 +65,14 @@ Item {
 
 							Layout.fillWidth: true
 
-							Menu {
+							ResponsiveMenu {
 								id: appMenu
 
-								MenuItem {
+								ResponsiveMenuItem {
+									text: qsTr("Settings")
+									onTriggered: root.pageStack.layers.push(Qt.resolvedUrl("MurmurSettings.qml"), {})
+								}
+								ResponsiveMenuItem {
 									text: qsTr("Log Out")
 									onTriggered: routerInstance.navigateToRoute("login")
 								}
@@ -115,7 +119,7 @@ Item {
 								acceptedButtons: Qt.LeftButton | Qt.RightButton
 								onClicked: {
 									if (mouse.button === Qt.RightButton) {
-										guildMenu.popup()
+										guildMenu.open()
 										return
 									}
 
@@ -126,10 +130,10 @@ Item {
 								}
 							}
 
-							Menu {
+							ResponsiveMenu {
 								id: guildMenu
 
-								MenuItem {
+								ResponsiveMenuItem {
 									text: model['isOwner'] ? qsTr("Delete") : qsTr("Leave")
 									onTriggered: {
 										if (HState.leaveGuild(model['homeserver'], model['guildID'], model['isOwner'])) {
@@ -176,10 +180,12 @@ Item {
 					}
 					ToolButton {
 						icon.name: "settings-configure"
-						onClicked: colView.layers.push(Qt.resolvedUrl("Invites.qml"), {"inviteModel": channelsModel.model.invitesModel()})
+						visible: channelsModel.model.permissions.canViewInvites
+						onClicked: root.pageStack.layers.push(Qt.resolvedUrl("Invites.qml"), {"inviteModel": channelsModel.model.invitesModel()})
 					}
 					ToolButton {
 						icon.name: "list-add"
+						visible: channelsModel.model.permissions.canCreate
 						onClicked: sheety.open()
 					}
 				}
@@ -268,14 +274,18 @@ Item {
 								)
 							}
 							onPressAndHold: {
-								itemer.z = 0
-								held = true
+								if (channelsModel.model.permissions.canMove) {
+									itemer.z = 0
+									held = true
+								}
 							}
 							onReleased: {
-								itemer.z = 999
-								held = false
-								channelsModel.model.moveChannelFromTo(index, itemer.DelegateModel.itemsIndex)
-								channelsModel.items.move(itemer.DelegateModel.itemsIndex, itemer.DelegateModel.itemsIndex)
+								if (held) {
+									itemer.z = 999
+									held = false
+									channelsModel.model.moveChannelFromTo(index, itemer.DelegateModel.itemsIndex)
+									channelsModel.items.move(itemer.DelegateModel.itemsIndex, itemer.DelegateModel.itemsIndex)
+								}
 							}
 
 							DropArea {

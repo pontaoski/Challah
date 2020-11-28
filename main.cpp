@@ -4,6 +4,7 @@
 
 #include <QApplication>
 #include <QCoreApplication>
+#include <QIcon>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QQuickStyle>
@@ -36,6 +37,12 @@ int main(int argc, char *argv[])
 	QTranslator murmurTranslator;
 	murmurTranslator.load("Murmur_" + QLocale::system().name(), ":/po/");
 	app->installTranslator(&murmurTranslator);
+
+	QApplication::setWindowIcon(QIcon::fromTheme(QString("com.github.harmony-development.Murmur")));
+	QApplication::setDesktopFileName("com.github.harmony-development.Murmur.desktop");
+	QApplication::setStyle("Breeze");
+	QIcon::setThemeName("breeze");
+	QQuickStyle::setStyle("org.kde.desktop");
 
 	QQmlApplicationEngine engine;
 	const QUrl url(QStringLiteral("qrc:/main.qml"));

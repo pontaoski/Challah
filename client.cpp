@@ -8,6 +8,8 @@
 #include "state.hpp"
 #include "client.hpp"
 #include "util.hpp"
+#include "channels.hpp"
+#include <unistd.h>
 
 using grpc::ClientContext;
 
@@ -86,9 +88,7 @@ GuildRepl Client::guildInfo(quint64 id)
 	authenticate(ctx);
 
 	auto req = protocol::core::v1::GetGuildRequest {};
-	auto loc = new protocol::core::v1::Location {};
-	loc->set_guild_id(id);
-	req.set_allocated_location(loc);
+	req.set_guild_id(id);
 
 	auto repl = protocol::core::v1::GetGuildResponse {};
 
@@ -138,6 +138,10 @@ void Client::federateOtherClient(Client* client, const QString& target)
 
 	client->userToken = repl2.session_token();
 	client->userID = repl2.user_id();
+
+	QtConcurrent::run([=]() {
+		client->runEvents();
+	});
 }
 
 Client* Client::mainClient;
@@ -194,7 +198,7 @@ bool Client::joinInvite(const QString& invite)
 		client->authenticate(ctx);
 
 		protocol::core::v1::AddGuildToGuildListRequest req;
-		req.set_guild_id(resp.location().guild_id());
+		req.set_guild_id(resp.guild_id());
 		req.set_homeserver(homeserver.toStdString());
 
 		protocol::core::v1::AddGuildToGuildListResponse resp2;
@@ -214,9 +218,7 @@ bool Client::leaveGuild(quint64 id, bool isOwner)
 		authenticate(ctx);
 
 		protocol::core::v1::LeaveGuildRequest req;
-		req.set_allocated_location(Location {
-			.guildID = id,
-		});
+		req.set_guild_id(id);
 		google::protobuf::Empty resp;
 
 		if (!checkStatus(coreKit->LeaveGuild(&ctx, req, &resp))) {
@@ -227,9 +229,7 @@ bool Client::leaveGuild(quint64 id, bool isOwner)
 		authenticate(ctx);
 
 		protocol::core::v1::DeleteGuildRequest req;
-		req.set_allocated_location(Location {
-			.guildID = id,
-		});
+		req.set_guild_id(id);
 		google::protobuf::Empty resp;
 
 		if (!checkStatus(coreKit->DeleteGuild(&ctx, req, &resp))) {
@@ -278,34 +278,111 @@ bool Client::consumeToken(const QString& token, quint64 userID, const QString& h
 	return true;
 }
 
+bool Client::hasPermission(const QString& node, quint64 guildID, quint64 channelID)
+{
+	ClientContext ctx;
+	authenticate(ctx);
+
+	protocol::core::v1::QueryPermissionsResponse resp;
+	protocol::core::v1::QueryPermissionsRequest req;
+	req.set_guild_id(guildID);
+	if (channelID != 0) {
+		req.set_channel_id(channelID);
+	}
+	req.set_check_for(node.toStdString());
+
+	if (!checkStatus(coreKit->QueryHasPermission(&ctx, req, &resp))) {
+		return false;
+	}
+
+	return resp.ok();
+}
+
 void Client::runEvents()
 {
 	ClientContext ctx;
 	authenticate(ctx);
 
-	protocol::core::v1::StreamHomeserverEventsRequest req;
-	auto stream = coreKit->StreamHomeserverEvents(&ctx, req);
-	protocol::core::v1::HomeserverEvent msg;
+	eventStream = coreKit->StreamEvents(&ctx);
+	protocol::core::v1::Event msg;
 
-	while (stream->Read(&msg)) {
+	protocol::core::v1::StreamEventsRequest req;
+	req.set_allocated_subscribe_to_homeserver_events(new protocol::core::v1::StreamEventsRequest_SubscribeToHomeserverEvents);
+	eventStream->Write(req, grpc::WriteOptions().set_write_through());
+
+	while (eventStream->Read(&msg)) {
 		if (msg.has_guild_added_to_list()) {
-			auto guild = msg.guild_added_to_list();
+			auto ev = msg.guild_added_to_list();
 
-			auto data = Client::instanceForHomeserver(QString::fromStdString(guild.homeserver()))->guildInfo(guild.guild_id());
+			auto data = Client::instanceForHomeserver(QString::fromStdString(ev.homeserver()))->guildInfo(ev.guild_id());
 
 			Q_EMIT State::instance()->guildModel->addGuild(Guild {
-				.guildID = guild.guild_id(),
+				.guildID = ev.guild_id(),
 				.ownerID = data.ownerID,
-				.homeserver = QString::fromStdString(guild.homeserver()),
+				.homeserver = QString::fromStdString(ev.homeserver()),
 				.name = data.name,
 				.picture = data.picture,
 			});
 		} else if (msg.has_guild_removed_from_list()) {
-			auto guild = msg.guild_removed_from_list();
+			auto ev = msg.guild_removed_from_list();
 
-			Q_EMIT State::instance()->guildModel->removeGuild(QString::fromStdString(guild.homeserver()), guild.guild_id());
+			Q_EMIT State::instance()->guildModel->removeGuild(QString::fromStdString(ev.homeserver()), ev.guild_id());
+		} else if (msg.has_action_performed()) {
+			// we don't care about these
+		} else if (msg.has_sent_message()) {
+			auto ev = msg.sent_message();
+
+			QCoreApplication::postEvent(ChannelsModel::modelFor(homeserver, ev.message().guild_id()), new MessageSentEvent(ev));
+		} else if (msg.has_edited_message()) {
+			auto ev = msg.edited_message();
+
+			QCoreApplication::postEvent(ChannelsModel::modelFor(homeserver, ev.guild_id()), new MessageUpdatedEvent(ev));
+		} else if (msg.has_deleted_message()) {
+			auto ev = msg.deleted_message();
+
+			QCoreApplication::postEvent(ChannelsModel::modelFor(homeserver, ev.guild_id()), new MessageDeletedEvent(ev));
+		} else if (msg.has_created_channel()) {
+			auto ev = msg.created_channel();
+
+			QCoreApplication::postEvent(ChannelsModel::modelFor(homeserver, ev.guild_id()), new ChannelCreatedEvent(ev));
+		} else if (msg.has_edited_channel()) {
+			auto ev = msg.edited_channel();
+
+			QCoreApplication::postEvent(ChannelsModel::modelFor(homeserver, ev.guild_id()), new ChannelUpdatedEvent(ev));
+		} else if (msg.has_deleted_channel()) {
+			auto ev = msg.deleted_channel();
+
+			QCoreApplication::postEvent(ChannelsModel::modelFor(homeserver, ev.guild_id()), new ChannelDeletedEvent(ev));
+		} else if (msg.has_edited_guild()) {
+			auto ev = msg.edited_guild();
+
+			QCoreApplication::postEvent(ChannelsModel::modelFor(homeserver, ev.guild_id()), new GuildUpdatedEvent(ev));
+		} else if (msg.has_deleted_guild()) {
+			// auto ev = msg.deleted_guild();
+
+			// Q_UNUSED(ev)
+		} else if (msg.has_joined_member()) {
+			auto ev = msg.joined_member();
+
+			QCoreApplication::postEvent(ChannelsModel::modelFor(homeserver, ev.guild_id()), new MemberJoinedEvent(ev));
+		} else if (msg.has_left_member()) {
+			auto ev = msg.left_member();
+
+			QCoreApplication::postEvent(ChannelsModel::modelFor(homeserver, ev.guild_id()), new MemberLeftEvent(ev));
 		}
 	}
+
+	qDebug() << "Got to end of stream!";
+}
+
+void Client::subscribeGuild(quint64 guild)
+{
+	protocol::core::v1::StreamEventsRequest req;
+	auto subReq = new protocol::core::v1::StreamEventsRequest_SubscribeToGuild;
+	subReq->set_guild_id(guild);
+	req.set_allocated_subscribe_to_guild(subReq);
+
+	eventStream->Write(req, grpc::WriteOptions().set_write_through());
 }
 
 bool Client::login(const QString &email, const QString &password, const QString &hs)

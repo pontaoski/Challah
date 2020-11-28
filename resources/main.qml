@@ -13,52 +13,59 @@ Kirigami.ApplicationWindow {
 	minimumWidth: 300
 	width: 1000
 
+	UISettings { id: uiSettings }
+
 	pageStack.globalToolBar.showNavigationButtons: 0
+	pageStack.initialPage: Kirigami.Page {
+		padding: 0
+		globalToolBarStyle: Kirigami.ApplicationHeaderStyle.None
+		Kirigami.Theme.colorSet: Kirigami.Theme.View
 
-	OverlappingPanels {
-		anchors.fill: parent
+		OverlappingPanels {
+			anchors.fill: parent
 
-		leftPanel: StaccatoDrawer { id: leftHandDrawer }
-		rightPanel: RightDrawer { id: rightHandDrawer }
-		centerPanel: Kirigami.PageRow {
-			id: colView
-			implicitWidth: 400
-			onImplicitWidthChanged: implicitWidth = 400
-			columnView {
-				columnResizeMode: Kirigami.ColumnView.SingleColumn
-			}
-			globalToolBar {
-				style: Kirigami.ApplicationHeaderStyle.ToolBar
-			}
-
-			Connections {
-				target: HState
-				function onLoggedIn() {
-					routerInstance.navigateToRoute("no-guild")
-					leftHandDrawer.shouldShow = true
+			leftPanel: StaccatoDrawer { id: leftHandDrawer }
+			rightPanel: RightDrawer { id: rightHandDrawer }
+			centerPanel: Kirigami.PageRow {
+				id: colView
+				implicitWidth: 400
+				onImplicitWidthChanged: implicitWidth = 400
+				columnView {
+					columnResizeMode: Kirigami.ColumnView.SingleColumn
 				}
-			}
+				globalToolBar {
+					style: Kirigami.ApplicationHeaderStyle.ToolBar
+				}
 
-			Kirigami.PageRouter {
-				id: routerInstance
-
-				initialRoute: {
-					if (HState.startupLogin()) {
+				Connections {
+					target: HState
+					function onLoggedIn() {
+						routerInstance.navigateToRoute("no-guild")
 						leftHandDrawer.shouldShow = true
-						return "no-guild"
-					} else {
-						return "login"
 					}
 				}
-				pageStack: colView.columnView
 
-				property var guildSheet: GuildSheet {
-					id: guildSheet
+				Kirigami.PageRouter {
+					id: routerInstance
+
+					initialRoute: {
+						if (HState.startupLogin()) {
+							leftHandDrawer.shouldShow = true
+							return "no-guild"
+						} else {
+							return "login"
+						}
+					}
+					pageStack: colView.columnView
+
+					property var guildSheet: GuildSheet {
+						id: guildSheet
+					}
+
+					LoginRoute {}
+					NoGuildRoute {}
+					MessagesRoute {}
 				}
-
-				LoginRoute {}
-				NoGuildRoute {}
-				MessagesRoute {}
 			}
 		}
 	}

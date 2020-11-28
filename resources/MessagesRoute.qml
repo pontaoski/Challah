@@ -18,7 +18,7 @@ Kirigami.PageRoute {
 		Kirigami.Theme.colorSet: Kirigami.Theme.View
 		property var model: Kirigami.PageRouter.data
 
-		footer: ComposeBar {}
+		footer: ComposeBar { id: composeBar }
 
 		ListView {
 			id: messagesView
@@ -63,33 +63,32 @@ Kirigami.PageRoute {
 				background: MouseArea {
 					acceptedButtons: Qt.RightButton
 					onClicked: {
-						if ((messagesRoute.model.userID() == authorID || messagesRoute.model.isOwner()) && mouse.button === Qt.RightButton)
-							messageMenu.popup()
+						messageMenu.open()
 					}
 
-					QQC2.Menu {
+					ResponsiveMenu {
 						id: messageMenu
-
-						QQC2.MenuItem {
+						ResponsiveMenuItem {
 							text: qsTr("Edit")
-							visible: messagesRoute.model.userID() == authorID
+							enabled: messagesRoute.model.permissions.canSendAndEdit && messagesRoute.model.userID() == authorID
 							onTriggered: {
 								messageBlock.edit = true
 							}
 						}
-						QQC2.MenuItem {
+						ResponsiveMenuItem {
 							text: qsTr("Delete")
-							visible: messagesRoute.model.userID() == authorID || messagesRoute.model.isOwner()
+							enabled: messagesRoute.model.permissions.canDeleteOthers || messagesRoute.model.userID() == authorID
 							onTriggered: {
 								messagesRoute.model.deleteMessage(messageID)
 							}
 						}
-						QQC2.MenuItem {
+						ResponsiveMenuItem {
 							text: qsTr("Reply")
+							enabled: messagesRoute.model.permissions.canSendAndEdit && messagesRoute.model.userID() == authorID
 							onTriggered: {
-								replyingBar.replyingToID = messageID
-								replyingBar.replyingToAuthor = authorName
-								replyingBar.replyingToContent = content
+								composeBar.replies.replyingToID = messageID
+								composeBar.replies.replyingToAuthor = authorName
+								composeBar.replies.replyingToContent = content
 							}
 						}
 					}
@@ -213,7 +212,70 @@ Kirigami.PageRoute {
 							smooth: true
 							mipmap: true
 
+							Component {
+								id: imagePopupComponent
+
+								QQC2.Popup {
+									id: imagePopup
+
+									anchors.centerIn: QQC2.Overlay.overlay
+									modal: true
+
+									background: Item {}
+									Image {
+										id: popupImage
+										source: HState.transformHMCURL(modelData)
+										x: (parent.QQC2.Overlay.overlay.width / 2) - (this.implicitWidth / 2)
+										y: (parent.QQC2.Overlay.overlay.height / 2) - (this.implicitHeight / 2)
+
+										PinchArea {
+											anchors.fill: parent
+											pinch.target: popupImage
+											pinch.minimumRotation: -360
+											pinch.maximumRotation: 360
+											pinch.minimumScale: 0.1
+											pinch.maximumScale: 10
+											pinch.dragAxis: Pinch.XAndYAxis
+										}
+										MouseArea {
+											drag.target: parent
+											anchors.fill: parent
+											onWheel: {
+												if (wheel.modifiers & Qt.ControlModifier) {
+													popupImage.rotation += wheel.angleDelta.y / 120 * 5
+													if (Math.abs(popupImage.rotation) < 4)
+														popupImage.rotation = 0
+												} else {
+													popupImage.rotation += wheel.angleDelta.x / 120
+													if (Math.abs(popupImage.rotation) < 0.6)
+														popupImage.rotation = 0
+													var scaleBefore = popupImage.scale
+													popupImage.scale += popupImage.scale * wheel.angleDelta.y / 120 / 10
+												}
+											}
+										}
+									}
+
+									width: QQC2.Overlay.overlay.width
+									height: QQC2.Overlay.overlay.height
+
+									onClosed: {
+										this.destroy()
+									}
+								}
+							}
+
+							MouseArea {
+								anchors.fill: parent
+								onClicked: {
+									let item = imagePopupComponent.createObject(messageDelegate)
+									item.open()
+								}
+							}
+
 							Layout.leftMargin: Kirigami.Units.gridUnit * 2 + Kirigami.Units.largeSpacing
+							Layout.preferredWidth: implicitWidth
+							Layout.preferredHeight: implicitHeight
 							Layout.maximumHeight: Layout.maximumWidth
 							Layout.maximumWidth: (applicationWindow().wideScreen ? Math.max(messagesView.width / 3, Kirigami.Units.gridUnit * 15) : (messagesView.width * 0.9)) - Layout.leftMargin
 						}

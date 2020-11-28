@@ -20,6 +20,7 @@
 #include "profile.pb.h"
 
 #include "guild.hpp"
+#include "util.hpp"
 
 class State;
 
@@ -31,6 +32,7 @@ class Client : public QObject
 	static QMap<QString,Client*> clients;
 
 	QString homeserver;
+	std::unique_ptr<grpc::ClientReaderWriterInterface<protocol::core::v1::StreamEventsRequest,protocol::core::v1::Event>> eventStream;
 
 	friend class State;
 
@@ -54,8 +56,10 @@ public:
 	static Client* instanceForHomeserver(const QString& homeserver);
 	bool joinInvite(const QString& invite);
 	bool login(const QString& email, const QString& password, const QString& homeserver);
+	void subscribeGuild(quint64 guild);
 	bool createGuild(const QString& name);
 	bool leaveGuild(quint64 id, bool isOwner);
+	bool hasPermission(const QString& node, quint64 guildID, quint64 channelID = 0);
 	GuildRepl guildInfo(quint64 id);
 	bool consumeToken(const QString& token, quint64 userID, const QString& homeserver);
 	bool refreshGuilds();
