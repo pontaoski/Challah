@@ -37,16 +37,34 @@
   <context>
     <name>ComposeBar</name>
     <message>
-      <location filename="../resources/ComposeBar.qml" line="59"/>
+      <location filename="../resources/ComposeBar.qml" line="49"/>
+      <location filename="../resources/ComposeBar.qml" line="135"/>
       <source>Write a message...</source>
       <extracomment>Placeholder text for the message field</extracomment>
       <translation>撰写一条消息...</translation>
     </message>
     <message>
+      <location filename="../resources/ComposeBar.qml" line="64"/>
+      <source>Failed to upload file</source>
+      <translation type="unfinished">Failed to upload file</translation>
+    </message>
+    <message>
       <location filename="../resources/ComposeBar.qml" line="75"/>
+      <location filename="../resources/ComposeBar.qml" line="179"/>
       <source>Send</source>
       <extracomment>Send the message in the text field</extracomment>
       <translation>发送</translation>
+    </message>
+    <message>
+      <location filename="../resources/ComposeBar.qml" line="126"/>
+      <source>Default</source>
+      <translation type="unfinished">Default</translation>
+    </message>
+    <message>
+      <location filename="../resources/ComposeBar.qml" line="169"/>
+      <source>Add attachment...</source>
+      <extracomment>Send the message in the text field</extracomment>
+      <translation type="unfinished">Add attachment...</translation>
     </message>
   </context>
   <context>
@@ -156,7 +174,7 @@
     <name>LoginRoute</name>
     <message>
       <location filename="../resources/LoginRoute.qml" line="17"/>
-      <location filename="../resources/LoginRoute.qml" line="65"/>
+      <location filename="../resources/LoginRoute.qml" line="64"/>
       <source>Login</source>
       <translation>登录</translation>
     </message>
@@ -177,29 +195,23 @@
       <translation>电子邮件：</translation>
     </message>
     <message>
-      <location filename="../resources/LoginRoute.qml" line="55"/>
-      <source>harmonyapp.io:2289</source>
-      <extracomment>placeholder for provider domain</extracomment>
-      <translation>harmonyapp.io:2289</translation>
-    </message>
-    <message>
-      <location filename="../resources/LoginRoute.qml" line="57"/>
+      <location filename="../resources/LoginRoute.qml" line="56"/>
       <source>Homeserver:</source>
       <translation>主服务器：</translation>
     </message>
     <message>
-      <location filename="../resources/LoginRoute.qml" line="62"/>
+      <location filename="../resources/LoginRoute.qml" line="61"/>
       <source>Password:</source>
       <translation>密码：</translation>
     </message>
     <message>
-      <location filename="../resources/LoginRoute.qml" line="69"/>
+      <location filename="../resources/LoginRoute.qml" line="68"/>
       <source>Logged in</source>
       <extracomment>the user logged in successfully</extracomment>
       <translation>登录成功</translation>
     </message>
     <message>
-      <location filename="../resources/LoginRoute.qml" line="72"/>
+      <location filename="../resources/LoginRoute.qml" line="71"/>
       <source>Failed to log in</source>
       <extracomment>login failed</extracomment>
       <translation>登录失败</translation>
@@ -231,6 +243,45 @@
       <location filename="../resources/MessagesRoute.qml" line="88"/>
       <source>Reply</source>
       <translation>回复</translation>
+    </message>
+  </context>
+  <context>
+    <name>MurmurSettings</name>
+    <message>
+      <location filename="../resources/MurmurSettings.qml" line="14"/>
+      <source>Settings</source>
+      <translation type="unfinished">Settings</translation>
+    </message>
+    <message>
+      <location filename="../resources/MurmurSettings.qml" line="23"/>
+      <source>Personas</source>
+      <extracomment>Personas are alternate identities; e.g. for roleplay reasons</extracomment>
+      <translation type="unfinished">Personas</translation>
+    </message>
+    <message>
+      <location filename="../resources/MurmurSettings.qml" line="25"/>
+      <source>New Persona</source>
+      <translation type="unfinished">New Persona</translation>
+    </message>
+    <message>
+      <location filename="../resources/MurmurSettings.qml" line="38"/>
+      <source>Persona Name:</source>
+      <translation type="unfinished">Persona Name:</translation>
+    </message>
+    <message>
+      <location filename="../resources/MurmurSettings.qml" line="44"/>
+      <source>Roleplay</source>
+      <translation type="unfinished">Roleplay</translation>
+    </message>
+    <message>
+      <location filename="../resources/MurmurSettings.qml" line="53"/>
+      <source>Persona Kind:</source>
+      <translation type="unfinished">Persona Kind:</translation>
+    </message>
+    <message>
+      <location filename="../resources/MurmurSettings.qml" line="56"/>
+      <source>Create</source>
+      <translation type="unfinished">Create</translation>
     </message>
   </context>
   <context>
@@ -268,34 +319,39 @@
   <context>
     <name>StaccatoDrawer</name>
     <message>
-      <location filename="../resources/StaccatoDrawer.qml" line="74"/>
+      <location filename="../resources/StaccatoDrawer.qml" line="72"/>
+      <source>Settings</source>
+      <translation type="unfinished">Settings</translation>
+    </message>
+    <message>
+      <location filename="../resources/StaccatoDrawer.qml" line="76"/>
       <source>Log Out</source>
       <translation>登出</translation>
     </message>
     <message>
-      <location filename="../resources/StaccatoDrawer.qml" line="133"/>
+      <location filename="../resources/StaccatoDrawer.qml" line="137"/>
       <source>Delete</source>
       <translation>删除</translation>
     </message>
     <message>
-      <location filename="../resources/StaccatoDrawer.qml" line="133"/>
+      <location filename="../resources/StaccatoDrawer.qml" line="137"/>
       <source>Leave</source>
       <translation>退出</translation>
     </message>
     <message>
-      <location filename="../resources/StaccatoDrawer.qml" line="137"/>
+      <location filename="../resources/StaccatoDrawer.qml" line="141"/>
       <source>Left guild</source>
       <extracomment>guild leaving succeeded</extracomment>
       <translation>成功退出公会</translation>
     </message>
     <message>
-      <location filename="../resources/StaccatoDrawer.qml" line="140"/>
+      <location filename="../resources/StaccatoDrawer.qml" line="144"/>
       <source>Failed to leave guild</source>
       <extracomment>guild leaving failed</extracomment>
       <translation>退出公会失败</translation>
     </message>
     <message>
-      <location filename="../resources/StaccatoDrawer.qml" line="174"/>
+      <location filename="../resources/StaccatoDrawer.qml" line="178"/>
       <source>Channels</source>
       <translation>频道</translation>
     </message>
