@@ -22,6 +22,7 @@ Loader {
 				delegate: QQC2.MenuItem {
 					text: modelData.text
 					visible: modelData.visible
+					enabled: modelData.enabled
 					onTriggered: modelData.triggered()
 				}
 			}
@@ -50,6 +51,7 @@ Loader {
 						level: 3
 						text: modelData.text
 					}
+					enabled: modelData.enabled
 					visible: modelData.visible
 					onClicked: {
 						modelData.triggered()

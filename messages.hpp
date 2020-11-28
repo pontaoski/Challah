@@ -7,6 +7,7 @@
 #include <QAbstractListModel>
 #include <QJsonDocument>
 #include <QJSValue>
+#include <QQmlPropertyMap>
 #include <optional>
 
 #include <google/protobuf/util/json_util.h>
@@ -97,6 +98,7 @@ class MessagesModel : public QAbstractListModel
 
 	QList<MessageData> messageData;
 	QSharedPointer<QNetworkAccessManager> nam;
+	QQmlPropertyMap* permissions;
 
 	friend class ChannelsModel;
 	friend class Client;
@@ -105,6 +107,8 @@ class MessagesModel : public QAbstractListModel
 	bool isGuildOwner = false;
 
 	Client* client;
+
+	Q_PROPERTY(QQmlPropertyMap* permissions MEMBER permissions CONSTANT FINAL)
 
 	enum Roles {
 		MessageTextRole = Qt::UserRole,

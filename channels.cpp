@@ -59,6 +59,11 @@ ChannelsModel::ChannelsModel(QString homeServer, quint64 guildID) : QAbstractLis
 {
 	client = Client::instanceForHomeserver(homeServer);
 	members = new MembersModel(homeServer, guildID, this);
+	permissions = new QQmlPropertyMap(this);
+
+	permissions->insert("canCreate", client->hasPermission("channels.manage.create", guildID));
+	permissions->insert("canMove", client->hasPermission("channels.manage.move", guildID));
+	permissions->insert("canViewInvites", client->hasPermission("invites.view", guildID));
 
 	auto& guilds = State::instance()->getGuildModel()->guilds;
 	for (auto guild : guilds) {

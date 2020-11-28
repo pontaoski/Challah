@@ -180,10 +180,12 @@ Item {
 					}
 					ToolButton {
 						icon.name: "settings-configure"
+						visible: channelsModel.model.permissions.canViewInvites
 						onClicked: root.pageStack.layers.push(Qt.resolvedUrl("Invites.qml"), {"inviteModel": channelsModel.model.invitesModel()})
 					}
 					ToolButton {
 						icon.name: "list-add"
+						visible: channelsModel.model.permissions.canCreate
 						onClicked: sheety.open()
 					}
 				}
@@ -272,14 +274,18 @@ Item {
 								)
 							}
 							onPressAndHold: {
-								itemer.z = 0
-								held = true
+								if (channelsModel.model.permissions.canMove) {
+									itemer.z = 0
+									held = true
+								}
 							}
 							onReleased: {
-								itemer.z = 999
-								held = false
-								channelsModel.model.moveChannelFromTo(index, itemer.DelegateModel.itemsIndex)
-								channelsModel.items.move(itemer.DelegateModel.itemsIndex, itemer.DelegateModel.itemsIndex)
+								if (held) {
+									itemer.z = 999
+									held = false
+									channelsModel.model.moveChannelFromTo(index, itemer.DelegateModel.itemsIndex)
+									channelsModel.items.move(itemer.DelegateModel.itemsIndex, itemer.DelegateModel.itemsIndex)
+								}
 							}
 
 							DropArea {

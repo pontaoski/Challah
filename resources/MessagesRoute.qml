@@ -70,20 +70,21 @@ Kirigami.PageRoute {
 						id: messageMenu
 						ResponsiveMenuItem {
 							text: qsTr("Edit")
-							visible: messagesRoute.model.userID() == authorID
+							enabled: messagesRoute.model.permissions.canSendAndEdit && messagesRoute.model.userID() == authorID
 							onTriggered: {
 								messageBlock.edit = true
 							}
 						}
 						ResponsiveMenuItem {
 							text: qsTr("Delete")
-							visible: messagesRoute.model.userID() == authorID || messagesRoute.model.isOwner()
+							enabled: messagesRoute.model.permissions.canDeleteOthers || messagesRoute.model.userID() == authorID
 							onTriggered: {
 								messagesRoute.model.deleteMessage(messageID)
 							}
 						}
 						ResponsiveMenuItem {
 							text: qsTr("Reply")
+							enabled: messagesRoute.model.permissions.canSendAndEdit && messagesRoute.model.userID() == authorID
 							onTriggered: {
 								composeBar.replies.replyingToID = messageID
 								composeBar.replies.replyingToAuthor = authorName

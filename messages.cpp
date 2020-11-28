@@ -20,6 +20,10 @@ MessagesModel::MessagesModel(ChannelsModel *parent, QString homeServer, quint64 
 {
 	nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
 	client = Client::instanceForHomeserver(homeServer);
+	permissions = new QQmlPropertyMap(this);
+
+	permissions->insert("canSendAndEdit", client->hasPermission("messages.send", guildID));
+	permissions->insert("canDeleteOthers", client->hasPermission("messages.manage.delete", guildID));
 
 	{
 		ClientContext ctx;

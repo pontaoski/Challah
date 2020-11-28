@@ -278,6 +278,26 @@ bool Client::consumeToken(const QString& token, quint64 userID, const QString& h
 	return true;
 }
 
+bool Client::hasPermission(const QString& node, quint64 guildID, quint64 channelID)
+{
+	ClientContext ctx;
+	authenticate(ctx);
+
+	protocol::core::v1::QueryPermissionsResponse resp;
+	protocol::core::v1::QueryPermissionsRequest req;
+	req.set_guild_id(guildID);
+	if (channelID != 0) {
+		req.set_channel_id(channelID);
+	}
+	req.set_check_for(node.toStdString());
+
+	if (!checkStatus(coreKit->QueryHasPermission(&ctx, req, &resp))) {
+		return false;
+	}
+
+	return resp.ok();
+}
+
 void Client::runEvents()
 {
 	ClientContext ctx;

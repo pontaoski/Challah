@@ -11,6 +11,7 @@ import com.github.HarmonyDevelopment.Staccato 1.0
 
 QtObject {
 	property string text: ""
+	property bool enabled: true
 	property bool visible: true
 	signal triggered()
 }

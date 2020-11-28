@@ -5,6 +5,7 @@
 #pragma once
 
 #include <QAbstractListModel>
+#include <QQmlPropertyMap>
 
 #include "core.grpc.pb.h"
 #include "core.pb.h"
@@ -91,6 +92,7 @@ class ChannelsModel : public QAbstractListModel
 	mutable QMap<quint64,MessagesModel*> models;
 	friend class Client;
 	static QMap<QPair<QString,quint64>,ChannelsModel*> instances;
+	QQmlPropertyMap* permissions;
 
 	Client* client;
 	MembersModel* members;
@@ -103,6 +105,7 @@ class ChannelsModel : public QAbstractListModel
 	};
 
 	Q_PROPERTY(MembersModel* members READ getMembers CONSTANT FINAL)
+	Q_PROPERTY(QQmlPropertyMap* permissions MEMBER permissions CONSTANT FINAL)
 
 protected:
 	Q_INVOKABLE void customEvent(QEvent *event) override;

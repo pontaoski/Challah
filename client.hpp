@@ -59,6 +59,7 @@ public:
 	void subscribeGuild(quint64 guild);
 	bool createGuild(const QString& name);
 	bool leaveGuild(quint64 id, bool isOwner);
+	bool hasPermission(const QString& node, quint64 guildID, quint64 channelID = 0);
 	GuildRepl guildInfo(quint64 id);
 	bool consumeToken(const QString& token, quint64 userID, const QString& homeserver);
 	bool refreshGuilds();

@@ -132,8 +132,13 @@ QQC2.ToolBar {
 			}
 			QQC2.TextField {
 				id: messageField
-				//: Placeholder text for the message field
-				placeholderText: qsTr("Write a message...")
+				placeholderText: if (messagesRoute.model.permissions.canSendAndEdit) {
+					//: Placeholder text for the message field
+					return qsTr("Write a message...")
+				} else {
+					//: Placeholder text for the message field when the user isn't allowed to send a message
+					return qsTr("You do not have permissions to send a message to this channel.")
+				}
 
 				Layout.fillWidth: true
 
@@ -161,6 +166,7 @@ QQC2.ToolBar {
 			}
 			QQC2.Button {
 				icon.name: "mail-attachment"
+				enabled: messagesRoute.model.permissions.canSendAndEdit
 				hoverEnabled: true
 				onClicked: fileDialog.open()
 
@@ -171,6 +177,7 @@ QQC2.ToolBar {
 			}
 			QQC2.Button {
 				icon.name: "document-send"
+				enabled: messagesRoute.model.permissions.canSendAndEdit
 				hoverEnabled: true
 				onClicked: messageField.send()
 
