@@ -6,7 +6,7 @@
     <message>
       <location filename="../resources/Avatar.qml" line="94"/>
       <source>%1 — %2</source>
-      <translation type="unfinished">%1 — %2</translation>
+      <translation>%1 — %2</translation>
     </message>
   </context>
   <context>
@@ -19,52 +19,58 @@
     <message>
       <location filename="../resources/ChannelSheet.qml" line="24"/>
       <source>Create Channel</source>
-      <translation type="unfinished">Create Channel</translation>
+      <translation>Membuat Channel</translation>
     </message>
     <message>
       <location filename="../resources/ChannelSheet.qml" line="29"/>
       <source>Created channel</source>
       <extracomment>the channel has been successfully created</extracomment>
-      <translation type="unfinished">Created channel</translation>
+      <translation>Channel terbuat</translation>
     </message>
     <message>
       <location filename="../resources/ChannelSheet.qml" line="32"/>
       <source>Failed to create channel</source>
       <extracomment>the channel failed to be created</extracomment>
-      <translation type="unfinished">Failed to create channel</translation>
+      <translation>Gagal membuat channel</translation>
     </message>
   </context>
   <context>
     <name>ComposeBar</name>
     <message>
-      <location filename="../resources/ComposeBar.qml" line="49"/>
-      <location filename="../resources/ComposeBar.qml" line="135"/>
+      <location filename="../resources/ComposeBar.qml" line="50"/>
+      <location filename="../resources/ComposeBar.qml" line="137"/>
       <source>Write a message...</source>
       <extracomment>Placeholder text for the message field</extracomment>
-      <translation type="unfinished">Write a message...</translation>
+      <translation>Tulis pesan...</translation>
     </message>
     <message>
-      <location filename="../resources/ComposeBar.qml" line="64"/>
+      <location filename="../resources/ComposeBar.qml" line="65"/>
       <source>Failed to upload file</source>
-      <translation type="unfinished">Failed to upload file</translation>
+      <translation>Gagal mengunggah file</translation>
     </message>
     <message>
-      <location filename="../resources/ComposeBar.qml" line="75"/>
-      <location filename="../resources/ComposeBar.qml" line="179"/>
+      <location filename="../resources/ComposeBar.qml" line="76"/>
+      <location filename="../resources/ComposeBar.qml" line="187"/>
       <source>Send</source>
       <extracomment>Send the message in the text field</extracomment>
-      <translation type="unfinished">Send</translation>
+      <translation>Kirim</translation>
     </message>
     <message>
-      <location filename="../resources/ComposeBar.qml" line="126"/>
+      <location filename="../resources/ComposeBar.qml" line="127"/>
       <source>Default</source>
-      <translation type="unfinished">Default</translation>
+      <translation>Default</translation>
     </message>
     <message>
-      <location filename="../resources/ComposeBar.qml" line="169"/>
+      <location filename="../resources/ComposeBar.qml" line="140"/>
+      <source>You do not have permissions to send a message to this channel.</source>
+      <extracomment>Placeholder text for the message field when the user isn&apos;t allowed to send a message</extracomment>
+      <translation>Anda tidak memiliki ijin untuk mengirim pesan pada channel ini.</translation>
+    </message>
+    <message>
+      <location filename="../resources/ComposeBar.qml" line="176"/>
       <source>Add attachment...</source>
       <extracomment>Send the message in the text field</extracomment>
-      <translation type="unfinished">Add attachment...</translation>
+      <translation>Tambah lampiran...</translation>
     </message>
   </context>
   <context>
@@ -73,46 +79,46 @@
       <location filename="../resources/GuildSheet.qml" line="54"/>
       <location filename="../resources/GuildSheet.qml" line="95"/>
       <source>Create Guild</source>
-      <translation type="unfinished">Create Guild</translation>
+      <translation>Membuat Guild</translation>
     </message>
     <message>
       <location filename="../resources/GuildSheet.qml" line="78"/>
       <source>Join Guild</source>
-      <translation type="unfinished">Join Guild</translation>
+      <translation>Bergabung dengan Guild</translation>
     </message>
     <message>
       <location filename="../resources/GuildSheet.qml" line="92"/>
       <source>Guild Name:</source>
-      <translation type="unfinished">Guild Name:</translation>
+      <translation>Nama Guild:</translation>
     </message>
     <message>
       <location filename="../resources/GuildSheet.qml" line="100"/>
       <source>Created guild</source>
       <extracomment>guild has been successfully created</extracomment>
-      <translation type="unfinished">Created guild</translation>
+      <translation>Guild terbuat</translation>
     </message>
     <message>
       <location filename="../resources/GuildSheet.qml" line="103"/>
       <source>Failed to make guild</source>
       <extracomment>creating the guild failed</extracomment>
-      <translation type="unfinished">Failed to make guild</translation>
+      <translation>Gagal membuat guild</translation>
     </message>
     <message>
       <location filename="../resources/GuildSheet.qml" line="119"/>
       <source>Join</source>
-      <translation type="unfinished">Join</translation>
+      <translation>Join</translation>
     </message>
     <message>
       <location filename="../resources/GuildSheet.qml" line="124"/>
       <source>Joined guild</source>
       <extracomment>guild has been successfully joined</extracomment>
-      <translation type="unfinished">Joined guild</translation>
+      <translation>Guild tergabung</translation>
     </message>
     <message>
       <location filename="../resources/GuildSheet.qml" line="127"/>
       <source>Failed to join guild</source>
       <extracomment>joining the guild failed</extracomment>
-      <translation type="unfinished">Failed to join guild</translation>
+      <translation>Gagal join dengan guild</translation>
     </message>
   </context>
   <context>
@@ -120,54 +126,54 @@
     <message>
       <location filename="../resources/Invites.qml" line="14"/>
       <source>Invites</source>
-      <translation type="unfinished">Invites</translation>
+      <translation>Undangan</translation>
     </message>
     <message>
       <location filename="../resources/Invites.qml" line="21"/>
       <source>Create Invite...</source>
-      <translation type="unfinished">Create Invite...</translation>
+      <translation>Membuat undangan...</translation>
     </message>
     <message>
       <location filename="../resources/Invites.qml" line="42"/>
       <source>Invite ID:</source>
-      <translation type="unfinished">Invite ID:</translation>
+      <translation>Undangan ID:</translation>
     </message>
     <message>
       <location filename="../resources/Invites.qml" line="52"/>
       <source>Restrict uses:</source>
-      <translation type="unfinished">Restrict uses:</translation>
+      <translation>Batasi penggunaan:</translation>
     </message>
     <message>
       <location filename="../resources/Invites.qml" line="56"/>
       <source>Create Invite</source>
-      <translation type="unfinished">Create Invite</translation>
+      <translation>Membuat Undangan</translation>
     </message>
     <message>
       <location filename="../resources/Invites.qml" line="61"/>
       <source>Created invite</source>
       <extracomment>the invite was created successfully</extracomment>
-      <translation type="unfinished">Created invite</translation>
+      <translation>Undangan terbuat</translation>
     </message>
     <message>
       <location filename="../resources/Invites.qml" line="64"/>
       <source>Failed to create invite</source>
       <extracomment>the invite couldn&apos;t be created successfully</extracomment>
-      <translation type="unfinished">Failed to create invite</translation>
+      <translation>Gagal membuat undangan</translation>
     </message>
     <message>
       <location filename="../resources/Invites.qml" line="78"/>
       <source>Invite ID: %1</source>
-      <translation type="unfinished">Invite ID: %1</translation>
+      <translation>ID undangan: %1</translation>
     </message>
     <message>
       <location filename="../resources/Invites.qml" line="82"/>
       <source>Possible Uses: %1 | Uses: %2 </source>
-      <translation type="unfinished">Possible Uses: %1 | Uses: %2 </translation>
+      <translation>Pilihan Penggunaan: %1 | Penggunaan: %2 </translation>
     </message>
     <message>
       <location filename="../resources/Invites.qml" line="82"/>
       <source>Possible Uses: Infinite | Uses : %1</source>
-      <translation type="unfinished">Possible Uses: Infinite | Uses : %1</translation>
+      <translation>Pilihan Penggunaan: Tidak terbatas | Penggunaan: %1</translation>
     </message>
   </context>
   <context>
@@ -176,45 +182,45 @@
       <location filename="../resources/LoginRoute.qml" line="17"/>
       <location filename="../resources/LoginRoute.qml" line="64"/>
       <source>Login</source>
-      <translation type="unfinished">Login</translation>
+      <translation>Masuk</translation>
     </message>
     <message>
       <location filename="../resources/LoginRoute.qml" line="38"/>
       <source>Welcome to Murmur</source>
-      <translation type="unfinished">Welcome to Murmur</translation>
+      <translation>Selamat datang di Murmur</translation>
     </message>
     <message>
       <location filename="../resources/LoginRoute.qml" line="48"/>
       <source>email@address.com</source>
       <extracomment>placeholder for email</extracomment>
-      <translation type="unfinished">email@address.com</translation>
+      <translation>alamat@email.com</translation>
     </message>
     <message>
       <location filename="../resources/LoginRoute.qml" line="50"/>
       <source>Email:</source>
-      <translation type="unfinished">Email:</translation>
+      <translation>Email:</translation>
     </message>
     <message>
       <location filename="../resources/LoginRoute.qml" line="56"/>
       <source>Homeserver:</source>
-      <translation type="unfinished">Homeserver:</translation>
+      <translation>Homeserver:</translation>
     </message>
     <message>
       <location filename="../resources/LoginRoute.qml" line="61"/>
       <source>Password:</source>
-      <translation type="unfinished">Password:</translation>
+      <translation>Kata sandi:</translation>
     </message>
     <message>
       <location filename="../resources/LoginRoute.qml" line="68"/>
       <source>Logged in</source>
       <extracomment>the user logged in successfully</extracomment>
-      <translation type="unfinished">Logged in</translation>
+      <translation>Masuk</translation>
     </message>
     <message>
       <location filename="../resources/LoginRoute.qml" line="71"/>
       <source>Failed to log in</source>
       <extracomment>login failed</extracomment>
-      <translation type="unfinished">Failed to log in</translation>
+      <translation>Gagal untuk masuk</translation>
     </message>
   </context>
   <context>
@@ -224,25 +230,25 @@
       <location filename="../resources/MessageAction.qml" line="95"/>
       <location filename="../resources/MessageAction.qml" line="119"/>
       <source>Submit</source>
-      <translation type="unfinished">Submit</translation>
+      <translation>Kirim</translation>
     </message>
   </context>
   <context>
     <name>MessagesRoute</name>
     <message>
-      <location filename="../resources/MessagesRoute.qml" line="74"/>
+      <location filename="../resources/MessagesRoute.qml" line="72"/>
       <source>Edit</source>
-      <translation type="unfinished">Edit</translation>
+      <translation>Ubah</translation>
     </message>
     <message>
-      <location filename="../resources/MessagesRoute.qml" line="81"/>
+      <location filename="../resources/MessagesRoute.qml" line="79"/>
       <source>Delete</source>
-      <translation type="unfinished">Delete</translation>
+      <translation>Hapus</translation>
     </message>
     <message>
-      <location filename="../resources/MessagesRoute.qml" line="88"/>
+      <location filename="../resources/MessagesRoute.qml" line="86"/>
       <source>Reply</source>
-      <translation type="unfinished">Reply</translation>
+      <translation>Balas</translation>
     </message>
   </context>
   <context>
@@ -250,38 +256,38 @@
     <message>
       <location filename="../resources/MurmurSettings.qml" line="14"/>
       <source>Settings</source>
-      <translation type="unfinished">Settings</translation>
+      <translation>Pengaturan</translation>
     </message>
     <message>
       <location filename="../resources/MurmurSettings.qml" line="23"/>
       <source>Personas</source>
       <extracomment>Personas are alternate identities; e.g. for roleplay reasons</extracomment>
-      <translation type="unfinished">Personas</translation>
+      <translation>Personas</translation>
     </message>
     <message>
       <location filename="../resources/MurmurSettings.qml" line="25"/>
       <source>New Persona</source>
-      <translation type="unfinished">New Persona</translation>
+      <translation>Persona Baru</translation>
     </message>
     <message>
       <location filename="../resources/MurmurSettings.qml" line="38"/>
       <source>Persona Name:</source>
-      <translation type="unfinished">Persona Name:</translation>
+      <translation>Nama Persona:</translation>
     </message>
     <message>
       <location filename="../resources/MurmurSettings.qml" line="44"/>
       <source>Roleplay</source>
-      <translation type="unfinished">Roleplay</translation>
+      <translation>Roleplay</translation>
     </message>
     <message>
       <location filename="../resources/MurmurSettings.qml" line="53"/>
       <source>Persona Kind:</source>
-      <translation type="unfinished">Persona Kind:</translation>
+      <translation>Jenis Persona:</translation>
     </message>
     <message>
       <location filename="../resources/MurmurSettings.qml" line="56"/>
       <source>Create</source>
-      <translation type="unfinished">Create</translation>
+      <translation>Membuat</translation>
     </message>
   </context>
   <context>
@@ -289,17 +295,17 @@
     <message>
       <location filename="../resources/NoGuildRoute.qml" line="16"/>
       <source>Guilds</source>
-      <translation type="unfinished">Guilds</translation>
+      <translation>Guilds</translation>
     </message>
     <message>
       <location filename="../resources/NoGuildRoute.qml" line="23"/>
       <source>Click a guild to get chatting.</source>
-      <translation type="unfinished">Click a guild to get chatting.</translation>
+      <translation>Klik guild untuk chat.</translation>
     </message>
     <message>
       <location filename="../resources/NoGuildRoute.qml" line="30"/>
       <source>Join or Create Guild...</source>
-      <translation type="unfinished">Join or Create Guild...</translation>
+      <translation>Join atau Membuat Guild...</translation>
     </message>
   </context>
   <context>
@@ -308,12 +314,12 @@
       <location filename="../resources/RightDrawer.qml" line="53"/>
       <source>Guild Info</source>
       <extracomment>a heading for the right drawer which shows guild info</extracomment>
-      <translation type="unfinished">Guild Info</translation>
+      <translation>Informasi Guild</translation>
     </message>
     <message>
       <location filename="../resources/RightDrawer.qml" line="113"/>
       <source>%L1 members</source>
-      <translation type="unfinished">%L1 members</translation>
+      <translation>%L1 angota</translation>
     </message>
   </context>
   <context>
@@ -321,39 +327,39 @@
     <message>
       <location filename="../resources/StaccatoDrawer.qml" line="72"/>
       <source>Settings</source>
-      <translation type="unfinished">Settings</translation>
+      <translation>Pengaturan</translation>
     </message>
     <message>
       <location filename="../resources/StaccatoDrawer.qml" line="76"/>
       <source>Log Out</source>
-      <translation type="unfinished">Log Out</translation>
+      <translation>Keluar</translation>
     </message>
     <message>
       <location filename="../resources/StaccatoDrawer.qml" line="137"/>
       <source>Delete</source>
-      <translation type="unfinished">Delete</translation>
+      <translation>Hapus</translation>
     </message>
     <message>
       <location filename="../resources/StaccatoDrawer.qml" line="137"/>
       <source>Leave</source>
-      <translation type="unfinished">Leave</translation>
+      <translation>Pergi</translation>
     </message>
     <message>
       <location filename="../resources/StaccatoDrawer.qml" line="141"/>
       <source>Left guild</source>
       <extracomment>guild leaving succeeded</extracomment>
-      <translation type="unfinished">Left guild</translation>
+      <translation>Meninggalkan guild</translation>
     </message>
     <message>
       <location filename="../resources/StaccatoDrawer.qml" line="144"/>
       <source>Failed to leave guild</source>
       <extracomment>guild leaving failed</extracomment>
-      <translation type="unfinished">Failed to leave guild</translation>
+      <translation>Gagal meninggalkan guild</translation>
     </message>
     <message>
       <location filename="../resources/StaccatoDrawer.qml" line="178"/>
       <source>Channels</source>
-      <translation type="unfinished">Channels</translation>
+      <translation>Channels</translation>
     </message>
   </context>
 </TS>
