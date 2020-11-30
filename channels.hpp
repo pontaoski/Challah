@@ -23,6 +23,7 @@ struct Channel {
 
 class ChannelsModel;
 class InviteModel;
+class RolesModel;
 class MembersModel : public QAbstractListModel
 {
 	Q_OBJECT
@@ -127,4 +128,5 @@ public:
 	Q_INVOKABLE QString userName(quint64 id);
 	Q_INVOKABLE QString avatarURL(quint64 id);
 	Q_INVOKABLE InviteModel* invitesModel();
+	Q_INVOKABLE RolesModel* rolesModel();
 };

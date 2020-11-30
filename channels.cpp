@@ -5,6 +5,7 @@
 #include <QtConcurrent>
 #include "channels.hpp"
 
+#include "roles.hpp"
 #include "invites.hpp"
 #include "client.hpp"
 #include "util.hpp"
@@ -64,6 +65,7 @@ ChannelsModel::ChannelsModel(QString homeServer, quint64 guildID) : QAbstractLis
 	permissions->insert("canCreate", client->hasPermission("channels.manage.create", guildID));
 	permissions->insert("canMove", client->hasPermission("channels.manage.move", guildID));
 	permissions->insert("canViewInvites", client->hasPermission("invites.view", guildID));
+	permissions->insert("canManageRoles", client->hasPermission("roles.manage", guildID));
 
 	auto& guilds = State::instance()->getGuildModel()->guilds;
 	for (auto guild : guilds) {
@@ -287,4 +289,9 @@ QString ChannelsModel::avatarURL(quint64 id)
 InviteModel* ChannelsModel::invitesModel()
 {
 	return new InviteModel(this, homeServer, guildID);
+}
+
+RolesModel* ChannelsModel::rolesModel()
+{
+	return new RolesModel(homeServer, guildID);
 }

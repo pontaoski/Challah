@@ -180,8 +180,11 @@ Item {
 					}
 					ToolButton {
 						icon.name: "settings-configure"
-						visible: channelsModel.model.permissions.canViewInvites
-						onClicked: root.pageStack.layers.push(Qt.resolvedUrl("Invites.qml"), {"inviteModel": channelsModel.model.invitesModel()})
+						visible: channelsModel.model.permissions.canViewInvites || channelsModel.model.permissions.canManageRoles
+						onClicked: root.pageStack.layers.push(Qt.resolvedUrl("GuildSettings.qml"), {
+							"invitesModel": channelsModel.model.permissions.canViewInvites ? channelsModel.model.invitesModel() : null,
+							"rolesModel": channelsModel.model.permissions.canManageRoles ? channelsModel.model.rolesModel() : null
+						})
 					}
 					ToolButton {
 						icon.name: "list-add"

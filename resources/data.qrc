@@ -20,6 +20,8 @@
         <file>ResponsiveMenu.qml</file>
         <file>ResponsiveMenuItem.qml</file>
         <file>MessageDelegate.qml</file>
+        <file>GuildSettings.qml</file>
+        <file>Roles.qml</file>
         <file>qmldir</file>
     </qresource>
     <qresource prefix="/img">

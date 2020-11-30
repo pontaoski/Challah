@@ -10,10 +10,7 @@ import QtQuick.Controls 2.10 as QQC2
 import com.github.HarmonyDevelopment.Staccato 1.0
 
 Kirigami.ScrollablePage {
-	id: invitePage
 	title: qsTr("Invites")
-
-	property var inviteModel
 
 	actions {
 		main: Kirigami.Action {
@@ -56,7 +53,7 @@ Kirigami.ScrollablePage {
 				text: qsTr("Create Invite")
 
 				onClicked: {
-					if (invitePage.inviteModel.createInvite(inviteField.text, inviteCount.Kirigami.FormData.checked ? inviteCount.value : -1)) {
+					if (settingsPage.invitesModel.createInvite(inviteField.text, inviteCount.Kirigami.FormData.checked ? inviteCount.value : -1)) {
 						//: the invite was created successfully
 						applicationWindow().showPassiveNotification(qsTr("Created invite"))
 					} else {
@@ -70,7 +67,7 @@ Kirigami.ScrollablePage {
 	}
 
 	ListView {
-		model: invitePage.inviteModel
+		model: settingsPage.invitesModel
 
 		delegate: Kirigami.SwipeListItem {
 			contentItem: ColumnLayout {
@@ -88,7 +85,7 @@ Kirigami.ScrollablePage {
 			actions: [
 				Kirigami.Action {
 					icon.name: "edit-delete"
-					onTriggered: invitePage.inviteModel.deleteInvite(inviteID)
+					onTriggered: settingsPage.invitesModel.deleteInvite(inviteID)
 				}
 			]
 		}
