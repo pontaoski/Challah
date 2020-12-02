@@ -95,8 +95,21 @@ Kirigami.ScrollablePage {
 					id: listItem
 					anchors.fill: parent
 
-					contentItem: QQC2.Label {
-						text: model['roleName']
+					contentItem: RowLayout {
+						spacing: Kirigami.Units.largeSpacing
+						Rectangle {
+							implicitHeight: Kirigami.Units.gridUnit
+							implicitWidth: Kirigami.Units.gridUnit
+							radius: Kirigami.Units.gridUnit
+							color: model['roleColour']
+							Layout.alignment: Qt.AlignVCenter
+						}
+						QQC2.Label {
+							text: model['roleName']
+							verticalAlignment: Text.AlignVCenter
+							Layout.fillHeight: true
+						}
+						Item { Layout.fillWidth: true }
 					}
 
 					actions: [
@@ -116,6 +129,9 @@ Kirigami.ScrollablePage {
 					drag.target: held ? delegateRoot : undefined
 					drag.axis: Drag.YAxis
 
+					onClicked: {
+						root.layers.push(Qt.resolvedUrl("Permissions.qml"), { "permsModel": model['permissions'] })
+					}
 					onPressAndHold: {
 						delegateRoot.z = 0
 						held = true

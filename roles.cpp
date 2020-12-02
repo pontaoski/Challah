@@ -5,6 +5,7 @@
 
 #include "client.hpp"
 #include "util.hpp"
+#include "permissions.hpp"
 
 #include <QColor>
 
@@ -79,6 +80,10 @@ QVariant RolesModel::data(const QModelIndex& index, int role) const
 	{
 	case NameRole:
 		return QString::fromStdString(d->roles[index.row()].name());
+	case ColorRole:
+		return QColor::fromRgba(d->roles[index.row()].color());
+	case Permissions:
+		return QVariant::fromValue(new PermissionsModel(homeServer, guildID, d->roles[index.row()].role_id()));
 	}
 
 	return QVariant();
@@ -138,6 +143,8 @@ QHash<int,QByteArray> RolesModel::roleNames() const
 	QHash<int,QByteArray> ret;
 
 	ret[NameRole] = "roleName";
+	ret[ColorRole] = "roleColour";
+	ret[Permissions] = "permissions";
 
 	return ret;
 }

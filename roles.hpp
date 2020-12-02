@@ -15,6 +15,8 @@ class RolesModel : public QAbstractListModel
 
 	enum Roles {
 		NameRole = Qt::UserRole,
+		ColorRole,
+		Permissions,
 	};
 
 public:
