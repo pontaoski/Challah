@@ -11,6 +11,7 @@
 enum Roles
 {
 	NodeName = Qt::UserRole,
+	Enabled
 };
 
 struct PermissionsModel::Private
@@ -38,6 +39,8 @@ PermissionsModel::PermissionsModel(QString homeserver, quint64 guildID, quint64 
 	for (auto perm : perms) {
 		d->perms << perm;
 	}
+
+	isDirty = false;
 }
 
 PermissionsModel::~PermissionsModel()
@@ -60,6 +63,8 @@ QVariant PermissionsModel::data(const QModelIndex& index, int role) const
 	{
 	case NodeName:
 		return QString::fromStdString(d->perms[index.row()].matches());
+	case Enabled:
+		return d->perms[index.row()].mode() == protocol::core::v1::Permission_Mode_Allow;
 	}
 
 	return QVariant();
@@ -67,6 +72,23 @@ QVariant PermissionsModel::data(const QModelIndex& index, int role) const
 
 bool PermissionsModel::setData(const QModelIndex& index, const QVariant& value, int role)
 {
+	if (!checkIndex(index))
+		return false;
+
+	switch (role)
+	{
+	case Enabled:
+		if (value.type() != QVariant::Bool) {
+			return false;
+		}
+
+		isDirty = true;
+		Q_EMIT isDirtyChanged();
+
+		d->perms[index.row()].set_mode(value.toBool() ? protocol::core::v1::Permission_Mode_Allow : protocol::core::v1::Permission_Mode_Deny);
+		return true;
+	}
+
 	return false;
 }
 
@@ -75,6 +97,7 @@ QHash<int,QByteArray> PermissionsModel::roleNames() const
 	QHash<int,QByteArray> ret;
 
 	ret[NodeName] = "nodeName";
+	ret[Enabled] = "enabled";
 
 	return ret;
 }

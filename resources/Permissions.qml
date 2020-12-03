@@ -105,6 +105,7 @@ Kirigami.ScrollablePage {
 		}
 
 		ListView {
+			implicitWidth: Math.min(root.width, Kirigami.Units.gridUnit * 15)
 			model: KSortFilterProxyModel {
 				sourceModel: ListModel {
 					ListElement { section: qsTr("Actions"); node: "actions.trigger"; }
@@ -162,6 +163,13 @@ Kirigami.ScrollablePage {
 					Layout.fillHeight: true
 				}
 				Item { Layout.fillWidth: true }
+				QQC2.Switch {
+					checked: model['enabled']
+					onCheckedChanged: {
+						model['enabled'] = checked
+					}
+					Layout.alignment: Qt.AlignVCenter
+				}
 			}
 
 			actions: [
