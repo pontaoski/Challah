@@ -5,6 +5,7 @@
 import QtQuick 2.5
 import QtQuick.Layouts 1.1
 import QtQuick.Controls 2.10
+import QtQuick.Dialogs 1.3
 import org.kde.kirigami 2.13 as Kirigami
 import com.github.HarmonyDevelopment.Staccato 1.0
 
@@ -95,6 +96,30 @@ Item {
 					Avatar {
 						source: drawer.model.picture
 						name: drawer.model.name
+
+						FileDialog {
+							id: fileDialog
+							title: "Please choose a file"
+							folder: shortcuts.pictures
+							onAccepted: {
+								drawer.model.parentModel.uploadFile(
+									fileDialog.fileUrl,
+									function(url) {
+										drawer.model.parentModel.setGuildPicture(url)
+									},
+									function() {
+										root.showPassiveNotification(qsTr("Failed to upload file"))
+									},
+									function(progress) {},
+									function() {}
+								)
+							}
+						}
+
+						actions.secondary: Kirigami.Action {
+							icon.name: "camera-photo-symbolic"
+							onTriggered: fileDialog.open()
+						}
 
 						Layout.preferredWidth: Kirigami.Units.gridUnit * 2.5
 						Layout.preferredHeight: Kirigami.Units.gridUnit * 2.5

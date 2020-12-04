@@ -56,7 +56,7 @@ QQC2.ToolBar {
 						let replyingTo = replyingBar.replyingToID
 						text = ""
 						replyingBar.replyingToID = ""
-						messageField.Kirigami.PageRouter.data.uploadFile(
+						messageField.Kirigami.PageRouter.data.parentModel.uploadFile(
 							uploadSheet.pendingUpload,
 							function(url) {
 								messageField.Kirigami.PageRouter.data.sendMessage(incomingText, replyingTo, [url])

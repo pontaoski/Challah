@@ -14,6 +14,7 @@
 #include "util.hpp"
 
 class Client;
+class QNetworkAccessManager;
 
 struct Channel {
 	quint64 channelID;
@@ -46,6 +47,9 @@ class MembersModel : public QAbstractListModel
 
 	Q_PROPERTY(QString name READ name NOTIFY nameChanged)
 	Q_PROPERTY(QString picture READ picture NOTIFY pictureChanged)
+
+	Q_PROPERTY(ChannelsModel* parentModel READ channelsModel CONSTANT FINAL)
+	ChannelsModel* channelsModel() { return model; }
 
 protected:
 	void customEvent(QEvent *event) override {
@@ -90,6 +94,7 @@ class ChannelsModel : public QAbstractListModel
 	QList<Channel> channels;
 	QMap<quint64,QString> users;
 	QMap<quint64,QString> avatars;
+	QSharedPointer<QNetworkAccessManager> nam;
 	mutable QMap<quint64,MessagesModel*> models;
 	friend class Client;
 	static QMap<QPair<QString,quint64>,ChannelsModel*> instances;
@@ -127,6 +132,8 @@ public:
 	Q_INVOKABLE void moveChannelFromTo(int from, int to);
 	Q_INVOKABLE QString userName(quint64 id);
 	Q_INVOKABLE QString avatarURL(quint64 id);
+	Q_INVOKABLE void setGuildPicture(const QString &url);
+	Q_INVOKABLE void uploadFile(const QUrl& path, QJSValue then, QJSValue elseDo, QJSValue progress, QJSValue finally);
 	Q_INVOKABLE InviteModel* invitesModel();
 	Q_INVOKABLE RolesModel* rolesModel();
 };

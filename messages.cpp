@@ -18,7 +18,6 @@ MessagesModel::MessagesModel(ChannelsModel *parent, QString homeServer, quint64 
 		channelID(channelID),
 		homeServer(homeServer)
 {
-	nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
 	client = Client::instanceForHomeserver(homeServer);
 	permissions = new QQmlPropertyMap(this);
 
@@ -360,50 +359,4 @@ QVariantMap MessagesModel::peekMessage(const QString& id)
 		{ "authorName", qobject_cast<ChannelsModel*>(parent())->userName(resp.message().author_id()) },
 		{ "content", QString::fromStdString(resp.message().content()) }
 	};
-}
-
-void MessagesModel::uploadFile(const QUrl& url, QJSValue then, QJSValue elseDo, QJSValue progress, QJSValue finally)
-{
-	QHttpMultiPart *mp = new QHttpMultiPart(QHttpMultiPart::FormDataType);
-
-	QFile* file(new QFile(url.toLocalFile()));
-	file->open(QIODevice::ReadOnly);
-
-	QHttpPart filePart;
-	filePart.setBodyDevice(file);
-	filePart.setHeader(QNetworkRequest::ContentDispositionHeader, QString("form-data; name=\"file\""));
-	filePart.setHeader(QNetworkRequest::ContentTypeHeader, "multipart/form-data");
-
-	mp->append(filePart);
-
-	QUrlQuery query;
-	query.addQueryItem("filename", url.fileName());
-	query.addQueryItem("contentType", QMimeDatabase().mimeTypeForFile(url.toLocalFile()).name());
-
-	QUrl reqUrl("http://" + homeServer + "/_harmony/media/upload?" + query.query());
-	QNetworkRequest req(reqUrl);
-	req.setRawHeader(QByteArrayLiteral("Authorization"), QString::fromStdString(client->userToken).toLocal8Bit());
-
-	auto reply = nam->post(req, mp);
-
-	connect(reply, &QNetworkReply::uploadProgress, this, [=](qint64 sent, qint64 total) mutable {
-		progress.call(QList<QJSValue>{ QJSValue(double(sent) / double(total)) });
-	});
-	connect(reply, &QNetworkReply::finished, this, [=]() mutable {
-		auto data = reply->readAll();
-
-		delete mp;
-		delete file;
-		delete reply;
-
-		if (reply->error() != QNetworkReply::NoError) {
-			elseDo.call();
-			finally.call();
-			return;
-		}
-
-		then.call(QList<QJSValue>{ QString("hmc://%1/%2").arg(homeServer).arg(QJsonDocument::fromJson(data)["id"].toString()) });
-		finally.call();
-		return;
-	});
 }

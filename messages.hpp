@@ -97,7 +97,6 @@ class MessagesModel : public QAbstractListModel
 	quint64 channelID;
 
 	QList<MessageData> messageData;
-	QSharedPointer<QNetworkAccessManager> nam;
 	QQmlPropertyMap* permissions;
 
 	friend class ChannelsModel;
@@ -107,6 +106,9 @@ class MessagesModel : public QAbstractListModel
 	bool isGuildOwner = false;
 
 	Client* client;
+
+	Q_PROPERTY(ChannelsModel* parentModel READ channelsModel CONSTANT FINAL)
+	ChannelsModel* channelsModel() { return reinterpret_cast<ChannelsModel*>(parent()); }
 
 	Q_PROPERTY(QQmlPropertyMap* permissions MEMBER permissions CONSTANT FINAL)
 
@@ -169,5 +171,4 @@ public:
 	Q_INVOKABLE void editMessage(const QString& id, const QString& content);
 	Q_INVOKABLE void deleteMessage(const QString& id);
 	Q_INVOKABLE void triggerAction(const QString& messageID, const QString& name, const QString& data);
-	Q_INVOKABLE void uploadFile(const QUrl& path, QJSValue then, QJSValue elseDo, QJSValue progress, QJSValue finally);
 };

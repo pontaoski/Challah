@@ -237,10 +237,11 @@ QQC2.Control {
                 Kirigami.Theme.textColor: "white"
                 source: (avatarRoot.actions.secondary || {iconName: ""}).iconName
 
-                width: Kirigami.Units.iconSizes.small
-                height: Kirigami.Units.iconSizes.small
+                width: 16
+                height: 16
 
-                anchors.centerIn: parent
+				x: Math.round((parent.width/2)-(this.width/2))
+				y: Math.round((parent.height/2)-(this.height/2))
             }
         }
 

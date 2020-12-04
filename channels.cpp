@@ -2,6 +2,11 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
+#include <QHttpMultiPart>
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
+#include <QNetworkReply>
+
 #include <QtConcurrent>
 #include "channels.hpp"
 
@@ -59,6 +64,7 @@ QVariant MembersModel::data(const QModelIndex& index, int role) const
 ChannelsModel::ChannelsModel(QString homeServer, quint64 guildID) : QAbstractListModel(), homeServer(homeServer), guildID(guildID)
 {
 	client = Client::instanceForHomeserver(homeServer);
+	nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
 	members = new MembersModel(homeServer, guildID, this);
 	permissions = new QQmlPropertyMap(this);
 
@@ -181,6 +187,11 @@ int ChannelsModel::rowCount(const QModelIndex &parent) const
 	return channels.count();
 }
 
+void ChannelsModel::setGuildPicture(const QString& url)
+{
+
+}
+
 QVariant ChannelsModel::data(const QModelIndex &index, int role) const
 {
 	if (!checkIndex(index))
@@ -294,4 +305,50 @@ InviteModel* ChannelsModel::invitesModel()
 RolesModel* ChannelsModel::rolesModel()
 {
 	return new RolesModel(homeServer, guildID);
+}
+
+void ChannelsModel::uploadFile(const QUrl& url, QJSValue then, QJSValue elseDo, QJSValue progress, QJSValue finally)
+{
+	QHttpMultiPart *mp = new QHttpMultiPart(QHttpMultiPart::FormDataType);
+
+	QFile* file(new QFile(url.toLocalFile()));
+	file->open(QIODevice::ReadOnly);
+
+	QHttpPart filePart;
+	filePart.setBodyDevice(file);
+	filePart.setHeader(QNetworkRequest::ContentDispositionHeader, QString("form-data; name=\"file\""));
+	filePart.setHeader(QNetworkRequest::ContentTypeHeader, "multipart/form-data");
+
+	mp->append(filePart);
+
+	QUrlQuery query;
+	query.addQueryItem("filename", url.fileName());
+	query.addQueryItem("contentType", QMimeDatabase().mimeTypeForFile(url.toLocalFile()).name());
+
+	QUrl reqUrl("http://" + homeServer + "/_harmony/media/upload?" + query.query());
+	QNetworkRequest req(reqUrl);
+	req.setRawHeader(QByteArrayLiteral("Authorization"), QString::fromStdString(client->userToken).toLocal8Bit());
+
+	auto reply = nam->post(req, mp);
+
+	connect(reply, &QNetworkReply::uploadProgress, this, [=](qint64 sent, qint64 total) mutable {
+		progress.call(QList<QJSValue>{ QJSValue(double(sent) / double(total)) });
+	});
+	connect(reply, &QNetworkReply::finished, this, [=]() mutable {
+		auto data = reply->readAll();
+
+		delete mp;
+		delete file;
+		delete reply;
+
+		if (reply->error() != QNetworkReply::NoError) {
+			elseDo.call();
+			finally.call();
+			return;
+		}
+
+		then.call(QList<QJSValue>{ QString("hmc://%1/%2").arg(homeServer).arg(QJsonDocument::fromJson(data)["id"].toString()) });
+		finally.call();
+		return;
+	});
 }
