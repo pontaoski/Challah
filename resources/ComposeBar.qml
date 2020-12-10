@@ -44,7 +44,7 @@ QQC2.ToolBar {
 			RowLayout {
 				Layout.fillWidth: true
 
-				QQC2.TextField {
+				QQC2.TextArea {
 					id: dialogField
 					//: Placeholder text for the message field
 					placeholderText: qsTr("Write a message...")
@@ -70,7 +70,9 @@ QQC2.ToolBar {
 						uploadSheet.close()
 					}
 
-					onAccepted: send()
+					Keys.onReturnPressed: send()
+
+					Component.onCompleted: HState.bindTextDocument(this.textDocument)
 				}
 				QQC2.Button {
 					text: qsTr("Send")
@@ -130,7 +132,7 @@ QQC2.ToolBar {
 				visible: uiSettings.personas.length > 0
 				textRole: "name"
 			}
-			QQC2.TextField {
+			QQC2.TextArea {
 				id: messageField
 				placeholderText: if (messagesRoute.model.permissions.canSendAndEdit) {
 					//: Placeholder text for the message field
@@ -140,6 +142,7 @@ QQC2.ToolBar {
 					return qsTr("You do not have permissions to send a message to this channel.")
 				}
 
+				Component.onCompleted: HState.bindTextDocument(this.textDocument)
 				Layout.fillWidth: true
 
 				function send() {
@@ -161,8 +164,7 @@ QQC2.ToolBar {
 				background: null
 
 				Keys.onEscapePressed: replyingBar.replyingToID = ""
-
-				onAccepted: send()
+				Keys.onReturnPressed: send()
 			}
 			QQC2.Button {
 				icon.name: "mail-attachment"

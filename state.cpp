@@ -3,6 +3,9 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 #include <QSettings>
+#include <QQuickTextDocument>
+
+#include "richtexter.hpp"
 #include "state.hpp"
 
 State* State::s_instance;
@@ -67,4 +70,9 @@ bool State::leaveGuild(const QString &homeserver, const QString &id, bool isOwne
 	auto actualID = id.toULongLong();
 
 	return Client::instanceForHomeserver(homeserver)->leaveGuild(actualID, isOwner);
+}
+
+void State::bindTextDocument(QQuickTextDocument* doc)
+{
+	new TextFormatter(doc->textDocument());
 }

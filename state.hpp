@@ -8,6 +8,8 @@
 #include <QObject>
 #include "client.hpp"
 
+class QQuickTextDocument;
+
 class State : public QObject
 {
 	Q_OBJECT
@@ -33,6 +35,7 @@ public:
 	Q_INVOKABLE bool createGuild(const QString& name);
 	Q_INVOKABLE bool joinGuild(const QString& inviteLink);
 	Q_INVOKABLE bool leaveGuild(const QString& homeserver, const QString& id, bool isOwner);
+	Q_INVOKABLE void bindTextDocument(QQuickTextDocument* doc);
 	Q_INVOKABLE QString transformHMCURL(const QString& url) {
 		QString trimmed = url.mid(QString("hmc://").length());
 		auto split = trimmed.split("/");
