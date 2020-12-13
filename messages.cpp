@@ -64,9 +64,13 @@ void MessagesModel::customEvent(QEvent *event)
 				}
 				if (msg.update_attachments()) {
 					auto msgAttaches = msg.attachments();
-					QStringList attachments;
+					QVariantList attachments;
 					for (auto attach : msgAttaches) {
-						attachments << QString::fromStdString(attach);
+						std::string jsonified;
+						google::protobuf::util::MessageToJsonString(attach, &jsonified, google::protobuf::util::JsonPrintOptions{});
+						auto document = QJsonDocument::fromJson(QByteArray::fromStdString(jsonified));
+
+						attachments << document.object();
 					}
 					message.attachments = attachments;
 				}

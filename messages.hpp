@@ -43,7 +43,7 @@ struct MessageData
 	};
 	std::optional<Override> overrides;
 
-	QStringList attachments;
+	QVariantList attachments;
 
 	static MessageData fromProtobuf(protocol::core::v1::Message& msg) {
 		std::string jsonified;
@@ -65,9 +65,13 @@ struct MessageData
 		}
 
 		auto msgAttaches = msg.attachments();
-		QStringList attachments;
+		QVariantList attachments;
 		for (auto attach : msgAttaches) {
-			attachments << QString::fromStdString(attach);
+			std::string jsonified;
+			google::protobuf::util::MessageToJsonString(attach, &jsonified, google::protobuf::util::JsonPrintOptions{});
+			auto document = QJsonDocument::fromJson(QByteArray::fromStdString(jsonified));
+
+			attachments << document.object();
 		}
 
 		return MessageData {

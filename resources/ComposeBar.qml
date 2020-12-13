@@ -146,6 +146,9 @@ QQC2.ToolBar {
 				Layout.fillWidth: true
 
 				function send() {
+					if (text == "") {
+						return
+					}
 					if (uiSettings.personas.length == 0) {
 						Kirigami.PageRouter.data.sendMessage(text, replyingBar.replyingToID, [])
 					} else {

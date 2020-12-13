@@ -163,9 +163,9 @@ QQC2.Control {
 			}
 		}
 		Repeater {
-			model: attachments
+			model: Array.from(attachments).filter(item => item["type"].startsWith("image"))
 			delegate: Image {
-				source: HState.transformHMCURL(modelData)
+				source: HState.transformHMCURL(modelData["id"])
 				fillMode: Image.PreserveAspectCrop
 				smooth: true
 				mipmap: true
@@ -182,7 +182,7 @@ QQC2.Control {
 						background: Item {}
 						Image {
 							id: popupImage
-							source: HState.transformHMCURL(modelData)
+							source: HState.transformHMCURL(modelData["id"])
 							x: (parent.QQC2.Overlay.overlay.width / 2) - (this.implicitWidth / 2)
 							y: (parent.QQC2.Overlay.overlay.height / 2) - (this.implicitHeight / 2)
 
