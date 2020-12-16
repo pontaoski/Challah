@@ -1,7 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
-        <file>Avatar.qml</file>
         <file>ChannelSheet.qml</file>
         <file>ComposeBar.qml</file>
         <file>Embed.qml</file>

@@ -36,7 +36,7 @@ Kirigami.PageRoute {
 				delegate: Item {
 					required property var section
 
-					Avatar {
+					Kirigami.Avatar {
 						name: parent.section.split("\t")[2]
 						source: parent.section.split("\t")[1]
 

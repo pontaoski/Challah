@@ -9,7 +9,6 @@
 #include <QQmlContext>
 #include <QQuickStyle>
 
-#include "avatar.hpp"
 #include "state.hpp"
 #include "channels.hpp"
 #include "invites.hpp"
@@ -27,8 +26,6 @@ int main(int argc, char *argv[])
 
 	qmlRegisterType<OverlappingPanels>("com.github.HarmonyDevelopment.Staccato", 1, 0, "OverlappingPanels");
 	qmlRegisterSingletonType<State>("com.github.HarmonyDevelopment.Staccato", 1, 0, "HState", [](QQmlEngine *, QJSEngine *) -> QObject * { return new State; });
-	qmlRegisterSingletonType<AvatarPrivate>("com.github.HarmonyDevelopment.Staccato", 1, 0, "AvatarPrivate", [](QQmlEngine *, QJSEngine *) -> QObject * { return new AvatarPrivate; });
-	qmlRegisterType<AvatarGroup>("com.github.HarmonyDevelopment.Staccato", 1, 0, "AvatarGroup");
 	qmlRegisterUncreatableType<ChannelsModel>("com.github.HarmonyDevelopment.ChannelsModel", 1, 0, "ChannelsModel", "You cannot create an instance of ChannelsModel.");
 	qmlRegisterUncreatableType<InviteModel>("com.github.HarmonyDevelopment.InviteModel", 1, 0, "InviteModel", "You cannot create an instance of InviteModel.");
 	qmlRegisterUncreatableType<RolesModel>("com.github.HarmonyDevelopment.RolesModel", 1, 0, "RolesModel", "You cannot create an instance of RolesModel.");
