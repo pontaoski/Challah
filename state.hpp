@@ -39,6 +39,10 @@ public:
 	Q_INVOKABLE QString transformHMCURL(const QString& url) {
 		QString trimmed = url.mid(QString("hmc://").length());
 		auto split = trimmed.split("/");
+		if (split.length() != 2) {
+			qWarning() << "Malformed HMC URL:" << url;
+			return QString("");
+		}
 		return QString("http://%1/_harmony/media/download/%2").arg(split[0]).arg(split[1]);
 	}
 	Q_PROPERTY(GuildModel* guildModel READ getGuildModel CONSTANT)
