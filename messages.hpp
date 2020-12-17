@@ -128,7 +128,8 @@ class MessagesModel : public QAbstractListModel
 		MessageReplyToRole,
 		MessageIDRole,
 		MessageAttachmentsRole,
-		MessageCombinedAuthorIDAvatarRole
+		MessageCombinedAuthorIDAvatarRole,
+		MessageQuirkRole
 	};
 
 	struct Fronter {

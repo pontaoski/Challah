@@ -28,7 +28,7 @@ Kirigami.PageRoute {
 			topMargin: 0
 			leftMargin: Kirigami.Units.gridUnit
 			rightMargin: Kirigami.Units.gridUnit
-			spacing: Kirigami.Units.gridUnit
+			spacing: 0
 
 			section {
 				criteria: ViewSection.FullString

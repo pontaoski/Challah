@@ -5,7 +5,7 @@
 import QtQuick 2.10
 import QtQuick.Window 2.10
 import QtQuick.Layouts 1.10
-import org.kde.kirigami 2.13 as Kirigami
+import org.kde.kirigami 2.14 as Kirigami
 import QtQuick.Controls 2.10 as QQC2
 import com.github.HarmonyDevelopment.Staccato 1.0
 
@@ -55,6 +55,34 @@ QQC2.Control {
 		property string modelMessageID: messageID
 
 		Kirigami.Theme.colorSet: messagesRoute.model.userID() == authorID ? Kirigami.Theme.Button : Kirigami.Theme.Window
+		spacing: 0
+
+		Item {
+			implicitHeight: yote.implicitHeight + Kirigami.Units.gridUnit
+			visible: !!quirks["dateHeader"]
+
+			Kirigami.Heading {
+				id: yote
+				level: 4
+				text: quirks["dateHeader"] || ""
+				anchors.centerIn: parent
+				padding: Kirigami.Units.smallSpacing
+				leftPadding: Kirigami.Units.largeSpacing
+				rightPadding: Kirigami.Units.largeSpacing
+
+				background: Rectangle {
+					radius: height
+
+					Kirigami.Theme.colorSet: Kirigami.Theme.Window
+					color: Kirigami.Theme.backgroundColor
+				}
+			}
+
+			Layout.preferredWidth: (applicationWindow().wideScreen ? Math.max(messagesView.width / 3, Kirigami.Units.gridUnit * 15) : (messagesView.width * 0.9)) - Layout.leftMargin
+			Layout.leftMargin: Kirigami.Units.gridUnit * 2 + Kirigami.Units.largeSpacing
+		}
+
+		Item { height: !!quirks["previousAuthorDifferent"] ? 6 : 2 }
 
 		QQC2.Control {
 			id: messageBlock
@@ -77,8 +105,9 @@ QQC2.Control {
 			}
 			contentItem: ColumnLayout {
 				QQC2.Label {
-					visible: shouldShowAuthorInfo
+					visible: !!quirks["previousAuthorDifferent"] || !!quirks["dateHeader"]
 					text: authorName
+					color: Kirigami.NameUtils.colorsFromString(authorName)
 
 					font.pixelSize: Kirigami.Units.gridUnit * (4/5)
 					font.pointSize: -1

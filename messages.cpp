@@ -115,13 +115,13 @@ QVariant MessagesModel::data(const QModelIndex& index, int role) const
 
 	auto idx = index.row();
 
-	auto author = [=]() {
+	auto author = [this](int idx) {
 		if (messageData[idx].overrides.has_value()) {
 			return messageData[idx].overrides->name;
 		}
 		return qobject_cast<ChannelsModel*>(parent())->userName(messageData[idx].authorID);
 	};
-	auto avatar = [=]() {
+	auto avatar = [this](int idx) {
 		if (messageData[idx].overrides.has_value()) {
 			return messageData[idx].overrides->avatar;
 		}
@@ -154,9 +154,9 @@ QVariant MessagesModel::data(const QModelIndex& index, int role) const
 	case MessageTextRole:
 		return messageData[idx].text;
 	case MessageAuthorRole:
-		return author();
+		return author(idx);
 	case MessageAuthorAvatarRole:
-		return avatar();
+		return avatar(idx);
 	case MessageAuthorIDRole:
 		return QString::number(messageData[idx].authorID);
 	case MessageShouldDisplayAuthorInfo:
@@ -178,9 +178,25 @@ QVariant MessagesModel::data(const QModelIndex& index, int role) const
 	case MessageCombinedAuthorIDAvatarRole:
 		return QStringList{
 			QString::number(messageData[idx].authorID),
-			avatar(),
-			author()
+			avatar(idx),
+			author(idx),
+			messageData[idx].date.date().toString(),
 		}.join("\t");
+	case MessageQuirkRole: {
+		QVariantMap quirks;
+		if (messageData.length() > (idx+1)) {
+
+			auto thisData = messageData[idx].date;
+			auto thatData = messageData[idx+1].date;
+			if (thisData.date() != thatData.date()) {
+				quirks["dateHeader"] = QLocale::system().toString(thisData.date(), QLocale::LongFormat);
+			}
+
+			quirks["previousAuthorDifferent"] = (messageData[idx].authorID != messageData[idx+1].authorID) || (avatar(idx) != avatar(idx+1)) || (author(idx) != author(idx+1));
+		}
+
+		return quirks;
+	}
 	}
 
 	return QVariant();
@@ -201,6 +217,7 @@ QHash<int,QByteArray> MessagesModel::roleNames() const
 	ret[MessageReplyToRole] = "replyToID";
 	ret[MessageCombinedAuthorIDAvatarRole] = "authorIDAndAvatar";
 	ret[MessageAttachmentsRole] = "attachments";
+	ret[MessageQuirkRole] = "quirks";
 
 	return ret;
 }
