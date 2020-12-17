@@ -115,6 +115,7 @@ class MessagesModel : public QAbstractListModel
 	ChannelsModel* channelsModel() { return reinterpret_cast<ChannelsModel*>(parent()); }
 
 	Q_PROPERTY(QQmlPropertyMap* permissions MEMBER permissions CONSTANT FINAL)
+	Q_PROPERTY(QString homeserver MEMBER homeServer CONSTANT FINAL)
 
 	enum Roles {
 		MessageTextRole = Qt::UserRole,

@@ -36,7 +36,11 @@ public:
 	Q_INVOKABLE bool joinGuild(const QString& inviteLink);
 	Q_INVOKABLE bool leaveGuild(const QString& homeserver, const QString& id, bool isOwner);
 	Q_INVOKABLE void bindTextDocument(QQuickTextDocument* doc);
-	Q_INVOKABLE QString transformHMCURL(const QString& url) {
+	Q_INVOKABLE QString transformHMCURL(const QString& url, const QString& homeserver) {
+		if (!url.startsWith("hmc://")) {
+			return QString("http://%1/_harmony/media/download/%2").arg(homeserver).arg(url);
+		}
+
 		QString trimmed = url.mid(QString("hmc://").length());
 		auto split = trimmed.split("/");
 		if (split.length() != 2) {
