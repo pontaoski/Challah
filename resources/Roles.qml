@@ -25,6 +25,13 @@ Kirigami.ScrollablePage {
 				createRolesSheet.open()
 			}
 		}
+		right: Kirigami.Action {
+			iconName: "document-edit"
+			text: qsTr("Edit Default Permissions...")
+			onTriggered: {
+				root.layers.push(Qt.resolvedUrl("Permissions.qml"), { "permsModel": settingsPage.rolesModel.everyonePermissions() })
+			}
+		}
 	}
 
 	ColorDialog {

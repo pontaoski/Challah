@@ -89,6 +89,11 @@ QVariant RolesModel::data(const QModelIndex& index, int role) const
 	return QVariant();
 }
 
+QVariant RolesModel::everyonePermissions() const
+{
+	return QVariant::fromValue(new PermissionsModel(homeServer, guildID, 0));
+}
+
 bool RolesModel::setData(const QModelIndex& index, const QVariant& value, int role)
 {
 	if (!checkIndex(index))

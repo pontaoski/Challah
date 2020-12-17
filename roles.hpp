@@ -25,6 +25,7 @@ public:
 
 	Q_INVOKABLE void moveRoleFromTo(int from, int to);
 	Q_INVOKABLE bool createRole(const QString& name, const QColor& colour);
+	Q_INVOKABLE QVariant everyonePermissions() const;
 
 	int rowCount(const QModelIndex& parent = QModelIndex()) const override;
 	QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
