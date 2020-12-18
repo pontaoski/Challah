@@ -8,6 +8,7 @@ import QtQuick.Layouts 1.10
 import org.kde.kirigami 2.14 as Kirigami
 import QtQuick.Controls 2.10 as QQC2
 import com.github.HarmonyDevelopment.Staccato 1.0
+import QtQml.Models 2.15
 
 QQC2.Control {
 	padding: 0
@@ -17,9 +18,18 @@ QQC2.Control {
 	bottomPadding: 0
 
 	background: MouseArea {
-		acceptedButtons: Qt.RightButton
+		id: backgroundMA
+		acceptedButtons: Qt.LeftButton | Qt.RightButton
 		onClicked: {
-			messageMenu.open()
+			if (messagesSelectionModel.selection.length > 0) {
+				if (mouse.button === Qt.RightButton) {
+					selectionMenu.open()
+				} else {
+					messagesSelectionModel.select(modelIndex, ItemSelectionModel.Toggle)
+				}
+			} else if (mouse.button === Qt.RightButton) {
+				messageMenu.open()
+			}
 		}
 
 		ResponsiveMenu {
@@ -47,6 +57,32 @@ QQC2.Control {
 					composeBar.replies.replyingToContent = content
 				}
 			}
+			ResponsiveMenuItem {
+				text: qsTr("Select")
+				onTriggered: {
+					messagesSelectionModel.select(modelIndex, ItemSelectionModel.Select)
+				}
+			}
+		}
+		ResponsiveMenu {
+			id: selectionMenu
+			ResponsiveMenuItem {
+				text: qsTr("Copy Selected Messages")
+				onTriggered: {
+					let field = Qt.createQmlObject("import QtQuick 2.10; TextEdit { visible: false }", root, "<embedded>")
+					field.text = Array.from(messagesSelectionModel.selectedIndexes).map(function(item) {
+						return `${messagesSelectionModel.model.data(item, 259)} [${messagesSelectionModel.model.data(item, 263).toLocaleString()}]\n${messagesSelectionModel.model.data(item, 256)}`
+					}).join("\n\n")
+					field.selectAll()
+					field.copy()
+				}
+			}
+			ResponsiveMenuItem {
+				text: Array.from(messagesSelectionModel.selectedIndexes).includes(modelIndex) ? qsTr("Unselect") : qsTr("Select")
+				onTriggered: {
+					messagesSelectionModel.select(modelIndex, ItemSelectionModel.Toggle)
+				}
+			}
 		}
 	}
 
@@ -54,7 +90,12 @@ QQC2.Control {
 		id: messageDelegate
 		property string modelMessageID: messageID
 
-		Kirigami.Theme.colorSet: messagesRoute.model.userID() == authorID ? Kirigami.Theme.Button : Kirigami.Theme.Window
+		Kirigami.Theme.colorSet: {
+			if (Array.from(messagesSelectionModel.selectedIndexes).includes(modelIndex)) {
+				return Kirigami.Theme.Selection
+			}
+			return messagesRoute.model.userID() == authorID ? Kirigami.Theme.Button : Kirigami.Theme.Window
+		}
 		spacing: 0
 
 		Item {
@@ -154,30 +195,33 @@ QQC2.Control {
 					Layout.maximumWidth: messageBlock.Layout.maximumWidth * 0.9
 				}
 				GridLayout {
-					QQC2.Label {
-						visible: !messageBlock.edit
+					TextEdit {
 						text: content
 						textFormat: TextEdit.MarkdownText
+						readOnly: !messageBlock.edit
 
 						font.pixelSize: Kirigami.Units.gridUnit * (3/4)
 						font.pointSize: -1
 						wrapMode: Text.Wrap
 
+						selectByMouse: true
+
+						color: Kirigami.Theme.textColor
+						selectedTextColor: Kirigami.Theme.highlightedTextColor
+						selectionColor: Kirigami.Theme.highlightColor
+
 						Layout.alignment: Qt.AlignBottom
 						Layout.maximumWidth: messageBlock.Layout.maximumWidth * 0.9
-					}
-					QQC2.TextField {
-						visible: messageBlock.edit
-						text: content
 
-						Keys.onEscapePressed: messageBlock.edit = false
-
-						onAccepted: {
+						Keys.onEscapePressed: {
+							messageBlock.edit = false
+							text = Qt.binding(function() { return content })
+						}
+						Keys.onReturnPressed: {
 							messageBlock.edit = false
 							messagesRoute.model.editMessage(messageID, text)
+							text = Qt.binding(function() { return content })
 						}
-
-						Layout.alignment: Qt.AlignBottom
 					}
 					Item { Layout.fillWidth: true }
 					QQC2.Label {

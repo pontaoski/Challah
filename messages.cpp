@@ -197,6 +197,8 @@ QVariant MessagesModel::data(const QModelIndex& index, int role) const
 
 		return quirks;
 	}
+	case MessageModelIndexRole:
+		return QVariant::fromValue(index);
 	}
 
 	return QVariant();
@@ -218,6 +220,7 @@ QHash<int,QByteArray> MessagesModel::roleNames() const
 	ret[MessageCombinedAuthorIDAvatarRole] = "authorIDAndAvatar";
 	ret[MessageAttachmentsRole] = "attachments";
 	ret[MessageQuirkRole] = "quirks";
+	ret[MessageModelIndexRole] = "modelIndex";
 
 	return ret;
 }

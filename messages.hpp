@@ -130,7 +130,8 @@ class MessagesModel : public QAbstractListModel
 		MessageIDRole,
 		MessageAttachmentsRole,
 		MessageCombinedAuthorIDAvatarRole,
-		MessageQuirkRole
+		MessageQuirkRole,
+		MessageModelIndexRole,
 	};
 
 	struct Fronter {
