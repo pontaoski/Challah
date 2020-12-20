@@ -22,6 +22,9 @@ class PermissionsModel : public QAbstractListModel
 	Q_SIGNAL void isDirtyChanged();
 	bool isDirty = false;
 
+protected:
+	void customEvent(QEvent *event) override;
+
 public:
 	PermissionsModel(QString homeserver, quint64 guildID, quint64 roleID);
 	~PermissionsModel();

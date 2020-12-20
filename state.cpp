@@ -76,3 +76,9 @@ void State::bindTextDocument(QQuickTextDocument* doc)
 {
 	new TextFormatter(doc->textDocument());
 }
+
+void callJS(QJSValue func, QList<QVariant> args)
+{
+	auto call = PleaseCall{func, args};
+	QCoreApplication::postEvent(State::instance(), new PleaseCallEvent(call));
+}

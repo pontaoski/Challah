@@ -128,7 +128,7 @@ public:
 	}
 
 	Q_INVOKABLE void deleteChannel(const QString& id);
-	Q_INVOKABLE bool createChannel(const QString& name);
+	Q_INVOKABLE void createChannel(const QString& name, QJSValue then, QJSValue elseDo);
 	Q_INVOKABLE void moveChannelFromTo(int from, int to);
 	Q_INVOKABLE QString userName(quint64 id);
 	Q_INVOKABLE QString avatarURL(quint64 id);

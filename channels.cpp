@@ -24,18 +24,22 @@ MembersModel::MembersModel(QString homeserver, quint64 guildID, ChannelsModel* m
 {
 	client = Client::instanceForHomeserver(homeServer);
 
-	ClientContext ctx;
-	client->authenticate(ctx);
+	QtConcurrent::run([=] {
+		ClientContext ctx;
+		client->authenticate(ctx);
 
-	protocol::core::v1::GetGuildMembersRequest req;
-	req.set_guild_id(guildID);
-	protocol::core::v1::GetGuildMembersResponse resp;
+		protocol::core::v1::GetGuildMembersRequest req;
+		req.set_guild_id(guildID);
+		protocol::core::v1::GetGuildMembersResponse resp;
 
-	checkStatus(client->coreKit->GetGuildMembers(&ctx, req, &resp));
+		checkStatus(client->coreKit->GetGuildMembers(&ctx, req, &resp));
 
-	for (auto member : resp.members()) {
-		members << member;
-	}
+		beginResetModel();
+		for (auto member : resp.members()) {
+			members << member;
+		}
+		endResetModel();
+	});
 }
 
 int MembersModel::rowCount(const QModelIndex& parent) const
@@ -81,23 +85,27 @@ ChannelsModel::ChannelsModel(QString homeServer, quint64 guildID) : QAbstractLis
 		}
 	}
 
-	ClientContext ctx;
-	client->authenticate(ctx);
+	QtConcurrent::run([=] {
+		ClientContext ctx;
+		client->authenticate(ctx);
 
-	protocol::core::v1::GetGuildChannelsRequest req;
-	req.set_guild_id(guildID);
+		protocol::core::v1::GetGuildChannelsRequest req;
+		req.set_guild_id(guildID);
 
-	protocol::core::v1::GetGuildChannelsResponse resp;
-	checkStatus(client->coreKit->GetGuildChannels(&ctx, req, &resp));
-	resp.channels_size();
+		protocol::core::v1::GetGuildChannelsResponse resp;
+		checkStatus(client->coreKit->GetGuildChannels(&ctx, req, &resp));
+		resp.channels_size();
 
-	for (auto chan : resp.channels()) {
-		channels << Channel {
-			.channelID = chan.channel_id(),
-			.name = QString::fromStdString(chan.channel_name()),
-			.isCategory = chan.is_category(),
-		};
-	}
+		beginResetModel();
+		for (auto chan : resp.channels()) {
+			channels << Channel {
+				.channelID = chan.channel_id(),
+				.name = QString::fromStdString(chan.channel_name()),
+				.isCategory = chan.is_category(),
+			};
+		}
+		endResetModel();
+	});
 
 	client->subscribeGuild(guildID);
 	instances.insert(qMakePair(homeServer, guildID), this);
@@ -107,23 +115,25 @@ QMap<QPair<QString,quint64>,ChannelsModel*> ChannelsModel::instances;
 
 void ChannelsModel::moveChannelFromTo(int from, int to)
 {
-	auto fromChan = channels[from];
-	doContext;
-	protocol::core::v1::UpdateChannelOrderRequest req;
-	google::protobuf::Empty resp;
-	req.set_guild_id(guildID);
-	req.set_channel_id(fromChan.channelID);
+	QtConcurrent::run([=] {
+		auto fromChan = channels[from];
+		doContext;
+		protocol::core::v1::UpdateChannelOrderRequest req;
+		google::protobuf::Empty resp;
+		req.set_guild_id(guildID);
+		req.set_channel_id(fromChan.channelID);
 
-	if (to == 0) {
-		req.set_next_id(channels[0].channelID);
-	} else if (to + 1 == channels.length()) {
-		req.set_previous_id(channels[to].channelID);
-	} else {
-		req.set_previous_id(channels[to-1].channelID);
-		req.set_next_id(channels[to+1].channelID);
-	}
+		if (to == 0) {
+			req.set_next_id(channels[0].channelID);
+		} else if (to + 1 == channels.length()) {
+			req.set_previous_id(channels[to].channelID);
+		} else {
+			req.set_previous_id(channels[to-1].channelID);
+			req.set_next_id(channels[to+1].channelID);
+		}
 
-	checkStatus(client->coreKit->UpdateChannelOrder(&ctx, req, &resp));
+		checkStatus(client->coreKit->UpdateChannelOrder(&ctx, req, &resp));
+	});
 }
 
 void ChannelsModel::customEvent(QEvent *event)
@@ -229,36 +239,45 @@ QHash<int, QByteArray> ChannelsModel::roleNames() const
 
 void ChannelsModel::deleteChannel(const QString& channel)
 {
-	doContext;
+	QtConcurrent::run([=] {
+		doContext;
 
-	protocol::core::v1::DeleteChannelRequest req;
-	req.set_guild_id(this->guildID);
-	req.set_channel_id(channel.toULongLong());
+		protocol::core::v1::DeleteChannelRequest req;
+		req.set_guild_id(this->guildID);
+		req.set_channel_id(channel.toULongLong());
 
-	google::protobuf::Empty resp;
-	checkStatus(client->coreKit->DeleteChannel(&ctx, req, &resp));
+		google::protobuf::Empty resp;
+		checkStatus(client->coreKit->DeleteChannel(&ctx, req, &resp));
+	});
 }
 
-bool ChannelsModel::createChannel(const QString& name)
+void ChannelsModel::createChannel(const QString& name, QJSValue then, QJSValue elseDo)
 {
-	doContext;
+	QtConcurrent::run([=] {
+		doContext;
 
-	quint64 last = 0;
+		quint64 last = 0;
 
-	for (auto channel : channels) {
-		last = channel.channelID;
-		if (channel.isCategory) {
-			break;
+		for (auto channel : channels) {
+			last = channel.channelID;
+			if (channel.isCategory) {
+				break;
+			}
 		}
-	}
 
-	protocol::core::v1::CreateChannelRequest req;
-	req.set_guild_id(this->guildID);
-	req.set_channel_name(name.toStdString());
-	req.set_previous_id(last);
+		protocol::core::v1::CreateChannelRequest req;
+		req.set_guild_id(this->guildID);
+		req.set_channel_name(name.toStdString());
+		req.set_previous_id(last);
 
-	protocol::core::v1::CreateChannelResponse resp;
-	return checkStatus(client->coreKit->CreateChannel(&ctx, req, &resp));
+		protocol::core::v1::CreateChannelResponse resp;
+
+		if (checkStatus(client->coreKit->CreateChannel(&ctx, req, &resp))) {
+			callJS(then, {});
+		} else {
+			callJS(elseDo, {});
+		}
+	});
 }
 
 QString ChannelsModel::userName(quint64 id)

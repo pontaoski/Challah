@@ -52,3 +52,5 @@ public:
 	Q_PROPERTY(GuildModel* guildModel READ getGuildModel CONSTANT)
 	GuildModel* getGuildModel() const { return guildModel; }
 };
+
+void callJS(QJSValue func, QList<QVariant> args);

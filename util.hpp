@@ -6,6 +6,7 @@
 
 #include <QtCore>
 #include <QEvent>
+#include <QJSValue>
 #include <optional>
 
 #include "client.hpp"
@@ -34,5 +35,11 @@ using GuildUpdatedEvent = CarrierEvent<10,protocol::core::v1::Event_GuildUpdated
 using GuildDeletedEvent = CarrierEvent<11,protocol::core::v1::Event_GuildDeleted>;
 using MemberJoinedEvent = CarrierEvent<12,protocol::core::v1::Event_MemberJoined>;
 using MemberLeftEvent = CarrierEvent<13,protocol::core::v1::Event_MemberLeft>;
+
+struct PleaseCall {
+	QJSValue func;
+	QVariantList args;
+};
+using PleaseCallEvent = CarrierEvent<14,PleaseCall>;
 
 bool checkStatus(grpc::Status status);

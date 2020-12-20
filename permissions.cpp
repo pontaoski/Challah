@@ -6,6 +6,8 @@
 #include "core.grpc.pb.h"
 #include "core.pb.h"
 
+#include <QJSEngine>
+
 #define doContext(c) ClientContext c; client->authenticate(c)
 
 enum Roles
@@ -52,6 +54,21 @@ PermissionsModel::~PermissionsModel()
 int PermissionsModel::rowCount(const QModelIndex& parent) const
 {
 	return d->perms.count();
+}
+
+void PermissionsModel::customEvent(QEvent *ev)
+{
+	if (ev->type() == PleaseCallEvent::typeID) {
+		auto event = static_cast<PleaseCallEvent*>(ev);
+
+		QList<QJSValue> data;
+
+		for (auto arg : event->data.args) {
+			data << event->data.func.engine()->toScriptValue(arg);
+		}
+
+		event->data.func.call(data);
+	}
 }
 
 QVariant PermissionsModel::data(const QModelIndex& index, int role) const

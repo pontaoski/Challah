@@ -15,6 +15,7 @@
 #include "overlappingpanels.hpp"
 #include "roles.hpp"
 #include "permissions.hpp"
+#include "promise.hpp"
 
 int main(int argc, char *argv[])
 {
@@ -30,6 +31,7 @@ int main(int argc, char *argv[])
 	qmlRegisterUncreatableType<InviteModel>("com.github.HarmonyDevelopment.InviteModel", 1, 0, "InviteModel", "You cannot create an instance of InviteModel.");
 	qmlRegisterUncreatableType<RolesModel>("com.github.HarmonyDevelopment.RolesModel", 1, 0, "RolesModel", "You cannot create an instance of RolesModel.");
 	qmlRegisterUncreatableType<PermissionsModel>("com.github.HarmonyDevelopment.PermissionsModel", 1, 0, "PermissionsModel", "You cannot create an instance of PermissionsModel.");
+	qmlRegisterUncreatableType<Promise>("com.github.HarmonyDevelopment.Promise", 1, 0, "Promise", "You cannot create an instance of Promise.");
 
 	QTranslator qtTranslator;
 	qtTranslator.load("qt_" + QLocale::system().name(), QLibraryInfo::location(QLibraryInfo::TranslationsPath));
