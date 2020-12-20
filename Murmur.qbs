@@ -2,10 +2,6 @@ QtApplication {
 	name: "Murmur"
 
 	protobuf.cpp.useGrpc: true
-	protobuf.cpp.libraryPath: "/usr/lib64/libprotobuf.so.23"
-	protobuf.cpp.grpcLibraryPath: "/usr/lib64/libgrpc++.so.1"
-	protobuf.cpp.grpcIncludePath: "/usr/include/grpc++"
-	protobuf.cpp.includePath: "/usr/include/google/protobuf"
 
 	cpp.cppFlags: ['-Werror=return-type']
 	cpp.cxxLanguageVersion: "c++17"
