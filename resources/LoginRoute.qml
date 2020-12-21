@@ -51,7 +51,7 @@ Kirigami.PageRoute {
 				}
 				QQC2.TextField {
 					id: homeserver
-					placeholderText: "harmonyapp.io:2289"
+					placeholderText: "chat.harmonyapp.io:2289"
 					// text: "localhost:2289"
 					Kirigami.FormData.label: qsTr("Homeserver:")
 				}
