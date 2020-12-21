@@ -1,0 +1,49 @@
+app-id: com.github.harmonydevelopment.Murmur
+runtime: org.kde.Platform
+runtime-version: "5.15"
+sdk: org.kde.Sdk
+command: Murmur
+finish-args:
+  - --share-ipc
+  - --device=dri
+  - --socket=x11
+  - --socket=wayland
+  - --share=network
+  - --filesystem=xdg-config/kdeglobals:ro
+
+modules:
+  - name: qtdeclarative
+    buildsystem: qmake
+    cleanup-platform: [ /bin, lib/plugins/qmltooling ]
+    sources:
+      - type: archive
+        url: http://download.qt.io/archive/qt/5.15/5.15.2/submodules/qtdeclarative-everywhere-src-5.15.2.tar.xz
+        sha256: c600d09716940f75d684f61c5bdaced797f623a86db1627da599027f6c635651
+      - type: patch
+        path: fix-delegatemodel.diff
+  - name: qbs
+    buildsystem: qmake
+    config-opts:
+    - QBS_INSTALL_PREFIX=/app
+    sources:
+      - type: archive
+        url: https://github.com/qbs/qbs/archive/v1.17.0.tar.gz
+        sha256: 32d6751ca7771ee9b5110831c35ca54430925509b4863df22254c8fb09936819
+      - type: patch
+        path: qbs-more-search.diff
+  - name: grpc
+    buildsystem: cmake
+    sources:
+      - type: git
+        url: https://github.com/grpc/grpc
+        tag: v1.33.2
+  - name: murmur
+    buildsystem: simple
+    build-commands:
+      - qbs resolve installPrefix:/app
+      - qbs -j8
+      - qbs install
+    sources:
+      - type: git
+        url: https://github.com/harmony-development/Murmur
+        branch: main

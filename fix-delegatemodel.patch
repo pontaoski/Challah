@@ -1,0 +1,132 @@
+From 3d725eb904358064d3c406d0d42472596eaebb32 Mon Sep 17 00:00:00 2001
+From: Carson Black <uhhadd@gmail.com>
+Date: Mon, 09 Nov 2020 00:44:10 +0000
+Subject: [PATCH] Add modelChanged signal on DelegateModel
+
+Change-Id: I87c8d58af7ddaa648b2d9bde9e0764bb306bfbc5
+---
+
+diff --git a/src/qmlmodels/qqmldelegatemodel.cpp b/src/qmlmodels/qqmldelegatemodel.cpp
+index 303ca0e..b8f6099 100644
+--- a/src/qmlmodels/qqmldelegatemodel.cpp
++++ b/src/qmlmodels/qqmldelegatemodel.cpp
+@@ -427,11 +427,16 @@
+ {
+     Q_D(QQmlDelegateModel);
+ 
++    auto transformed = d->m_adaptorModel.list.transformVariant(model, d->m_context->engine());
++
++    if (d->m_adaptorModel.model() == transformed)
++       return;
++
+     if (d->m_complete)
+         _q_itemsRemoved(0, d->m_count);
+ 
+     d->disconnectFromAbstractItemModel();
+-    d->m_adaptorModel.setModel(model, this, d->m_context->engine());
++    d->m_adaptorModel.setModel(transformed, this, d->m_context->engine());
+     d->connectToAbstractItemModel();
+ 
+     d->m_adaptorModel.replaceWatchedRoles(QList<QByteArray>(), d->m_watchedRoles);
+@@ -444,6 +449,8 @@
+         _q_itemsInserted(0, d->adaptorModelCount());
+         d->requestMoreIfNecessary();
+     }
++
++    Q_EMIT modelChanged();
+ }
+ 
+ /*!
+@@ -538,6 +545,9 @@
+         if (!d->m_adaptorModel.isValid() && d->m_adaptorModel.aim()) {
+             // The previous root index was invalidated, so we need to reconnect the model.
+             d->disconnectFromAbstractItemModel();
++            // Normally we would need to apply some transformations to the model being passed to
++            // here, but since we're taking the list from the adaptorModel, which has already transformed
++            // it, we don't need to,
+             d->m_adaptorModel.setModel(d->m_adaptorModel.list.list(), this, d->m_context->engine());
+             d->connectToAbstractItemModel();
+         }
+diff --git a/src/qmlmodels/qqmldelegatemodel_p.h b/src/qmlmodels/qqmldelegatemodel_p.h
+index f4578e1..f90c717 100644
+--- a/src/qmlmodels/qqmldelegatemodel_p.h
++++ b/src/qmlmodels/qqmldelegatemodel_p.h
+@@ -76,7 +76,7 @@
+     Q_OBJECT
+     Q_DECLARE_PRIVATE(QQmlDelegateModel)
+ 
+-    Q_PROPERTY(QVariant model READ model WRITE setModel)
++    Q_PROPERTY(QVariant model READ model WRITE setModel NOTIFY modelChanged)
+     Q_PROPERTY(QQmlComponent *delegate READ delegate WRITE setDelegate NOTIFY delegateChanged)
+     Q_PROPERTY(QString filterOnGroup READ filterGroup WRITE setFilterGroup NOTIFY filterGroupChanged RESET resetFilterGroup)
+     Q_PROPERTY(QQmlDelegateModelGroup *items READ items CONSTANT) //TODO : worth renaming?
+@@ -144,6 +144,7 @@
+     void defaultGroupsChanged();
+     void rootIndexChanged();
+     void delegateChanged();
++    void modelChanged();
+ 
+ private Q_SLOTS:
+     void _q_itemsChanged(int index, int count, const QVector<int> &roles);
+diff --git a/src/qmlmodels/qqmllistaccessor.cpp b/src/qmlmodels/qqmllistaccessor.cpp
+index 5e3fb86..61b3bff 100644
+--- a/src/qmlmodels/qqmllistaccessor.cpp
++++ b/src/qmlmodels/qqmllistaccessor.cpp
+@@ -63,14 +63,29 @@
+     return d;
+ }
+ 
+-void QQmlListAccessor::setList(const QVariant &v, QQmlEngine *engine)
++QVariant QQmlListAccessor::transformVariant(const QVariant &v, QQmlEngine *engine)
+ {
+-    d = v;
++    QQmlEnginePrivate *enginePrivate = engine ? QQmlEnginePrivate::get(engine) : nullptr;
+ 
+     // An incoming JS array as model is treated as a variant list, so we need to
+     // convert it first with toVariant().
+-    if (d.userType() == qMetaTypeId<QJSValue>())
+-        d = d.value<QJSValue>().toVariant();
++    if (v.userType() == qMetaTypeId<QJSValue>())
++        return v.value<QJSValue>().toVariant();
++
++    if ((!enginePrivate && QQmlMetaType::isQObject(v.userType())) ||
++        (enginePrivate && enginePrivate->isQObject(v.userType()))) {
++
++        QObject *data = enginePrivate ? enginePrivate->toQObject(v) : QQmlMetaType::toQObject(v);
++        return QVariant::fromValue(data);
++    }
++
++    return v;
++}
++
++// The variant should be transformed with transformVariant before calling setList
++void QQmlListAccessor::setList(const QVariant &v, QQmlEngine *engine)
++{
++    d = v;
+ 
+     QQmlEnginePrivate *enginePrivate = engine?QQmlEnginePrivate::get(engine):nullptr;
+ 
+@@ -103,10 +118,7 @@
+         } else {
+             m_type = Integer;
+         }
+-    } else if ((!enginePrivate && QQmlMetaType::isQObject(d.userType())) ||
+-               (enginePrivate && enginePrivate->isQObject(d.userType()))) {
+-        QObject *data = enginePrivate?enginePrivate->toQObject(d):QQmlMetaType::toQObject(d);
+-        d = QVariant::fromValue(data);
++    } else if (d.userType() == QMetaType::QObjectStar) {
+         m_type = Instance;
+     } else if (d.userType() == qMetaTypeId<QQmlListReference>()) {
+         m_type = ListProperty;
+diff --git a/src/qmlmodels/qqmllistaccessor_p.h b/src/qmlmodels/qqmllistaccessor_p.h
+index 3306396..6c691b8 100644
+--- a/src/qmlmodels/qqmllistaccessor_p.h
++++ b/src/qmlmodels/qqmllistaccessor_p.h
+@@ -64,6 +64,7 @@
+ 
+     QVariant list() const;
+     void setList(const QVariant &, QQmlEngine * = nullptr);
++    static QVariant transformVariant(const QVariant &, QQmlEngine * = nullptr);
+ 
+     bool isValid() const;
+ 

@@ -1,0 +1,36 @@
+From fc497852f2f35fe39969747a09ed91516b82378e Mon Sep 17 00:00:00 2001
+From: Jan Blackquill <uhhadd@gmail.com>
+Date: Sun, 20 Dec 2020 23:27:14 -0500
+Subject: [PATCH] Add more paths to search in Library and Include probes
+
+These paths are used by containerisation systems such as Flatpak; searching in these by default makes building Qbs applications in Flatpak et. al easier
+
+Change-Id: I438ba1ffd66845ac1331791428135eb70105ff34
+---
+
+diff --git a/share/qbs/imports/qbs/Probes/IncludeProbe.qbs b/share/qbs/imports/qbs/Probes/IncludeProbe.qbs
+index 3c1059e..6201cbc 100644
+--- a/share/qbs/imports/qbs/Probes/IncludeProbe.qbs
++++ b/share/qbs/imports/qbs/Probes/IncludeProbe.qbs
+@@ -32,6 +32,8 @@
+     platformSearchPaths: qbs.targetOS.contains("unix") ? [
+         "/usr/include",
+         "/usr/local/include",
++        "/include",
++        "/app/include",
+     ] : []
+     platformEnvironmentPaths: {
+         if (qbs.toolchain.contains('msvc'))
+diff --git a/share/qbs/imports/qbs/Probes/LibraryProbe.qbs b/share/qbs/imports/qbs/Probes/LibraryProbe.qbs
+index 0f42207..7631eb4 100644
+--- a/share/qbs/imports/qbs/Probes/LibraryProbe.qbs
++++ b/share/qbs/imports/qbs/Probes/LibraryProbe.qbs
+@@ -60,7 +60,7 @@
+                 else if (qbs.architecture === "x86")
+                     result = ["/usr/lib32", "/usr/lib/i386-linux-gnu"]
+             }
+-            result = result.concat(["/usr/lib", "/usr/local/lib"]);
++            result = result.concat(["/usr/lib", "/usr/local/lib", "/lib", "/app/lib"]);
+         }
+ 
+         return result;
