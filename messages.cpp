@@ -42,11 +42,37 @@ void MessagesModel::customEvent(QEvent *event)
 {
 	if (event->type() == MessageSentEvent::typeID) {
 		auto ev = reinterpret_cast<MessageSentEvent*>(event);
-		auto msg = ev->data.message();
-		auto idx = messageData.count();
-		beginInsertRows(QModelIndex(), 0, 0);
-		messageData.push_front(MessageData::fromProtobuf(msg));
-		endInsertRows();
+		auto echoID = ev->data.echo_id();
+		echoesMutex.lockForRead();
+		if (echoes.contains(echoID)) {
+			auto msg = echoes[echoID];
+			messageMutex.lockForRead();
+			int i = 0;
+			for (auto &message : messageData) {
+				if (message.echoID == echoID) {
+					break;
+				}
+				i++;
+			}
+			auto message = ev->data.message();
+			*msg = MessageData::fromProtobuf(message);
+			messageMutex.unlock();
+			echoesMutex.unlock();
+			echoesMutex.lockForWrite();
+			echoes.remove(echoID);
+			echoesMutex.unlock();
+			echoesMutex.lockForRead();
+			dataChanged(index(i), index(i));
+		} else {
+			auto msg = ev->data.message();
+			auto idx = messageData.count();
+			beginInsertRows(QModelIndex(), 0, 0);
+			messageMutex.lockForWrite();
+			messageData.push_front(MessageData::fromProtobuf(msg));
+			messageMutex.unlock();
+			endInsertRows();
+		}
+		echoesMutex.unlock();
 	} else if (event->type() == MessageUpdatedEvent::typeID) {
 		auto ev = reinterpret_cast<MessageUpdatedEvent*>(event);
 		auto& msg = ev->data;
@@ -106,13 +132,19 @@ void MessagesModel::customEvent(QEvent *event)
 
 int MessagesModel::rowCount(const QModelIndex& parent) const
 {
-	return messageData.count();
+	messageMutex.lockForRead();
+	auto count = messageData.count();
+	messageMutex.unlock();
+	return count;
 }
 
 QVariant MessagesModel::data(const QModelIndex& index, int role) const
 {
 	if (!checkIndex(index))
 		return QVariant();
+
+	messageMutex.lockForRead();
+	auto unlocker = qScopeGuard([=]{ messageMutex.unlock(); });
 
 	auto idx = index.row();
 
@@ -228,46 +260,88 @@ QHash<int,QByteArray> MessagesModel::roleNames() const
 
 void MessagesModel::sendMessageFull(const QString& message, const QString &replyTo, const QStringList& attachments, const SendAs& as)
 {
-	ClientContext ctx;
-	client->authenticate(ctx);
+	QtConcurrent::run([=] {
+		ClientContext ctx;
+		client->authenticate(ctx);
 
-	protocol::core::v1::SendMessageRequest req;
+		protocol::core::v1::SendMessageRequest req;
 
-	req.set_guild_id(guildID);
-	req.set_channel_id(channelID);
-	req.set_content(message.toStdString());
-	if (replyTo != QString()) {
-		req.set_in_reply_to(replyTo.toULongLong());
-	}
+		req.set_guild_id(guildID);
+		req.set_channel_id(channelID);
+		req.set_content(message.toStdString());
+		if (replyTo != QString()) {
+			req.set_in_reply_to(replyTo.toULongLong());
+		}
 
-	for (auto attachment : attachments) {
-		req.add_attachments(attachment.toStdString());
-	}
+		for (auto attachment : attachments) {
+			req.add_attachments(attachment.toStdString());
+		}
 
-	if (std::holds_alternative<Nobody>(as)) {
+		if (std::holds_alternative<Nobody>(as)) {
 
-	} else if (std::holds_alternative<Fronter>(as)) {
-		auto& fronter = std::get<Fronter>(as);
+		} else if (std::holds_alternative<Fronter>(as)) {
+			auto& fronter = std::get<Fronter>(as);
 
-		auto override = new protocol::core::v1::Override();
-		override->set_name(fronter.name.toStdString());
-		override->set_allocated_system_plurality(new google::protobuf::Empty{});
+			auto override = new protocol::core::v1::Override();
+			override->set_name(fronter.name.toStdString());
+			override->set_allocated_system_plurality(new google::protobuf::Empty{});
 
-		req.set_allocated_overrides(override);
+			req.set_allocated_overrides(override);
 
-	} else if (std::holds_alternative<RoleplayCharacter>(as)) {
-		auto& character = std::get<RoleplayCharacter>(as);
+		} else if (std::holds_alternative<RoleplayCharacter>(as)) {
+			auto& character = std::get<RoleplayCharacter>(as);
 
-		auto override = new protocol::core::v1::Override();
-		override->set_name(character.name.toStdString());
-		override->set_user_defined("Roleplay");
+			auto override = new protocol::core::v1::Override();
+			override->set_name(character.name.toStdString());
+			override->set_user_defined("Roleplay");
 
-		req.set_allocated_overrides(override);
-	}
+			req.set_allocated_overrides(override);
+		}
 
-	protocol::core::v1::SendMessageResponse empty;
+		beginInsertRows(QModelIndex(), 0, 0);
+		auto incoming = MessageData {};
+		incoming.text = message;
+		if (replyTo != QString()) {
+			incoming.replyTo = replyTo.toULongLong();
+		}
+		QVariantList attaches;
+		for (auto attach : attachments) {
+			attaches << attach;
+		}
+		incoming.attachments = attaches;
+		if (std::holds_alternative<Nobody>(as)) {
+			;
+		} else if (std::holds_alternative<Fronter>(as)) {
+			incoming.overrides = MessageData::Override {
+				.name = std::get<Fronter>(as).name,
+				.reason = MessageData::Override::Plurality,
+			};
+		} else if (std::holds_alternative<RoleplayCharacter>(as)) {
+			incoming.overrides = MessageData::Override {
+				.name = std::get<RoleplayCharacter>(as).name
+			};
+		}
+		incoming.status = MessageData::Sending;
+		incoming.authorID = client->userID;
 
-	client->coreKit->SendMessage(&ctx, req, &empty);
+		auto echoID = QRandomGenerator::global()->generate64();
+		req.set_echo_id(echoID);
+		incoming.echoID = echoID;
+
+		messageMutex.lockForWrite();
+		messageData.push_front(incoming);
+		endInsertRows();
+
+		echoesMutex.lockForWrite();
+		MessageData& ref = messageData[0];
+		echoes[echoID] = &ref;
+		echoesMutex.unlock();
+		messageMutex.unlock();
+
+		protocol::core::v1::SendMessageResponse empty;
+
+		client->coreKit->SendMessage(&ctx, req, &empty);
+	});
 }
 
 bool MessagesModel::canFetchMore(const QModelIndex& parent) const
@@ -290,9 +364,11 @@ void MessagesModel::fetchMore(const QModelIndex& parent)
 		req.set_channel_id(channelID);
 		protocol::core::v1::GetChannelMessagesResponse resp;
 
+		messageMutex.lockForRead();
 		if (!messageData.isEmpty()) {
 			req.set_before_message(messageData.last().id);
 		}
+		messageMutex.unlock();
 
 		if (checkStatus(client->coreKit->GetChannelMessages(&ctx, req, &resp))) {
 			if (resp.messages_size() == 0) {
@@ -301,9 +377,11 @@ void MessagesModel::fetchMore(const QModelIndex& parent)
 			}
 
 			beginInsertRows(QModelIndex(), messageData.count(), (messageData.count()+resp.messages_size())-1);
+			messageMutex.lockForWrite();
 			for (auto item : resp.messages()) {
 				messageData << MessageData::fromProtobuf(item);
 			}
+			messageMutex.unlock();
 			endInsertRows();
 		}
 	});
@@ -360,6 +438,7 @@ void MessagesModel::deleteMessage(const QString& id)
 QVariantMap MessagesModel::peekMessage(const QString& id)
 {
 	quint64 actualID = id.toULongLong();
+	messageMutex.lockForWrite();
 	for (const auto& item : messageData) {
 		if (item.id == actualID) {
 			return {
@@ -368,6 +447,7 @@ QVariantMap MessagesModel::peekMessage(const QString& id)
 			};
 		}
 	}
+	messageMutex.unlock();
 
 	ClientContext ctx;
 	client->authenticate(ctx);

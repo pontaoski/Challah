@@ -45,6 +45,14 @@ struct MessageData
 
 	QVariantList attachments;
 
+	enum State {
+		Sent,
+		Sending,
+		Failed,
+	};
+	State status;
+	quint64 echoID;
+
 	static MessageData fromProtobuf(protocol::core::v1::Message& msg) {
 		std::string jsonified;
 		google::protobuf::util::MessageToJsonString(msg, &jsonified, google::protobuf::util::JsonPrintOptions{});
@@ -84,7 +92,8 @@ struct MessageData
 			.editedAt = QDateTime(),
 			.replyTo = msg.in_reply_to(),
 			.overrides = overrides,
-			.attachments = attachments
+			.attachments = attachments,
+			.status = State::Sent,
 		};
 	}
 };
@@ -101,6 +110,9 @@ class MessagesModel : public QAbstractListModel
 	quint64 channelID;
 
 	QList<MessageData> messageData;
+	mutable QReadWriteLock messageMutex;
+	QHash<quint64,MessageData*> echoes;
+	QReadWriteLock echoesMutex;
 	QQmlPropertyMap* permissions;
 
 	friend class ChannelsModel;
@@ -132,6 +144,7 @@ class MessagesModel : public QAbstractListModel
 		MessageCombinedAuthorIDAvatarRole,
 		MessageQuirkRole,
 		MessageModelIndexRole,
+		MessageStatusRole,
 	};
 
 	struct Fronter {
