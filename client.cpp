@@ -300,6 +300,7 @@ bool Client::hasPermission(const QString& node, quint64 guildID, quint64 channel
 
 void Client::runEvents()
 {
+restart:
 	ClientContext ctx;
 	authenticate(ctx);
 
@@ -372,7 +373,7 @@ void Client::runEvents()
 		}
 	}
 
-	qDebug() << "Got to end of stream!";
+	goto restart;
 }
 
 void Client::subscribeGuild(quint64 guild)
