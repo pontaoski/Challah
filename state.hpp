@@ -38,7 +38,7 @@ public:
 	Q_INVOKABLE void bindTextDocument(QQuickTextDocument* doc);
 	Q_INVOKABLE QString transformHMCURL(const QString& url, const QString& homeserver) {
 		if (!url.startsWith("hmc://")) {
-			return QString("http://%1/_harmony/media/download/%2").arg(homeserver).arg(url);
+			return QString("https://%1/_harmony/media/download/%2").arg(homeserver).arg(url);
 		}
 
 		QString trimmed = url.mid(QString("hmc://").length());
@@ -47,7 +47,7 @@ public:
 			qWarning() << "Malformed HMC URL:" << url;
 			return QString("");
 		}
-		return QString("http://%1/_harmony/media/download/%2").arg(split[0]).arg(split[1]);
+		return QString("https://%1/_harmony/media/download/%2").arg(split[0]).arg(split[1]);
 	}
 	Q_PROPERTY(GuildModel* guildModel READ getGuildModel CONSTANT)
 	GuildModel* getGuildModel() const { return guildModel; }

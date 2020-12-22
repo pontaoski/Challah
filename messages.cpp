@@ -6,6 +6,7 @@
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
 #include <QNetworkReply>
+#include <QtConcurrent>
 
 #include "channels.hpp"
 #include "messages.hpp"
@@ -24,7 +25,7 @@ MessagesModel::MessagesModel(ChannelsModel *parent, QString homeServer, quint64 
 	permissions->insert("canSendAndEdit", client->hasPermission("messages.send", guildID));
 	permissions->insert("canDeleteOthers", client->hasPermission("messages.manage.delete", guildID));
 
-	{
+	QtConcurrent::run([=] {
 		ClientContext ctx;
 		client->authenticate(ctx);
 
@@ -34,7 +35,7 @@ MessagesModel::MessagesModel(ChannelsModel *parent, QString homeServer, quint64 
 		if (checkStatus(client->coreKit->GetGuild(&ctx, req, &resp))) {
 			isGuildOwner = client->userID == resp.guild_owner();
 		}
-	}
+	});
 }
 
 void MessagesModel::customEvent(QEvent *event)
@@ -280,30 +281,32 @@ void MessagesModel::fetchMore(const QModelIndex& parent)
 {
 	Q_UNUSED(parent)
 
-	ClientContext ctx;
-	client->authenticate(ctx);
+	QtConcurrent::run([=] {
+		ClientContext ctx;
+		client->authenticate(ctx);
 
-	protocol::core::v1::GetChannelMessagesRequest req;
-	req.set_guild_id(guildID);
-	req.set_channel_id(channelID);
-	protocol::core::v1::GetChannelMessagesResponse resp;
+		protocol::core::v1::GetChannelMessagesRequest req;
+		req.set_guild_id(guildID);
+		req.set_channel_id(channelID);
+		protocol::core::v1::GetChannelMessagesResponse resp;
 
-	if (!messageData.isEmpty()) {
-		req.set_before_message(messageData.last().id);
-	}
-
-	if (checkStatus(client->coreKit->GetChannelMessages(&ctx, req, &resp))) {
-		if (resp.messages_size() == 0) {
-			atEnd = true;
-			return;
+		if (!messageData.isEmpty()) {
+			req.set_before_message(messageData.last().id);
 		}
 
-		beginInsertRows(QModelIndex(), messageData.count(), (messageData.count()+resp.messages_size())-1);
-		for (auto item : resp.messages()) {
-			messageData << MessageData::fromProtobuf(item);
+		if (checkStatus(client->coreKit->GetChannelMessages(&ctx, req, &resp))) {
+			if (resp.messages_size() == 0) {
+				atEnd = true;
+				return;
+			}
+
+			beginInsertRows(QModelIndex(), messageData.count(), (messageData.count()+resp.messages_size())-1);
+			for (auto item : resp.messages()) {
+				messageData << MessageData::fromProtobuf(item);
+			}
+			endInsertRows();
 		}
-		endInsertRows();
-	}
+	});
 }
 
 void MessagesModel::triggerAction(const QString& messageID, const QString &name, const QString &data)

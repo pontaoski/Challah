@@ -344,7 +344,7 @@ void ChannelsModel::uploadFile(const QUrl& url, QJSValue then, QJSValue elseDo, 
 	query.addQueryItem("filename", url.fileName());
 	query.addQueryItem("contentType", QMimeDatabase().mimeTypeForFile(url.toLocalFile()).name());
 
-	QUrl reqUrl("http://" + homeServer + "/_harmony/media/upload?" + query.query());
+	QUrl reqUrl("https://" + homeServer + "/_harmony/media/upload?" + query.query());
 	QNetworkRequest req(reqUrl);
 	req.setRawHeader(QByteArrayLiteral("Authorization"), QString::fromStdString(client->userToken).toLocal8Bit());
 
