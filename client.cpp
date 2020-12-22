@@ -105,7 +105,7 @@ GuildRepl Client::guildInfo(quint64 id)
 
 void Client::federateOtherClient(Client* client, const QString& target)
 {
-	client->client = grpc::CreateChannel(target.toStdString(), grpc::SslCredentials(grpc::SslCredentialsOptions()));
+	client->client = grpc::CreateChannel(target.toStdString(), grpc::InsecureChannelCredentials());
 	client->homeserver = target;
 	client->coreKit = protocol::core::v1::CoreService::NewStub(client->client);
 	client->foundationKit = protocol::foundation::v1::FoundationService::NewStub(client->client);
@@ -256,7 +256,7 @@ bool Client::leaveGuild(quint64 id, bool isOwner)
 
 bool Client::consumeToken(const QString& token, quint64 userID, const QString& homeserver)
 {
-	client = grpc::CreateChannel(homeserver.toStdString(), grpc::SslCredentials(grpc::SslCredentialsOptions()));
+	client = grpc::CreateChannel(homeserver.toStdString(), grpc::InsecureChannelCredentials());
 	clients[homeserver] = this;
 
 	this->homeserver = homeserver;
@@ -387,7 +387,7 @@ void Client::subscribeGuild(quint64 guild)
 
 bool Client::login(const QString &email, const QString &password, const QString &hs)
 {
-	client = grpc::CreateChannel(hs.toStdString(), grpc::SslCredentials(grpc::SslCredentialsOptions()));
+	client = grpc::CreateChannel(hs.toStdString(), grpc::InsecureChannelCredentials());
 	clients[hs] = this;
 
 	homeserver = hs;
