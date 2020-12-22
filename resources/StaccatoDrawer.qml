@@ -123,7 +123,6 @@ Item {
 										return
 									}
 
-									channelsTitle.text = model['guildName']
 									channelsModel.model = model['channelModel']
 
 									rightHandDrawer.model = model['channelModel'].members
@@ -173,7 +172,6 @@ Item {
 					}
 
 					Kirigami.Heading {
-						id: channelsTitle
 						leftPadding: Kirigami.Units.largeSpacing
 						text: qsTr("Channels")
 						Layout.fillWidth: true
