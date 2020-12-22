@@ -143,6 +143,20 @@ QQC2.Control {
 			background: Rectangle {
 				radius: 4
 				color: Kirigami.Theme.backgroundColor
+
+				QQC2.Label {
+					text: `${("0"+date.getHours()).slice(-2)}:${("0"+date.getMinutes()).slice(-2)}`
+					opacity: 0.5
+					visible: !messageBlock.edit
+
+					font.pixelSize: Kirigami.Units.gridUnit * (1/2)
+					font.pointSize: -1
+					anchors {
+						bottom: parent.bottom
+						right: parent.right
+						margins: Kirigami.Units.smallSpacing
+					}
+				}
 			}
 			contentItem: ColumnLayout {
 				QQC2.Label {
@@ -196,7 +210,7 @@ QQC2.Control {
 				}
 				GridLayout {
 					TextEdit {
-						text: content
+						text: readOnly ? content + "     ⠀" : content
 						textFormat: TextEdit.MarkdownText
 						readOnly: !messageBlock.edit
 
@@ -215,22 +229,13 @@ QQC2.Control {
 
 						Keys.onEscapePressed: {
 							messageBlock.edit = false
-							text = Qt.binding(function() { return content })
+							text = Qt.binding(function() { return readOnly ? content + "     ⠀" : content })
 						}
 						Keys.onReturnPressed: {
 							messageBlock.edit = false
 							messagesRoute.model.editMessage(messageID, text)
-							text = Qt.binding(function() { return content })
+							text = Qt.binding(function() { return readOnly ? content + "     ⠀" : content })
 						}
-					}
-					Item { Layout.fillWidth: true }
-					QQC2.Label {
-						text: `${("0"+date.getHours()).slice(-2)}:${("0"+date.getMinutes()).slice(-2)}`
-						opacity: 0.5
-
-						font.pixelSize: Kirigami.Units.gridUnit * (1/2)
-						font.pointSize: -1
-						Layout.alignment: Qt.AlignBottom | Qt.AlignRight
 					}
 				}
 			}
