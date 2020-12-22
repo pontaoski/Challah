@@ -49,6 +49,7 @@ private:
 
 	Client();
 	void runEvents();
+	bool forgeNewConnection();
 
 public:
 	quint64 userID;

@@ -254,18 +254,26 @@ bool Client::leaveGuild(quint64 id, bool isOwner)
 	return true;
 }
 
-bool Client::consumeToken(const QString& token, quint64 userID, const QString& homeserver)
+bool Client::forgeNewConnection()
 {
 	client = grpc::CreateChannel(homeserver.toStdString(), grpc::SslCredentials(grpc::SslCredentialsOptions()));
+
+	coreKit = protocol::core::v1::CoreService::NewStub(client);
+	foundationKit = protocol::foundation::v1::FoundationService::NewStub(client);
+	profileKit = protocol::profile::v1::ProfileService::NewStub(client);
+
+	return true;
+}
+
+bool Client::consumeToken(const QString& token, quint64 userID, const QString& homeserver)
+{
 	clients[homeserver] = this;
 
 	this->homeserver = homeserver;
 	this->userID = userID;
 	this->userToken = token.toStdString();
 
-	coreKit = protocol::core::v1::CoreService::NewStub(client);
-	foundationKit = protocol::foundation::v1::FoundationService::NewStub(client);
-	profileKit = protocol::profile::v1::ProfileService::NewStub(client);
+	forgeNewConnection();
 
 	if (!refreshGuilds()) {
 		return false;
@@ -300,80 +308,81 @@ bool Client::hasPermission(const QString& node, quint64 guildID, quint64 channel
 
 void Client::runEvents()
 {
-restart:
-	ClientContext ctx;
-	authenticate(ctx);
+	while (true) {
+		ClientContext ctx;
+		authenticate(ctx);
 
-	eventStream = coreKit->StreamEvents(&ctx);
-	protocol::core::v1::Event msg;
+		eventStream = coreKit->StreamEvents(&ctx);
+		protocol::core::v1::Event msg;
 
-	protocol::core::v1::StreamEventsRequest req;
-	req.set_allocated_subscribe_to_homeserver_events(new protocol::core::v1::StreamEventsRequest_SubscribeToHomeserverEvents);
-	eventStream->Write(req, grpc::WriteOptions().set_write_through());
+		protocol::core::v1::StreamEventsRequest req;
+		req.set_allocated_subscribe_to_homeserver_events(new protocol::core::v1::StreamEventsRequest_SubscribeToHomeserverEvents);
+		eventStream->Write(req, grpc::WriteOptions().set_write_through());
 
-	while (eventStream->Read(&msg)) {
-		if (msg.has_guild_added_to_list()) {
-			auto ev = msg.guild_added_to_list();
+		while (eventStream->Read(&msg)) {
+			if (msg.has_guild_added_to_list()) {
+				auto ev = msg.guild_added_to_list();
 
-			auto data = Client::instanceForHomeserver(QString::fromStdString(ev.homeserver()))->guildInfo(ev.guild_id());
+				auto data = Client::instanceForHomeserver(QString::fromStdString(ev.homeserver()))->guildInfo(ev.guild_id());
 
-			Q_EMIT State::instance()->guildModel->addGuild(Guild {
-				.guildID = ev.guild_id(),
-				.ownerID = data.ownerID,
-				.homeserver = QString::fromStdString(ev.homeserver()),
-				.name = data.name,
-				.picture = data.picture,
-			});
-		} else if (msg.has_guild_removed_from_list()) {
-			auto ev = msg.guild_removed_from_list();
+				Q_EMIT State::instance()->guildModel->addGuild(Guild {
+					.guildID = ev.guild_id(),
+					.ownerID = data.ownerID,
+					.homeserver = QString::fromStdString(ev.homeserver()),
+					.name = data.name,
+					.picture = data.picture,
+				});
+			} else if (msg.has_guild_removed_from_list()) {
+				auto ev = msg.guild_removed_from_list();
 
-			Q_EMIT State::instance()->guildModel->removeGuild(QString::fromStdString(ev.homeserver()), ev.guild_id());
-		} else if (msg.has_action_performed()) {
-			// we don't care about these
-		} else if (msg.has_sent_message()) {
-			auto ev = msg.sent_message();
+				Q_EMIT State::instance()->guildModel->removeGuild(QString::fromStdString(ev.homeserver()), ev.guild_id());
+			} else if (msg.has_action_performed()) {
+				// we don't care about these
+			} else if (msg.has_sent_message()) {
+				auto ev = msg.sent_message();
 
-			QCoreApplication::postEvent(ChannelsModel::modelFor(homeserver, ev.message().guild_id()), new MessageSentEvent(ev));
-		} else if (msg.has_edited_message()) {
-			auto ev = msg.edited_message();
+				QCoreApplication::postEvent(ChannelsModel::modelFor(homeserver, ev.message().guild_id()), new MessageSentEvent(ev));
+			} else if (msg.has_edited_message()) {
+				auto ev = msg.edited_message();
 
-			QCoreApplication::postEvent(ChannelsModel::modelFor(homeserver, ev.guild_id()), new MessageUpdatedEvent(ev));
-		} else if (msg.has_deleted_message()) {
-			auto ev = msg.deleted_message();
+				QCoreApplication::postEvent(ChannelsModel::modelFor(homeserver, ev.guild_id()), new MessageUpdatedEvent(ev));
+			} else if (msg.has_deleted_message()) {
+				auto ev = msg.deleted_message();
 
-			QCoreApplication::postEvent(ChannelsModel::modelFor(homeserver, ev.guild_id()), new MessageDeletedEvent(ev));
-		} else if (msg.has_created_channel()) {
-			auto ev = msg.created_channel();
+				QCoreApplication::postEvent(ChannelsModel::modelFor(homeserver, ev.guild_id()), new MessageDeletedEvent(ev));
+			} else if (msg.has_created_channel()) {
+				auto ev = msg.created_channel();
 
-			QCoreApplication::postEvent(ChannelsModel::modelFor(homeserver, ev.guild_id()), new ChannelCreatedEvent(ev));
-		} else if (msg.has_edited_channel()) {
-			auto ev = msg.edited_channel();
+				QCoreApplication::postEvent(ChannelsModel::modelFor(homeserver, ev.guild_id()), new ChannelCreatedEvent(ev));
+			} else if (msg.has_edited_channel()) {
+				auto ev = msg.edited_channel();
 
-			QCoreApplication::postEvent(ChannelsModel::modelFor(homeserver, ev.guild_id()), new ChannelUpdatedEvent(ev));
-		} else if (msg.has_deleted_channel()) {
-			auto ev = msg.deleted_channel();
+				QCoreApplication::postEvent(ChannelsModel::modelFor(homeserver, ev.guild_id()), new ChannelUpdatedEvent(ev));
+			} else if (msg.has_deleted_channel()) {
+				auto ev = msg.deleted_channel();
 
-			QCoreApplication::postEvent(ChannelsModel::modelFor(homeserver, ev.guild_id()), new ChannelDeletedEvent(ev));
-		} else if (msg.has_edited_guild()) {
-			auto ev = msg.edited_guild();
+				QCoreApplication::postEvent(ChannelsModel::modelFor(homeserver, ev.guild_id()), new ChannelDeletedEvent(ev));
+			} else if (msg.has_edited_guild()) {
+				auto ev = msg.edited_guild();
 
-			QCoreApplication::postEvent(ChannelsModel::modelFor(homeserver, ev.guild_id()), new GuildUpdatedEvent(ev));
-		} else if (msg.has_deleted_guild()) {
-			// auto ev = msg.deleted_guild();
+				QCoreApplication::postEvent(ChannelsModel::modelFor(homeserver, ev.guild_id()), new GuildUpdatedEvent(ev));
+			} else if (msg.has_deleted_guild()) {
+				// auto ev = msg.deleted_guild();
 
-			// Q_UNUSED(ev)
-		} else if (msg.has_joined_member()) {
-			auto ev = msg.joined_member();
+				// Q_UNUSED(ev)
+			} else if (msg.has_joined_member()) {
+				auto ev = msg.joined_member();
 
-			QCoreApplication::postEvent(ChannelsModel::modelFor(homeserver, ev.guild_id()), new MemberJoinedEvent(ev));
-		} else if (msg.has_left_member()) {
-			auto ev = msg.left_member();
+				QCoreApplication::postEvent(ChannelsModel::modelFor(homeserver, ev.guild_id()), new MemberJoinedEvent(ev));
+			} else if (msg.has_left_member()) {
+				auto ev = msg.left_member();
 
-			QCoreApplication::postEvent(ChannelsModel::modelFor(homeserver, ev.guild_id()), new MemberLeftEvent(ev));
+				QCoreApplication::postEvent(ChannelsModel::modelFor(homeserver, ev.guild_id()), new MemberLeftEvent(ev));
+			}
 		}
-	}
 
-	goto restart;
+		forgeNewConnection();
+	}
 }
 
 void Client::subscribeGuild(quint64 guild)
@@ -388,14 +397,10 @@ void Client::subscribeGuild(quint64 guild)
 
 bool Client::login(const QString &email, const QString &password, const QString &hs)
 {
-	client = grpc::CreateChannel(hs.toStdString(), grpc::SslCredentials(grpc::SslCredentialsOptions()));
 	clients[hs] = this;
-
 	homeserver = hs;
 
-	coreKit = protocol::core::v1::CoreService::NewStub(client);
-	foundationKit = protocol::foundation::v1::FoundationService::NewStub(client);
-	profileKit = protocol::profile::v1::ProfileService::NewStub(client);
+	forgeNewConnection();
 
 	auto req = protocol::foundation::v1::LoginRequest{};
 	auto local = new protocol::foundation::v1::LoginRequest_Local{};
