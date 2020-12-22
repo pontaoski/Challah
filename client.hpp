@@ -38,7 +38,7 @@ class Client : public QObject
 
 public:
 	std::string userToken;
-	std::shared_ptr<grpc_impl::Channel> client;
+	std::shared_ptr<grpc::Channel> client;
 	std::unique_ptr<protocol::core::v1::CoreService::Stub> coreKit;
 	std::unique_ptr<protocol::foundation::v1::FoundationService::Stub> foundationKit;
 	std::unique_ptr<protocol::profile::v1::ProfileService::Stub> profileKit;
