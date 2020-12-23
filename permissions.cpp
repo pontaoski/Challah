@@ -3,8 +3,8 @@
 #include "client.hpp"
 #include "util.hpp"
 
-#include "core.grpc.pb.h"
-#include "core.pb.h"
+#include "chat/v1/chat.grpc.pb.h"
+#include "chat/v1/chat.pb.h"
 
 #include <QJSEngine>
 
@@ -18,7 +18,7 @@ enum Roles
 
 struct PermissionsModel::Private
 {
-	QList<protocol::core::v1::Permission> perms;
+	QList<protocol::chat::v1::Permission> perms;
 };
 
 using grpc::ClientContext;
@@ -30,12 +30,12 @@ PermissionsModel::PermissionsModel(QString homeserver, quint64 guildID, quint64 
 
 	doContext(ctx);
 
-	protocol::core::v1::GetPermissionsRequest req;
+	protocol::chat::v1::GetPermissionsRequest req;
 	req.set_guild_id(guildID);
 	req.set_role_id(roleID);
-	protocol::core::v1::GetPermissionsResponse resp;
+	protocol::chat::v1::GetPermissionsResponse resp;
 
-	checkStatus(client->coreKit->GetPermissions(&ctx, req, &resp));
+	checkStatus(client->chatKit->GetPermissions(&ctx, req, &resp));
 
 	auto perms = resp.perms().permissions();
 	for (auto perm : perms) {
@@ -81,7 +81,7 @@ QVariant PermissionsModel::data(const QModelIndex& index, int role) const
 	case NodeName:
 		return QString::fromStdString(d->perms[index.row()].matches());
 	case Enabled:
-		return d->perms[index.row()].mode() == protocol::core::v1::Permission_Mode_Allow;
+		return d->perms[index.row()].mode() == protocol::chat::v1::Permission_Mode_Allow;
 	}
 
 	return QVariant();
@@ -102,7 +102,7 @@ bool PermissionsModel::setData(const QModelIndex& index, const QVariant& value, 
 		isDirty = true;
 		Q_EMIT isDirtyChanged();
 
-		d->perms[index.row()].set_mode(value.toBool() ? protocol::core::v1::Permission_Mode_Allow : protocol::core::v1::Permission_Mode_Deny);
+		d->perms[index.row()].set_mode(value.toBool() ? protocol::chat::v1::Permission_Mode_Allow : protocol::chat::v1::Permission_Mode_Deny);
 		return true;
 	}
 
@@ -123,9 +123,9 @@ void PermissionsModel::addPermission(const QString& node, bool allow)
 {
 	beginInsertRows(QModelIndex(), d->perms.length(), d->perms.length());
 
-	protocol::core::v1::Permission perm;
+	protocol::chat::v1::Permission perm;
 	perm.set_matches(node.toStdString());
-	perm.set_mode(allow ? protocol::core::v1::Permission_Mode_Allow : protocol::core::v1::Permission_Mode_Deny);
+	perm.set_mode(allow ? protocol::chat::v1::Permission_Mode_Allow : protocol::chat::v1::Permission_Mode_Deny);
 
 	d->perms << perm;
 
@@ -137,11 +137,11 @@ void PermissionsModel::addPermission(const QString& node, bool allow)
 
 void PermissionsModel::save()
 {
-	protocol::core::v1::SetPermissionsRequest req;
+	protocol::chat::v1::SetPermissionsRequest req;
 	req.set_guild_id(guildID);
 	req.set_role_id(roleID);
 
-	auto list = new protocol::core::v1::PermissionList;
+	auto list = new protocol::chat::v1::PermissionList;
 	list->add_permissions();
 	for (auto perm : d->perms) {
 		*(list->mutable_permissions()->Add()) = perm;
@@ -151,7 +151,7 @@ void PermissionsModel::save()
 	google::protobuf::Empty resp;
 
 	doContext(ctx);
-	if (checkStatus(client->coreKit->SetPermissions(&ctx, req, &resp))) {
+	if (checkStatus(client->chatKit->SetPermissions(&ctx, req, &resp))) {
 		isDirty = false;
 		Q_EMIT isDirtyChanged();
 	}

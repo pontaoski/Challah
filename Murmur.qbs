@@ -1,6 +1,7 @@
 QtApplication {
 	name: "Murmur"
 
+	protobuf.cpp.importPaths: ["protocol"]
 	protobuf.cpp.useGrpc: true
 
 	cpp.cppFlags: ['-Werror=return-type']
@@ -46,9 +47,16 @@ QtApplication {
 
 	Group {
 		files: [
-			"protocol/core/v1/core.proto",
-			"protocol/foundation/v1/foundation.proto",
-			"protocol/profile/v1/profile.proto"
+			"protocol/auth/v1/auth.proto",
+			"protocol/chat/v1/channels.proto",
+			"protocol/chat/v1/chat.proto",
+			"protocol/chat/v1/emotes.proto",
+			"protocol/chat/v1/guilds.proto",
+			"protocol/chat/v1/messages.proto",
+			"protocol/chat/v1/permissions.proto",
+			"protocol/chat/v1/profile.proto",
+			"protocol/chat/v1/streaming.proto",
+			"protocol/harmonytypes/v1/types.proto",
 		]
 		fileTags: "protobuf.grpc"
 	}

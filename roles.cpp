@@ -1,7 +1,7 @@
 #include "roles.hpp"
 
-#include "core.grpc.pb.h"
-#include "core.pb.h"
+#include "chat/v1/chat.grpc.pb.h"
+#include "chat/v1/chat.pb.h"
 
 #include "client.hpp"
 #include "util.hpp"
@@ -15,7 +15,7 @@ using grpc::ClientContext;
 
 struct RolesModel::Private
 {
-	QList<protocol::core::v1::Role> roles;
+	QList<protocol::chat::v1::Role> roles;
 };
 
 RolesModel::RolesModel(QString homeserver, quint64 guildID) : QAbstractListModel(), homeServer(homeserver), guildID(guildID)
@@ -25,11 +25,11 @@ RolesModel::RolesModel(QString homeserver, quint64 guildID) : QAbstractListModel
 
 	doContext(ctx);
 
-	protocol::core::v1::GetGuildRolesRequest req;
+	protocol::chat::v1::GetGuildRolesRequest req;
 	req.set_guild_id(guildID);
-	protocol::core::v1::GetGuildRolesResponse resp;
+	protocol::chat::v1::GetGuildRolesResponse resp;
 
-	checkStatus(client->coreKit->GetGuildRoles(&ctx, req, &resp));
+	checkStatus(client->chatKit->GetGuildRoles(&ctx, req, &resp));
 
 	auto roles = resp.roles();
 	for (auto role : roles) {
@@ -47,10 +47,10 @@ void RolesModel::moveRoleFromTo(int from, int to)
 
 	doContext(ctx);
 
-	protocol::core::v1::MoveRoleRequest req;
+	protocol::chat::v1::MoveRoleRequest req;
 	req.set_guild_id(guildID);
 	req.set_role_id(fromRole.role_id());
-	protocol::core::v1::MoveRoleResponse resp;
+	protocol::chat::v1::MoveRoleResponse resp;
 
 	if (to == 0) {
 		req.set_before_id(d->roles[0].role_id());
@@ -61,7 +61,7 @@ void RolesModel::moveRoleFromTo(int from, int to)
 		req.set_before_id(d->roles[to+1].role_id());
 	}
 
-	checkStatus(client->coreKit->MoveRole(&ctx, req, &resp));
+	checkStatus(client->chatKit->MoveRole(&ctx, req, &resp));
 }
 
 int RolesModel::rowCount(const QModelIndex& parent) const
@@ -105,14 +105,14 @@ bool RolesModel::setData(const QModelIndex& index, const QVariant& value, int ro
 		{
 			doContext(ctx);
 
-			protocol::core::v1::ModifyGuildRoleRequest req;
+			protocol::chat::v1::ModifyGuildRoleRequest req;
 			req.set_guild_id(guildID);
-			req.set_allocated_role(new protocol::core::v1::Role);
+			req.set_allocated_role(new protocol::chat::v1::Role);
 			req.set_modify_name(true);
 			req.mutable_role()->set_name(value.toString().toStdString());
 			google::protobuf::Empty empty;
 
-			return checkStatus(client->coreKit->ModifyGuildRole(&ctx, req, &empty));
+			return checkStatus(client->chatKit->ModifyGuildRole(&ctx, req, &empty));
 		}
 	}
 
@@ -123,15 +123,15 @@ bool RolesModel::createRole(const QString& name, const QColor& colour)
 {
 	doContext(ctx);
 
-	protocol::core::v1::AddGuildRoleRequest req;
+	protocol::chat::v1::AddGuildRoleRequest req;
 	req.set_guild_id(guildID);
-	req.set_allocated_role(new protocol::core::v1::Role);
+	req.set_allocated_role(new protocol::chat::v1::Role);
 	req.mutable_role()->set_name(name.toStdString());
 	req.mutable_role()->set_color(colour.rgba());
 
-	protocol::core::v1::AddGuildRoleResponse resp;
+	protocol::chat::v1::AddGuildRoleResponse resp;
 
-	if (!checkStatus(client->coreKit->AddGuildRole(&ctx, req, &resp))) {
+	if (!checkStatus(client->chatKit->AddGuildRole(&ctx, req, &resp))) {
 		return false;
 	}
 

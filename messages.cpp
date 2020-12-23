@@ -29,10 +29,10 @@ MessagesModel::MessagesModel(ChannelsModel *parent, QString homeServer, quint64 
 		ClientContext ctx;
 		client->authenticate(ctx);
 
-		protocol::core::v1::GetGuildRequest req;
+		protocol::chat::v1::GetGuildRequest req;
 		req.set_guild_id(guildID);
-		protocol::core::v1::GetGuildResponse resp;
-		if (checkStatus(client->coreKit->GetGuild(&ctx, req, &resp))) {
+		protocol::chat::v1::GetGuildResponse resp;
+		if (checkStatus(client->chatKit->GetGuild(&ctx, req, &resp))) {
 			isGuildOwner = client->userID == resp.guild_owner();
 		}
 	});
@@ -264,7 +264,7 @@ void MessagesModel::sendMessageFull(const QString& message, const QString &reply
 		ClientContext ctx;
 		client->authenticate(ctx);
 
-		protocol::core::v1::SendMessageRequest req;
+		protocol::chat::v1::SendMessageRequest req;
 
 		req.set_guild_id(guildID);
 		req.set_channel_id(channelID);
@@ -282,7 +282,7 @@ void MessagesModel::sendMessageFull(const QString& message, const QString &reply
 		} else if (std::holds_alternative<Fronter>(as)) {
 			auto& fronter = std::get<Fronter>(as);
 
-			auto override = new protocol::core::v1::Override();
+			auto override = new protocol::harmonytypes::v1::Override();
 			override->set_name(fronter.name.toStdString());
 			override->set_allocated_system_plurality(new google::protobuf::Empty{});
 
@@ -291,7 +291,7 @@ void MessagesModel::sendMessageFull(const QString& message, const QString &reply
 		} else if (std::holds_alternative<RoleplayCharacter>(as)) {
 			auto& character = std::get<RoleplayCharacter>(as);
 
-			auto override = new protocol::core::v1::Override();
+			auto override = new protocol::harmonytypes::v1::Override();
 			override->set_name(character.name.toStdString());
 			override->set_user_defined("Roleplay");
 
@@ -338,9 +338,9 @@ void MessagesModel::sendMessageFull(const QString& message, const QString &reply
 		echoesMutex.unlock();
 		messageMutex.unlock();
 
-		protocol::core::v1::SendMessageResponse empty;
+		protocol::chat::v1::SendMessageResponse empty;
 
-		client->coreKit->SendMessage(&ctx, req, &empty);
+		client->chatKit->SendMessage(&ctx, req, &empty);
 	});
 }
 
@@ -359,10 +359,10 @@ void MessagesModel::fetchMore(const QModelIndex& parent)
 		ClientContext ctx;
 		client->authenticate(ctx);
 
-		protocol::core::v1::GetChannelMessagesRequest req;
+		protocol::chat::v1::GetChannelMessagesRequest req;
 		req.set_guild_id(guildID);
 		req.set_channel_id(channelID);
-		protocol::core::v1::GetChannelMessagesResponse resp;
+		protocol::chat::v1::GetChannelMessagesResponse resp;
 
 		messageMutex.lockForRead();
 		if (!messageData.isEmpty()) {
@@ -370,7 +370,7 @@ void MessagesModel::fetchMore(const QModelIndex& parent)
 		}
 		messageMutex.unlock();
 
-		if (checkStatus(client->coreKit->GetChannelMessages(&ctx, req, &resp))) {
+		if (checkStatus(client->chatKit->GetChannelMessages(&ctx, req, &resp))) {
 			if (resp.messages_size() == 0) {
 				atEnd = true;
 				return;
@@ -392,7 +392,7 @@ void MessagesModel::triggerAction(const QString& messageID, const QString &name,
 	ClientContext ctx;
 	client->authenticate(ctx);
 
-	protocol::core::v1::TriggerActionRequest req;
+	protocol::chat::v1::TriggerActionRequest req;
 	req.set_guild_id(guildID);
 	req.set_channel_id(channelID);
 	req.set_message_id(messageID.toULongLong());
@@ -402,7 +402,7 @@ void MessagesModel::triggerAction(const QString& messageID, const QString &name,
 	}
 	google::protobuf::Empty resp;
 
-	checkStatus(client->coreKit->TriggerAction(&ctx, req, &resp));
+	checkStatus(client->chatKit->TriggerAction(&ctx, req, &resp));
 }
 
 void MessagesModel::editMessage(const QString& id, const QString &content)
@@ -410,7 +410,7 @@ void MessagesModel::editMessage(const QString& id, const QString &content)
 	ClientContext ctx;
 	client->authenticate(ctx);
 
-	protocol::core::v1::UpdateMessageRequest req;
+	protocol::chat::v1::UpdateMessageRequest req;
 	req.set_guild_id(guildID);
 	req.set_channel_id(channelID);
 	req.set_message_id(id.toULongLong());
@@ -418,7 +418,7 @@ void MessagesModel::editMessage(const QString& id, const QString &content)
 	req.set_update_content(true);
 	google::protobuf::Empty resp;
 
-	checkStatus(client->coreKit->UpdateMessage(&ctx, req, &resp));
+	checkStatus(client->chatKit->UpdateMessage(&ctx, req, &resp));
 }
 
 void MessagesModel::deleteMessage(const QString& id)
@@ -426,13 +426,13 @@ void MessagesModel::deleteMessage(const QString& id)
 	ClientContext ctx;
 	client->authenticate(ctx);
 
-	protocol::core::v1::DeleteMessageRequest req;
+	protocol::chat::v1::DeleteMessageRequest req;
 	req.set_guild_id(guildID);
 	req.set_channel_id(channelID);
 	req.set_message_id(id.toULongLong());
 	google::protobuf::Empty resp;
 
-	checkStatus(client->coreKit->DeleteMessage(&ctx, req, &resp));
+	checkStatus(client->chatKit->DeleteMessage(&ctx, req, &resp));
 }
 
 QVariantMap MessagesModel::peekMessage(const QString& id)
@@ -452,13 +452,13 @@ QVariantMap MessagesModel::peekMessage(const QString& id)
 	ClientContext ctx;
 	client->authenticate(ctx);
 
-	protocol::core::v1::GetMessageRequest req;
+	protocol::chat::v1::GetMessageRequest req;
 	req.set_guild_id(guildID);
 	req.set_channel_id(channelID);
 	req.set_message_id(actualID);
-	protocol::core::v1::GetMessageResponse resp;
+	protocol::chat::v1::GetMessageResponse resp;
 
-	if (!checkStatus(client->coreKit->GetMessage(&ctx, req, &resp))) {
+	if (!checkStatus(client->chatKit->GetMessage(&ctx, req, &resp))) {
 		return QVariantMap();
 	}
 

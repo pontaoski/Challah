@@ -10,14 +10,11 @@
 
 #include "grpc++/grpc++.h"
 
-#include "core.grpc.pb.h"
-#include "core.pb.h"
+#include "chat/v1/chat.grpc.pb.h"
+#include "chat/v1/chat.pb.h"
 
-#include "foundation.grpc.pb.h"
-#include "foundation.pb.h"
-
-#include "profile.grpc.pb.h"
-#include "profile.pb.h"
+#include "auth/v1/auth.grpc.pb.h"
+#include "auth/v1/auth.pb.h"
 
 #include "guild.hpp"
 #include "util.hpp"
@@ -32,16 +29,15 @@ class Client : public QObject
 	static QMap<QString,Client*> clients;
 
 	QString homeserver;
-	std::unique_ptr<grpc::ClientReaderWriterInterface<protocol::core::v1::StreamEventsRequest,protocol::core::v1::Event>> eventStream;
+	std::unique_ptr<grpc::ClientReaderWriterInterface<protocol::chat::v1::StreamEventsRequest,protocol::chat::v1::Event>> eventStream;
 
 	friend class State;
 
 public:
 	std::string userToken;
 	std::shared_ptr<grpc::Channel> client;
-	std::unique_ptr<protocol::core::v1::CoreService::Stub> coreKit;
-	std::unique_ptr<protocol::foundation::v1::FoundationService::Stub> foundationKit;
-	std::unique_ptr<protocol::profile::v1::ProfileService::Stub> profileKit;
+	std::unique_ptr<protocol::chat::v1::ChatService::Stub> chatKit;
+	std::unique_ptr<protocol::auth::v1::AuthService::Stub> authKit;
 	void authenticate(grpc::ClientContext& ctx);
 
 private:

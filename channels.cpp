@@ -28,11 +28,11 @@ MembersModel::MembersModel(QString homeserver, quint64 guildID, ChannelsModel* m
 		ClientContext ctx;
 		client->authenticate(ctx);
 
-		protocol::core::v1::GetGuildMembersRequest req;
+		protocol::chat::v1::GetGuildMembersRequest req;
 		req.set_guild_id(guildID);
-		protocol::core::v1::GetGuildMembersResponse resp;
+		protocol::chat::v1::GetGuildMembersResponse resp;
 
-		checkStatus(client->coreKit->GetGuildMembers(&ctx, req, &resp));
+		checkStatus(client->chatKit->GetGuildMembers(&ctx, req, &resp));
 
 		beginResetModel();
 		for (auto member : resp.members()) {
@@ -89,11 +89,11 @@ ChannelsModel::ChannelsModel(QString homeServer, quint64 guildID) : QAbstractLis
 		ClientContext ctx;
 		client->authenticate(ctx);
 
-		protocol::core::v1::GetGuildChannelsRequest req;
+		protocol::chat::v1::GetGuildChannelsRequest req;
 		req.set_guild_id(guildID);
 
-		protocol::core::v1::GetGuildChannelsResponse resp;
-		checkStatus(client->coreKit->GetGuildChannels(&ctx, req, &resp));
+		protocol::chat::v1::GetGuildChannelsResponse resp;
+		checkStatus(client->chatKit->GetGuildChannels(&ctx, req, &resp));
 		resp.channels_size();
 
 		beginResetModel();
@@ -118,7 +118,7 @@ void ChannelsModel::moveChannelFromTo(int from, int to)
 	QtConcurrent::run([=] {
 		auto fromChan = channels[from];
 		doContext;
-		protocol::core::v1::UpdateChannelOrderRequest req;
+		protocol::chat::v1::UpdateChannelOrderRequest req;
 		google::protobuf::Empty resp;
 		req.set_guild_id(guildID);
 		req.set_channel_id(fromChan.channelID);
@@ -132,7 +132,7 @@ void ChannelsModel::moveChannelFromTo(int from, int to)
 			req.set_next_id(channels[to+1].channelID);
 		}
 
-		checkStatus(client->coreKit->UpdateChannelOrder(&ctx, req, &resp));
+		checkStatus(client->chatKit->UpdateChannelOrder(&ctx, req, &resp));
 	});
 }
 
@@ -242,12 +242,12 @@ void ChannelsModel::deleteChannel(const QString& channel)
 	QtConcurrent::run([=] {
 		doContext;
 
-		protocol::core::v1::DeleteChannelRequest req;
+		protocol::chat::v1::DeleteChannelRequest req;
 		req.set_guild_id(this->guildID);
 		req.set_channel_id(channel.toULongLong());
 
 		google::protobuf::Empty resp;
-		checkStatus(client->coreKit->DeleteChannel(&ctx, req, &resp));
+		checkStatus(client->chatKit->DeleteChannel(&ctx, req, &resp));
 	});
 }
 
@@ -265,14 +265,14 @@ void ChannelsModel::createChannel(const QString& name, QJSValue then, QJSValue e
 			}
 		}
 
-		protocol::core::v1::CreateChannelRequest req;
+		protocol::chat::v1::CreateChannelRequest req;
 		req.set_guild_id(this->guildID);
 		req.set_channel_name(name.toStdString());
 		req.set_previous_id(last);
 
-		protocol::core::v1::CreateChannelResponse resp;
+		protocol::chat::v1::CreateChannelResponse resp;
 
-		if (checkStatus(client->coreKit->CreateChannel(&ctx, req, &resp))) {
+		if (checkStatus(client->chatKit->CreateChannel(&ctx, req, &resp))) {
 			callJS(then, {});
 		} else {
 			callJS(elseDo, {});
@@ -285,12 +285,12 @@ QString ChannelsModel::userName(quint64 id)
 	if (!users.contains(id)) {
 		doContext;
 
-		protocol::profile::v1::GetUserRequest req;
+		protocol::chat::v1::GetUserRequest req;
 		req.set_user_id(id);
 
-		protocol::profile::v1::GetUserResponse resp;
+		protocol::chat::v1::GetUserResponse resp;
 
-		checkStatus(client->profileKit->GetUser(&ctx, req, &resp));
+		checkStatus(client->chatKit->GetUser(&ctx, req, &resp));
 
 		users[id] = QString::fromStdString(resp.user_name());
 		avatars[id] = QString::fromStdString(resp.user_avatar());
@@ -303,12 +303,12 @@ QString ChannelsModel::avatarURL(quint64 id)
 	if (!users.contains(id)) {
 		doContext;
 
-		protocol::profile::v1::GetUserRequest req;
+		protocol::chat::v1::GetUserRequest req;
 		req.set_user_id(id);
 
-		protocol::profile::v1::GetUserResponse resp;
+		protocol::chat::v1::GetUserResponse resp;
 
-		checkStatus(client->profileKit->GetUser(&ctx, req, &resp));
+		checkStatus(client->chatKit->GetUser(&ctx, req, &resp));
 
 		users[id] = QString::fromStdString(resp.user_name());
 		avatars[id] = QString::fromStdString(resp.user_avatar());

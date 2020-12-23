@@ -12,8 +12,8 @@
 
 #include <google/protobuf/util/json_util.h>
 
-#include "core.grpc.pb.h"
-#include "core.pb.h"
+#include "chat/v1/chat.grpc.pb.h"
+#include "chat/v1/chat.pb.h"
 
 #include "client.hpp"
 #include "util.hpp"
@@ -53,7 +53,7 @@ struct MessageData
 	State status;
 	quint64 echoID;
 
-	static MessageData fromProtobuf(protocol::core::v1::Message& msg) {
+	static MessageData fromProtobuf(protocol::harmonytypes::v1::Message& msg) {
 		std::string jsonified;
 		google::protobuf::util::MessageToJsonString(msg, &jsonified, google::protobuf::util::JsonPrintOptions{});
 		auto document = QJsonDocument::fromJson(QByteArray::fromStdString(jsonified));

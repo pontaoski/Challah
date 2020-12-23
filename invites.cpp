@@ -9,11 +9,11 @@ InviteModel::InviteModel(ChannelsModel *parent, QString homeServer, quint64 guil
 	ClientContext ctx;
 	client->authenticate(ctx);
 
-	protocol::core::v1::GetGuildInvitesRequest req;
+	protocol::chat::v1::GetGuildInvitesRequest req;
 	req.set_guild_id(guildID);
-	protocol::core::v1::GetGuildInvitesResponse resp;
+	protocol::chat::v1::GetGuildInvitesResponse resp;
 
-	if (checkStatus(client->coreKit->GetGuildInvites(&ctx, req, &resp))) {
+	if (checkStatus(client->chatKit->GetGuildInvites(&ctx, req, &resp))) {
 		for (auto invite : resp.invites()) {
 			invites << Invite {
 				.id = QString::fromStdString(invite.invite_id()),
@@ -65,13 +65,13 @@ bool InviteModel::createInvite(const QString& id, qint32 possibleUses)
 	ClientContext ctx;
 	client->authenticate(ctx);
 
-	protocol::core::v1::CreateInviteRequest req;
+	protocol::chat::v1::CreateInviteRequest req;
 	req.set_guild_id(guildID);
 	req.set_name(id.toStdString());
 	req.set_possible_uses(possibleUses);
-	protocol::core::v1::CreateInviteResponse resp;
+	protocol::chat::v1::CreateInviteResponse resp;
 
-	if (!checkStatus(client->coreKit->CreateInvite(&ctx, req, &resp))) {
+	if (!checkStatus(client->chatKit->CreateInvite(&ctx, req, &resp))) {
 		return false;
 	}
 
@@ -91,12 +91,12 @@ bool InviteModel::deleteInvite(const QString& id)
 	ClientContext ctx;
 	client->authenticate(ctx);
 
-	protocol::core::v1::DeleteInviteRequest req;
+	protocol::chat::v1::DeleteInviteRequest req;
 	req.set_guild_id(guildID);
 	req.set_invite_id(id.toStdString());
 	google::protobuf::Empty resp;
 
-	if (!checkStatus(client->coreKit->DeleteInvite(&ctx, req, &resp))) {
+	if (!checkStatus(client->chatKit->DeleteInvite(&ctx, req, &resp))) {
 		return false;
 	}
 
