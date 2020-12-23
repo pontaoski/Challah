@@ -22,7 +22,7 @@ Kirigami.PageRoute {
 			anchors.centerIn: parent
 
 			Image {
-				source: "qrc:/img/com.github.harmony-development.Murmur.svg"
+				source: "qrc:/img/io.harmonyapp.Murmur.svg"
 				sourceSize {
 					width: Layout.preferredWidth
 					height: Layout.preferredWidth

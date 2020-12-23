@@ -14,19 +14,19 @@ QtApplication {
 	]
 
 	Group {
-		files: ["resources/com.github.harmony-development.Murmur.svg"]
+		files: ["resources/io.harmonyapp.Murmur.svg"]
 		qbs.install: qbs.targetOS.contains("linux")
 		qbs.installDir: "share/icons/hicolor/scalable/apps"
 	}
 
 	Group {
-		files: ["com.github.harmony-development.Murmur.appdata.xml"]
+		files: ["io.harmonyapp.Murmur.appdata.xml"]
 		qbs.install: qbs.targetOS.contains("linux")
 		qbs.installDir: "share/metainfo"
 	}
 
 	Group {
-		files: ["com.github.harmony-development.Murmur.desktop"]
+		files: ["io.harmonyapp.Murmur.desktop"]
 		qbs.install: qbs.targetOS.contains("linux")
 		qbs.installDir: "share/applications"
 	}

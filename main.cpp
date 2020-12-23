@@ -41,8 +41,8 @@ int main(int argc, char *argv[])
 	murmurTranslator.load("Murmur_" + QLocale::system().name(), ":/po/");
 	app->installTranslator(&murmurTranslator);
 
-	QApplication::setWindowIcon(QIcon::fromTheme(QString("com.github.harmony-development.Murmur")));
-	QApplication::setDesktopFileName("com.github.harmony-development.Murmur.desktop");
+	QApplication::setWindowIcon(QIcon::fromTheme(QString("io.harmonyapp.Murmur")));
+	QApplication::setDesktopFileName("io.harmonyapp.Murmur.desktop");
 	QApplication::setStyle("Breeze");
 	QIcon::setThemeName("breeze");
 	QQuickStyle::setStyle("org.kde.desktop");
