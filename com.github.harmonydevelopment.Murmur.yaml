@@ -4,7 +4,7 @@ runtime-version: "5.15"
 sdk: org.kde.Sdk
 command: Murmur
 finish-args:
-  - --share-ipc
+  - --share=ipc
   - --device=dri
   - --socket=x11
   - --socket=wayland
@@ -48,10 +48,11 @@ modules:
         tag: v1.34.0
   - name: murmur
     buildsystem: simple
+    post-install:
+    - cp -r release/install-root/app/bin/Murmur /app/bin/
+    - cp -r release/install-root/app/share/* /app/share/
     build-commands:
-      - qbs resolve config:release modules.cpp.treatWarningsAsErrors:false installPrefix:/app
-      - qbs -j8
-      - qbs install
+      - qbs config:release modules.cpp.treatWarningsAsErrors:false installPrefix:/app -j8
     sources:
       - type: git
         url: https://github.com/harmony-development/Murmur
