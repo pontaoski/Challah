@@ -49,9 +49,9 @@ modules:
   - name: murmur
     buildsystem: simple
     build-commands:
-      - qbs resolve installPrefix:/app
-      - qbs config:release modules.cpp.treatWarningsAsErrors:false -j8
-      - qbs install config:release modules.cpp.treatWarningsAsErrors:false
+      - qbs resolve config:release modules.cpp.treatWarningsAsErrors:false installPrefix:/app
+      - qbs -j8
+      - qbs install
     sources:
       - type: git
         url: https://github.com/harmony-development/Murmur
