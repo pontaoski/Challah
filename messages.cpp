@@ -260,85 +260,85 @@ QHash<int,QByteArray> MessagesModel::roleNames() const
 
 void MessagesModel::sendMessageFull(const QString& message, const QString &replyTo, const QStringList& attachments, const SendAs& as)
 {
-	QtConcurrent::run([=] {
+	protocol::chat::v1::SendMessageRequest req;
+
+	req.set_guild_id(guildID);
+	req.set_channel_id(channelID);
+	req.set_content(message.toStdString());
+	if (replyTo != QString()) {
+		req.set_in_reply_to(replyTo.toULongLong());
+	}
+
+	for (auto attachment : attachments) {
+		req.add_attachments(attachment.toStdString());
+	}
+
+	if (std::holds_alternative<Nobody>(as)) {
+
+	} else if (std::holds_alternative<Fronter>(as)) {
+		auto& fronter = std::get<Fronter>(as);
+
+		auto override = new protocol::harmonytypes::v1::Override();
+		override->set_name(fronter.name.toStdString());
+		override->set_allocated_system_plurality(new google::protobuf::Empty{});
+
+		req.set_allocated_overrides(override);
+
+	} else if (std::holds_alternative<RoleplayCharacter>(as)) {
+		auto& character = std::get<RoleplayCharacter>(as);
+
+		auto override = new protocol::harmonytypes::v1::Override();
+		override->set_name(character.name.toStdString());
+		override->set_user_defined("Roleplay");
+
+		req.set_allocated_overrides(override);
+	}
+
+	beginInsertRows(QModelIndex(), 0, 0);
+	auto incoming = MessageData {};
+	incoming.text = message;
+	if (replyTo != QString()) {
+		incoming.replyTo = replyTo.toULongLong();
+	}
+	QVariantList attaches;
+	for (auto attach : attachments) {
+		attaches << attach;
+	}
+	incoming.attachments = attaches;
+	if (std::holds_alternative<Nobody>(as)) {
+		;
+	} else if (std::holds_alternative<Fronter>(as)) {
+		incoming.overrides = MessageData::Override {
+			.name = std::get<Fronter>(as).name,
+			.reason = MessageData::Override::Plurality,
+		};
+	} else if (std::holds_alternative<RoleplayCharacter>(as)) {
+		incoming.overrides = MessageData::Override {
+			.name = std::get<RoleplayCharacter>(as).name
+		};
+	}
+	incoming.status = MessageData::Sending;
+	incoming.authorID = client->userID;
+
+	auto echoID = QRandomGenerator::global()->generate64();
+	req.set_echo_id(echoID);
+	incoming.echoID = echoID;
+
+	messageMutex.lockForWrite();
+	messageData.push_front(incoming);
+	endInsertRows();
+
+	echoesMutex.lockForWrite();
+	MessageData& ref = messageData[0];
+	echoes[echoID] = &ref;
+	echoesMutex.unlock();
+	messageMutex.unlock();
+
+	protocol::chat::v1::SendMessageResponse empty;
+
+	QtConcurrent::run([=]() mutable {
 		ClientContext ctx;
 		client->authenticate(ctx);
-
-		protocol::chat::v1::SendMessageRequest req;
-
-		req.set_guild_id(guildID);
-		req.set_channel_id(channelID);
-		req.set_content(message.toStdString());
-		if (replyTo != QString()) {
-			req.set_in_reply_to(replyTo.toULongLong());
-		}
-
-		for (auto attachment : attachments) {
-			req.add_attachments(attachment.toStdString());
-		}
-
-		if (std::holds_alternative<Nobody>(as)) {
-
-		} else if (std::holds_alternative<Fronter>(as)) {
-			auto& fronter = std::get<Fronter>(as);
-
-			auto override = new protocol::harmonytypes::v1::Override();
-			override->set_name(fronter.name.toStdString());
-			override->set_allocated_system_plurality(new google::protobuf::Empty{});
-
-			req.set_allocated_overrides(override);
-
-		} else if (std::holds_alternative<RoleplayCharacter>(as)) {
-			auto& character = std::get<RoleplayCharacter>(as);
-
-			auto override = new protocol::harmonytypes::v1::Override();
-			override->set_name(character.name.toStdString());
-			override->set_user_defined("Roleplay");
-
-			req.set_allocated_overrides(override);
-		}
-
-		beginInsertRows(QModelIndex(), 0, 0);
-		auto incoming = MessageData {};
-		incoming.text = message;
-		if (replyTo != QString()) {
-			incoming.replyTo = replyTo.toULongLong();
-		}
-		QVariantList attaches;
-		for (auto attach : attachments) {
-			attaches << attach;
-		}
-		incoming.attachments = attaches;
-		if (std::holds_alternative<Nobody>(as)) {
-			;
-		} else if (std::holds_alternative<Fronter>(as)) {
-			incoming.overrides = MessageData::Override {
-				.name = std::get<Fronter>(as).name,
-				.reason = MessageData::Override::Plurality,
-			};
-		} else if (std::holds_alternative<RoleplayCharacter>(as)) {
-			incoming.overrides = MessageData::Override {
-				.name = std::get<RoleplayCharacter>(as).name
-			};
-		}
-		incoming.status = MessageData::Sending;
-		incoming.authorID = client->userID;
-
-		auto echoID = QRandomGenerator::global()->generate64();
-		req.set_echo_id(echoID);
-		incoming.echoID = echoID;
-
-		messageMutex.lockForWrite();
-		messageData.push_front(incoming);
-		endInsertRows();
-
-		echoesMutex.lockForWrite();
-		MessageData& ref = messageData[0];
-		echoes[echoID] = &ref;
-		echoesMutex.unlock();
-		messageMutex.unlock();
-
-		protocol::chat::v1::SendMessageResponse empty;
 
 		client->chatKit->SendMessage(&ctx, req, &empty);
 	});
