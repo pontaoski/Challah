@@ -15,6 +15,10 @@ modules:
   - name: qtdeclarative
     buildsystem: qmake
     cleanup-platform: [ /bin, lib/plugins/qmltooling ]
+    no-make-install: true
+    post-install:
+    - install -d /app/lib
+    - cp -r lib/libQt5QmlModels* /app/lib/
     sources:
       - type: archive
         url: http://download.qt.io/archive/qt/5.15/5.15.2/submodules/qtdeclarative-everywhere-src-5.15.2.tar.xz
@@ -33,16 +37,21 @@ modules:
         path: qbs-more-search.patch
   - name: grpc
     buildsystem: cmake
+    config-opts:
+      - -DBUILD_SHARED_LIBS=on
+      - -DCARES_SHARED=on
+      - -DCARES_STATIC=off
+      - -Dprotobuf_BUILD_SHARED_LIBS=on
     sources:
       - type: git
         url: https://github.com/grpc/grpc
-        tag: v1.33.2
+        tag: v1.34.0
   - name: murmur
     buildsystem: simple
     build-commands:
       - qbs resolve installPrefix:/app
-      - qbs -j8
-      - qbs install
+      - qbs config:release modules.cpp.treatWarningsAsErrors:false -j8
+      - qbs install config:release modules.cpp.treatWarningsAsErrors:false
     sources:
       - type: git
         url: https://github.com/harmony-development/Murmur
