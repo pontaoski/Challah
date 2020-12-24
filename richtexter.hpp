@@ -34,11 +34,14 @@ class TextFormatter : public QObject {
 	Q_OBJECT
 
 public:
-	explicit TextFormatter(QTextDocument* parent);
+	explicit TextFormatter(QTextDocument* parent, QObject* field);
 	~TextFormatter();
 
 	void registerFormatter(ITextEntityFormatter* formatter);
 	void removeTextFormatter(ITextEntityFormatter* formatter);
+
+protected:
+	bool eventFilter(QObject *object, QEvent *event) override;
 
 private:
 	class Private;

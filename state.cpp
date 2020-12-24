@@ -72,9 +72,9 @@ bool State::leaveGuild(const QString &homeserver, const QString &id, bool isOwne
 	return Client::instanceForHomeserver(homeserver)->leaveGuild(actualID, isOwner);
 }
 
-void State::bindTextDocument(QQuickTextDocument* doc)
+void State::bindTextDocument(QQuickTextDocument* doc, QObject* field)
 {
-	new TextFormatter(doc->textDocument());
+	new TextFormatter(doc->textDocument(), field);
 }
 
 void callJS(QJSValue func, QList<QVariant> args)

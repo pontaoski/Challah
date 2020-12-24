@@ -72,7 +72,7 @@ QQC2.ToolBar {
 
 					Keys.onReturnPressed: send()
 
-					Component.onCompleted: HState.bindTextDocument(this.textDocument)
+					Component.onCompleted: HState.bindTextDocument(this.textDocument, this)
 				}
 				QQC2.Button {
 					text: qsTr("Send")
@@ -142,7 +142,7 @@ QQC2.ToolBar {
 					return qsTr("You do not have permissions to send a message to this channel.")
 				}
 
-				Component.onCompleted: HState.bindTextDocument(this.textDocument)
+				Component.onCompleted: HState.bindTextDocument(this.textDocument, this)
 				Layout.fillWidth: true
 
 				function send() {

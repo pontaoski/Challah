@@ -1,12 +1,16 @@
 #include "richtexter.hpp"
 
 #include <QDebug>
+#include <QEvent>
 #include <QSet>
 #include <QTextCursor>
+#include <QKeyEvent>
+#include <QKeySequence>
 
 class TextFormatter::Private {
 public:
 	QTextDocument* parent = nullptr;
+	QObject* field = nullptr;
 	bool ignoreSignals = false;
 	QString plaintextBuffer = QString();
 	QSet<ITextEntityFormatter*> formatters;
@@ -50,11 +54,14 @@ public:
 	}
 };
 
-TextFormatter::TextFormatter(QTextDocument* parent)
+TextFormatter::TextFormatter(QTextDocument* parent, QObject* field)
 {
 	p = new Private;
 
 	p->parent = parent;
+	p->field = field;
+
+	field->installEventFilter(this);
 
 	registerFormatter(new UnderlineFormatter);
 	registerFormatter(new ItalicFormatter);
@@ -75,6 +82,17 @@ void TextFormatter::registerFormatter(ITextEntityFormatter* formatter)
 void TextFormatter::removeTextFormatter(ITextEntityFormatter* formatter)
 {
 	p->formatters.remove(formatter);
+}
+
+bool TextFormatter::eventFilter(QObject *object, QEvent *event)
+{
+	if (auto ev = dynamic_cast<QKeyEvent*>(event)) {
+		if (ev == QKeySequence::Copy) {
+			qDebug() << "Intercepted copy event!";
+			return false;
+		}
+	}
+	return false;
 }
 
 void TextFormatter::handleTextChanged(int position, int charsRemoved, int charsAdded)
