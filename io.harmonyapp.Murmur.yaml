@@ -23,7 +23,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/grpc/grpc
-        tag: v1.34.0
+        tag: v1.26.0
   - name: extra-cmake-modules
     buildsystem: cmake
     builddir: true
