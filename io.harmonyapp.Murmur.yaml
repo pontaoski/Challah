@@ -1,4 +1,4 @@
-app-id: com.github.harmonydevelopment.Murmur
+app-id: io.harmonyapp.Murmur
 runtime: org.kde.Platform
 runtime-version: "5.15"
 sdk: org.kde.Sdk
@@ -52,7 +52,7 @@ modules:
     - cp -r release/install-root/app/bin/Murmur /app/bin/
     - cp -r release/install-root/app/share/* /app/share/
     build-commands:
-      - qbs config:release modules.cpp.treatWarningsAsErrors:false installPrefix:/app -j8
+      - qbs config:release modules.cpp.treatWarningsAsErrors:false installPrefix:/app -j2
     sources:
       - type: git
         url: https://github.com/harmony-development/Murmur
