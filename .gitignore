@@ -4,3 +4,4 @@ release
 build
 _flatpak_builder
 .vscode
+output
