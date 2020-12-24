@@ -25,6 +25,12 @@ modules:
         sha256: c600d09716940f75d684f61c5bdaced797f623a86db1627da599027f6c635651
       - type: patch
         path: fix-delegatemodel.patch
+  - name: kirigami
+    buildsystem: cmake
+    sources:
+      - type: git
+        url: https://invent.kde.org/frameworks/kirigami
+        branch: master
   - name: qbs
     buildsystem: qmake
     config-opts:
