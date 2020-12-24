@@ -12,6 +12,11 @@ jobs:
       options: --privileged
     steps:
     - uses: actions/checkout@v2
+    - name: Cache .flatpak-builder
+      uses: actions/cache@v2
+      with:
+        path: .flatpak-builder
+        key: ${{ runner.os }}-${{ hashFiles('**/lockfiles') }}
     - uses: bilelmoussaoui/flatpak-github-actions@v2
       with:
         bundle: "murmur.flatpak"
