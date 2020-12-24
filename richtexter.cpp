@@ -106,6 +106,26 @@ void TextFormatter::handleTextChanged(int position, int charsRemoved, int charsA
 	curs.movePosition(QTextCursor::MoveOperation::End, QTextCursor::MoveMode::KeepAnchor);
 	curs.setCharFormat(QTextCharFormat());
 
+	if (false) {
+		if (charsRemoved == 0 and charsAdded > 0) {
+			QTextCursor bufferReader(p->parent);
+			bufferReader.setPosition(position);
+			bufferReader.setPosition(position + charsAdded, QTextCursor::KeepAnchor);
+
+			p->plaintextBuffer.insert(position, bufferReader.selectedText());
+		} else if (charsRemoved > 0 and charsAdded == 0) {
+			p->plaintextBuffer.remove(position - charsRemoved, charsRemoved);
+		} else if (charsRemoved > 0 and charsAdded > 0) {
+			p->plaintextBuffer.remove(position - charsRemoved, charsRemoved);
+
+			QTextCursor bufferReader(p->parent);
+			bufferReader.setPosition(position);
+			bufferReader.setPosition(position + charsAdded, QTextCursor::KeepAnchor);
+
+			p->plaintextBuffer.insert(position - charsRemoved + 1, bufferReader.selectedText());
+		}
+	}
+
 	p->plaintextBuffer = curs.selectedText();
 
 	for (auto formatter : p->formatters) {

@@ -438,7 +438,7 @@ void MessagesModel::deleteMessage(const QString& id)
 QVariantMap MessagesModel::peekMessage(const QString& id)
 {
 	quint64 actualID = id.toULongLong();
-	messageMutex.lockForWrite();
+	messageMutex.lockForRead();
 	for (const auto& item : messageData) {
 		if (item.id == actualID) {
 			return {
