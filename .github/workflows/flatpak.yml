@@ -15,7 +15,7 @@ jobs:
     - name: Cache .flatpak-builder
       uses: actions/cache@v2
       with:
-        path: .flatpak-builder
+        path: ${{ github.workspace }}/.flatpak-builder
         key: ${{ runner.os }}-${{ hashFiles('**/lockfiles') }}
     - uses: bilelmoussaoui/flatpak-github-actions@v2
       with:
