@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Copyright 2019 Carson Black -->
 <component type="desktop-application">
-	<id>com.github.harmony-development.Murmur</id>
-	<icon type="remote" width="128" height="128">https://raw.githubusercontent.com/harmony-development/Murmur/main/resources/com.github.harmony-development.Murmur.svg</icon>
+	<id>io.harmonyapp.Murmur</id>
+	<icon type="remote" width="128" height="128">https://raw.githubusercontent.com/harmony-development/Murmur/main/resources/io.harmonyapp.Murmur.svg</icon>
 	<name>Murmur</name>
 	<summary>Murmur is a desktop client for Harmony</summary>
 	<description>
