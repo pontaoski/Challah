@@ -6,6 +6,14 @@ QtApplication {
 
 	cpp.cppFlags: ['-Werror=return-type']
 	cpp.cxxLanguageVersion: "c++17"
+	cpp.debugInformation: true
+	cpp.separateDebugInformation: true
+	cpp.enableExceptions: true
+	cpp.enableReproducibleBuilds: true
+	cpp.enableRtti: true
+
+	debugInformationInstallDir: "bin"
+	installDebugInformation: true
 
 	files: [
 		"*.cpp",
