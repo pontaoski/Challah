@@ -64,6 +64,41 @@ int GuildModel::rowCount(const QModelIndex &parent) const
 	return guilds.count();
 }
 
+void GuildModel::customEvent(QEvent *event)
+{
+	if (event->type() == GuildListUpdateEvent::typeID) {
+		auto ev = reinterpret_cast<GuildListUpdateEvent*>(event);
+		auto& data = ev->data;
+
+		if (data.name.has_value()) {
+			int i = 0;
+			for (auto& guild : guilds) {
+				if (guild.guildID == data.guildID && guild.homeserver == data.homeserver) {
+					guild.name = data.name.value();
+
+					dataChanged(index(i), index(i), {GuildNameRole});
+					break;
+				}
+
+				i++;
+			}
+		}
+		if (data.picture.has_value()) {
+			int i = 0;
+			for (auto& guild : guilds) {
+				if (guild.guildID == data.guildID && guild.homeserver == data.homeserver) {
+					guild.picture = data.picture.value();
+
+					dataChanged(index(i), index(i), {GuildPictureRole});
+					break;
+				}
+
+				i++;
+			}
+		}
+	}
+}
+
 QVariant GuildModel::data(const QModelIndex &index, int role) const
 {
 	if (!checkIndex(index))

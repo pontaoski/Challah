@@ -45,3 +45,13 @@ using PleaseCallEvent = CarrierEvent<14,PleaseCall>;
 bool checkStatus(grpc::Status status);
 
 using ExecuteEvent = CarrierEvent<15,std::function<void()>>;
+
+struct GuildUpdate {
+	QString homeserver;
+	quint64 guildID;
+
+	std::optional<QString> picture;
+	std::optional<QString> name;
+};
+
+using GuildListUpdateEvent = CarrierEvent<16,GuildUpdate>;

@@ -213,8 +213,24 @@ void ChannelsModel::customEvent(QEvent *event)
 		QCoreApplication::postEvent(members, new MemberLeftEvent(ev->data));
 	} else if (event->type() == GuildUpdatedEvent::typeID) {
 		auto ev = reinterpret_cast<GuildUpdatedEvent*>(event);
+		std::optional<QString> name;
+		std::optional<QString> picture;
+
+		if (ev->data.update_picture()) {
+			picture = QString::fromStdString(ev->data.picture());
+		}
+		if (ev->data.update_name()) {
+			name = QString::fromStdString(ev->data.name());
+		}
+
+		GuildUpdate upd;
+		upd.homeserver = homeServer;
+		upd.guildID = guildID;
+		upd.name = name;
+		upd.picture = picture;
 
 		QCoreApplication::postEvent(members, new GuildUpdatedEvent(ev->data));
+		QCoreApplication::postEvent(State::instance()->getGuildModel(), new GuildListUpdateEvent(upd));
 	}
 }
 

@@ -52,6 +52,9 @@ class GuildModel : public QAbstractListModel
 		PictureRole
 	};
 
+protected:
+	void customEvent(QEvent *event) override;
+
 public:
 	GuildModel();
 	~GuildModel();
