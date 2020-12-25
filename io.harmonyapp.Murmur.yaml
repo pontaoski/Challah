@@ -10,7 +10,7 @@ finish-args:
   - --socket=wayland
   - --share=network
   - --filesystem=xdg-config/kdeglobals:ro
-clean:
+cleanup:
   - /app/bin/a*
   - /app/bin/grpc*
   - /app/bin/protoc*
