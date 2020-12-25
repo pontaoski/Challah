@@ -12,10 +12,12 @@ jobs:
       options: --privileged
     steps:
     - uses: actions/checkout@v2
-    - name: Cache .flatpak-builder
+    - name: Cache flatpak dependencies
       uses: actions/cache@v2
       with:
-        path: ${{ github.workspace }}/.flatpak-builder
+        path: |
+          ${{ github.workspace }}/.flatpak-builder
+          ~/.local/share/flatpak
         key: ${{ runner.os }}-${{ hashFiles('**/lockfiles') }}
     - uses: bilelmoussaoui/flatpak-github-actions@v2
       with:
