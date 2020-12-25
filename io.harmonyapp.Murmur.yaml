@@ -11,19 +11,19 @@ finish-args:
   - --share=network
   - --filesystem=xdg-config/kdeglobals:ro
 cleanup:
-  - /app/bin/a*
-  - /app/bin/grpc*
-  - /app/bin/protoc*
-  - /app/bin/qbs*
-  - /app/include
-  - /app/lib/cmake
-  - /app/lib/pkgconfig
-  - /app/lib/qbs
-  - /app/libexec
-  - /app/share/ECM
-  - /app/share/man
-  - /app/share/pkgconfig
-  - /app/share/qbs
+  - /bin/a*
+  - /bin/grpc*
+  - /bin/protoc*
+  - /bin/qbs*
+  - /include
+  - /lib/cmake
+  - /lib/pkgconfig
+  - /lib/qbs
+  - /libexec
+  - /share/ECM
+  - /share/man
+  - /share/pkgconfig
+  - /share/qbs
 
 modules:
 # stuff we don't modify
