@@ -10,6 +10,20 @@ finish-args:
   - --socket=wayland
   - --share=network
   - --filesystem=xdg-config/kdeglobals:ro
+clean:
+  - /app/bin/a*
+  - /app/bin/grpc*
+  - /app/bin/protoc*
+  - /app/bin/qbs*
+  - /app/include
+  - /app/lib/cmake
+  - /app/lib/pkgconfig
+  - /app/lib/qbs
+  - /app/libexec
+  - /app/share/ECM
+  - /app/share/man
+  - /app/share/pkgconfig
+  - /app/share/qbs
 
 modules:
 # stuff we don't modify
@@ -23,7 +37,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/grpc/grpc
-        tag: v1.26.0
+        tag: v1.27.0
   - name: extra-cmake-modules
     buildsystem: cmake
     builddir: true
@@ -45,7 +59,7 @@ modules:
     no-make-install: true
     post-install:
     - install -d /app/lib
-    - cp -r lib/libQt5QmlModels* /app/lib/
+    - cp -r lib/libQt5QmlModels.so* /app/lib/
     sources:
       - type: archive
         url: http://download.qt.io/archive/qt/5.15/5.15.2/submodules/qtdeclarative-everywhere-src-5.15.2.tar.xz
