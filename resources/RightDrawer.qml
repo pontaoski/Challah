@@ -91,7 +91,7 @@ Item {
 					}
 				}
 
-				contentItem: RowLayout {
+				contentItem: ColumnLayout {
 					Kirigami.Theme.colorSet: Kirigami.Theme.Header
 					Kirigami.Avatar {
 						source: drawer.model.picture
@@ -116,33 +116,38 @@ Item {
 							}
 						}
 
+						ImagePopup {
+							id: imagePopup
+							source: drawer.model.picture
+						}
+
+						actions.main: Kirigami.Action {
+							onTriggered: imagePopup.open()
+						}
 						actions.secondary: Kirigami.Action {
 							icon.name: "camera-photo-symbolic"
 							onTriggered: fileDialog.open()
 						}
 
-						Layout.preferredWidth: Kirigami.Units.gridUnit * 2.5
-						Layout.preferredHeight: Kirigami.Units.gridUnit * 2.5
+						Layout.preferredWidth: Kirigami.Units.gridUnit * 5
+						Layout.preferredHeight: Kirigami.Units.gridUnit * 5
+						Layout.alignment: Qt.AlignHCenter
 					}
-					ColumnLayout {
-						Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
 
-						Item { Layout.fillHeight: true }
-						Kirigami.Heading {
-							text: drawer.model.name
-							level: 2
+					Kirigami.Heading {
+						text: drawer.model.name
+						level: 2
 
-							Layout.alignment: Qt.AlignBottom
-						}
-						Label {
-							text: qsTr("%L1 members").arg(listy.count)
-							opacity: 0.7
-
-							Layout.alignment: Qt.AlignTop
-						}
-						Item { Layout.fillHeight: true }
+						horizontalAlignment: Text.AlignHCenter
+						Layout.fillWidth: true
 					}
-					Item { Layout.fillWidth: true }
+					Label {
+						text: qsTr("%L1 members").arg(listy.count)
+						opacity: 0.7
+
+						horizontalAlignment: Text.AlignHCenter
+						Layout.fillWidth: true
+					}
 				}
 			}
 
