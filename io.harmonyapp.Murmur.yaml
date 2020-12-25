@@ -16,9 +16,11 @@ cleanup:
   - /bin/protoc*
   - /bin/qbs*
   - /include
+  - /lib/*.a
   - /lib/cmake
   - /lib/pkgconfig
   - /lib/qbs
+  - /lib/libqbs*
   - /libexec
   - /share/ECM
   - /share/man
