@@ -44,11 +44,7 @@ void MessagesModel::customEvent(QEvent *event)
 		auto ev = reinterpret_cast<MessageSentEvent*>(event);
 		auto echoID = ev->data.echo_id();
 
-		QReadLocker echoesLock(&echoesMutex);
-
 		if (echoes.contains(echoID)) {
-			QReadLocker messageLock(&messageMutex);
-
 			auto msg = echoes[echoID];
 			int i = 0;
 			for (auto &message : messageData) {
@@ -60,18 +56,10 @@ void MessagesModel::customEvent(QEvent *event)
 			auto message = ev->data.message();
 			*msg = MessageData::fromProtobuf(message);
 
-			echoesLock.unlock();
-			{
-				QWriteLocker echoesWriteLock(&echoesMutex);
-
-				echoes.remove(echoID);
-			}
-			echoesLock.relock();
+			echoes.remove(echoID);
 
 			dataChanged(index(i), index(i));
 		} else {
-			QWriteLocker messagesWriteLock(&messageMutex);
-
 			auto msg = ev->data.message();
 			auto idx = messageData.count();
 			beginInsertRows(QModelIndex(), 0, 0);
@@ -133,13 +121,14 @@ void MessagesModel::customEvent(QEvent *event)
 			messageData.removeAt(idx);
 			endRemoveRows();
 		}
+	} else if (event->type() == ExecuteEvent::typeID) {
+		auto ev = reinterpret_cast<ExecuteEvent*>(event);
+		ev->data();
 	}
 }
 
 int MessagesModel::rowCount(const QModelIndex& parent) const
 {
-	QReadLocker lock(&messageMutex);
-
 	return messageData.count();
 }
 
@@ -147,8 +136,6 @@ QVariant MessagesModel::data(const QModelIndex& index, int role) const
 {
 	if (!checkIndex(index))
 		return QVariant();
-
-	QReadLocker lock(&messageMutex);
 
 	auto idx = index.row();
 
@@ -328,12 +315,8 @@ void MessagesModel::sendMessageFull(const QString& message, const QString &reply
 	req.set_echo_id(echoID);
 	incoming.echoID = echoID;
 
-	QWriteLocker messagesLock(&messageMutex);
-
 	messageData.push_front(incoming);
 	endInsertRows();
-
-	QWriteLocker echoesLock(&echoesMutex);
 
 	MessageData& ref = messageData[0];
 	echoes[echoID] = &ref;
@@ -359,35 +342,44 @@ void MessagesModel::fetchMore(const QModelIndex& parent)
 {
 	Q_UNUSED(parent)
 
+	if (isReadingMore) {
+		return;
+	}
+
+	isReadingMore = true;
+
+	protocol::chat::v1::GetChannelMessagesRequest req;
+	req.set_guild_id(guildID);
+	req.set_channel_id(channelID);
+	if (!messageData.isEmpty()) {
+		req.set_before_message(messageData.last().id);
+	}
+
 	QtConcurrent::run([=] {
 		ClientContext ctx;
 		client->authenticate(ctx);
 
-		protocol::chat::v1::GetChannelMessagesRequest req;
-		req.set_guild_id(guildID);
-		req.set_channel_id(channelID);
 		protocol::chat::v1::GetChannelMessagesResponse resp;
 
-		{
-			QReadLocker lock(&messageMutex);
-			if (!messageData.isEmpty()) {
-				req.set_before_message(messageData.last().id);
-			}
-		}
-
 		if (checkStatus(client->chatKit->GetChannelMessages(&ctx, req, &resp))) {
-			if (resp.messages_size() == 0) {
-				atEnd = true;
-				return;
-			}
+			QCoreApplication::postEvent(this, new ExecuteEvent([resp, this] {
+				if (resp.messages_size() == 0) {
+					atEnd = true;
+					return;
+				}
 
-			QWriteLocker messagesLock(&messageMutex);
+				beginInsertRows(QModelIndex(), messageData.count(), (messageData.count()+resp.messages_size())-1);
+				for (auto item : resp.messages()) {
+					messageData << MessageData::fromProtobuf(item);
+				}
+				endInsertRows();
 
-			beginInsertRows(QModelIndex(), messageData.count(), (messageData.count()+resp.messages_size())-1);
-			for (auto item : resp.messages()) {
-				messageData << MessageData::fromProtobuf(item);
-			}
-			endInsertRows();
+				isReadingMore = false;
+			}));
+		} else {
+			QCoreApplication::postEvent(this, new ExecuteEvent([this] {
+				isReadingMore = false;
+			}));
 		}
 	});
 }
@@ -444,16 +436,12 @@ QVariantMap MessagesModel::peekMessage(const QString& id)
 {
 	quint64 actualID = id.toULongLong();
 
-	{
-		QReadLocker lock(&messageMutex);
-
-		for (const auto& item : messageData) {
-			if (item.id == actualID) {
-				return {
-					{ "authorName", qobject_cast<ChannelsModel*>(parent())->userName(item.authorID) },
-					{ "content", item.text }
-				};
-			}
+	for (const auto& item : messageData) {
+		if (item.id == actualID) {
+			return {
+				{ "authorName", qobject_cast<ChannelsModel*>(parent())->userName(item.authorID) },
+				{ "content", item.text }
+			};
 		}
 	}
 

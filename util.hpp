@@ -43,3 +43,5 @@ struct PleaseCall {
 using PleaseCallEvent = CarrierEvent<14,PleaseCall>;
 
 bool checkStatus(grpc::Status status);
+
+using ExecuteEvent = CarrierEvent<15,std::function<void()>>;

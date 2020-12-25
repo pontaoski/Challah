@@ -110,9 +110,7 @@ class MessagesModel : public QAbstractListModel
 	quint64 channelID;
 
 	QList<MessageData> messageData;
-	mutable QReadWriteLock messageMutex;
 	QHash<quint64,MessageData*> echoes;
-	QReadWriteLock echoesMutex;
 	QQmlPropertyMap* permissions;
 
 	friend class ChannelsModel;
@@ -120,6 +118,7 @@ class MessagesModel : public QAbstractListModel
 
 	bool atEnd = false;
 	bool isGuildOwner = false;
+	bool isReadingMore = false;
 
 	Client* client;
 
