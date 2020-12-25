@@ -104,12 +104,12 @@ Item {
 							implicitWidth: 48
 							implicitHeight: 48
 
-							name: model['guildName']
-							source: model['picture']
+							name: guildName
+							source: picture
 
 							Layout.alignment: Qt.AlignTop | Qt.AlignHCenter
 
-							ToolTip.text: model['guildName']
+							ToolTip.text: guildName
 							ToolTip.visible: maus.containsMouse
 
 							MouseArea {
