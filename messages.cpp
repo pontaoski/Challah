@@ -43,10 +43,13 @@ void MessagesModel::customEvent(QEvent *event)
 	if (event->type() == MessageSentEvent::typeID) {
 		auto ev = reinterpret_cast<MessageSentEvent*>(event);
 		auto echoID = ev->data.echo_id();
-		echoesMutex.lockForRead();
+
+		QReadLocker echoesLock(&echoesMutex);
+
 		if (echoes.contains(echoID)) {
+			QReadLocker messageLock(&messageMutex);
+
 			auto msg = echoes[echoID];
-			messageMutex.lockForRead();
 			int i = 0;
 			for (auto &message : messageData) {
 				if (message.echoID == echoID) {
@@ -56,23 +59,26 @@ void MessagesModel::customEvent(QEvent *event)
 			}
 			auto message = ev->data.message();
 			*msg = MessageData::fromProtobuf(message);
-			messageMutex.unlock();
-			echoesMutex.unlock();
-			echoesMutex.lockForWrite();
-			echoes.remove(echoID);
-			echoesMutex.unlock();
-			echoesMutex.lockForRead();
+
+			echoesLock.unlock();
+			{
+				QWriteLocker echoesWriteLock(&echoesMutex);
+
+				echoes.remove(echoID);
+			}
+			echoesLock.relock();
+
 			dataChanged(index(i), index(i));
 		} else {
+			QWriteLocker messagesWriteLock(&messageMutex);
+
 			auto msg = ev->data.message();
 			auto idx = messageData.count();
 			beginInsertRows(QModelIndex(), 0, 0);
-			messageMutex.lockForWrite();
 			messageData.push_front(MessageData::fromProtobuf(msg));
-			messageMutex.unlock();
 			endInsertRows();
 		}
-		echoesMutex.unlock();
+
 	} else if (event->type() == MessageUpdatedEvent::typeID) {
 		auto ev = reinterpret_cast<MessageUpdatedEvent*>(event);
 		auto& msg = ev->data;
@@ -132,10 +138,9 @@ void MessagesModel::customEvent(QEvent *event)
 
 int MessagesModel::rowCount(const QModelIndex& parent) const
 {
-	messageMutex.lockForRead();
-	auto count = messageData.count();
-	messageMutex.unlock();
-	return count;
+	QReadLocker lock(&messageMutex);
+
+	return messageData.count();
 }
 
 QVariant MessagesModel::data(const QModelIndex& index, int role) const
@@ -143,8 +148,7 @@ QVariant MessagesModel::data(const QModelIndex& index, int role) const
 	if (!checkIndex(index))
 		return QVariant();
 
-	messageMutex.lockForRead();
-	auto unlocker = qScopeGuard([=]{ messageMutex.unlock(); });
+	QReadLocker lock(&messageMutex);
 
 	auto idx = index.row();
 
@@ -324,15 +328,15 @@ void MessagesModel::sendMessageFull(const QString& message, const QString &reply
 	req.set_echo_id(echoID);
 	incoming.echoID = echoID;
 
-	messageMutex.lockForWrite();
+	QWriteLocker messagesLock(&messageMutex);
+
 	messageData.push_front(incoming);
 	endInsertRows();
 
-	echoesMutex.lockForWrite();
+	QWriteLocker echoesLock(&echoesMutex);
+
 	MessageData& ref = messageData[0];
 	echoes[echoID] = &ref;
-	echoesMutex.unlock();
-	messageMutex.unlock();
 
 	protocol::chat::v1::SendMessageResponse empty;
 
@@ -364,11 +368,12 @@ void MessagesModel::fetchMore(const QModelIndex& parent)
 		req.set_channel_id(channelID);
 		protocol::chat::v1::GetChannelMessagesResponse resp;
 
-		messageMutex.lockForRead();
-		if (!messageData.isEmpty()) {
-			req.set_before_message(messageData.last().id);
+		{
+			QReadLocker lock(&messageMutex);
+			if (!messageData.isEmpty()) {
+				req.set_before_message(messageData.last().id);
+			}
 		}
-		messageMutex.unlock();
 
 		if (checkStatus(client->chatKit->GetChannelMessages(&ctx, req, &resp))) {
 			if (resp.messages_size() == 0) {
@@ -376,12 +381,12 @@ void MessagesModel::fetchMore(const QModelIndex& parent)
 				return;
 			}
 
+			QWriteLocker messagesLock(&messageMutex);
+
 			beginInsertRows(QModelIndex(), messageData.count(), (messageData.count()+resp.messages_size())-1);
-			messageMutex.lockForWrite();
 			for (auto item : resp.messages()) {
 				messageData << MessageData::fromProtobuf(item);
 			}
-			messageMutex.unlock();
 			endInsertRows();
 		}
 	});
@@ -438,16 +443,19 @@ void MessagesModel::deleteMessage(const QString& id)
 QVariantMap MessagesModel::peekMessage(const QString& id)
 {
 	quint64 actualID = id.toULongLong();
-	messageMutex.lockForRead();
-	for (const auto& item : messageData) {
-		if (item.id == actualID) {
-			return {
-				{ "authorName", qobject_cast<ChannelsModel*>(parent())->userName(item.authorID) },
-				{ "content", item.text }
-			};
+
+	{
+		QReadLocker lock(&messageMutex);
+
+		for (const auto& item : messageData) {
+			if (item.id == actualID) {
+				return {
+					{ "authorName", qobject_cast<ChannelsModel*>(parent())->userName(item.authorID) },
+					{ "content", item.text }
+				};
+			}
 		}
 	}
-	messageMutex.unlock();
 
 	ClientContext ctx;
 	client->authenticate(ctx);
