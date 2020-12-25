@@ -69,6 +69,10 @@ void MembersModel::customEvent(QEvent *event)
 			_name = QString::fromStdString(ev->data.name());
 			Q_EMIT nameChanged();
 		}
+		if (ev->data.update_picture()) {
+			_picture = State::instance()->transformHMCURL(QString::fromStdString(ev->data.picture()), homeServer);
+			Q_EMIT pictureChanged();
+		}
 	}
 }
 
@@ -104,7 +108,7 @@ ChannelsModel::ChannelsModel(QString homeServer, quint64 guildID) : QAbstractLis
 	for (auto guild : guilds) {
 		if (guild.homeserver == homeServer && guild.guildID == guildID) {
 			members->_name = guild.name;
-			members->_picture = State::instance()->transformHMCURL(guild.picture);
+			members->_picture = State::instance()->transformHMCURL(guild.picture, homeServer);
 		}
 	}
 
@@ -223,7 +227,14 @@ int ChannelsModel::rowCount(const QModelIndex &parent) const
 void ChannelsModel::setGuildPicture(const QString& url)
 {
 	QtConcurrent::run([=] {
+		protocol::chat::v1::UpdateGuildPictureRequest req;
+		req.set_guild_id(guildID);
+		req.set_new_guild_picture(url.toStdString());
 
+		google::protobuf::Empty resp;
+
+		doContext;
+		checkStatus(client->chatKit->UpdateGuildPicture(&ctx, req, &resp));
 	});
 }
 

@@ -4,6 +4,7 @@
 
 #include <QQmlEngine>
 
+#include "state.hpp"
 #include "guild.hpp"
 #include "channels.hpp"
 
@@ -79,7 +80,7 @@ QVariant GuildModel::data(const QModelIndex &index, int role) const
 	case HomeserverRole:
 		return guilds[index.row()].homeserver;
 	case PictureRole:
-		return guilds[index.row()].picture;
+		return State::instance()->transformHMCURL(guilds[index.row()].picture, guilds[index.row()].homeserver);
 	case ChannelModelRole:
 		auto key = qMakePair(guilds[index.row()].guildID, guilds[index.row()].homeserver);
 		if (!d->models.contains(key)) {
