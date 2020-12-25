@@ -49,6 +49,29 @@ int MembersModel::rowCount(const QModelIndex& parent) const
 	return members.count();
 }
 
+void MembersModel::customEvent(QEvent *event)
+{
+	if (event->type() == MemberJoinedEvent::typeID) {
+		auto ev = reinterpret_cast<MemberJoinedEvent*>(event);
+		beginInsertRows(QModelIndex(), members.length(), members.length());
+		members << ev->data.member_id();
+		endInsertRows();
+	} else if (event->type() == MemberLeftEvent::typeID) {
+		auto ev = reinterpret_cast<MemberLeftEvent*>(event);
+		auto idx = std::find_if(members.begin(), members.end(), [=](quint64 id) { return id == ev->data.member_id(); });
+
+		beginRemoveRows(QModelIndex(), idx - members.begin(), idx - members.begin());
+		members.removeAt(idx - members.begin());
+		endRemoveRows();
+	} else if (event->type() == GuildUpdatedEvent::typeID) {
+		auto ev = reinterpret_cast<GuildUpdatedEvent*>(event);
+		if (ev->data.update_name()) {
+			_name = QString::fromStdString(ev->data.name());
+			Q_EMIT nameChanged();
+		}
+	}
+}
+
 QVariant MembersModel::data(const QModelIndex& index, int role) const
 {
 	if (!checkIndex(index))
@@ -81,7 +104,7 @@ ChannelsModel::ChannelsModel(QString homeServer, quint64 guildID) : QAbstractLis
 	for (auto guild : guilds) {
 		if (guild.homeserver == homeServer && guild.guildID == guildID) {
 			members->_name = guild.name;
-			members->_picture = guild.picture;
+			members->_picture = State::instance()->transformHMCURL(guild.picture);
 		}
 	}
 
@@ -199,7 +222,9 @@ int ChannelsModel::rowCount(const QModelIndex &parent) const
 
 void ChannelsModel::setGuildPicture(const QString& url)
 {
+	QtConcurrent::run([=] {
 
+	});
 }
 
 QVariant ChannelsModel::data(const QModelIndex &index, int role) const
@@ -313,7 +338,7 @@ QString ChannelsModel::avatarURL(quint64 id)
 		users[id] = QString::fromStdString(resp.user_name());
 		avatars[id] = QString::fromStdString(resp.user_avatar());
 	}
-	return avatars[id];
+	return State::instance()->transformHMCURL(avatars[id], homeServer);
 }
 
 InviteModel* ChannelsModel::invitesModel()

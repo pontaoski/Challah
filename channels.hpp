@@ -52,27 +52,7 @@ class MembersModel : public QAbstractListModel
 	ChannelsModel* channelsModel() { return model; }
 
 protected:
-	void customEvent(QEvent *event) override {
-		if (event->type() == MemberJoinedEvent::typeID) {
-			auto ev = reinterpret_cast<MemberJoinedEvent*>(event);
-			beginInsertRows(QModelIndex(), members.length(), members.length());
-			members << ev->data.member_id();
-			endInsertRows();
-		} else if (event->type() == MemberLeftEvent::typeID) {
-			auto ev = reinterpret_cast<MemberLeftEvent*>(event);
-			auto idx = std::find_if(members.begin(), members.end(), [=](quint64 id) { return id == ev->data.member_id(); });
-
-			beginRemoveRows(QModelIndex(), idx - members.begin(), idx - members.begin());
-			members.removeAt(idx - members.begin());
-			endRemoveRows();
-		} else if (event->type() == GuildUpdatedEvent::typeID) {
-			auto ev = reinterpret_cast<GuildUpdatedEvent*>(event);
-			if (ev->data.update_name()) {
-				_name = QString::fromStdString(ev->data.name());
-				Q_EMIT nameChanged();
-			}
-		}
-	}
+	void customEvent(QEvent *event) override;
 
 public:
 	Q_SIGNAL void nameChanged();
