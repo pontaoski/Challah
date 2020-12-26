@@ -125,17 +125,18 @@ ChannelsModel::ChannelsModel(QString homeServer, quint64 guildID) : QAbstractLis
 
 		protocol::chat::v1::GetGuildChannelsResponse resp;
 		checkStatus(client->chatKit->GetGuildChannels(&ctx, req, &resp));
-		resp.channels_size();
 
-		beginResetModel();
-		for (auto chan : resp.channels()) {
-			channels << Channel {
-				.channelID = chan.channel_id(),
-				.name = QString::fromStdString(chan.channel_name()),
-				.isCategory = chan.is_category(),
-			};
-		}
-		endResetModel();
+		QCoreApplication::postEvent(this, new ExecuteEvent([resp, this]{
+			beginResetModel();
+			for (auto chan : resp.channels()) {
+				channels << Channel {
+					.channelID = chan.channel_id(),
+					.name = QString::fromStdString(chan.channel_name()),
+					.isCategory = chan.is_category(),
+				};
+			}
+			endResetModel();
+		}));
 	});
 
 	client->subscribeGuild(guildID);
