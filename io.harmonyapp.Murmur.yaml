@@ -35,7 +35,16 @@ modules:
       - -DBUILD_SHARED_LIBS=on
       - -DCARES_SHARED=on
       - -DCARES_STATIC=off
+      - -DgRPC_BUILD_CSHARP_EXT=OFF
+      - -DgRPC_BUILD_GRPC_CSHARP_PLUGIN=OFF
+      - -DgRPC_BUILD_GRPC_NODE_PLUGIN=OFF
+      - -DgRPC_BUILD_GRPC_OBJECTIVE_C_PL=OFF
+      - -DgRPC_BUILD_GRPC_PHP_PLUGIN=OFF
+      - -DgRPC_BUILD_GRPC_PYTHON_PLUGIN=OFF
       - -Dprotobuf_BUILD_SHARED_LIBS=on
+      - -DgRPC_BUILD_GRPC_RUBY_PLUGIN=OFF
+      - -DRE2_BUILD_TESTING=off
+      - -DgRPC_BUILD_TESTS=off
     sources:
       - type: git
         url: https://github.com/grpc/grpc
