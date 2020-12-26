@@ -1,6 +1,7 @@
 default
 release
 build
+flatpak
 _flatpak_builder
 .vscode
 output
