@@ -44,7 +44,7 @@ QQC2.ToolBar {
 			RowLayout {
 				Layout.fillWidth: true
 
-				QQC2.TextField {
+				QQC2.TextArea {
 					id: dialogField
 					//: Placeholder text for the message field
 					placeholderText: qsTr("Write a message...")
@@ -56,7 +56,7 @@ QQC2.ToolBar {
 						let replyingTo = replyingBar.replyingToID
 						text = ""
 						replyingBar.replyingToID = ""
-						messageField.Kirigami.PageRouter.data.uploadFile(
+						messageField.Kirigami.PageRouter.data.parentModel.uploadFile(
 							uploadSheet.pendingUpload,
 							function(url) {
 								messageField.Kirigami.PageRouter.data.sendMessage(incomingText, replyingTo, [url])
@@ -70,7 +70,9 @@ QQC2.ToolBar {
 						uploadSheet.close()
 					}
 
-					onAccepted: send()
+					Keys.onReturnPressed: send()
+
+					Component.onCompleted: HState.bindTextDocument(this.textDocument, this)
 				}
 				QQC2.Button {
 					text: qsTr("Send")
@@ -130,7 +132,7 @@ QQC2.ToolBar {
 				visible: uiSettings.personas.length > 0
 				textRole: "name"
 			}
-			QQC2.TextField {
+			QQC2.TextArea {
 				id: messageField
 				placeholderText: if (messagesRoute.model.permissions.canSendAndEdit) {
 					//: Placeholder text for the message field
@@ -140,9 +142,13 @@ QQC2.ToolBar {
 					return qsTr("You do not have permissions to send a message to this channel.")
 				}
 
+				Component.onCompleted: HState.bindTextDocument(this.textDocument, this)
 				Layout.fillWidth: true
 
 				function send() {
+					if (text == "") {
+						return
+					}
 					if (uiSettings.personas.length == 0) {
 						Kirigami.PageRouter.data.sendMessage(text, replyingBar.replyingToID, [])
 					} else {
@@ -161,8 +167,7 @@ QQC2.ToolBar {
 				background: null
 
 				Keys.onEscapePressed: replyingBar.replyingToID = ""
-
-				onAccepted: send()
+				Keys.onReturnPressed: send()
 			}
 			QQC2.Button {
 				icon.name: "mail-attachment"

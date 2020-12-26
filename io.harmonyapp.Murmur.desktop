@@ -4,4 +4,4 @@ Name=Murmur
 Exec=Murmur
 Comment=Harmony client
 GenericName=Chat Application
-Icon=com.github.harmony-development.Murmur.svg
+Icon=io.harmonyapp.Murmur

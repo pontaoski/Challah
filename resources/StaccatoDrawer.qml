@@ -12,7 +12,7 @@ import com.github.HarmonyDevelopment.Staccato 1.0
 Item {
 	id: drawer
 
-	implicitWidth: shouldShow ? (channelsModel.model != null ? 72 + 200 : 72) : 0
+	implicitWidth: shouldShow ? (channelsModel.workaroundModel != null ? 72 + 200 : 72) : 0
 	property bool shouldShow: false
 
 	Rectangle {
@@ -100,16 +100,16 @@ Item {
 
 					Repeater {
 						model: HState.guildModel
-						delegate: Avatar {
+						delegate: Kirigami.Avatar {
 							implicitWidth: 48
 							implicitHeight: 48
 
-							name: model['guildName']
-							source: model['picture']
+							name: guildName
+							source: picture
 
 							Layout.alignment: Qt.AlignTop | Qt.AlignHCenter
 
-							ToolTip.text: model['guildName']
+							ToolTip.text: guildName
 							ToolTip.visible: maus.containsMouse
 
 							MouseArea {
@@ -123,8 +123,7 @@ Item {
 										return
 									}
 
-									channelsTitle.text = model['guildName']
-									channelsModel.model = model['channelModel']
+									channelsModel.workaroundModel = model['channelModel']
 
 									rightHandDrawer.model = model['channelModel'].members
 								}
@@ -154,11 +153,11 @@ Item {
 		Kirigami.Separator {
 			Layout.fillHeight: true
 
-			visible: channelsModel.model != null
+			visible: channelsModel.workaroundModel != null
 		}
 		ColumnLayout {
 			spacing: 0
-			visible: channelsModel.model != null
+			visible: channelsModel.workaroundModel != null
 			Layout.fillWidth: true
 
 			Kirigami.ApplicationHeader {
@@ -173,19 +172,21 @@ Item {
 					}
 
 					Kirigami.Heading {
-						id: channelsTitle
 						leftPadding: Kirigami.Units.largeSpacing
 						text: qsTr("Channels")
 						Layout.fillWidth: true
 					}
 					ToolButton {
 						icon.name: "settings-configure"
-						visible: channelsModel.model.permissions.canViewInvites
-						onClicked: root.pageStack.layers.push(Qt.resolvedUrl("Invites.qml"), {"inviteModel": channelsModel.model.invitesModel()})
+						visible: channelsModel.workaroundModel.permissions.canViewInvites || channelsModel.workaroundModel.permissions.canManageRoles
+						onClicked: root.pageStack.layers.push(Qt.resolvedUrl("GuildSettings.qml"), {
+							"invitesModel": channelsModel.workaroundModel.permissions.canViewInvites ? channelsModel.workaroundModel.invitesModel() : null,
+							"rolesModel": channelsModel.workaroundModel.permissions.canManageRoles ? channelsModel.workaroundModel.rolesModel() : null
+						})
 					}
 					ToolButton {
 						icon.name: "list-add"
-						visible: channelsModel.model.permissions.canCreate
+						visible: channelsModel.workaroundModel.permissions.canCreate
 						onClicked: sheety.open()
 					}
 				}
@@ -211,6 +212,9 @@ Item {
 
 				model: DelegateModel {
 					id: channelsModel
+
+					model: workaroundModel
+					property var workaroundModel: null
 
 					delegate: Item {
 						id: itemer
@@ -250,7 +254,7 @@ Item {
 							actions: [
 								Kirigami.Action {
 									icon.name: "edit-delete"
-									onTriggered: channelsModel.model.deleteChannel(channelID)
+									onTriggered: channelsModel.workaroundModel.deleteChannel(channelID)
 								}
 							]
 						}
@@ -274,7 +278,7 @@ Item {
 								)
 							}
 							onPressAndHold: {
-								if (channelsModel.model.permissions.canMove) {
+								if (channelsModel.workaroundModel.permissions.canMove) {
 									itemer.z = 0
 									held = true
 								}
@@ -283,7 +287,7 @@ Item {
 								if (held) {
 									itemer.z = 999
 									held = false
-									channelsModel.model.moveChannelFromTo(index, itemer.DelegateModel.itemsIndex)
+									channelsModel.workaroundModel.moveChannelFromTo(index, itemer.DelegateModel.itemsIndex)
 									channelsModel.items.move(itemer.DelegateModel.itemsIndex, itemer.DelegateModel.itemsIndex)
 								}
 							}
@@ -307,6 +311,6 @@ Item {
 
 	ChannelSheet {
 		id: sheety
-		model: channelsModel.model
+		model: channelsModel.workaroundModel
 	}
 }

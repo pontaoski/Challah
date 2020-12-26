@@ -7,13 +7,14 @@
 #include <QAbstractListModel>
 #include <QQmlPropertyMap>
 
-#include "core.grpc.pb.h"
-#include "core.pb.h"
+#include "chat/v1/chat.grpc.pb.h"
+#include "chat/v1/chat.pb.h"
 
 #include "messages.hpp"
 #include "util.hpp"
 
 class Client;
+class QNetworkAccessManager;
 
 struct Channel {
 	quint64 channelID;
@@ -23,6 +24,7 @@ struct Channel {
 
 class ChannelsModel;
 class InviteModel;
+class RolesModel;
 class MembersModel : public QAbstractListModel
 {
 	Q_OBJECT
@@ -46,28 +48,11 @@ class MembersModel : public QAbstractListModel
 	Q_PROPERTY(QString name READ name NOTIFY nameChanged)
 	Q_PROPERTY(QString picture READ picture NOTIFY pictureChanged)
 
-protected:
-	void customEvent(QEvent *event) override {
-		if (event->type() == MemberJoinedEvent::typeID) {
-			auto ev = reinterpret_cast<MemberJoinedEvent*>(event);
-			beginInsertRows(QModelIndex(), members.length(), members.length());
-			members << ev->data.member_id();
-			endInsertRows();
-		} else if (event->type() == MemberLeftEvent::typeID) {
-			auto ev = reinterpret_cast<MemberLeftEvent*>(event);
-			auto idx = std::find_if(members.begin(), members.end(), [=](quint64 id) { return id == ev->data.member_id(); });
+	Q_PROPERTY(ChannelsModel* parentModel READ channelsModel CONSTANT FINAL)
+	ChannelsModel* channelsModel() { return model; }
 
-			beginRemoveRows(QModelIndex(), idx - members.begin(), idx - members.begin());
-			members.removeAt(idx - members.begin());
-			endRemoveRows();
-		} else if (event->type() == GuildUpdatedEvent::typeID) {
-			auto ev = reinterpret_cast<GuildUpdatedEvent*>(event);
-			if (ev->data.update_name()) {
-				_name = QString::fromStdString(ev->data.name());
-				Q_EMIT nameChanged();
-			}
-		}
-	}
+protected:
+	void customEvent(QEvent *event) override;
 
 public:
 	Q_SIGNAL void nameChanged();
@@ -89,6 +74,7 @@ class ChannelsModel : public QAbstractListModel
 	QList<Channel> channels;
 	QMap<quint64,QString> users;
 	QMap<quint64,QString> avatars;
+	QSharedPointer<QNetworkAccessManager> nam;
 	mutable QMap<quint64,MessagesModel*> models;
 	friend class Client;
 	static QMap<QPair<QString,quint64>,ChannelsModel*> instances;
@@ -122,9 +108,14 @@ public:
 	}
 
 	Q_INVOKABLE void deleteChannel(const QString& id);
-	Q_INVOKABLE bool createChannel(const QString& name);
+	Q_INVOKABLE void createChannel(const QString& name, QJSValue then, QJSValue elseDo);
 	Q_INVOKABLE void moveChannelFromTo(int from, int to);
 	Q_INVOKABLE QString userName(quint64 id);
 	Q_INVOKABLE QString avatarURL(quint64 id);
+	Q_INVOKABLE void setGuildPicture(const QString &url);
+	Q_INVOKABLE void uploadFile(const QUrl& path, QJSValue then, QJSValue elseDo, QJSValue progress, QJSValue finally);
+	Q_INVOKABLE void checkCanInstantView(const QStringList& link, QJSValue then);
+	Q_INVOKABLE void grabInstantView(const QString& link, QJSValue then);
 	Q_INVOKABLE InviteModel* invitesModel();
+	Q_INVOKABLE RolesModel* rolesModel();
 };

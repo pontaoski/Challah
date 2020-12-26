@@ -24,14 +24,13 @@ Kirigami.OverlaySheet {
             text: qsTr("Create Channel")
 
             onClicked: {
-                if (rooty.model.createChannel(texty.text)) {
+				rooty.model.createChannel(
+					texty.text,
 					//: the channel has been successfully created
-                    root.showPassiveNotification(qsTr("Created channel"))
-                } else {
+					function() { root.showPassiveNotification(qsTr("Created channel")); rooty.close() },
 					//: the channel failed to be created
-                    root.showPassiveNotification(qsTr("Failed to create channel"))
-                }
-                rooty.close()
+					function() { root.showPassiveNotification(qsTr("Failed to create channel")); rooty.close() },
+				)
             }
         }
     }

@@ -12,8 +12,8 @@
 
 #include <google/protobuf/util/json_util.h>
 
-#include "core.grpc.pb.h"
-#include "core.pb.h"
+#include "chat/v1/chat.grpc.pb.h"
+#include "chat/v1/chat.pb.h"
 
 #include "client.hpp"
 #include "util.hpp"
@@ -43,9 +43,17 @@ struct MessageData
 	};
 	std::optional<Override> overrides;
 
-	QStringList attachments;
+	QVariantList attachments;
 
-	static MessageData fromProtobuf(protocol::core::v1::Message& msg) {
+	enum State {
+		Sent,
+		Sending,
+		Failed,
+	};
+	State status;
+	quint64 echoID;
+
+	static MessageData fromProtobuf(protocol::harmonytypes::v1::Message& msg) {
 		std::string jsonified;
 		google::protobuf::util::MessageToJsonString(msg, &jsonified, google::protobuf::util::JsonPrintOptions{});
 		auto document = QJsonDocument::fromJson(QByteArray::fromStdString(jsonified));
@@ -65,9 +73,13 @@ struct MessageData
 		}
 
 		auto msgAttaches = msg.attachments();
-		QStringList attachments;
+		QVariantList attachments;
 		for (auto attach : msgAttaches) {
-			attachments << QString::fromStdString(attach);
+			std::string jsonified;
+			google::protobuf::util::MessageToJsonString(attach, &jsonified, google::protobuf::util::JsonPrintOptions{});
+			auto document = QJsonDocument::fromJson(QByteArray::fromStdString(jsonified));
+
+			attachments << document.object();
 		}
 
 		return MessageData {
@@ -80,7 +92,8 @@ struct MessageData
 			.editedAt = QDateTime(),
 			.replyTo = msg.in_reply_to(),
 			.overrides = overrides,
-			.attachments = attachments
+			.attachments = attachments,
+			.status = State::Sent,
 		};
 	}
 };
@@ -97,7 +110,7 @@ class MessagesModel : public QAbstractListModel
 	quint64 channelID;
 
 	QList<MessageData> messageData;
-	QSharedPointer<QNetworkAccessManager> nam;
+	QHash<quint64,MessageData*> echoes;
 	QQmlPropertyMap* permissions;
 
 	friend class ChannelsModel;
@@ -105,10 +118,15 @@ class MessagesModel : public QAbstractListModel
 
 	bool atEnd = false;
 	bool isGuildOwner = false;
+	bool isReadingMore = false;
 
 	Client* client;
 
+	Q_PROPERTY(ChannelsModel* parentModel READ channelsModel CONSTANT FINAL)
+	ChannelsModel* channelsModel() { return reinterpret_cast<ChannelsModel*>(parent()); }
+
 	Q_PROPERTY(QQmlPropertyMap* permissions MEMBER permissions CONSTANT FINAL)
+	Q_PROPERTY(QString homeserver MEMBER homeServer CONSTANT FINAL)
 
 	enum Roles {
 		MessageTextRole = Qt::UserRole,
@@ -122,7 +140,10 @@ class MessagesModel : public QAbstractListModel
 		MessageReplyToRole,
 		MessageIDRole,
 		MessageAttachmentsRole,
-		MessageCombinedAuthorIDAvatarRole
+		MessageCombinedAuthorIDAvatarRole,
+		MessageQuirkRole,
+		MessageModelIndexRole,
+		MessageStatusRole,
 	};
 
 	struct Fronter {
@@ -169,5 +190,4 @@ public:
 	Q_INVOKABLE void editMessage(const QString& id, const QString& content);
 	Q_INVOKABLE void deleteMessage(const QString& id);
 	Q_INVOKABLE void triggerAction(const QString& messageID, const QString& name, const QString& data);
-	Q_INVOKABLE void uploadFile(const QUrl& path, QJSValue then, QJSValue elseDo, QJSValue progress, QJSValue finally);
 };

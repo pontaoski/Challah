@@ -1,14 +1,19 @@
 QtApplication {
 	name: "Murmur"
 
+	protobuf.cpp.importPaths: ["protocol"]
 	protobuf.cpp.useGrpc: true
-	protobuf.cpp.libraryPath: "/usr/lib64/libprotobuf.so.22"
-	protobuf.cpp.grpcLibraryPath: "/usr/lib64/libgrpc++.so.1"
-	protobuf.cpp.grpcIncludePath: "/usr/include/grpc++"
-	protobuf.cpp.includePath: "/usr/include/google/protobuf"
 
 	cpp.cppFlags: ['-Werror=return-type']
 	cpp.cxxLanguageVersion: "c++17"
+	cpp.debugInformation: true
+	cpp.separateDebugInformation: true
+	cpp.enableExceptions: true
+	cpp.enableReproducibleBuilds: true
+	cpp.enableRtti: true
+
+	debugInformationInstallDir: "bin"
+	installDebugInformation: true
 
 	files: [
 		"*.cpp",
@@ -17,19 +22,19 @@ QtApplication {
 	]
 
 	Group {
-		files: ["resources/com.github.harmony-development.Murmur.svg"]
+		files: ["resources/io.harmonyapp.Murmur.svg"]
 		qbs.install: qbs.targetOS.contains("linux")
 		qbs.installDir: "share/icons/hicolor/scalable/apps"
 	}
 
 	Group {
-		files: ["com.github.harmony-development.Murmur.appdata.xml"]
+		files: ["io.harmonyapp.Murmur.appdata.xml"]
 		qbs.install: qbs.targetOS.contains("linux")
 		qbs.installDir: "share/metainfo"
 	}
 
 	Group {
-		files: ["com.github.harmony-development.Murmur.desktop"]
+		files: ["io.harmonyapp.Murmur.desktop"]
 		qbs.install: qbs.targetOS.contains("linux")
 		qbs.installDir: "share/applications"
 	}
@@ -50,9 +55,17 @@ QtApplication {
 
 	Group {
 		files: [
-			"protocol/core/v1/core.proto",
-			"protocol/foundation/v1/foundation.proto",
-			"protocol/profile/v1/profile.proto"
+			"protocol/auth/v1/auth.proto",
+			"protocol/chat/v1/channels.proto",
+			"protocol/chat/v1/chat.proto",
+			"protocol/chat/v1/emotes.proto",
+			"protocol/chat/v1/guilds.proto",
+			"protocol/chat/v1/messages.proto",
+			"protocol/chat/v1/permissions.proto",
+			"protocol/chat/v1/profile.proto",
+			"protocol/chat/v1/streaming.proto",
+			"protocol/harmonytypes/v1/types.proto",
+			"protocol/mediaproxy/v1/mediaproxy.proto",
 		]
 		fileTags: "protobuf.grpc"
 	}

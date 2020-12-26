@@ -5,6 +5,7 @@
 import QtQuick 2.5
 import QtQuick.Layouts 1.1
 import QtQuick.Controls 2.10
+import QtQuick.Dialogs 1.3
 import org.kde.kirigami 2.13 as Kirigami
 import com.github.HarmonyDevelopment.Staccato 1.0
 
@@ -90,34 +91,63 @@ Item {
 					}
 				}
 
-				contentItem: RowLayout {
+				contentItem: ColumnLayout {
 					Kirigami.Theme.colorSet: Kirigami.Theme.Header
-					Avatar {
+					Kirigami.Avatar {
 						source: drawer.model.picture
 						name: drawer.model.name
 
-						Layout.preferredWidth: Kirigami.Units.gridUnit * 2.5
-						Layout.preferredHeight: Kirigami.Units.gridUnit * 2.5
-					}
-					ColumnLayout {
-						Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
-
-						Item { Layout.fillHeight: true }
-						Kirigami.Heading {
-							text: drawer.model.name
-							level: 2
-
-							Layout.alignment: Qt.AlignBottom
+						FileDialog {
+							id: fileDialog
+							title: "Please choose a file"
+							folder: shortcuts.pictures
+							onAccepted: {
+								drawer.model.parentModel.uploadFile(
+									fileDialog.fileUrl,
+									function(url) {
+										drawer.model.parentModel.setGuildPicture(url)
+									},
+									function() {
+										root.showPassiveNotification(qsTr("Failed to upload file"))
+									},
+									function(progress) {},
+									function() {}
+								)
+							}
 						}
-						Label {
-							text: qsTr("%L1 members").arg(listy.count)
-							opacity: 0.7
 
-							Layout.alignment: Qt.AlignTop
+						ImagePopup {
+							id: imagePopup
+							source: drawer.model.picture
 						}
-						Item { Layout.fillHeight: true }
+
+						actions.main: Kirigami.Action {
+							onTriggered: imagePopup.open()
+						}
+						actions.secondary: Kirigami.Action {
+							icon.name: "camera-photo-symbolic"
+							onTriggered: fileDialog.open()
+						}
+
+						Layout.preferredWidth: Kirigami.Units.gridUnit * 5
+						Layout.preferredHeight: Kirigami.Units.gridUnit * 5
+						Layout.alignment: Qt.AlignHCenter
 					}
-					Item { Layout.fillWidth: true }
+
+					Kirigami.Heading {
+						text: drawer.model.name
+						level: 2
+
+						horizontalAlignment: Text.AlignHCenter
+						Layout.fillWidth: true
+					}
+					Label {
+						text: qsTr("%L1 members").arg(listy.count)
+						opacity: 0.7
+
+						horizontalAlignment: Text.AlignHCenter
+						Layout.fillWidth: true
+					}
 				}
 			}
 
@@ -125,7 +155,7 @@ Item {
 				hoverEnabled: false
 				highlighted: false
 				contentItem: RowLayout {
-					Avatar {
+					Kirigami.Avatar {
 						name: display
 						source: decoration
 

@@ -6,6 +6,7 @@
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
 #include <QNetworkReply>
+#include <QtConcurrent>
 
 #include "channels.hpp"
 #include "messages.hpp"
@@ -18,35 +19,54 @@ MessagesModel::MessagesModel(ChannelsModel *parent, QString homeServer, quint64 
 		channelID(channelID),
 		homeServer(homeServer)
 {
-	nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
 	client = Client::instanceForHomeserver(homeServer);
 	permissions = new QQmlPropertyMap(this);
 
 	permissions->insert("canSendAndEdit", client->hasPermission("messages.send", guildID));
 	permissions->insert("canDeleteOthers", client->hasPermission("messages.manage.delete", guildID));
 
-	{
+	QtConcurrent::run([=] {
 		ClientContext ctx;
 		client->authenticate(ctx);
 
-		protocol::core::v1::GetGuildRequest req;
+		protocol::chat::v1::GetGuildRequest req;
 		req.set_guild_id(guildID);
-		protocol::core::v1::GetGuildResponse resp;
-		if (checkStatus(client->coreKit->GetGuild(&ctx, req, &resp))) {
+		protocol::chat::v1::GetGuildResponse resp;
+		if (checkStatus(client->chatKit->GetGuild(&ctx, req, &resp))) {
 			isGuildOwner = client->userID == resp.guild_owner();
 		}
-	}
+	});
 }
 
 void MessagesModel::customEvent(QEvent *event)
 {
 	if (event->type() == MessageSentEvent::typeID) {
 		auto ev = reinterpret_cast<MessageSentEvent*>(event);
-		auto msg = ev->data.message();
-		auto idx = messageData.count();
-		beginInsertRows(QModelIndex(), 0, 0);
-		messageData.push_front(MessageData::fromProtobuf(msg));
-		endInsertRows();
+		auto echoID = ev->data.echo_id();
+
+		if (echoes.contains(echoID)) {
+			auto msg = echoes[echoID];
+			int i = 0;
+			for (auto &message : messageData) {
+				if (message.echoID == echoID) {
+					break;
+				}
+				i++;
+			}
+			auto message = ev->data.message();
+			*msg = MessageData::fromProtobuf(message);
+
+			echoes.remove(echoID);
+
+			dataChanged(index(i), index(i));
+		} else {
+			auto msg = ev->data.message();
+			auto idx = messageData.count();
+			beginInsertRows(QModelIndex(), 0, 0);
+			messageData.push_front(MessageData::fromProtobuf(msg));
+			endInsertRows();
+		}
+
 	} else if (event->type() == MessageUpdatedEvent::typeID) {
 		auto ev = reinterpret_cast<MessageUpdatedEvent*>(event);
 		auto& msg = ev->data;
@@ -65,9 +85,13 @@ void MessagesModel::customEvent(QEvent *event)
 				}
 				if (msg.update_attachments()) {
 					auto msgAttaches = msg.attachments();
-					QStringList attachments;
+					QVariantList attachments;
 					for (auto attach : msgAttaches) {
-						attachments << QString::fromStdString(attach);
+						std::string jsonified;
+						google::protobuf::util::MessageToJsonString(attach, &jsonified, google::protobuf::util::JsonPrintOptions{});
+						auto document = QJsonDocument::fromJson(QByteArray::fromStdString(jsonified));
+
+						attachments << document.object();
 					}
 					message.attachments = attachments;
 				}
@@ -97,6 +121,9 @@ void MessagesModel::customEvent(QEvent *event)
 			messageData.removeAt(idx);
 			endRemoveRows();
 		}
+	} else if (event->type() == ExecuteEvent::typeID) {
+		auto ev = reinterpret_cast<ExecuteEvent*>(event);
+		ev->data();
 	}
 }
 
@@ -112,13 +139,13 @@ QVariant MessagesModel::data(const QModelIndex& index, int role) const
 
 	auto idx = index.row();
 
-	auto author = [=]() {
+	auto author = [this](int idx) {
 		if (messageData[idx].overrides.has_value()) {
 			return messageData[idx].overrides->name;
 		}
 		return qobject_cast<ChannelsModel*>(parent())->userName(messageData[idx].authorID);
 	};
-	auto avatar = [=]() {
+	auto avatar = [this](int idx) {
 		if (messageData[idx].overrides.has_value()) {
 			return messageData[idx].overrides->avatar;
 		}
@@ -151,9 +178,9 @@ QVariant MessagesModel::data(const QModelIndex& index, int role) const
 	case MessageTextRole:
 		return messageData[idx].text;
 	case MessageAuthorRole:
-		return author();
+		return author(idx);
 	case MessageAuthorAvatarRole:
-		return avatar();
+		return avatar(idx);
 	case MessageAuthorIDRole:
 		return QString::number(messageData[idx].authorID);
 	case MessageShouldDisplayAuthorInfo:
@@ -175,9 +202,27 @@ QVariant MessagesModel::data(const QModelIndex& index, int role) const
 	case MessageCombinedAuthorIDAvatarRole:
 		return QStringList{
 			QString::number(messageData[idx].authorID),
-			avatar(),
-			author()
+			avatar(idx),
+			author(idx),
+			messageData[idx].date.date().toString(),
 		}.join("\t");
+	case MessageQuirkRole: {
+		QVariantMap quirks;
+		if (messageData.length() > (idx+1)) {
+
+			auto thisData = messageData[idx].date;
+			auto thatData = messageData[idx+1].date;
+			if (thisData.date() != thatData.date()) {
+				quirks["dateHeader"] = QLocale::system().toString(thisData.date(), QLocale::LongFormat);
+			}
+
+			quirks["previousAuthorDifferent"] = (messageData[idx].authorID != messageData[idx+1].authorID) || (avatar(idx) != avatar(idx+1)) || (author(idx) != author(idx+1));
+		}
+
+		return quirks;
+	}
+	case MessageModelIndexRole:
+		return QVariant::fromValue(index);
 	}
 
 	return QVariant();
@@ -198,16 +243,15 @@ QHash<int,QByteArray> MessagesModel::roleNames() const
 	ret[MessageReplyToRole] = "replyToID";
 	ret[MessageCombinedAuthorIDAvatarRole] = "authorIDAndAvatar";
 	ret[MessageAttachmentsRole] = "attachments";
+	ret[MessageQuirkRole] = "quirks";
+	ret[MessageModelIndexRole] = "modelIndex";
 
 	return ret;
 }
 
 void MessagesModel::sendMessageFull(const QString& message, const QString &replyTo, const QStringList& attachments, const SendAs& as)
 {
-	ClientContext ctx;
-	client->authenticate(ctx);
-
-	protocol::core::v1::SendMessageRequest req;
+	protocol::chat::v1::SendMessageRequest req;
 
 	req.set_guild_id(guildID);
 	req.set_channel_id(channelID);
@@ -225,7 +269,7 @@ void MessagesModel::sendMessageFull(const QString& message, const QString &reply
 	} else if (std::holds_alternative<Fronter>(as)) {
 		auto& fronter = std::get<Fronter>(as);
 
-		auto override = new protocol::core::v1::Override();
+		auto override = new protocol::harmonytypes::v1::Override();
 		override->set_name(fronter.name.toStdString());
 		override->set_allocated_system_plurality(new google::protobuf::Empty{});
 
@@ -234,16 +278,57 @@ void MessagesModel::sendMessageFull(const QString& message, const QString &reply
 	} else if (std::holds_alternative<RoleplayCharacter>(as)) {
 		auto& character = std::get<RoleplayCharacter>(as);
 
-		auto override = new protocol::core::v1::Override();
+		auto override = new protocol::harmonytypes::v1::Override();
 		override->set_name(character.name.toStdString());
 		override->set_user_defined("Roleplay");
 
 		req.set_allocated_overrides(override);
 	}
 
-	protocol::core::v1::SendMessageResponse empty;
+	beginInsertRows(QModelIndex(), 0, 0);
+	auto incoming = MessageData {};
+	incoming.text = message;
+	if (replyTo != QString()) {
+		incoming.replyTo = replyTo.toULongLong();
+	}
+	QVariantList attaches;
+	for (auto attach : attachments) {
+		attaches << attach;
+	}
+	incoming.attachments = attaches;
+	if (std::holds_alternative<Nobody>(as)) {
+		;
+	} else if (std::holds_alternative<Fronter>(as)) {
+		incoming.overrides = MessageData::Override {
+			.name = std::get<Fronter>(as).name,
+			.reason = MessageData::Override::Plurality,
+		};
+	} else if (std::holds_alternative<RoleplayCharacter>(as)) {
+		incoming.overrides = MessageData::Override {
+			.name = std::get<RoleplayCharacter>(as).name
+		};
+	}
+	incoming.status = MessageData::Sending;
+	incoming.authorID = client->userID;
 
-	client->coreKit->SendMessage(&ctx, req, &empty);
+	auto echoID = QRandomGenerator::global()->generate64();
+	req.set_echo_id(echoID);
+	incoming.echoID = echoID;
+
+	messageData.push_front(incoming);
+	endInsertRows();
+
+	MessageData& ref = messageData[0];
+	echoes[echoID] = &ref;
+
+	protocol::chat::v1::SendMessageResponse empty;
+
+	QtConcurrent::run([=]() mutable {
+		ClientContext ctx;
+		client->authenticate(ctx);
+
+		client->chatKit->SendMessage(&ctx, req, &empty);
+	});
 }
 
 bool MessagesModel::canFetchMore(const QModelIndex& parent) const
@@ -257,30 +342,46 @@ void MessagesModel::fetchMore(const QModelIndex& parent)
 {
 	Q_UNUSED(parent)
 
-	ClientContext ctx;
-	client->authenticate(ctx);
+	if (isReadingMore) {
+		return;
+	}
 
-	protocol::core::v1::GetChannelMessagesRequest req;
+	isReadingMore = true;
+
+	protocol::chat::v1::GetChannelMessagesRequest req;
 	req.set_guild_id(guildID);
 	req.set_channel_id(channelID);
-	protocol::core::v1::GetChannelMessagesResponse resp;
-
 	if (!messageData.isEmpty()) {
 		req.set_before_message(messageData.last().id);
 	}
 
-	if (checkStatus(client->coreKit->GetChannelMessages(&ctx, req, &resp))) {
-		if (resp.messages_size() == 0) {
-			atEnd = true;
-			return;
-		}
+	QtConcurrent::run([=] {
+		ClientContext ctx;
+		client->authenticate(ctx);
 
-		beginInsertRows(QModelIndex(), messageData.count(), (messageData.count()+resp.messages_size())-1);
-		for (auto item : resp.messages()) {
-			messageData << MessageData::fromProtobuf(item);
+		protocol::chat::v1::GetChannelMessagesResponse resp;
+
+		if (checkStatus(client->chatKit->GetChannelMessages(&ctx, req, &resp))) {
+			QCoreApplication::postEvent(this, new ExecuteEvent([resp, this] {
+				if (resp.messages_size() == 0) {
+					atEnd = true;
+					return;
+				}
+
+				beginInsertRows(QModelIndex(), messageData.count(), (messageData.count()+resp.messages_size())-1);
+				for (auto item : resp.messages()) {
+					messageData << MessageData::fromProtobuf(item);
+				}
+				endInsertRows();
+
+				isReadingMore = false;
+			}));
+		} else {
+			QCoreApplication::postEvent(this, new ExecuteEvent([this] {
+				isReadingMore = false;
+			}));
 		}
-		endInsertRows();
-	}
+	});
 }
 
 void MessagesModel::triggerAction(const QString& messageID, const QString &name, const QString &data)
@@ -288,7 +389,7 @@ void MessagesModel::triggerAction(const QString& messageID, const QString &name,
 	ClientContext ctx;
 	client->authenticate(ctx);
 
-	protocol::core::v1::TriggerActionRequest req;
+	protocol::chat::v1::TriggerActionRequest req;
 	req.set_guild_id(guildID);
 	req.set_channel_id(channelID);
 	req.set_message_id(messageID.toULongLong());
@@ -298,7 +399,7 @@ void MessagesModel::triggerAction(const QString& messageID, const QString &name,
 	}
 	google::protobuf::Empty resp;
 
-	checkStatus(client->coreKit->TriggerAction(&ctx, req, &resp));
+	checkStatus(client->chatKit->TriggerAction(&ctx, req, &resp));
 }
 
 void MessagesModel::editMessage(const QString& id, const QString &content)
@@ -306,7 +407,7 @@ void MessagesModel::editMessage(const QString& id, const QString &content)
 	ClientContext ctx;
 	client->authenticate(ctx);
 
-	protocol::core::v1::UpdateMessageRequest req;
+	protocol::chat::v1::UpdateMessageRequest req;
 	req.set_guild_id(guildID);
 	req.set_channel_id(channelID);
 	req.set_message_id(id.toULongLong());
@@ -314,7 +415,7 @@ void MessagesModel::editMessage(const QString& id, const QString &content)
 	req.set_update_content(true);
 	google::protobuf::Empty resp;
 
-	checkStatus(client->coreKit->UpdateMessage(&ctx, req, &resp));
+	checkStatus(client->chatKit->UpdateMessage(&ctx, req, &resp));
 }
 
 void MessagesModel::deleteMessage(const QString& id)
@@ -322,18 +423,19 @@ void MessagesModel::deleteMessage(const QString& id)
 	ClientContext ctx;
 	client->authenticate(ctx);
 
-	protocol::core::v1::DeleteMessageRequest req;
+	protocol::chat::v1::DeleteMessageRequest req;
 	req.set_guild_id(guildID);
 	req.set_channel_id(channelID);
 	req.set_message_id(id.toULongLong());
 	google::protobuf::Empty resp;
 
-	checkStatus(client->coreKit->DeleteMessage(&ctx, req, &resp));
+	checkStatus(client->chatKit->DeleteMessage(&ctx, req, &resp));
 }
 
 QVariantMap MessagesModel::peekMessage(const QString& id)
 {
 	quint64 actualID = id.toULongLong();
+
 	for (const auto& item : messageData) {
 		if (item.id == actualID) {
 			return {
@@ -346,13 +448,13 @@ QVariantMap MessagesModel::peekMessage(const QString& id)
 	ClientContext ctx;
 	client->authenticate(ctx);
 
-	protocol::core::v1::GetMessageRequest req;
+	protocol::chat::v1::GetMessageRequest req;
 	req.set_guild_id(guildID);
 	req.set_channel_id(channelID);
 	req.set_message_id(actualID);
-	protocol::core::v1::GetMessageResponse resp;
+	protocol::chat::v1::GetMessageResponse resp;
 
-	if (!checkStatus(client->coreKit->GetMessage(&ctx, req, &resp))) {
+	if (!checkStatus(client->chatKit->GetMessage(&ctx, req, &resp))) {
 		return QVariantMap();
 	}
 
@@ -360,50 +462,4 @@ QVariantMap MessagesModel::peekMessage(const QString& id)
 		{ "authorName", qobject_cast<ChannelsModel*>(parent())->userName(resp.message().author_id()) },
 		{ "content", QString::fromStdString(resp.message().content()) }
 	};
-}
-
-void MessagesModel::uploadFile(const QUrl& url, QJSValue then, QJSValue elseDo, QJSValue progress, QJSValue finally)
-{
-	QHttpMultiPart *mp = new QHttpMultiPart(QHttpMultiPart::FormDataType);
-
-	QFile* file(new QFile(url.toLocalFile()));
-	file->open(QIODevice::ReadOnly);
-
-	QHttpPart filePart;
-	filePart.setBodyDevice(file);
-	filePart.setHeader(QNetworkRequest::ContentDispositionHeader, QString("form-data; name=\"file\""));
-	filePart.setHeader(QNetworkRequest::ContentTypeHeader, "multipart/form-data");
-
-	mp->append(filePart);
-
-	QUrlQuery query;
-	query.addQueryItem("filename", url.fileName());
-	query.addQueryItem("contentType", QMimeDatabase().mimeTypeForFile(url.toLocalFile()).name());
-
-	QUrl reqUrl("http://" + homeServer + "/_harmony/media/upload?" + query.query());
-	QNetworkRequest req(reqUrl);
-	req.setRawHeader(QByteArrayLiteral("Authorization"), QString::fromStdString(client->userToken).toLocal8Bit());
-
-	auto reply = nam->post(req, mp);
-
-	connect(reply, &QNetworkReply::uploadProgress, this, [=](qint64 sent, qint64 total) mutable {
-		progress.call(QList<QJSValue>{ QJSValue(double(sent) / double(total)) });
-	});
-	connect(reply, &QNetworkReply::finished, this, [=]() mutable {
-		auto data = reply->readAll();
-
-		delete mp;
-		delete file;
-		delete reply;
-
-		if (reply->error() != QNetworkReply::NoError) {
-			elseDo.call();
-			finally.call();
-			return;
-		}
-
-		then.call(QList<QJSValue>{ QString("hmc://%1/%2").arg(homeServer).arg(QJsonDocument::fromJson(data)["id"].toString()) });
-		finally.call();
-		return;
-	});
 }
