@@ -27,7 +27,7 @@ Kirigami.ScrollablePage {
 			textFormat: TextEdit.MarkdownText
 			text: instantViewPage.theData
 			wrapMode: Text.Wrap
-			width: Math.min(Kirigami.Units.gridUnit * 60, instantViewPage.width - Kirigami.Units.largeSpacing*2)
+			width: Math.min(Kirigami.Units.gridUnit * 60, instantViewPage.width - Kirigami.Units.largeSpacing*4)
 			anchors.horizontalCenter: parent.horizontalCenter
 			readOnly: true
 		}
