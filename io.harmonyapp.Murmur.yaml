@@ -10,6 +10,7 @@ finish-args:
   - --socket=wayland
   - --share=network
   - --filesystem=xdg-config/kdeglobals:ro
+  - --filesystem=home
 cleanup:
   - /bin/a*
   - /bin/grpc*
