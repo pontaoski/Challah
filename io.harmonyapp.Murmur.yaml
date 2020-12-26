@@ -45,6 +45,8 @@ modules:
       - -DgRPC_BUILD_GRPC_RUBY_PLUGIN=OFF
       - -DRE2_BUILD_TESTING=off
       - -DgRPC_BUILD_TESTS=off
+      - -DgRPC_SSL_PROVIDER=package
+      - -DgRPC_ZLIB_PROVIDER=package
     sources:
       - type: git
         url: https://github.com/grpc/grpc
