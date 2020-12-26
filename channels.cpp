@@ -243,14 +243,15 @@ int ChannelsModel::rowCount(const QModelIndex &parent) const
 void ChannelsModel::setGuildPicture(const QString& url)
 {
 	QtConcurrent::run([=] {
-		protocol::chat::v1::UpdateGuildPictureRequest req;
+		protocol::chat::v1::UpdateGuildInformationRequest req;
 		req.set_guild_id(guildID);
 		req.set_new_guild_picture(url.toStdString());
+		req.set_update_guild_picture(true);
 
 		google::protobuf::Empty resp;
 
 		doContext;
-		checkStatus(client->chatKit->UpdateGuildPicture(&ctx, req, &resp));
+		checkStatus(client->chatKit->UpdateGuildInformation(&ctx, req, &resp));
 	});
 }
 
