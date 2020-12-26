@@ -55,29 +55,15 @@ modules:
         url: https://invent.kde.org/frameworks/kirigami
         branch: master
 # stuff we modify
-  - name: qtdeclarative
-    buildsystem: qmake
-    cleanup-platform: [ /bin, lib/plugins/qmltooling ]
-    no-make-install: true
-    post-install:
-    - install -d /app/lib
-    - cp -r lib/libQt5QmlModels.so* /app/lib/
-    sources:
-      - type: archive
-        url: http://download.qt.io/archive/qt/5.15/5.15.2/submodules/qtdeclarative-everywhere-src-5.15.2.tar.xz
-        sha256: c600d09716940f75d684f61c5bdaced797f623a86db1627da599027f6c635651
-      - type: patch
-        path: fix-delegatemodel.patch
   - name: qbs
     buildsystem: qmake
     config-opts:
     - QBS_INSTALL_PREFIX=/app
     sources:
-      - type: archive
-        url: https://github.com/qbs/qbs/archive/v1.17.0.tar.gz
-        sha256: 32d6751ca7771ee9b5110831c35ca54430925509b4863df22254c8fb09936819
-      - type: patch
-        path: qbs-more-search.patch
+      - type: git
+        url: https://code.qt.io/qbs/qbs.git
+        branch: 1.18
+        commit: 297ab225ed2ce32a8b64fb7b693fe73cb82e8dc7
 # the app
   - name: murmur
     buildsystem: simple
