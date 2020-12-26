@@ -109,6 +109,7 @@ void Client::federateOtherClient(Client* client, const QString& target)
 	client->homeserver = target;
 	client->chatKit = protocol::chat::v1::ChatService::NewStub(client->client);
 	client->authKit = protocol::auth::v1::AuthService::NewStub(client->client);
+	client->mediaProxyKit = protocol::mediaproxy::v1::MediaProxyService::NewStub(client->client);
 
 	ClientContext ctx;
 	authenticate(ctx);
@@ -259,6 +260,7 @@ bool Client::forgeNewConnection()
 
 	chatKit = protocol::chat::v1::ChatService::NewStub(client);
 	authKit = protocol::auth::v1::AuthService::NewStub(client);
+	mediaProxyKit = protocol::mediaproxy::v1::MediaProxyService::NewStub(client);
 
 	return true;
 }

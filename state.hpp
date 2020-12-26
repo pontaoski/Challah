@@ -22,6 +22,9 @@ class State : public QObject
 
 	static State* s_instance;
 
+protected:
+	void customEvent(QEvent *event) override;
+
 public:
 	State();
 	~State();

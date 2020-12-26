@@ -16,6 +16,9 @@
 #include "auth/v1/auth.grpc.pb.h"
 #include "auth/v1/auth.pb.h"
 
+#include "mediaproxy/v1/mediaproxy.grpc.pb.h"
+#include "mediaproxy/v1/mediaproxy.pb.h"
+
 #include "guild.hpp"
 #include "util.hpp"
 
@@ -38,6 +41,7 @@ public:
 	std::shared_ptr<grpc::Channel> client;
 	std::unique_ptr<protocol::chat::v1::ChatService::Stub> chatKit;
 	std::unique_ptr<protocol::auth::v1::AuthService::Stub> authKit;
+	std::unique_ptr<protocol::mediaproxy::v1::MediaProxyService::Stub> mediaProxyKit;
 	void authenticate(grpc::ClientContext& ctx);
 
 private:

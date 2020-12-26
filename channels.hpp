@@ -114,6 +114,8 @@ public:
 	Q_INVOKABLE QString avatarURL(quint64 id);
 	Q_INVOKABLE void setGuildPicture(const QString &url);
 	Q_INVOKABLE void uploadFile(const QUrl& path, QJSValue then, QJSValue elseDo, QJSValue progress, QJSValue finally);
+	Q_INVOKABLE void checkCanInstantView(const QStringList& link, QJSValue then);
+	Q_INVOKABLE void grabInstantView(const QString& link, QJSValue then);
 	Q_INVOKABLE InviteModel* invitesModel();
 	Q_INVOKABLE RolesModel* rolesModel();
 };

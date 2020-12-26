@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 #include <QSettings>
+#include <QJSEngine>
 #include <QQuickTextDocument>
 
 #include "richtexter.hpp"
@@ -70,6 +71,23 @@ bool State::leaveGuild(const QString &homeserver, const QString &id, bool isOwne
 	auto actualID = id.toULongLong();
 
 	return Client::instanceForHomeserver(homeserver)->leaveGuild(actualID, isOwner);
+}
+
+void State::customEvent(QEvent *event)
+{
+	switch (event->type()) {
+	case PleaseCallEvent::typeID: {
+		auto ev = reinterpret_cast<PleaseCallEvent*>(event);
+
+		QList<QJSValue> data;
+
+		for (auto arg : ev->data.args) {
+			data << ev->data.func.engine()->toScriptValue(arg);
+		}
+
+		ev->data.func.call(data);
+	}
+	}
 }
 
 void State::bindTextDocument(QQuickTextDocument* doc, QObject* field)

@@ -7,6 +7,7 @@
 #include <QNetworkRequest>
 #include <QNetworkReply>
 
+#include <QJSEngine>
 #include <QtConcurrent>
 #include "channels.hpp"
 
@@ -73,6 +74,9 @@ void MembersModel::customEvent(QEvent *event)
 			_picture = State::instance()->transformHMCURL(QString::fromStdString(ev->data.picture()), homeServer);
 			Q_EMIT pictureChanged();
 		}
+	} else if (event->type() == ExecuteEvent::typeID) {
+		auto ev = reinterpret_cast<ExecuteEvent*>(event);
+		ev->data();
 	}
 }
 
@@ -163,6 +167,73 @@ void ChannelsModel::moveChannelFromTo(int from, int to)
 	});
 }
 
+void ChannelsModel::grabInstantView(const QString& url, QJSValue then)
+{
+	QtConcurrent::run([url, this](QJSValue then) {
+		doContext;
+
+		protocol::mediaproxy::v1::InstantViewRequest req;
+		protocol::mediaproxy::v1::InstantViewResponse resp;
+
+		req.set_url(url.toStdString());
+		if (!checkStatus(client->mediaProxyKit->InstantView(&ctx, req, &resp))) {
+			return;
+		}
+		if (!resp.is_valid()) {
+			return;
+		}
+
+		callJS(then, {QString::fromStdString(resp.content())});
+	}, then);
+}
+
+void ChannelsModel::checkCanInstantView(const QStringList& url, QJSValue then)
+{
+	QtConcurrent::run([url, this](QJSValue then) {
+		QVariantList list;
+		for (auto item : url) {
+			QJsonObject obj;
+			bool canInstantView = false;
+			obj["from_url"] = item;
+
+			{
+				doContext;
+
+				protocol::mediaproxy::v1::InstantViewRequest req;
+				protocol::mediaproxy::v1::CanInstantViewResponse resp;
+
+				req.set_url(item.toStdString());
+
+				if (checkStatus(client->mediaProxyKit->CanInstantView(&ctx, req, &resp))) {
+					obj["instant_view_ok"] = resp.can_instant_view();
+					canInstantView = resp.can_instant_view();
+				} else {
+					obj["instant_view_ok"] = false;
+				}
+			}
+			{
+				doContext;
+
+				protocol::mediaproxy::v1::FetchLinkMetadataRequest req;
+				protocol::mediaproxy::v1::SiteMetadata resp;
+
+				req.set_url(item.toStdString());
+
+				checkStatus(client->mediaProxyKit->FetchLinkMetadata(&ctx, req, &resp));
+
+				obj["page_title"] = QString::fromStdString(resp.page_title());
+				obj["site_title"] = QString::fromStdString(resp.site_title());
+				obj["description"] = QString::fromStdString(resp.description());
+				obj["preview_image"] = QString::fromStdString(resp.image());
+				obj["url"] = QString::fromStdString(resp.url());
+			}
+
+			list << obj;
+		}
+		callJS(then, {list});
+	}, then);
+}
+
 void ChannelsModel::customEvent(QEvent *event)
 {
 	if (event->type() == ChannelCreatedEvent::typeID) {
@@ -231,6 +302,9 @@ void ChannelsModel::customEvent(QEvent *event)
 
 		QCoreApplication::postEvent(members, new GuildUpdatedEvent(ev->data));
 		QCoreApplication::postEvent(State::instance()->getGuildModel(), new GuildListUpdateEvent(upd));
+	} else if (event->type() == ExecuteEvent::typeID) {
+		auto ev = reinterpret_cast<ExecuteEvent*>(event);
+		ev->data();
 	}
 }
 

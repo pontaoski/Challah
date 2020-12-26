@@ -65,6 +65,7 @@ QtApplication {
 			"protocol/chat/v1/profile.proto",
 			"protocol/chat/v1/streaming.proto",
 			"protocol/harmonytypes/v1/types.proto",
+			"protocol/mediaproxy/v1/mediaproxy.proto",
 		]
 		fileTags: "protobuf.grpc"
 	}

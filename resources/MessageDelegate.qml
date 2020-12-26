@@ -7,6 +7,7 @@ import QtQuick.Window 2.10
 import QtQuick.Layouts 1.10
 import org.kde.kirigami 2.14 as Kirigami
 import QtQuick.Controls 2.10 as QQC2
+import QtGraphicalEffects 1.0
 import com.github.HarmonyDevelopment.Staccato 1.0
 import QtQml.Models 2.15
 
@@ -134,6 +135,7 @@ QQC2.Control {
 
 			Layout.minimumWidth: Kirigami.Units.gridUnit * 3
 			Layout.maximumWidth: (applicationWindow().wideScreen ? Math.max(messagesView.width / 3, Kirigami.Units.gridUnit * 15) : (messagesView.width * 0.9)) - Layout.leftMargin
+			Layout.preferredWidth: theThing.data.length > 0 ? Layout.maximumWidth : -1
 			Layout.leftMargin: Kirigami.Units.gridUnit * 2 + Kirigami.Units.largeSpacing
 			Kirigami.Theme.colorSet: messagesRoute.model.userID() == authorID ? Kirigami.Theme.Button : Kirigami.Theme.Window
 
@@ -237,6 +239,115 @@ QQC2.Control {
 							text = Qt.binding(function() { return readOnly ? content + "     ⠀" : content })
 						}
 					}
+				}
+				Repeater {
+					id: linkPreviewRepeater
+					model: theThing.data
+					delegate: QQC2.Control {
+						id: theDelegate
+						Layout.preferredWidth: ((applicationWindow().wideScreen ? Math.max(messagesView.width / 3, Kirigami.Units.gridUnit * 15) : (messagesView.width * 0.9))) - Kirigami.Units.largeSpacing * 8
+
+						background: Rectangle {
+							color: Kirigami.Theme.backgroundColor
+
+							Image {
+								anchors.fill: parent
+								source: modelData["preview_image"]
+								fillMode: Image.PreserveAspectCrop
+
+								layer.enabled: true
+								layer.effect: HueSaturation {
+									cached: true
+									saturation: 0.9
+
+									layer.enabled: true
+									layer.effect: GaussianBlur {
+										cached: true
+
+										radius: 32
+										deviation: 12
+										samples: 63
+
+										transparentBorder: false
+									}
+								}
+							}
+							Rectangle {
+								anchors.fill: parent
+								color: Kirigami.Theme.backgroundColor
+								opacity: 0.9
+							}
+							Rectangle {
+								anchors {
+									left: parent.left
+									top: parent.top
+									bottom: parent.bottom
+									margins: Kirigami.Units.smallSpacing
+								}
+								width: 2
+								color: Kirigami.Theme.highlightColor
+							}
+						}
+						contentItem: ColumnLayout {
+							spacing: 2
+
+							QQC2.Label {
+								visible: text != ""
+								text: modelData["site_title"]
+								color: Kirigami.Theme.highlightColor
+								wrapMode: Text.Wrap
+
+								Layout.fillWidth: true
+								Layout.leftMargin: Kirigami.Units.smallSpacing * 2
+							}
+							QQC2.Label {
+								text: modelData["page_title"]
+								wrapMode: Text.Wrap
+
+								Layout.fillWidth: true
+								Layout.leftMargin: Kirigami.Units.smallSpacing * 2
+							}
+							QQC2.Label {
+								text: modelData["description"]
+								wrapMode: Text.Wrap
+
+								Layout.fillWidth: true
+								Layout.leftMargin: Kirigami.Units.smallSpacing * 2
+							}
+							QQC2.Button {
+								text: qsTr("Instant View")
+								visible: modelData["instant_view_ok"]
+								flat: true
+
+								onClicked: {
+									let item = root.pageStack.layers.push(Qt.resolvedUrl("InstantView.qml"))
+									messagesRoute.model.parentModel.grabInstantView(modelData["from_url"], function(data) {
+										item.title = modelData["page_title"]
+										item.theData = data
+									})
+								}
+
+								Layout.fillWidth: true
+								Layout.leftMargin: Kirigami.Units.smallSpacing * 2
+							}
+						}
+					}
+				}
+				Item { visible: theThing.data.length > 0; implicitHeight: Kirigami.Units.largeSpacing }
+			}
+		}
+		QtObject {
+			id: theThing
+			property string text: content
+			property var data: []
+			onTextChanged: {
+				theThing.data = []
+				var urlRegex =/(\b(https?):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig
+				var matches = (content.match(urlRegex) || [])
+				if (matches.length > 0) {
+					messagesRoute.model.parentModel.checkCanInstantView(matches, function(data) {
+						theThing.data = data
+					})
 				}
 			}
 		}
