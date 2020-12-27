@@ -89,6 +89,10 @@ void State::customEvent(QEvent *event)
 	}
 	}
 }
+void State::createAccount(const QString& username, const QString& email, const QString& password, const QString& homeserver, QJSValue then)
+{
+	client->createAccount(username, email, password, homeserver, then);
+}
 
 void State::bindTextDocument(QQuickTextDocument* doc, QObject* field)
 {

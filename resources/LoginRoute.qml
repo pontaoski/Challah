@@ -73,6 +73,13 @@ Kirigami.PageRoute {
 					}
 				}
 			}
+			Item { implicitHeight: Kirigami.Units.gridUnit }
+			Kirigami.LinkButton {
+				text: qsTr("Don't have an account yet?")
+				onClicked: root.pageStack.layers.push(Qt.resolvedUrl("Register.qml"))
+
+				Layout.fillWidth: true
+			}
 		}
 	}
 }

@@ -57,6 +57,7 @@ public:
 	static Client* instanceForHomeserver(const QString& homeserver);
 	bool joinInvite(const QString& invite);
 	bool login(const QString& email, const QString& password, const QString& homeserver);
+	void createAccount(const QString& username, const QString& email, const QString& password, const QString &homeserver, QJSValue then);
 	void subscribeGuild(quint64 guild);
 	bool createGuild(const QString& name);
 	bool leaveGuild(quint64 id, bool isOwner);

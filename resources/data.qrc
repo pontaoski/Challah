@@ -24,6 +24,7 @@
         <file>Permissions.qml</file>
         <file>ImagePopup.qml</file>
         <file>InstantView.qml</file>
+        <file>Register.qml</file>
         <file>qmldir</file>
     </qresource>
     <qresource prefix="/img">

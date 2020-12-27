@@ -35,6 +35,7 @@ public:
 
 	Q_INVOKABLE bool startupLogin();
 	Q_INVOKABLE bool login(const QString& email, const QString& password, const QString &homeserver);
+	Q_INVOKABLE void createAccount(const QString& username, const QString& email, const QString& password, const QString &homeserver, QJSValue then);
 	Q_INVOKABLE bool createGuild(const QString& name);
 	Q_INVOKABLE bool joinGuild(const QString& inviteLink);
 	Q_INVOKABLE bool leaveGuild(const QString& homeserver, const QString& id, bool isOwner);

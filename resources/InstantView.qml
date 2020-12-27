@@ -15,6 +15,8 @@ Kirigami.ScrollablePage {
 
 	property string theData: ""
 
+	Kirigami.Theme.colorSet: Kirigami.Theme.View
+
 	Item {
 		height: editor.implicitHeight
 		width: instantViewPage.width
