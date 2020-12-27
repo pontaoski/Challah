@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+
+git pull
+git commit --allow-empty -m "Trigger Flatpak rebuild"
+git push
