@@ -37,12 +37,12 @@ int main(int argc, char *argv[])
 	qtTranslator.load("qt_" + QLocale::system().name(), QLibraryInfo::location(QLibraryInfo::TranslationsPath));
 	app->installTranslator(&qtTranslator);
 
-	QTranslator murmurTranslator;
-	murmurTranslator.load("Murmur_" + QLocale::system().name(), ":/po/");
-	app->installTranslator(&murmurTranslator);
+	QTranslator kalamaTranslator;
+	kalamaTranslator.load("Kalama_" + QLocale::system().name(), ":/po/");
+	app->installTranslator(&kalamaTranslator);
 
-	QApplication::setWindowIcon(QIcon::fromTheme(QString("io.harmonyapp.Murmur")));
-	QApplication::setDesktopFileName("io.harmonyapp.Murmur.desktop");
+	QApplication::setWindowIcon(QIcon::fromTheme(QString("io.harmonyapp.Kalama")));
+	QApplication::setDesktopFileName("io.harmonyapp.Kalama.desktop");
 	QApplication::setStyle("Breeze");
 	QIcon::setThemeName("breeze");
 	QQuickStyle::setStyle("org.kde.desktop");

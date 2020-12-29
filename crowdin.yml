@@ -1,3 +1,3 @@
 files:
-  - source: /po/Murmur.ts
-    translation: /po/Murmur_%two_letters_code%.ts
+  - source: /po/Kalama.ts
+    translation: /po/Kalama_%two_letters_code%.ts
