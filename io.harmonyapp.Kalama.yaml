@@ -1,8 +1,8 @@
-app-id: io.harmonyapp.Murmur
+app-id: io.harmonyapp.Kalama
 runtime: org.kde.Platform
 runtime-version: "5.15"
 sdk: org.kde.Sdk
-command: Murmur
+command: Kalama
 finish-args:
   - --share=ipc
   - --device=dri
@@ -77,14 +77,14 @@ modules:
         branch: 1.18
         commit: 297ab225ed2ce32a8b64fb7b693fe73cb82e8dc7
 # the app
-  - name: murmur
+  - name: kalama
     buildsystem: simple
     post-install:
-    - cp -r release/install-root/app/bin/Murmur /app/bin/
+    - cp -r release/install-root/app/bin/Kalama /app/bin/
     - cp -r release/install-root/app/share/* /app/share/
     build-commands:
       - qbs config:release modules.cpp.treatWarningsAsErrors:false installPrefix:/app -j2
     sources:
       - type: git
-        url: https://github.com/harmony-development/Murmur
+        url: https://github.com/harmony-development/Kalama
         branch: main
