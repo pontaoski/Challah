@@ -52,14 +52,14 @@ modules:
       - type: git
         url: https://github.com/grpc/grpc
         tag: v1.28.2
-  - name: extra-cmake-modules
+  - name: kf5-extra-cmake-modules
     buildsystem: cmake
     builddir: true
     sources:
       - type: git
         url: https://invent.kde.org/frameworks/extra-cmake-modules
         branch: master
-  - name: kirigami
+  - name: kf5-kirigami
     buildsystem: cmake
     builddir: true
     sources:
