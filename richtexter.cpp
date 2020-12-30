@@ -88,7 +88,6 @@ bool TextFormatter::eventFilter(QObject *object, QEvent *event)
 {
 	if (auto ev = dynamic_cast<QKeyEvent*>(event)) {
 		if (ev == QKeySequence::Copy) {
-			qDebug() << "Intercepted copy event!";
 			return false;
 		}
 	}

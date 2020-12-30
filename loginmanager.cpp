@@ -41,7 +41,6 @@ auto translate(const std::string& source) -> QString { return translate(QString:
 
 void LoginManager::customEvent(QEvent* event)
 {
-	qDebug() << "Received event...";
 	if (auto ev = dynamic_cast<SessionEvent*>(event))
 	{
 		auto client = State::instance()->client;
@@ -172,8 +171,6 @@ void LoginManager::customEvent(QEvent* event)
 					for (auto& item : items) {
 						auto field = req.mutable_form()->mutable_fields()->Add();
 
-						qDebug() << "Adding" << item.second << "field";
-
 						if (QList<QString>{"email", "username"}.contains(item.second)) {
 							field->set_string(item.first->property("text").toString().toStdString());
 						} else if (QList<QString>{"password", "new-password"}.contains(item.second)) {
@@ -183,7 +180,6 @@ void LoginManager::customEvent(QEvent* event)
 
 					protocol::auth::v1::AuthStep resp;
 
-					qDebug() << "Sending" << req.mutable_form()->fields_size();
 					client->authKit->NextStep(&ctx, req, &resp);
 				});
 			});

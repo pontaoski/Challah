@@ -31,13 +31,13 @@ class Client : public QObject
 	static Client* mainClient;
 	static QMap<QString,Client*> clients;
 
-	QString homeserver;
 	std::unique_ptr<grpc::ClientReaderWriterInterface<protocol::chat::v1::StreamEventsRequest,protocol::chat::v1::Event>> eventStream;
 
 	friend class State;
 	friend class LoginManager;
 
 public:
+	QString homeserver;
 	std::string userToken;
 	std::shared_ptr<grpc::Channel> client;
 	std::unique_ptr<protocol::chat::v1::ChatService::Stub> chatKit;

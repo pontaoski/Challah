@@ -69,7 +69,7 @@ Client* Client::mainInstance()
 
 Client* Client::instanceForHomeserver(const QString& homeserver)
 {
-	if (homeserver == "local") {
+	if (homeserver == "local" || homeserver.isEmpty()) {
 		return mainInstance();
 	}
 
@@ -161,7 +161,6 @@ bool Client::createGuild(const QString &name)
 
 	auto req2 = protocol::chat::v1::AddGuildToGuildListRequest{};
 	req2.set_guild_id(resp.guild_id());
-	req2.set_homeserver(homeserver.toStdString());
 
 	auto resp2 = protocol::chat::v1::AddGuildToGuildListResponse{};
 

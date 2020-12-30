@@ -14,9 +14,6 @@ class State : public QObject
 {
 	Q_OBJECT
 
-	GuildModel* guildModel;
-	Client* client;
-
 	friend class GuildModel;
 	friend class Client;
 	friend class LoginManager;
@@ -27,6 +24,9 @@ protected:
 	void customEvent(QEvent *event) override;
 
 public:
+	GuildModel* guildModel;
+	Client* client;
+
 	State();
 	~State();
 
@@ -41,8 +41,13 @@ public:
 	Q_INVOKABLE bool leaveGuild(const QString& homeserver, const QString& id, bool isOwner);
 	Q_INVOKABLE void bindTextDocument(QQuickTextDocument* doc, QObject* field);
 	Q_INVOKABLE QString transformHMCURL(const QString& url, const QString& homeserver) {
+		auto hs = homeserver;
+		if (hs.isEmpty()) {
+			hs = client->homeserver;
+		}
+
 		if (!url.startsWith("hmc://")) {
-			return QString("https://%1/_harmony/media/download/%2").arg(homeserver).arg(url);
+			return QString("https://%1/_harmony/media/download/%2").arg(hs).arg(url);
 		}
 
 		QString trimmed = url.mid(QString("hmc://").length());

@@ -110,7 +110,11 @@ ChannelsModel::ChannelsModel(QString homeServer, quint64 guildID) : QAbstractLis
 
 	auto& guilds = State::instance()->getGuildModel()->guilds;
 	for (auto guild : guilds) {
-		if (guild.homeserver == homeServer && guild.guildID == guildID) {
+		auto tc = guild.homeserver;
+		if (guild.homeserver.isEmpty()) {
+			tc = State::instance()->client->homeserver;
+		}
+		if (tc == homeServer && guild.guildID == guildID) {
 			members->_name = guild.name;
 			members->_picture = State::instance()->transformHMCURL(guild.picture, homeServer);
 		}

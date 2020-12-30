@@ -119,7 +119,11 @@ QVariant GuildModel::data(const QModelIndex &index, int role) const
 	case ChannelModelRole:
 		auto key = qMakePair(guilds[index.row()].guildID, guilds[index.row()].homeserver);
 		if (!d->models.contains(key)) {
-			d->models.insert(key, new ChannelsModel(guilds[index.row()].homeserver, guilds[index.row()].guildID));
+			auto hs = guilds[index.row()].homeserver;
+			if (hs.isEmpty()) {
+				hs = State::instance()->client->homeserver;
+			}
+			d->models.insert(key, new ChannelsModel(hs, guilds[index.row()].guildID));
 			QQmlEngine::setObjectOwnership(d->models[key], QQmlEngine::CppOwnership);
 		}
 		return QVariant::fromValue(d->models[key]);
