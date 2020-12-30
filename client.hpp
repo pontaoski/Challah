@@ -35,6 +35,7 @@ class Client : public QObject
 	std::unique_ptr<grpc::ClientReaderWriterInterface<protocol::chat::v1::StreamEventsRequest,protocol::chat::v1::Event>> eventStream;
 
 	friend class State;
+	friend class LoginManager;
 
 public:
 	std::string userToken;
@@ -56,8 +57,7 @@ public:
 	static Client* mainInstance();
 	static Client* instanceForHomeserver(const QString& homeserver);
 	bool joinInvite(const QString& invite);
-	bool login(const QString& email, const QString& password, const QString& homeserver);
-	void createAccount(const QString& username, const QString& email, const QString& password, const QString &homeserver, QJSValue then);
+	void consumeSession(protocol::auth::v1::Session session, const QString& homeserver);
 	void subscribeGuild(quint64 guild);
 	bool createGuild(const QString& name);
 	bool leaveGuild(quint64 id, bool isOwner);

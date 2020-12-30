@@ -14,7 +14,7 @@ Kirigami.PageRoute {
 	cache: false
 
 	Kirigami.Page {
-		title: qsTr("Login")
+		title: qsTr("Welcome")
 
 		Kirigami.Theme.colorSet: Kirigami.Theme.View
 
@@ -40,45 +40,32 @@ Kirigami.PageRoute {
 
 				Layout.fillWidth: true
 			}
-
-			Kirigami.FormLayout {
-				QQC2.TextField {
-					id: email
-					//: placeholder for email
-					placeholderText: qsTr("email@address.com")
-					// text: "r@r.r"
-					Kirigami.FormData.label: qsTr("Email:")
-				}
-				QQC2.TextField {
-					id: homeserver
-					placeholderText: "chat.harmonyapp.io:2289"
-					// text: "localhost:2289"
-					Kirigami.FormData.label: qsTr("Homeserver:")
-				}
-				Kirigami.PasswordField {
-					id: password
-					// text: "10kekeAke"
-					Kirigami.FormData.label: qsTr("Password:")
-				}
-				QQC2.Button {
-					text: qsTr("Login")
-					onClicked: {
-						if (HState.login(email.text, password.text, homeserver.text)) {
-							//: the user logged in successfully
-							root.showPassiveNotification(qsTr("Logged in"))
-						} else {
-							//: login failed
-							root.showPassiveNotification(qsTr("Failed to log in"))
-						}
-					}
-				}
-			}
-			Item { implicitHeight: Kirigami.Units.gridUnit }
-			Kirigami.LinkButton {
-				text: qsTr("Don't have an account yet?")
-				onClicked: root.pageStack.layers.push(Qt.resolvedUrl("Register.qml"))
+			Kirigami.Heading {
+				text: qsTr("Enter your homeserver to continue")
+				horizontalAlignment: Text.AlignHCenter
+				level: 4
 
 				Layout.fillWidth: true
+			}
+
+			Item { implicitHeight: Kirigami.Units.largeSpacing }
+
+			QQC2.TextField {
+				id: homeserver
+				placeholderText: "chat.harmonyapp.io:2289"
+
+				Layout.fillWidth: true
+			}
+
+			QQC2.Button {
+				text: qsTr("Continue")
+
+				Layout.alignment: Qt.AlignHCenter
+
+				onClicked: {
+					let manager = root.pageStack.layers.push(Qt.resolvedUrl("Stepper.qml")).manager
+					manager.beginLogin(homeserver.text)
+				}
 			}
 		}
 	}

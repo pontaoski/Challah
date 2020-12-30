@@ -124,15 +124,10 @@ void Client::federateOtherClient(Client* client, const QString& target)
 
 	ClientContext ctx2;
 
-	auto req2 = protocol::auth::v1::LoginRequest {};
-	auto remote = new protocol::auth::v1::LoginRequest_Federated {};
-	remote->set_auth_token(repl.token());
-	remote->set_domain(homeserver.toStdString());
-	req2.set_allocated_federated(remote);
-
+	auto req2 = protocol::auth::v1::LoginFederatedRequest {};
 	auto repl2 = protocol::auth::v1::Session {};
 
-	if (!checkStatus(client->authKit->Login(&ctx2, req2, &repl2))) {
+	if (!checkStatus(client->authKit->LoginFederated(&ctx2, req2, &repl2))) {
 		return;
 	}
 
@@ -395,71 +390,14 @@ void Client::subscribeGuild(quint64 guild)
 	eventStream->Write(req, grpc::WriteOptions().set_write_through());
 }
 
-void Client::createAccount(const QString& username, const QString& email, const QString& password, const QString &hs, QJSValue then)
+void Client::consumeSession(protocol::auth::v1::Session session, const QString& homeserver)
 {
-	QtConcurrent::run([then, this, username, email, password, hs] {
-		clients[hs] = this;
-		homeserver = hs;
-
-		forgeNewConnection();
-
-		auto req = protocol::auth::v1::RegisterRequest{};
-		req.set_email(email.toStdString());
-		req.set_password(password.toStdString());
-		req.set_username(username.toStdString());
-
-		ClientContext ctx;
-		protocol::auth::v1::Session reply;
-
-		if (!checkStatus(authKit->Register(&ctx, req, &reply))) {
-			callJS(then, {false});
-		}
-
-		userToken = reply.session_token();
-		userID = reply.user_id();
-
-		QSettings settings;
-		settings.setValue("state/token", QString::fromStdString(reply.session_token()));
-		settings.setValue("state/homeserver", hs);
-		settings.setValue("state/userid", userID);
-
-		QtConcurrent::run([=]() {
-			runEvents();
-		});
-
-		refreshGuilds();
-
-		callJS(then, {true});
-		Q_EMIT State::instance()->loggedIn();
-	});
-}
-
-bool Client::login(const QString &email, const QString &password, const QString &hs)
-{
-	clients[hs] = this;
-	homeserver = hs;
-
-	forgeNewConnection();
-
-	auto req = protocol::auth::v1::LoginRequest{};
-	auto local = new protocol::auth::v1::LoginRequest_Local{};
-	local->set_email(email.toStdString());
-	local->set_password(password.toStdString());
-	req.set_allocated_local(local);
-
-	ClientContext ctx;
-	protocol::auth::v1::Session repl;
-
-	if (!checkStatus(authKit->Login(&ctx, req, &repl))) {
-		return false;
-	}
-
-	userToken = repl.session_token();
-	userID = repl.user_id();
+	userToken = session.session_token();
+	userID = session.user_id();
 
 	QSettings settings;
-	settings.setValue("state/token", QString::fromStdString(repl.session_token()));
-	settings.setValue("state/homeserver", hs);
+	settings.setValue("state/token", QString::fromStdString(session.session_token()));
+	settings.setValue("state/homeserver", homeserver);
 	settings.setValue("state/userid", userID);
 
 	QtConcurrent::run([=]() {
@@ -468,5 +406,6 @@ bool Client::login(const QString &email, const QString &password, const QString 
 
 	refreshGuilds();
 
-	return true;
+	Q_EMIT State::instance()->loggedIn();
 }
+

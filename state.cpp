@@ -40,14 +40,6 @@ bool State::startupLogin()
 
 	return false;
 }
-bool State::login(const QString &email, const QString &password, const QString &homeserver)
-{
-	if (client->login(email, password, homeserver)) {
-		Q_EMIT loggedIn();
-		return true;
-	}
-	return false;
-}
 bool State::createGuild(const QString &name)
 {
 	return client->createGuild(name);
@@ -88,10 +80,6 @@ void State::customEvent(QEvent *event)
 		ev->data.func.call(data);
 	}
 	}
-}
-void State::createAccount(const QString& username, const QString& email, const QString& password, const QString& homeserver, QJSValue then)
-{
-	client->createAccount(username, email, password, homeserver, then);
 }
 
 void State::bindTextDocument(QQuickTextDocument* doc, QObject* field)

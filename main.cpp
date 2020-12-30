@@ -16,6 +16,7 @@
 #include "roles.hpp"
 #include "permissions.hpp"
 #include "promise.hpp"
+#include "loginmanager.hpp"
 
 int main(int argc, char *argv[])
 {
@@ -26,6 +27,7 @@ int main(int argc, char *argv[])
 	auto app = new QApplication(argc, argv);
 
 	qmlRegisterType<OverlappingPanels>("com.github.HarmonyDevelopment.Staccato", 1, 0, "OverlappingPanels");
+	qmlRegisterType<LoginManager>("com.github.HarmonyDevelopment.Staccato", 1, 0, "LoginManager");
 	qmlRegisterSingletonType<State>("com.github.HarmonyDevelopment.Staccato", 1, 0, "HState", [](QQmlEngine *, QJSEngine *) -> QObject * { return new State; });
 	qmlRegisterUncreatableType<ChannelsModel>("com.github.HarmonyDevelopment.ChannelsModel", 1, 0, "ChannelsModel", "You cannot create an instance of ChannelsModel.");
 	qmlRegisterUncreatableType<InviteModel>("com.github.HarmonyDevelopment.InviteModel", 1, 0, "InviteModel", "You cannot create an instance of InviteModel.");
@@ -44,6 +46,8 @@ int main(int argc, char *argv[])
 	QApplication::setWindowIcon(QIcon::fromTheme(QString("io.harmonyapp.Kalama")));
 	QApplication::setDesktopFileName("io.harmonyapp.Kalama.desktop");
 	QApplication::setStyle("Breeze");
+	QApplication::setOrganizationName("Harmony Development");
+	QApplication::setOrganizationDomain("io.harmonyapp");
 	QIcon::setThemeName("breeze");
 	QQuickStyle::setStyle("org.kde.desktop");
 
