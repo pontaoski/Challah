@@ -228,7 +228,7 @@
     <message>
       <location filename="../resources/LoginRoute.qml" line="17"/>
       <source>Welcome</source>
-      <translation type="unfinished">Welcome</translation>
+      <translation>Willkommen</translation>
     </message>
     <message>
       <location filename="../resources/LoginRoute.qml" line="38"/>
@@ -238,12 +238,12 @@
     <message>
       <location filename="../resources/LoginRoute.qml" line="44"/>
       <source>Enter your homeserver to continue</source>
-      <translation type="unfinished">Enter your homeserver to continue</translation>
+      <translation>Geben Sie Ihren Homeserver ein, um fortzufahren</translation>
     </message>
     <message>
       <location filename="../resources/LoginRoute.qml" line="61"/>
       <source>Continue</source>
-      <translation type="unfinished">Continue</translation>
+      <translation>Weiter</translation>
     </message>
   </context>
   <context>
@@ -277,22 +277,22 @@
       <location filename="../resources/MessageDelegate.qml" line="62"/>
       <location filename="../resources/MessageDelegate.qml" line="82"/>
       <source>Select</source>
-      <translation type="unfinished">Select</translation>
+      <translation>Auswählen</translation>
     </message>
     <message>
       <location filename="../resources/MessageDelegate.qml" line="71"/>
       <source>Copy Selected Messages</source>
-      <translation type="unfinished">Copy Selected Messages</translation>
+      <translation>Ausgewählte Nachrichten kopieren</translation>
     </message>
     <message>
       <location filename="../resources/MessageDelegate.qml" line="82"/>
       <source>Unselect</source>
-      <translation type="unfinished">Unselect</translation>
+      <translation>Abwählen</translation>
     </message>
     <message>
       <location filename="../resources/MessageDelegate.qml" line="318"/>
       <source>Instant View</source>
-      <translation type="unfinished">Instant View</translation>
+      <translation>Schenllansicht</translation>
     </message>
   </context>
   <context>
@@ -321,142 +321,142 @@
       <location filename="../resources/Permissions.qml" line="124"/>
       <location filename="../resources/Permissions.qml" line="125"/>
       <source>Permissions</source>
-      <translation type="unfinished">Permissions</translation>
+      <translation>Berechtigungen</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="25"/>
       <source>Add Permission...</source>
-      <translation type="unfinished">Add Permission...</translation>
+      <translation>Berechtigung hinzufügen...</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="30"/>
       <source>Save Permissions</source>
-      <translation type="unfinished">Save Permissions</translation>
+      <translation>Berechtigungen speichern</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="42"/>
       <source>Allow Or Deny</source>
-      <translation type="unfinished">Allow Or Deny</translation>
+      <translation>Erlauben oder ablehnen</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="48"/>
       <source>Allow or deny access to this permission to members with this role?</source>
-      <translation type="unfinished">Allow or deny access to this permission to members with this role?</translation>
+      <translation>Mitgliedern mit dieser Rolle den Zugriff auf diese Berechtigung erlauben oder verweigern?</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="53"/>
       <source>Allow</source>
-      <translation type="unfinished">Allow</translation>
+      <translation>Erlauben</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="60"/>
       <source>Deny</source>
-      <translation type="unfinished">Deny</translation>
+      <translation>Ablehnen</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="72"/>
       <source>Trigger Actions</source>
-      <translation type="unfinished">Trigger Actions</translation>
+      <translation>Aktionen Triggern</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="73"/>
       <source>Change Channel Names</source>
-      <translation type="unfinished">Change Channel Names</translation>
+      <translation>Kanalnamen ändern</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="74"/>
       <source>Create Channels</source>
-      <translation type="unfinished">Create Channels</translation>
+      <translation>Kanäle erstellen</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="75"/>
       <source>Delete Channels</source>
-      <translation type="unfinished">Delete Channels</translation>
+      <translation>Kanäle löschen</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="76"/>
       <source>Move Channels</source>
-      <translation type="unfinished">Move Channels</translation>
+      <translation>Kanäle verschieben</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="77"/>
       <source>Change Guild Name</source>
-      <translation type="unfinished">Change Guild Name</translation>
+      <translation>Guildname ändern</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="78"/>
       <source>Delete Guild</source>
-      <translation type="unfinished">Delete Guild</translation>
+      <translation>Guild löschen</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="79"/>
       <source>Create Invites</source>
-      <translation type="unfinished">Create Invites</translation>
+      <translation>Einladungen erstellen</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="80"/>
       <source>View Invites</source>
-      <translation type="unfinished">View Invites</translation>
+      <translation>Einladungen anzeigen</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="81"/>
       <source>Delete Others&apos; Messages</source>
-      <translation type="unfinished">Delete Others&apos; Messages</translation>
+      <translation>Nachrichten löschen</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="82"/>
       <source>Send Messages</source>
-      <translation type="unfinished">Send Messages</translation>
+      <translation>Nachrichten senden</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="83"/>
       <source>Read Messages</source>
-      <translation type="unfinished">Read Messages</translation>
+      <translation>Nachrichten lesen</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="84"/>
       <source>Get Permissions</source>
-      <translation type="unfinished">Get Permissions</translation>
+      <translation>Berechtigungen anzeigen</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="85"/>
       <source>Set Permissions</source>
-      <translation type="unfinished">Set Permissions</translation>
+      <translation>Berechtigungen ändern</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="86"/>
       <source>Check Permissions</source>
-      <translation type="unfinished">Check Permissions</translation>
+      <translation>Berechtigungen prüfen</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="87"/>
       <source>View Roles</source>
-      <translation type="unfinished">View Roles</translation>
+      <translation>Rollen anzeigen</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="88"/>
       <source>Manage Roles</source>
-      <translation type="unfinished">Manage Roles</translation>
+      <translation>Rollen verwalten</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="89"/>
       <source>View Users&apos; Roles</source>
-      <translation type="unfinished">View Users&apos; Roles</translation>
+      <translation>Rollen des anderes Benutzern anzeigen</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="90"/>
       <source>Manage Users&apos; Roles</source>
-      <translation type="unfinished">Manage Users&apos; Roles</translation>
+      <translation>Rollen des anderes Benutzern ändern</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="100"/>
       <source>Add Permissions</source>
-      <translation type="unfinished">Add Permissions</translation>
+      <translation>Berechtigungen hinzufügen</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="111"/>
       <source>Actions</source>
-      <translation type="unfinished">Actions</translation>
+      <translation>Aktionen</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="112"/>
@@ -470,7 +470,7 @@
       <location filename="../resources/Permissions.qml" line="116"/>
       <location filename="../resources/Permissions.qml" line="117"/>
       <source>Guild</source>
-      <translation type="unfinished">Guild</translation>
+      <translation>Guild</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="118"/>
@@ -483,7 +483,7 @@
       <location filename="../resources/Permissions.qml" line="121"/>
       <location filename="../resources/Permissions.qml" line="122"/>
       <source>Messages</source>
-      <translation type="unfinished">Messages</translation>
+      <translation>Nachrichten</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="126"/>
@@ -491,7 +491,7 @@
       <location filename="../resources/Permissions.qml" line="128"/>
       <location filename="../resources/Permissions.qml" line="129"/>
       <source>Roles</source>
-      <translation type="unfinished">Roles</translation>
+      <translation>Rollen</translation>
     </message>
   </context>
   <context>
@@ -505,7 +505,7 @@
     <message>
       <location filename="../resources/RightDrawer.qml" line="111"/>
       <source>Failed to upload file</source>
-      <translation type="unfinished">Failed to upload file</translation>
+      <translation>Fehler beim Hochladen der Datei</translation>
     </message>
     <message>
       <location filename="../resources/RightDrawer.qml" line="145"/>
@@ -518,44 +518,44 @@
     <message>
       <location filename="../resources/Roles.qml" line="15"/>
       <source>Roles</source>
-      <translation type="unfinished">Roles</translation>
+      <translation>Rollen</translation>
     </message>
     <message>
       <location filename="../resources/Roles.qml" line="22"/>
       <source>Create Role...</source>
-      <translation type="unfinished">Create Role...</translation>
+      <translation>Rolle erstellen...</translation>
     </message>
     <message>
       <location filename="../resources/Roles.qml" line="30"/>
       <source>Edit Default Permissions...</source>
-      <translation type="unfinished">Edit Default Permissions...</translation>
+      <translation>Standardberechtigungen bearbeiten...</translation>
     </message>
     <message>
       <location filename="../resources/Roles.qml" line="50"/>
       <source>Role Name:</source>
-      <translation type="unfinished">Role Name:</translation>
+      <translation>Rollenname:</translation>
     </message>
     <message>
       <location filename="../resources/Roles.qml" line="62"/>
       <source>Role Color:</source>
-      <translation type="unfinished">Role Color:</translation>
+      <translation>Rollenfarbe:</translation>
     </message>
     <message>
       <location filename="../resources/Roles.qml" line="65"/>
       <source>Create Role</source>
-      <translation type="unfinished">Create Role</translation>
+      <translation>Rolle erstellen</translation>
     </message>
     <message>
       <location filename="../resources/Roles.qml" line="70"/>
       <source>Created role</source>
       <extracomment>the role was created successfully</extracomment>
-      <translation type="unfinished">Created role</translation>
+      <translation>Erstellte Rolle</translation>
     </message>
     <message>
       <location filename="../resources/Roles.qml" line="73"/>
       <source>Failed to create role</source>
       <extracomment>the role couldn&apos;t be created successfully</extracomment>
-      <translation type="unfinished">Failed to create role</translation>
+      <translation>Fehler beim Erstellen der Rolle</translation>
     </message>
   </context>
   <context>
@@ -563,7 +563,7 @@
     <message>
       <location filename="../resources/StaccatoDrawer.qml" line="72"/>
       <source>Settings</source>
-      <translation type="unfinished">Settings</translation>
+      <translation>Einstellungen</translation>
     </message>
     <message>
       <location filename="../resources/StaccatoDrawer.qml" line="76"/>
