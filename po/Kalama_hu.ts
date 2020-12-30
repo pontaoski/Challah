@@ -122,6 +122,14 @@
     </message>
   </context>
   <context>
+    <name>InstantView</name>
+    <message>
+      <location filename="../resources/InstantView.qml" line="14"/>
+      <source>Loading...</source>
+      <translation type="unfinished">Loading...</translation>
+    </message>
+  </context>
+  <context>
     <name>Invites</name>
     <message>
       <location filename="../resources/Invites.qml" line="13"/>
@@ -236,35 +244,40 @@
   <context>
     <name>MessageDelegate</name>
     <message>
-      <location filename="../resources/MessageDelegate.qml" line="38"/>
+      <location filename="../resources/MessageDelegate.qml" line="39"/>
       <source>Edit</source>
       <translation>Szerkesztés</translation>
     </message>
     <message>
-      <location filename="../resources/MessageDelegate.qml" line="45"/>
+      <location filename="../resources/MessageDelegate.qml" line="46"/>
       <source>Delete</source>
       <translation>Törlés</translation>
     </message>
     <message>
-      <location filename="../resources/MessageDelegate.qml" line="52"/>
+      <location filename="../resources/MessageDelegate.qml" line="53"/>
       <source>Reply</source>
       <translation>Válasz</translation>
     </message>
     <message>
-      <location filename="../resources/MessageDelegate.qml" line="61"/>
-      <location filename="../resources/MessageDelegate.qml" line="81"/>
+      <location filename="../resources/MessageDelegate.qml" line="62"/>
+      <location filename="../resources/MessageDelegate.qml" line="82"/>
       <source>Select</source>
       <translation type="unfinished">Select</translation>
     </message>
     <message>
-      <location filename="../resources/MessageDelegate.qml" line="70"/>
+      <location filename="../resources/MessageDelegate.qml" line="71"/>
       <source>Copy Selected Messages</source>
       <translation type="unfinished">Copy Selected Messages</translation>
     </message>
     <message>
-      <location filename="../resources/MessageDelegate.qml" line="81"/>
+      <location filename="../resources/MessageDelegate.qml" line="82"/>
       <source>Unselect</source>
       <translation type="unfinished">Unselect</translation>
+    </message>
+    <message>
+      <location filename="../resources/MessageDelegate.qml" line="318"/>
+      <source>Instant View</source>
+      <translation type="unfinished">Instant View</translation>
     </message>
   </context>
   <context>
@@ -519,7 +532,7 @@
       <translation>Fájl feltöltés sikertelen</translation>
     </message>
     <message>
-      <location filename="../resources/RightDrawer.qml" line="138"/>
+      <location filename="../resources/RightDrawer.qml" line="145"/>
       <source>%L1 members</source>
       <translation>%L1 tagok</translation>
     </message>
