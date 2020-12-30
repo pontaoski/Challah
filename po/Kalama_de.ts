@@ -38,7 +38,7 @@
     <message>
       <location filename="../resources/ComposeBar.qml" line="65"/>
       <source>Failed to upload file</source>
-      <translation type="unfinished">Failed to upload file</translation>
+      <translation>Fehler beim Hochladen der Datei</translation>
     </message>
     <message>
       <location filename="../resources/ComposeBar.qml" line="78"/>
@@ -50,19 +50,19 @@
     <message>
       <location filename="../resources/ComposeBar.qml" line="129"/>
       <source>Default</source>
-      <translation type="unfinished">Default</translation>
+      <translation>Standard</translation>
     </message>
     <message>
       <location filename="../resources/ComposeBar.qml" line="142"/>
       <source>You do not have permissions to send a message to this channel.</source>
       <extracomment>Placeholder text for the message field when the user isn&apos;t allowed to send a message</extracomment>
-      <translation type="unfinished">You do not have permissions to send a message to this channel.</translation>
+      <translation>Sie haben keine Berechtigung, eine Nachricht an diesen Kanal zu senden.</translation>
     </message>
     <message>
       <location filename="../resources/ComposeBar.qml" line="181"/>
       <source>Add attachment...</source>
       <extracomment>Send the message in the text field</extracomment>
-      <translation type="unfinished">Add attachment...</translation>
+      <translation>Anhang hinzufügen...</translation>
     </message>
   </context>
   <context>
@@ -70,7 +70,7 @@
     <message>
       <location filename="../resources/GuildSettings.qml" line="14"/>
       <source>Settings</source>
-      <translation type="unfinished">Settings</translation>
+      <translation>Einstellungen</translation>
     </message>
   </context>
   <context>
@@ -126,7 +126,7 @@
     <message>
       <location filename="../resources/InstantView.qml" line="14"/>
       <source>Loading...</source>
-      <translation type="unfinished">Loading...</translation>
+      <translation>Wird geladen...</translation>
     </message>
   </context>
   <context>
@@ -189,90 +189,61 @@
     <message>
       <location filename="../resources/KalamaSettings.qml" line="14"/>
       <source>Settings</source>
-      <translation type="unfinished">Settings</translation>
+      <translation>Einstellungen</translation>
     </message>
     <message>
       <location filename="../resources/KalamaSettings.qml" line="23"/>
       <source>Personas</source>
       <extracomment>Personas are alternate identities; e.g. for roleplay reasons</extracomment>
-      <translation type="unfinished">Personas</translation>
+      <translation>Personas</translation>
     </message>
     <message>
       <location filename="../resources/KalamaSettings.qml" line="25"/>
       <source>New Persona</source>
-      <translation type="unfinished">New Persona</translation>
+      <translation>Neue Persona</translation>
     </message>
     <message>
       <location filename="../resources/KalamaSettings.qml" line="38"/>
       <source>Persona Name:</source>
-      <translation type="unfinished">Persona Name:</translation>
+      <translation>Persona-Name:</translation>
     </message>
     <message>
       <location filename="../resources/KalamaSettings.qml" line="44"/>
       <source>Roleplay</source>
-      <translation type="unfinished">Roleplay</translation>
+      <translation>Rollenspiel</translation>
     </message>
     <message>
       <location filename="../resources/KalamaSettings.qml" line="53"/>
       <source>Persona Kind:</source>
-      <translation type="unfinished">Persona Kind:</translation>
+      <translation>Persona Sort:</translation>
     </message>
     <message>
       <location filename="../resources/KalamaSettings.qml" line="56"/>
       <source>Create</source>
-      <translation type="unfinished">Create</translation>
+      <translation>Erstellen</translation>
     </message>
   </context>
   <context>
     <name>LoginRoute</name>
     <message>
       <location filename="../resources/LoginRoute.qml" line="17"/>
-      <location filename="../resources/LoginRoute.qml" line="64"/>
-      <source>Login</source>
-      <translation>Anmelden</translation>
+      <source>Welcome</source>
+      <translation type="unfinished">Welcome</translation>
     </message>
     <message>
       <location filename="../resources/LoginRoute.qml" line="38"/>
       <source>Welcome to Kalama</source>
-      <translation type="unfinished">Welcome to Kalama</translation>
+      <translation>Willkommen bei Kalama</translation>
     </message>
     <message>
-      <location filename="../resources/LoginRoute.qml" line="48"/>
-      <source>email@address.com</source>
-      <extracomment>placeholder for email</extracomment>
-      <translation>email@adresse.de</translation>
-    </message>
-    <message>
-      <location filename="../resources/LoginRoute.qml" line="50"/>
-      <source>Email:</source>
-      <translation>Email:</translation>
-    </message>
-    <message>
-      <location filename="../resources/LoginRoute.qml" line="56"/>
-      <source>Homeserver:</source>
-      <translation>Homeserver:</translation>
+      <location filename="../resources/LoginRoute.qml" line="44"/>
+      <source>Enter your homeserver to continue</source>
+      <translation type="unfinished">Enter your homeserver to continue</translation>
     </message>
     <message>
       <location filename="../resources/LoginRoute.qml" line="61"/>
-      <source>Password:</source>
-      <translation>Passwort:</translation>
-    </message>
-    <message>
-      <location filename="../resources/LoginRoute.qml" line="68"/>
-      <source>Logged in</source>
-      <extracomment>the user logged in successfully</extracomment>
-      <translation>Angemeldet</translation>
-    </message>
-    <message>
-      <location filename="../resources/LoginRoute.qml" line="71"/>
-      <source>Failed to log in</source>
-      <extracomment>login failed</extracomment>
-      <translation>Anmeldung fehlgeschlagen</translation>
-    </message>
-    <message>
-      <location filename="../resources/LoginRoute.qml" line="78"/>
-      <source>Don&apos;t have an account yet?</source>
-      <translation type="unfinished">Don&apos;t have an account yet?</translation>
+      <source>Continue</source>
+      <translation type="unfinished">Continue</translation>
     </message>
   </context>
   <context>
@@ -524,61 +495,6 @@
     </message>
   </context>
   <context>
-    <name>Register</name>
-    <message>
-      <location filename="../resources/Register.qml" line="14"/>
-      <source>Create an account</source>
-      <translation type="unfinished">Create an account</translation>
-    </message>
-    <message>
-      <location filename="../resources/Register.qml" line="25"/>
-      <source>johndoe</source>
-      <extracomment>placeholder for username</extracomment>
-      <translation type="unfinished">johndoe</translation>
-    </message>
-    <message>
-      <location filename="../resources/Register.qml" line="26"/>
-      <source>Username:</source>
-      <translation type="unfinished">Username:</translation>
-    </message>
-    <message>
-      <location filename="../resources/Register.qml" line="31"/>
-      <source>email@address.com</source>
-      <extracomment>placeholder for email</extracomment>
-      <translation>email@adresse.de</translation>
-    </message>
-    <message>
-      <location filename="../resources/Register.qml" line="33"/>
-      <source>Email:</source>
-      <translation>Email:</translation>
-    </message>
-    <message>
-      <location filename="../resources/Register.qml" line="39"/>
-      <source>Homeserver:</source>
-      <translation>Homeserver:</translation>
-    </message>
-    <message>
-      <location filename="../resources/Register.qml" line="44"/>
-      <source>Password:</source>
-      <translation>Passwort:</translation>
-    </message>
-    <message>
-      <location filename="../resources/Register.qml" line="47"/>
-      <source>Create Account</source>
-      <translation type="unfinished">Create Account</translation>
-    </message>
-    <message>
-      <location filename="../resources/Register.qml" line="53"/>
-      <source>Account created, welcome to Harmony!</source>
-      <translation type="unfinished">Account created, welcome to Harmony!</translation>
-    </message>
-    <message>
-      <location filename="../resources/Register.qml" line="55"/>
-      <source>Failed to create an account</source>
-      <translation type="unfinished">Failed to create an account</translation>
-    </message>
-  </context>
-  <context>
     <name>RightDrawer</name>
     <message>
       <location filename="../resources/RightDrawer.qml" line="54"/>
@@ -680,6 +596,14 @@
       <location filename="../resources/StaccatoDrawer.qml" line="176"/>
       <source>Channels</source>
       <translation>Kanäle</translation>
+    </message>
+  </context>
+  <context>
+    <name>Stepper</name>
+    <message>
+      <location filename="../resources/Stepper.qml" line="14"/>
+      <source>Login</source>
+      <translation>Anmelden</translation>
     </message>
   </context>
 </TS>
