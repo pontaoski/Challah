@@ -39,8 +39,8 @@ QtApplication {
 		qbs.installDir: "share/applications"
 	}
 
-	qbs.install: qbs.targetOS.contains("linux")
-	qbs.installDir: "bin"
+	install: qbs.targetOS.contains("linux")
+	installDir: "bin"
 
 	Group {
 		name: "Translation files"
