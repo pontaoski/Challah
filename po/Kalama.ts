@@ -227,8 +227,7 @@
     <name>LoginRoute</name>
     <message>
         <location filename="../resources/LoginRoute.qml" line="17"/>
-        <location filename="../resources/LoginRoute.qml" line="64"/>
-        <source>Login</source>
+        <source>Welcome</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -237,41 +236,13 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../resources/LoginRoute.qml" line="48"/>
-        <source>email@address.com</source>
-        <extracomment>placeholder for email</extracomment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../resources/LoginRoute.qml" line="50"/>
-        <source>Email:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../resources/LoginRoute.qml" line="56"/>
-        <source>Homeserver:</source>
+        <location filename="../resources/LoginRoute.qml" line="44"/>
+        <source>Enter your homeserver to continue</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../resources/LoginRoute.qml" line="61"/>
-        <source>Password:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../resources/LoginRoute.qml" line="68"/>
-        <source>Logged in</source>
-        <extracomment>the user logged in successfully</extracomment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../resources/LoginRoute.qml" line="71"/>
-        <source>Failed to log in</source>
-        <extracomment>login failed</extracomment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../resources/LoginRoute.qml" line="78"/>
-        <source>Don&apos;t have an account yet?</source>
+        <source>Continue</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -524,61 +495,6 @@
     </message>
 </context>
 <context>
-    <name>Register</name>
-    <message>
-        <location filename="../resources/Register.qml" line="14"/>
-        <source>Create an account</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../resources/Register.qml" line="25"/>
-        <source>johndoe</source>
-        <extracomment>placeholder for username</extracomment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../resources/Register.qml" line="26"/>
-        <source>Username:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../resources/Register.qml" line="31"/>
-        <source>email@address.com</source>
-        <extracomment>placeholder for email</extracomment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../resources/Register.qml" line="33"/>
-        <source>Email:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../resources/Register.qml" line="39"/>
-        <source>Homeserver:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../resources/Register.qml" line="44"/>
-        <source>Password:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../resources/Register.qml" line="47"/>
-        <source>Create Account</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../resources/Register.qml" line="53"/>
-        <source>Account created, welcome to Harmony!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../resources/Register.qml" line="55"/>
-        <source>Failed to create an account</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>RightDrawer</name>
     <message>
         <location filename="../resources/RightDrawer.qml" line="54"/>
@@ -679,6 +595,14 @@
     <message>
         <location filename="../resources/StaccatoDrawer.qml" line="176"/>
         <source>Channels</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Stepper</name>
+    <message>
+        <location filename="../resources/Stepper.qml" line="14"/>
+        <source>Login</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -8,4 +8,4 @@ PO_DIR=${SCRIPT_DIR}/po
 cd "${SOURCE_DIR}" || exit 1
 mkdir -p "$PO_DIR"
 
-lupdate "${SCRIPT_DIR}"/resources/data.qrc -ts "$PO_DIR"/Kalama.ts
+lupdate "${SCRIPT_DIR}"/resources/data.qrc -ts "$PO_DIR"/Kalama.ts -noobsolete
