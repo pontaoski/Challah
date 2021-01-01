@@ -139,22 +139,21 @@ void TextFormatter::handleTextChanged(int position, int charsRemoved, int charsA
 			cursor.setPosition(match.capturedStart(1));
 			cursor.movePosition(QTextCursor::MoveOperation::Right, QTextCursor::MoveMode::KeepAnchor, match.capturedLength(1));
 
-			if (std::holds_alternative<CharacterStyle>(format)) {
-				auto style = std::get<CharacterStyle>(format);
+			if (auto style = std::get_if<CharacterStyle>(&format)) {
 
 				QTextCharFormat fmt;
 
-				if (style.weight.has_value()) {
-					fmt.setFontWeight(*style.weight);
+				if (style->weight.has_value()) {
+					fmt.setFontWeight(*style->weight);
 				}
-				if (style.italic.has_value()) {
-					fmt.setFontItalic(*style.italic);
+				if (style->italic.has_value()) {
+					fmt.setFontItalic(*style->italic);
 				}
-				if (style.underline.has_value()) {
-					fmt.setFontUnderline(*style.underline);
+				if (style->underline.has_value()) {
+					fmt.setFontUnderline(*style->underline);
 				}
-				if (style.font.has_value()) {
-					fmt.setFont(*style.font);
+				if (style->font.has_value()) {
+					fmt.setFont(*style->font);
 				}
 
 				cursor.mergeCharFormat(fmt);
