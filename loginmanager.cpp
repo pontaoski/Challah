@@ -93,7 +93,9 @@ void LoginManager::customEvent(QEvent* event)
 
 						protocol::auth::v1::AuthStep resp;
 
-						client->authKit->NextStep(&ctx, req, &resp);
+						if (!checkStatus(client->authKit->NextStep(&ctx, req, &resp))) {
+							QCoreApplication::postEvent(this, new ErrorEvent());
+						}
 					});
 				});
 			}
@@ -180,7 +182,9 @@ void LoginManager::customEvent(QEvent* event)
 
 					protocol::auth::v1::AuthStep resp;
 
-					client->authKit->NextStep(&ctx, req, &resp);
+					if (!checkStatus(client->authKit->NextStep(&ctx, req, &resp))) {
+						QCoreApplication::postEvent(this, new ErrorEvent());
+					}
 				});
 			});
 
