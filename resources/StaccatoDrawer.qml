@@ -74,7 +74,7 @@ Item {
 								}
 								ResponsiveMenuItem {
 									text: qsTr("Log Out")
-									onTriggered: routerInstance.navigateToRoute("login")
+									onTriggered: HState.logOut()
 								}
 							}
 						}

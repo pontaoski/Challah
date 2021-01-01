@@ -8,6 +8,7 @@
 
 #include "richtexter.hpp"
 #include "state.hpp"
+#include "channels.hpp"
 
 State* State::s_instance;
 
@@ -25,6 +26,32 @@ State::~State()
 State* State::instance()
 {
 	return s_instance;
+}
+void State::logOut()
+{
+	delete Client::mainClient;
+	auto copy = Client::mainClient;
+	Client::mainClient = nullptr;
+	client = nullptr;
+
+	delete guildModel;
+
+	for (auto cli : Client::clients) {
+		if (cli != copy) {
+			delete cli;
+		}
+	}
+	Client::clients.clear();
+
+	for (auto channelsModel : ChannelsModel::instances) {
+		delete channelsModel;
+	}
+	ChannelsModel::instances.clear();
+
+	this->guildModel = new GuildModel;
+	this->client = Client::mainInstance();
+
+	Q_EMIT loggedOut();
 }
 bool State::startupLogin()
 {

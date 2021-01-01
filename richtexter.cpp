@@ -145,16 +145,16 @@ void TextFormatter::handleTextChanged(int position, int charsRemoved, int charsA
 				QTextCharFormat fmt;
 
 				if (style.weight.has_value()) {
-					fmt.setFontWeight(style.weight.value());
+					fmt.setFontWeight(*style.weight);
 				}
 				if (style.italic.has_value()) {
-					fmt.setFontItalic(style.italic.value());
+					fmt.setFontItalic(*style.italic);
 				}
 				if (style.underline.has_value()) {
-					fmt.setFontUnderline(style.underline.value());
+					fmt.setFontUnderline(*style.underline);
 				}
 				if (style.font.has_value()) {
-					fmt.setFont(style.font.value());
+					fmt.setFont(*style.font);
 				}
 
 				cursor.mergeCharFormat(fmt);

@@ -77,6 +77,7 @@ class ChannelsModel : public QAbstractListModel
 	QSharedPointer<QNetworkAccessManager> nam;
 	mutable QMap<quint64,MessagesModel*> models;
 	friend class Client;
+	friend class State;
 	static QMap<QPair<QString,quint64>,ChannelsModel*> instances;
 	QQmlPropertyMap* permissions;
 

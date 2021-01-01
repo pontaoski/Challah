@@ -43,6 +43,11 @@ Kirigami.ApplicationWindow {
 						routerInstance.navigateToRoute("no-guild")
 						leftHandDrawer.shouldShow = true
 					}
+					function onLoggedOut() {
+						routerInstance.navigateToRoute("login")
+						leftHandDrawer.shouldShow = false
+						rightHandDrawer.model = null
+					}
 				}
 
 				Kirigami.PageRouter {

@@ -34,7 +34,9 @@ public:
 
 	Q_SIGNAL void loggedIn();
 	Q_SIGNAL void loginFailure();
+	Q_SIGNAL void loggedOut();
 
+	Q_INVOKABLE void logOut();
 	Q_INVOKABLE bool startupLogin();
 	Q_INVOKABLE bool createGuild(const QString& name);
 	Q_INVOKABLE bool joinGuild(const QString& inviteLink);

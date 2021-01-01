@@ -161,8 +161,8 @@ QVariant MessagesModel::data(const QModelIndex& index, int role) const
 		if ((!messageData[idx].overrides.has_value()) == (!messageData[idx+1].overrides.has_value()))
 			return false;
 
-		const auto& lhs = messageData[idx].overrides.value();
-		const auto& rhs = messageData[idx+1].overrides.value();
+		const auto& lhs = *messageData[idx].overrides;
+		const auto& rhs = *messageData[idx+1].overrides;
 
 		if (lhs.avatar != rhs.avatar)
 			return true;

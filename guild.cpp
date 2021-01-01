@@ -74,7 +74,7 @@ void GuildModel::customEvent(QEvent *event)
 			int i = 0;
 			for (auto& guild : guilds) {
 				if (guild.guildID == data.guildID && guild.homeserver == data.homeserver) {
-					guild.name = data.name.value();
+					guild.name = *data.name;
 
 					dataChanged(index(i), index(i), {GuildNameRole});
 					break;
@@ -87,7 +87,7 @@ void GuildModel::customEvent(QEvent *event)
 			int i = 0;
 			for (auto& guild : guilds) {
 				if (guild.guildID == data.guildID && guild.homeserver == data.homeserver) {
-					guild.picture = data.picture.value();
+					guild.picture = *data.picture;
 
 					dataChanged(index(i), index(i), {GuildPictureRole});
 					break;
