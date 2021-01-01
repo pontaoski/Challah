@@ -132,6 +132,17 @@ QQC2.ToolBar {
 				visible: uiSettings.personas.length > 0
 				textRole: "name"
 			}
+			QQC2.Button {
+				icon.name: "mail-attachment"
+				enabled: messagesRoute.model.permissions.canSendAndEdit
+				hoverEnabled: true
+				onClicked: fileDialog.open()
+
+				QQC2.ToolTip.delay: Kirigami.Units.shortDuration
+				QQC2.ToolTip.visible: hovered
+				//: Send the message in the text field
+				QQC2.ToolTip.text: qsTr("Add attachment...")
+			}
 			QQC2.TextArea {
 				id: messageField
 				placeholderText: if (messagesRoute.model.permissions.canSendAndEdit) {
@@ -168,17 +179,6 @@ QQC2.ToolBar {
 
 				Keys.onEscapePressed: replyingBar.replyingToID = ""
 				Keys.onReturnPressed: send()
-			}
-			QQC2.Button {
-				icon.name: "mail-attachment"
-				enabled: messagesRoute.model.permissions.canSendAndEdit
-				hoverEnabled: true
-				onClicked: fileDialog.open()
-
-				QQC2.ToolTip.delay: Kirigami.Units.shortDuration
-				QQC2.ToolTip.visible: hovered
-				//: Send the message in the text field
-				QQC2.ToolTip.text: qsTr("Add attachment...")
 			}
 			QQC2.Button {
 				icon.name: "document-send"
