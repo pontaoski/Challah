@@ -266,20 +266,16 @@ void MessagesModel::sendMessageFull(const QString& message, const QString &reply
 
 	if (std::holds_alternative<Nobody>(as)) {
 
-	} else if (std::holds_alternative<Fronter>(as)) {
-		auto& fronter = std::get<Fronter>(as);
-
+	} else if (auto fronter = std::get_if<Fronter>(&as)) {
 		auto override = new protocol::harmonytypes::v1::Override();
-		override->set_name(fronter.name.toStdString());
+		override->set_name(fronter->name.toStdString());
 		override->set_allocated_system_plurality(new google::protobuf::Empty{});
 
 		req.set_allocated_overrides(override);
 
-	} else if (std::holds_alternative<RoleplayCharacter>(as)) {
-		auto& character = std::get<RoleplayCharacter>(as);
-
+	} else if (auto character = std::get_if<RoleplayCharacter>(&as)) {
 		auto override = new protocol::harmonytypes::v1::Override();
-		override->set_name(character.name.toStdString());
+		override->set_name(character->name.toStdString());
 		override->set_user_defined("Roleplay");
 
 		req.set_allocated_overrides(override);
@@ -298,14 +294,14 @@ void MessagesModel::sendMessageFull(const QString& message, const QString &reply
 	incoming.attachments = attaches;
 	if (std::holds_alternative<Nobody>(as)) {
 		;
-	} else if (std::holds_alternative<Fronter>(as)) {
+	} else if (auto fronter = std::get_if<Fronter>(&as)) {
 		incoming.overrides = MessageData::Override {
-			.name = std::get<Fronter>(as).name,
+			.name = fronter->name,
 			.reason = MessageData::Override::Plurality,
 		};
-	} else if (std::holds_alternative<RoleplayCharacter>(as)) {
+	} else if (auto character = std::get_if<RoleplayCharacter>(&as)) {
 		incoming.overrides = MessageData::Override {
-			.name = std::get<RoleplayCharacter>(as).name
+			.name = character->name
 		};
 	}
 	incoming.status = MessageData::Sending;
