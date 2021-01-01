@@ -70,6 +70,7 @@ QtApplication {
 		fileTags: "protobuf.grpc"
 	}
 
+	Depends { name: "bundle" }
 	Depends { name: "cpp" }
 	Depends { name: "protobuf.cpp" }
 	Depends { name: "Qt"; submodules: ["gui", "concurrent", "widgets", "quick", "quickcontrols2", "qml"] }
