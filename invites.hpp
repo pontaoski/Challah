@@ -6,7 +6,7 @@
 struct Invite {
 	QString id;
 	qint32 possibleUses;
-	quint32 useCount;
+	qint32 useCount;
 };
 
 class InviteModel : public QAbstractListModel
