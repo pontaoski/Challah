@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-import QtQuick 2.10
+import QtQuick 2.15
 import QtQuick.Window 2.10
 import QtQuick.Layouts 1.10
 import org.kde.kirigami 2.13 as Kirigami
@@ -43,6 +43,8 @@ Kirigami.PageRoute {
 					required property var section
 
 					Kirigami.Avatar {
+						id: avvy
+
 						name: parent.section.split("\t")[2]
 						source: parent.section.split("\t")[1]
 
@@ -51,6 +53,18 @@ Kirigami.PageRoute {
 
 						anchors {
 							bottom: parent.top
+						}
+
+						UserPopup {
+							id: popup
+							name: avvy.name
+							source: avvy.source
+						}
+
+						TapHandler {
+							onTapped: {
+								popup.open()
+							}
 						}
 					}
 

@@ -25,6 +25,7 @@
         <file>ImagePopup.qml</file>
         <file>InstantView.qml</file>
         <file>Stepper.qml</file>
+        <file>UserPopup.qml</file>
         <file>qmldir</file>
     </qresource>
     <qresource prefix="/img">
