@@ -1,0 +1,24 @@
+on:
+  push:
+    branches: [main]
+
+name: macOS Build
+jobs:
+  macos:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Fetch dependencies
+        run: |
+          brew tap kde-mac/kde https://invent.kde.org/packaging/homebrew-kde.git --force-auto-update
+          "$(brew --repo kde-mac/kde)/tools/do-caveats.sh"
+          brew install grpc qbs kf5-kirigami2 kf5-kitemmodels
+
+      - name: Build app
+        run: |
+          export QML2_IMPORT_PATH=/usr/local/lib/qt5/qml
+          qbs
+          macdeployqt default/Kalama.4faaf09d/Kalama.app -qmldir=resources
