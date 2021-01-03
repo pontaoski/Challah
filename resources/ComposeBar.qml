@@ -153,6 +153,13 @@ QQC2.ToolBar {
 					return qsTr("You do not have permissions to send a message to this channel.")
 				}
 
+				Clipboard.paste: function(clipboard) {
+					if (clipboard.hasUrls) {
+						uploadSheet.pendingUpload = clipboard.urls[0]
+						uploadSheet.open()
+						return true
+					}
+				}
 				Component.onCompleted: HState.bindTextDocument(this.textDocument, this)
 				Layout.fillWidth: true
 

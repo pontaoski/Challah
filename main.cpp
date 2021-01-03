@@ -17,6 +17,7 @@
 #include "permissions.hpp"
 #include "promise.hpp"
 #include "loginmanager.hpp"
+#include "copyinterceptor.hpp"
 
 int main(int argc, char *argv[])
 {
@@ -28,6 +29,7 @@ int main(int argc, char *argv[])
 
 	qmlRegisterType<OverlappingPanels>("com.github.HarmonyDevelopment.Staccato", 1, 0, "OverlappingPanels");
 	qmlRegisterType<LoginManager>("com.github.HarmonyDevelopment.Staccato", 1, 0, "LoginManager");
+	qmlRegisterUncreatableType<CopyInterceptor>("com.github.HarmonyDevelopment.Staccato", 1, 0, "Clipboard", "You cannot create an instance of Clipboard.");
 	qmlRegisterSingletonType<State>("com.github.HarmonyDevelopment.Staccato", 1, 0, "HState", [](QQmlEngine *, QJSEngine *) -> QObject * { return new State; });
 	qmlRegisterUncreatableType<ChannelsModel>("com.github.HarmonyDevelopment.ChannelsModel", 1, 0, "ChannelsModel", "You cannot create an instance of ChannelsModel.");
 	qmlRegisterUncreatableType<InviteModel>("com.github.HarmonyDevelopment.InviteModel", 1, 0, "InviteModel", "You cannot create an instance of InviteModel.");
