@@ -11,6 +11,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v1
 
+      - uses: actions/cache@v2
+        id: cache
+        with:
+          path: |
+            ~/Library/Caches/Homebrew/*
+            /tmp/package-*
+            /usr/local/Cellar/*
+            /usr/local/*
+          key: brew-${{ runner.os }}-${{ hashFiles('.github/brew-formulae') }}
+          restore-keys: brew-
+
       - name: Fetch dependencies
         run: |
           brew tap kde-mac/kde https://invent.kde.org/packaging/homebrew-kde.git --force-auto-update
@@ -21,4 +32,11 @@ jobs:
         run: |
           export QML2_IMPORT_PATH=/usr/local/lib/qt5/qml
           qbs
-          macdeployqt default/Kalama.4faaf09d/Kalama.app -qmldir=resources
+          macdeployqt default/Kalama.4faaf09d/Kalama.app -qmldir=resources -dmg
+
+      - name: DMG File
+        uses: actions/upload-artifact@v2
+        with:
+          name: DMG File
+          path: |
+            default/Kalama.4faaf09d/Kalama.dmg
