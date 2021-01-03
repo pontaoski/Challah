@@ -61,10 +61,8 @@ Kirigami.PageRoute {
 							source: avvy.source
 						}
 
-						TapHandler {
-							onTapped: {
-								popup.open()
-							}
+						actions.main: Kirigami.Action {
+							onTriggered: popup.open()
 						}
 					}
 

@@ -9,7 +9,7 @@ import org.kde.kirigami 2.13 as Kirigami
 import QtQuick.Controls 2.10 as QQC2
 import com.github.HarmonyDevelopment.Staccato 1.0
 
-QQC2.Popup {
+Kirigami.OverlaySheet {
 	id: userPopupRoot
 
 	background: Kirigami.Card {}
@@ -17,24 +17,12 @@ QQC2.Popup {
 	property string name: ""
 	property string source: ""
 
-	width: Kirigami.Units.gridUnit * 10
 	leftPadding: Kirigami.Units.gridUnit*2
 	rightPadding: Kirigami.Units.gridUnit*2
 
-	enter: Transition {
-		ParallelAnimation {
-			NumberAnimation { property: "x"; from: -20 }
-			NumberAnimation { property: "opacity"; from: 0.0; to: 1.0 }
-		}
-	}
-	exit: Transition {
-		ParallelAnimation {
-			NumberAnimation { property: "x"; to: from+20 }
-			NumberAnimation { property: "opacity"; from: 1.0; to: 0.0 }
-		}
-	}
-
 	contentItem: ColumnLayout {
+		Layout.maximumWidth: Kirigami.Units.gridUnit * 20
+
 		Kirigami.Avatar {
 			name: userPopupRoot.name
 			source: userPopupRoot.source
@@ -46,6 +34,34 @@ QQC2.Popup {
 			level: 2
 
 			horizontalAlignment: Text.AlignHCenter
+			Layout.fillWidth: true
+		}
+
+		Kirigami.Heading {
+			text: qsTr("Roles")
+			level: 4
+		}
+
+		Kirigami.Heading {
+			text: qsTr("Manage User")
+			level: 4
+		}
+
+		Kirigami.BasicListItem {
+			text: qsTr("Kick User")
+
+			topPadding: Kirigami.Units.largeSpacing
+			bottomPadding: Kirigami.Units.largeSpacing
+
+			Layout.fillWidth: true
+		}
+
+		Kirigami.BasicListItem {
+			text: qsTr("Ban User")
+
+			topPadding: Kirigami.Units.largeSpacing
+			bottomPadding: Kirigami.Units.largeSpacing
+
 			Layout.fillWidth: true
 		}
 	}
