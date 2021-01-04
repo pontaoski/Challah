@@ -39,11 +39,11 @@ Product {
 			config.description = "configuring gRPC...";
 			config.workingDirectory = product.sourceDirectory + "/grpc";
 
-			var config = new Command("cmake", ["--build", ".", "--target", "grpc++"]);
-			config.description = "building gRPC...";
-			config.workingDirectory = product.sourceDirectory + "/grpc";
+			var build = new Command("cmake", ["--build", ".", "--target", "grpc++"]);
+			build.description = "building gRPC...";
+			build.workingDirectory = product.sourceDirectory + "/grpc";
 
-			return [cmd];
+			return [cmd, build];
 		}
 	}
 }
