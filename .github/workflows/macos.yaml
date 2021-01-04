@@ -37,7 +37,7 @@ jobs:
           qbs
           mkdir -p ./default/Kalama.4faaf09d/Kalama.app/PlugIns/
           cp -r /usr/local/Cellar/qt/5.15.2/plugins/platforms ./default/Kalama.4faaf09d/Kalama.app/PlugIns/
-          macdeployqt default/Kalama.4faaf09d/Kalama.app -qmldir=resources -dmg -verbose=3 $(find default/Kalama.4faaf09d/Kalama.app -name '*.dylib' -exec echo -n "-executable={} " \;)
+          macdeployqt default/Kalama.4faaf09d/Kalama.app -qmldir=app/resources -dmg -verbose=3 $(find default/Kalama.4faaf09d/Kalama.app -name '*.dylib' -exec echo -n "-executable={} " \;)
 
       - name: DMG File
         uses: actions/upload-artifact@v2
