@@ -30,7 +30,7 @@
     <name>ComposeBar</name>
     <message>
         <location filename="../resources/ComposeBar.qml" line="50"/>
-        <location filename="../resources/ComposeBar.qml" line="139"/>
+        <location filename="../resources/ComposeBar.qml" line="150"/>
         <source>Write a message...</source>
         <extracomment>Placeholder text for the message field</extracomment>
         <translation type="unfinished"></translation>
@@ -42,7 +42,7 @@
     </message>
     <message>
         <location filename="../resources/ComposeBar.qml" line="78"/>
-        <location filename="../resources/ComposeBar.qml" line="192"/>
+        <location filename="../resources/ComposeBar.qml" line="199"/>
         <source>Send</source>
         <extracomment>Send the message in the text field</extracomment>
         <translation type="unfinished"></translation>
@@ -53,13 +53,13 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../resources/ComposeBar.qml" line="142"/>
+        <location filename="../resources/ComposeBar.qml" line="153"/>
         <source>You do not have permissions to send a message to this channel.</source>
         <extracomment>Placeholder text for the message field when the user isn&apos;t allowed to send a message</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../resources/ComposeBar.qml" line="181"/>
+        <location filename="../resources/ComposeBar.qml" line="144"/>
         <source>Add attachment...</source>
         <extracomment>Send the message in the text field</extracomment>
         <translation type="unfinished"></translation>
@@ -603,6 +603,29 @@
     <message>
         <location filename="../resources/Stepper.qml" line="14"/>
         <source>Login</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>UserPopup</name>
+    <message>
+        <location filename="../resources/UserPopup.qml" line="41"/>
+        <source>Roles</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../resources/UserPopup.qml" line="46"/>
+        <source>Manage User</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../resources/UserPopup.qml" line="51"/>
+        <source>Kick User</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../resources/UserPopup.qml" line="60"/>
+        <source>Ban User</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

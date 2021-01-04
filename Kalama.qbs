@@ -1,6 +1,6 @@
 Project {
 	references: [
-		"Source.qbs",
+		"app/Source.qbs",
 	]
 
 	SubProject {

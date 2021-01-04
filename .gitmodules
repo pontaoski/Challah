@@ -1,5 +1,5 @@
 [submodule "protocol"]
-	path = protocol
+	path = app/protocol
 	url = https://github.com/harmony-development/protocol.git
 [submodule "vendor/kirigami"]
 	path = vendor/kirigami
