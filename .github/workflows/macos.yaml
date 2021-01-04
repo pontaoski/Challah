@@ -36,7 +36,7 @@ jobs:
           export QML2_IMPORT_PATH=/usr/local/lib/qt5/qml
           qbs
           mkdir -p ./default/Kalama.4faaf09d/Kalama.app/PlugIns/
-          cp -r /usr/local/Cellar/qt/5.15.2/plugins/* ./default/Kalama.4faaf09d/Kalama.app/PlugIns/
+          cp -r /usr/local/Cellar/qt/5.15.2/plugins/platforms ./default/Kalama.4faaf09d/Kalama.app/PlugIns/
           macdeployqt default/Kalama.4faaf09d/Kalama.app -qmldir=resources -dmg -verbose=3 $(find default/Kalama.4faaf09d/Kalama.app -name '*.dylib' -exec echo -n "-executable={} " \;)
 
       - name: DMG File
