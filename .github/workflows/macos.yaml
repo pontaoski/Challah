@@ -26,7 +26,8 @@ jobs:
         run: |
           brew tap kde-mac/kde https://invent.kde.org/packaging/homebrew-kde.git --force-auto-update
           "$(brew --repo kde-mac/kde)/tools/do-caveats.sh"
-          brew install grpc qbs kf5-kirigami2 kf5-kitemmodels || true
+          brew install grpc qbs qt5 kf5-kirigami2 kf5-kitemmodels || true
+          brew link --force qt5
 
       - name: Build app
         run: |
