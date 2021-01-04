@@ -35,7 +35,7 @@ jobs:
         run: |
           export QML2_IMPORT_PATH=/usr/local/lib/qt5/qml
           qbs
-          macdeployqt default/Kalama.4faaf09d/Kalama.app -qmldir=resources -dmg
+          macdeployqt default/Kalama.4faaf09d/Kalama.app -qmldir=resources -dmg -verbose=3
 
       - name: DMG File
         uses: actions/upload-artifact@v2
