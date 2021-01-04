@@ -2,7 +2,24 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
+#ifdef Q_OS_ANDROID
+
+#include <QtAndroid>
+#include <QGuiApplication>
+#include <QQuickStyle>
+
+// WindowManager.LayoutParams
+#define FLAG_TRANSLUCENT_STATUS 0x04000000
+#define FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS 0x80000000
+// View
+#define SYSTEM_UI_FLAG_LIGHT_STATUS_BAR 0x00002000
+
+#else
+
 #include <QApplication>
+
+#endif
+
 #include <QCoreApplication>
 #include <QIcon>
 #include <QQmlApplicationEngine>
@@ -22,10 +39,23 @@
 int main(int argc, char *argv[])
 {
 	QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+	QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 
 	QThreadPool::globalInstance()->setMaxThreadCount(QThread::idealThreadCount() * 8);
 
+#ifdef Q_OS_ANDROID
+	auto app = new QGuiApplication(argc, argv);
+#else
 	auto app = new QApplication(argc, argv);
+#endif
+
+#ifdef Q_OS_ANDROID
+	QQuickStyle::setStyle(QStringLiteral("Material"));
+#elif defined(Q_OS_LINUX)
+	QApplication::setStyle("Breeze");
+	QIcon::setThemeName("breeze");
+	QQuickStyle::setStyle("org.kde.desktop");
+#endif
 
 	qmlRegisterType<OverlappingPanels>("com.github.HarmonyDevelopment.Staccato", 1, 0, "OverlappingPanels");
 	qmlRegisterType<LoginManager>("com.github.HarmonyDevelopment.Staccato", 1, 0, "LoginManager");
@@ -47,11 +77,8 @@ int main(int argc, char *argv[])
 
 	QApplication::setWindowIcon(QIcon::fromTheme(QString("io.harmonyapp.Kalama")));
 	QApplication::setDesktopFileName("io.harmonyapp.Kalama.desktop");
-	QApplication::setStyle("Breeze");
 	QApplication::setOrganizationName("Harmony Development");
 	QApplication::setOrganizationDomain("io.harmonyapp");
-	QIcon::setThemeName("breeze");
-	QQuickStyle::setStyle("org.kde.desktop");
 
 	QQmlApplicationEngine engine;
 	const QUrl url(QStringLiteral("qrc:/main.qml"));
@@ -65,6 +92,16 @@ int main(int argc, char *argv[])
 		},
 		Qt::QueuedConnection);
 	engine.load(url);
+
+#ifdef Q_OS_ANDROID
+	QtAndroid::runOnAndroidThread([=]() {
+		QAndroidJniObject window = QtAndroid::androidActivity().callObjectMethod("getWindow", "()Landroid/view/Window;");
+		window.callMethod<void>("addFlags", "(I)V", FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+		window.callMethod<void>("clearFlags", "(I)V", FLAG_TRANSLUCENT_STATUS);
+		window.callMethod<void>("setStatusBarColor", "(I)V", QColor("#2196f3").rgba());
+		window.callMethod<void>("setNavigationBarColor", "(I)V", QColor("#2196f3").rgba());
+	});
+#endif
 
 	return QApplication::exec();
 }
