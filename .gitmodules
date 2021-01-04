@@ -1,3 +1,9 @@
 [submodule "protocol"]
 	path = protocol
 	url = https://github.com/harmony-development/protocol.git
+[submodule "vendor/kirigami"]
+	path = vendor/kirigami
+	url = https://invent.kde.org/frameworks/kirigami
+[submodule "vendor/grpc"]
+	path = vendor/grpc
+	url = https://github.com/grpc/grpc
