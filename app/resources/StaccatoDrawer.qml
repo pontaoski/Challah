@@ -125,6 +125,10 @@ Item {
 
 									channelsModel.workaroundModel = model['channelModel']
 
+									print(rightHandDrawer.model)
+									print(model)
+									print(model['channelModel'])
+									print(model['channelModel'].members)
 									rightHandDrawer.model = model['channelModel'].members
 								}
 							}

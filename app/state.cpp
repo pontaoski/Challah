@@ -31,6 +31,7 @@ void State::logOut()
 {
 	delete Client::mainClient;
 	auto copy = Client::mainClient;
+	copy->stopEvents();
 	Client::mainClient = nullptr;
 	client = nullptr;
 
@@ -38,6 +39,7 @@ void State::logOut()
 
 	for (auto cli : Client::clients) {
 		if (cli != copy) {
+			cli->stopEvents();
 			delete cli;
 		}
 	}
@@ -50,6 +52,8 @@ void State::logOut()
 
 	this->guildModel = new GuildModel;
 	this->client = Client::mainInstance();
+
+	guildModelChanged();
 
 	Q_EMIT loggedOut();
 }

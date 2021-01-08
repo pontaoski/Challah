@@ -60,7 +60,8 @@ public:
 		}
 		return QString("https://%1/_harmony/media/download/%2").arg(split[0]).arg(split[1]);
 	}
-	Q_PROPERTY(GuildModel* guildModel READ getGuildModel CONSTANT)
+	Q_SIGNAL void guildModelChanged();
+	Q_PROPERTY(GuildModel* guildModel READ getGuildModel NOTIFY guildModelChanged)
 	GuildModel* getGuildModel() const { return guildModel; }
 };
 

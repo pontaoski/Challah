@@ -5,3 +5,4 @@ flatpak
 _flatpak_builder
 .vscode
 output
+/.cache

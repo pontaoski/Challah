@@ -43,6 +43,9 @@ public:
 	std::unique_ptr<protocol::chat::v1::ChatService::Stub> chatKit;
 	std::unique_ptr<protocol::auth::v1::AuthService::Stub> authKit;
 	std::unique_ptr<protocol::mediaproxy::v1::MediaProxyService::Stub> mediaProxyKit;
+	QMutex writeMutex;
+	bool loopRunning = false;
+	bool shouldRunLoop = true;
 	void authenticate(grpc::ClientContext& ctx);
 
 private:
@@ -52,10 +55,14 @@ private:
 	void runEvents();
 	bool forgeNewConnection();
 
+protected:
+	void customEvent(QEvent *event) override;
+
 public:
 	quint64 userID;
 	static Client* mainInstance();
 	static Client* instanceForHomeserver(const QString& homeserver);
+	void stopEvents();
 	bool joinInvite(const QString& invite);
 	void consumeSession(protocol::auth::v1::Session session, const QString& homeserver);
 	void subscribeGuild(quint64 guild);

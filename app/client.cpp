@@ -5,13 +5,31 @@
 #include <QtConcurrent>
 #include <QDebug>
 
+#include "qcoreapplication.h"
 #include "state.hpp"
 #include "client.hpp"
 #include "util.hpp"
 #include "channels.hpp"
+#include <grpc/impl/codegen/connectivity_state.h>
 #include <unistd.h>
 
 using grpc::ClientContext;
+
+class LoopFinished : public QEvent {
+public:
+	LoopFinished() : QEvent(QEvent::MaxUser) {}
+};
+
+class StartLoop : public QEvent {
+public:
+	StartLoop() : QEvent(QEvent::MaxUser) {}
+};
+
+class Subscribe : public QEvent {
+public:
+	Subscribe(quint64 gid) : QEvent(QEvent::MaxUser), gid(gid) {}
+	quint64 gid;
+};
 
 void Client::authenticate(grpc::ClientContext &ctx)
 {
@@ -57,10 +75,7 @@ Client::Client() : QObject()
 
 Client* Client::mainInstance()
 {
-	static bool madeClient = false;
-
-	if (!madeClient) {
-		madeClient = true;
+	if (mainClient == nullptr) {
 		mainClient = new Client;
 	}
 
@@ -134,9 +149,7 @@ void Client::federateOtherClient(Client* client, const QString& target)
 	client->userToken = repl2.session_token();
 	client->userID = repl2.user_id();
 
-	QtConcurrent::run([=]() {
-		client->runEvents();
-	});
+	client->runEvents();
 }
 
 Client* Client::mainClient;
@@ -273,9 +286,7 @@ bool Client::consumeToken(const QString& token, quint64 userID, const QString& h
 		return false;
 	}
 
-	QtConcurrent::run([=]() {
-		runEvents();
-	});
+	runEvents();
 
 	return true;
 }
@@ -300,18 +311,56 @@ bool Client::hasPermission(const QString& node, quint64 guildID, quint64 channel
 	return resp.ok();
 }
 
+void Client::customEvent(QEvent *event)
+{
+	if (auto ev = dynamic_cast<LoopFinished*>(event)) {
+		Q_UNUSED(ev);
+
+		loopRunning = false;
+		if (shouldRunLoop) {
+			QCoreApplication::postEvent(this, new StartLoop());
+		}
+	} else if (auto ev = dynamic_cast<StartLoop*>(event)) {
+		Q_UNUSED(ev);
+
+		loopRunning = true;
+		forgeNewConnection();
+		runEvents();
+	} else if (auto ev = dynamic_cast<Subscribe*>(event)) {
+		if (loopRunning) {
+			protocol::chat::v1::StreamEventsRequest req;
+			auto subReq = new protocol::chat::v1::StreamEventsRequest_SubscribeToGuild;
+			subReq->set_guild_id(ev->gid);
+			req.set_allocated_subscribe_to_guild(subReq);
+
+			writeMutex.lock();
+			eventStream->Write(req, grpc::WriteOptions().set_write_through());
+			writeMutex.unlock();
+		} else {
+			if (shouldRunLoop) {
+				QCoreApplication::postEvent(this, new StartLoop());
+				QCoreApplication::postEvent(this, new Subscribe(ev->gid));
+			}
+		}
+	}
+}
+
 void Client::runEvents()
 {
-	while (true) {
+	QtConcurrent::run([=] {
 		ClientContext ctx;
 		authenticate(ctx);
 
 		eventStream = chatKit->StreamEvents(&ctx);
+
 		protocol::chat::v1::Event msg;
 
 		protocol::chat::v1::StreamEventsRequest req;
 		req.set_allocated_subscribe_to_homeserver_events(new protocol::chat::v1::StreamEventsRequest_SubscribeToHomeserverEvents);
+
+		writeMutex.lock();
 		eventStream->Write(req, grpc::WriteOptions().set_write_through());
+		writeMutex.unlock();
 
 		while (eventStream->Read(&msg)) {
 			if (msg.has_guild_added_to_list()) {
@@ -375,18 +424,24 @@ void Client::runEvents()
 			}
 		}
 
-		forgeNewConnection();
+		QCoreApplication::postEvent(this, new LoopFinished());
+	});
+}
+
+void Client::stopEvents()
+{
+	shouldRunLoop = false;
+
+	if (eventStream.get() != nullptr) {
+		qDebug() << "Finishing...";
+		eventStream->Finish();
+		qDebug() << "Finish";
 	}
 }
 
 void Client::subscribeGuild(quint64 guild)
 {
-	protocol::chat::v1::StreamEventsRequest req;
-	auto subReq = new protocol::chat::v1::StreamEventsRequest_SubscribeToGuild;
-	subReq->set_guild_id(guild);
-	req.set_allocated_subscribe_to_guild(subReq);
-
-	eventStream->Write(req, grpc::WriteOptions().set_write_through());
+	QCoreApplication::postEvent(this, new Subscribe(guild));
 }
 
 void Client::consumeSession(protocol::auth::v1::Session session, const QString& homeserver)
@@ -399,9 +454,7 @@ void Client::consumeSession(protocol::auth::v1::Session session, const QString& 
 	settings.setValue("state/homeserver", homeserver);
 	settings.setValue("state/userid", userID);
 
-	QtConcurrent::run([=]() {
-		runEvents();
-	});
+	runEvents();
 
 	refreshGuilds();
 
