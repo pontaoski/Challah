@@ -595,29 +595,29 @@
       <translation>Keluar</translation>
     </message>
     <message>
-      <location filename="../resources/StaccatoDrawer.qml" line="136"/>
+      <location filename="../resources/StaccatoDrawer.qml" line="140"/>
       <source>Delete</source>
       <translation>Hapus</translation>
     </message>
     <message>
-      <location filename="../resources/StaccatoDrawer.qml" line="136"/>
+      <location filename="../resources/StaccatoDrawer.qml" line="140"/>
       <source>Leave</source>
       <translation>Pergi</translation>
     </message>
     <message>
-      <location filename="../resources/StaccatoDrawer.qml" line="140"/>
+      <location filename="../resources/StaccatoDrawer.qml" line="144"/>
       <source>Left guild</source>
       <extracomment>guild leaving succeeded</extracomment>
       <translation>Meninggalkan guild</translation>
     </message>
     <message>
-      <location filename="../resources/StaccatoDrawer.qml" line="143"/>
+      <location filename="../resources/StaccatoDrawer.qml" line="147"/>
       <source>Failed to leave guild</source>
       <extracomment>guild leaving failed</extracomment>
       <translation>Gagal meninggalkan guild</translation>
     </message>
     <message>
-      <location filename="../resources/StaccatoDrawer.qml" line="176"/>
+      <location filename="../resources/StaccatoDrawer.qml" line="180"/>
       <source>Channels</source>
       <translation>Channels</translation>
     </message>
