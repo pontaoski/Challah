@@ -6,24 +6,24 @@
     <message>
       <location filename="../resources/ChannelSheet.qml" line="21"/>
       <source>Channel Name:</source>
-      <translation type="unfinished">Channel Name:</translation>
+      <translation>nimi pi tomo kulupu:</translation>
     </message>
     <message>
       <location filename="../resources/ChannelSheet.qml" line="24"/>
       <source>Create Channel</source>
-      <translation type="unfinished">Create Channel</translation>
+      <translation>pali e tomo kulupu</translation>
     </message>
     <message>
       <location filename="../resources/ChannelSheet.qml" line="30"/>
       <source>Created channel</source>
       <extracomment>the channel has been successfully created</extracomment>
-      <translation type="unfinished">Created channel</translation>
+      <translation>tenpo pini la pali e tomo kulupu</translation>
     </message>
     <message>
       <location filename="../resources/ChannelSheet.qml" line="32"/>
       <source>Failed to create channel</source>
       <extracomment>the channel failed to be created</extracomment>
-      <translation type="unfinished">Failed to create channel</translation>
+      <translation>tenpo pini la ilo li ken ala pali e kulupu</translation>
     </message>
   </context>
   <context>
@@ -33,19 +33,19 @@
       <location filename="../resources/ComposeBar.qml" line="150"/>
       <source>Write a message...</source>
       <extracomment>Placeholder text for the message field</extracomment>
-      <translation type="unfinished">Write a message...</translation>
+      <translation>pali e toki...</translation>
     </message>
     <message>
       <location filename="../resources/ComposeBar.qml" line="65"/>
       <source>Failed to upload file</source>
-      <translation type="unfinished">Failed to upload file</translation>
+      <translation>ilo li ken ala kama e lipu sina</translation>
     </message>
     <message>
       <location filename="../resources/ComposeBar.qml" line="78"/>
       <location filename="../resources/ComposeBar.qml" line="199"/>
       <source>Send</source>
       <extracomment>Send the message in the text field</extracomment>
-      <translation type="unfinished">Send</translation>
+      <translation>pana</translation>
     </message>
     <message>
       <location filename="../resources/ComposeBar.qml" line="129"/>
@@ -56,13 +56,13 @@
       <location filename="../resources/ComposeBar.qml" line="153"/>
       <source>You do not have permissions to send a message to this channel.</source>
       <extracomment>Placeholder text for the message field when the user isn&apos;t allowed to send a message</extracomment>
-      <translation type="unfinished">You do not have permissions to send a message to this channel.</translation>
+      <translation>sina ken ala toki lon tomo ni.</translation>
     </message>
     <message>
       <location filename="../resources/ComposeBar.qml" line="144"/>
       <source>Add attachment...</source>
       <extracomment>Send the message in the text field</extracomment>
-      <translation type="unfinished">Add attachment...</translation>
+      <translation>pana e lipu...</translation>
     </message>
   </context>
   <context>
@@ -70,7 +70,7 @@
     <message>
       <location filename="../resources/GuildSettings.qml" line="14"/>
       <source>Settings</source>
-      <translation type="unfinished">Settings</translation>
+      <translation>wile</translation>
     </message>
   </context>
   <context>
@@ -79,46 +79,46 @@
       <location filename="../resources/GuildSheet.qml" line="54"/>
       <location filename="../resources/GuildSheet.qml" line="95"/>
       <source>Create Guild</source>
-      <translation type="unfinished">Create Guild</translation>
+      <translation>pali e kulupu</translation>
     </message>
     <message>
       <location filename="../resources/GuildSheet.qml" line="78"/>
       <source>Join Guild</source>
-      <translation type="unfinished">Join Guild</translation>
+      <translation>kama tawa kulupu</translation>
     </message>
     <message>
       <location filename="../resources/GuildSheet.qml" line="92"/>
       <source>Guild Name:</source>
-      <translation type="unfinished">Guild Name:</translation>
+      <translation>nimi kulupu:</translation>
     </message>
     <message>
       <location filename="../resources/GuildSheet.qml" line="100"/>
       <source>Created guild</source>
       <extracomment>guild has been successfully created</extracomment>
-      <translation type="unfinished">Created guild</translation>
+      <translation>tenpo pini la ilo li pali e kulupu</translation>
     </message>
     <message>
       <location filename="../resources/GuildSheet.qml" line="103"/>
       <source>Failed to make guild</source>
       <extracomment>creating the guild failed</extracomment>
-      <translation type="unfinished">Failed to make guild</translation>
+      <translation>ilo li ken ala pali e kulupu</translation>
     </message>
     <message>
       <location filename="../resources/GuildSheet.qml" line="119"/>
       <source>Join</source>
-      <translation type="unfinished">Join</translation>
+      <translation>kama</translation>
     </message>
     <message>
       <location filename="../resources/GuildSheet.qml" line="124"/>
       <source>Joined guild</source>
       <extracomment>guild has been successfully joined</extracomment>
-      <translation type="unfinished">Joined guild</translation>
+      <translation>tenpo pini la sina kama tawa kulupu</translation>
     </message>
     <message>
       <location filename="../resources/GuildSheet.qml" line="127"/>
       <source>Failed to join guild</source>
       <extracomment>joining the guild failed</extracomment>
-      <translation type="unfinished">Failed to join guild</translation>
+      <translation>ilo li ken ala pali e ni: sina kama tawa kulupu</translation>
     </message>
   </context>
   <context>
@@ -126,7 +126,7 @@
     <message>
       <location filename="../resources/InstantView.qml" line="14"/>
       <source>Loading...</source>
-      <translation type="unfinished">Loading...</translation>
+      <translation>tenpo kama la lon...</translation>
     </message>
   </context>
   <context>
@@ -134,39 +134,39 @@
     <message>
       <location filename="../resources/Invites.qml" line="13"/>
       <source>Invites</source>
-      <translation type="unfinished">Invites</translation>
+      <translation>lipu kama</translation>
     </message>
     <message>
       <location filename="../resources/Invites.qml" line="18"/>
       <source>Create Invite...</source>
-      <translation type="unfinished">Create Invite...</translation>
+      <translation>pali e lipu kama</translation>
     </message>
     <message>
       <location filename="../resources/Invites.qml" line="39"/>
       <source>Invite ID:</source>
-      <translation type="unfinished">Invite ID:</translation>
+      <translation>nanpa pi lipu kama</translation>
     </message>
     <message>
       <location filename="../resources/Invites.qml" line="49"/>
       <source>Restrict uses:</source>
-      <translation type="unfinished">Restrict uses:</translation>
+      <translation>jo e nanpa pi ken ala pali:</translation>
     </message>
     <message>
       <location filename="../resources/Invites.qml" line="53"/>
       <source>Create Invite</source>
-      <translation type="unfinished">Create Invite</translation>
+      <translation>pali e lipu kama</translation>
     </message>
     <message>
       <location filename="../resources/Invites.qml" line="58"/>
       <source>Created invite</source>
       <extracomment>the invite was created successfully</extracomment>
-      <translation type="unfinished">Created invite</translation>
+      <translation>tenpo pini la ilo li pali e lipu kama</translation>
     </message>
     <message>
       <location filename="../resources/Invites.qml" line="61"/>
       <source>Failed to create invite</source>
       <extracomment>the invite couldn&apos;t be created successfully</extracomment>
-      <translation type="unfinished">Failed to create invite</translation>
+      <translation>ilo li ken ala pali e lipu kama</translation>
     </message>
     <message>
       <location filename="../resources/Invites.qml" line="75"/>
@@ -233,17 +233,17 @@
     <message>
       <location filename="../resources/LoginRoute.qml" line="38"/>
       <source>Welcome to Kalama</source>
-      <translation type="unfinished">Welcome to Kalama</translation>
+      <translation>o kama pona tawa ilo Kalama</translation>
     </message>
     <message>
       <location filename="../resources/LoginRoute.qml" line="44"/>
       <source>Enter your homeserver to continue</source>
-      <translation type="unfinished">Enter your homeserver to continue</translation>
+      <translation>sina wile kama la o pana e ma lon sina</translation>
     </message>
     <message>
       <location filename="../resources/LoginRoute.qml" line="61"/>
       <source>Continue</source>
-      <translation type="unfinished">Continue</translation>
+      <translation>kama</translation>
     </message>
   </context>
   <context>
@@ -571,29 +571,29 @@
       <translation type="unfinished">Log Out</translation>
     </message>
     <message>
-      <location filename="../resources/StaccatoDrawer.qml" line="136"/>
+      <location filename="../resources/StaccatoDrawer.qml" line="140"/>
       <source>Delete</source>
       <translation type="unfinished">Delete</translation>
     </message>
     <message>
-      <location filename="../resources/StaccatoDrawer.qml" line="136"/>
+      <location filename="../resources/StaccatoDrawer.qml" line="140"/>
       <source>Leave</source>
       <translation type="unfinished">Leave</translation>
     </message>
     <message>
-      <location filename="../resources/StaccatoDrawer.qml" line="140"/>
+      <location filename="../resources/StaccatoDrawer.qml" line="144"/>
       <source>Left guild</source>
       <extracomment>guild leaving succeeded</extracomment>
       <translation type="unfinished">Left guild</translation>
     </message>
     <message>
-      <location filename="../resources/StaccatoDrawer.qml" line="143"/>
+      <location filename="../resources/StaccatoDrawer.qml" line="147"/>
       <source>Failed to leave guild</source>
       <extracomment>guild leaving failed</extracomment>
       <translation type="unfinished">Failed to leave guild</translation>
     </message>
     <message>
-      <location filename="../resources/StaccatoDrawer.qml" line="176"/>
+      <location filename="../resources/StaccatoDrawer.qml" line="180"/>
       <source>Channels</source>
       <translation type="unfinished">Channels</translation>
     </message>
