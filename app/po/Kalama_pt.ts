@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="pt" sourcelanguage="en">
+<TS version="2.1" language="pt-BR" sourcelanguage="en">
   <context>
     <name>ChannelSheet</name>
     <message>
@@ -595,29 +595,29 @@
       <translation type="unfinished">Log Out</translation>
     </message>
     <message>
-      <location filename="../resources/StaccatoDrawer.qml" line="136"/>
+      <location filename="../resources/StaccatoDrawer.qml" line="140"/>
       <source>Delete</source>
       <translation type="unfinished">Delete</translation>
     </message>
     <message>
-      <location filename="../resources/StaccatoDrawer.qml" line="136"/>
+      <location filename="../resources/StaccatoDrawer.qml" line="140"/>
       <source>Leave</source>
       <translation type="unfinished">Leave</translation>
     </message>
     <message>
-      <location filename="../resources/StaccatoDrawer.qml" line="140"/>
+      <location filename="../resources/StaccatoDrawer.qml" line="144"/>
       <source>Left guild</source>
       <extracomment>guild leaving succeeded</extracomment>
       <translation type="unfinished">Left guild</translation>
     </message>
     <message>
-      <location filename="../resources/StaccatoDrawer.qml" line="143"/>
+      <location filename="../resources/StaccatoDrawer.qml" line="147"/>
       <source>Failed to leave guild</source>
       <extracomment>guild leaving failed</extracomment>
       <translation type="unfinished">Failed to leave guild</translation>
     </message>
     <message>
-      <location filename="../resources/StaccatoDrawer.qml" line="176"/>
+      <location filename="../resources/StaccatoDrawer.qml" line="180"/>
       <source>Channels</source>
       <translation type="unfinished">Channels</translation>
     </message>
