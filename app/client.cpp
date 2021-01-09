@@ -6,12 +6,14 @@
 #include <QDebug>
 
 #include "qcoreapplication.h"
+#include "qloggingcategory.h"
 #include "state.hpp"
 #include "client.hpp"
 #include "util.hpp"
 #include "channels.hpp"
 #include <grpc/impl/codegen/connectivity_state.h>
 #include <unistd.h>
+#include "logging.hpp"
 
 using grpc::ClientContext;
 
@@ -71,6 +73,7 @@ bool Client::refreshGuilds()
 
 Client::Client() : QObject()
 {
+	qCDebug(CLIENT_LIFECYCLE) << "Constructing new client" << this;
 }
 
 Client* Client::mainInstance()
@@ -120,6 +123,8 @@ GuildRepl Client::guildInfo(quint64 id)
 
 void Client::federateOtherClient(Client* client, const QString& target)
 {
+	qCDebug(CLIENT_LIFECYCLE) << this << "Federating new client" << client << "to" << target << "from" << homeserver;
+
 	client->client = grpc::CreateChannel(target.toStdString(), grpc::SslCredentials(grpc::SslCredentialsOptions()));
 	client->homeserver = target;
 	client->chatKit = protocol::chat::v1::ChatService::NewStub(client->client);
@@ -263,6 +268,8 @@ bool Client::leaveGuild(quint64 id, bool isOwner)
 
 bool Client::forgeNewConnection()
 {
+	qCDebug(CLIENT_LIFECYCLE) << this << "Creating new gRPC channels for homeserver" << homeserver;
+
 	client = grpc::CreateChannel(homeserver.toStdString(), grpc::SslCredentials(grpc::SslCredentialsOptions()));
 
 	chatKit = protocol::chat::v1::ChatService::NewStub(client);
@@ -274,6 +281,8 @@ bool Client::forgeNewConnection()
 
 bool Client::consumeToken(const QString& token, quint64 userID, const QString& homeserver)
 {
+	qCDebug(CLIENT_LIFECYCLE) << this << "Consuming a token for" << homeserver;
+
 	clients[homeserver] = this;
 
 	this->homeserver = homeserver;
@@ -316,28 +325,45 @@ void Client::customEvent(QEvent *event)
 	if (auto ev = dynamic_cast<LoopFinished*>(event)) {
 		Q_UNUSED(ev);
 
+		qCDebug(STREAM_LIFECYCLE) << "Loop finished for homeserver" << homeserver;
 		loopRunning = false;
 		if (shouldRunLoop) {
+			qCDebug(STREAM_LIFECYCLE) << "Posting start loop request for homeserver" << homeserver;
 			QCoreApplication::postEvent(this, new StartLoop());
+			qCDebug(STREAM_LIFECYCLE) << "Reposting guild subscribe requests for homeserver" << homeserver;
+			for (auto guild : subscribedGuilds) {
+				qCDebug(STREAM_LIFECYCLE) << "Reposting subscribe" << guild << homeserver;
+				QCoreApplication::postEvent(this, new Subscribe(guild));
+			}
+			subscribedGuilds.clear();
 		}
 	} else if (auto ev = dynamic_cast<StartLoop*>(event)) {
 		Q_UNUSED(ev);
 
-		loopRunning = true;
+		qCDebug(STREAM_LIFECYCLE) << "Got a start loop request, forging new connections for homeserver" << homeserver;
 		forgeNewConnection();
 		runEvents();
 	} else if (auto ev = dynamic_cast<Subscribe*>(event)) {
+		if (subscribedGuilds.contains(ev->gid)) return;
+
 		if (loopRunning) {
 			protocol::chat::v1::StreamEventsRequest req;
 			auto subReq = new protocol::chat::v1::StreamEventsRequest_SubscribeToGuild;
 			subReq->set_guild_id(ev->gid);
 			req.set_allocated_subscribe_to_guild(subReq);
 
+			qCDebug(STREAM_LIFECYCLE) << "Subscribing to guild" << ev->gid << "on homeserver" << homeserver;
+
 			writeMutex.lock();
+			subscribedGuilds << ev->gid;
 			eventStream->Write(req, grpc::WriteOptions().set_write_through());
 			writeMutex.unlock();
+
+			qCDebug(STREAM_LIFECYCLE) << "Now subscribed to guilds" << subscribedGuilds << "on homeserver" << homeserver;
 		} else {
+			qCDebug(STREAM_LIFECYCLE) << "Got a request to subscribe to guild on homeserver" << homeserver << "but the stream is closed";
 			if (shouldRunLoop) {
+				qCDebug(STREAM_LIFECYCLE) << "Posting a start loop request and another subscribe request...";
 				QCoreApplication::postEvent(this, new StartLoop());
 				QCoreApplication::postEvent(this, new Subscribe(ev->gid));
 			}
@@ -347,10 +373,13 @@ void Client::customEvent(QEvent *event)
 
 void Client::runEvents()
 {
+	loopRunning = true;
+
 	QtConcurrent::run([=] {
 		ClientContext ctx;
 		authenticate(ctx);
 
+		qCDebug(STREAM_LIFECYCLE) << "Creating new stream for homeserver" << homeserver;
 		eventStream = chatKit->StreamEvents(&ctx);
 
 		protocol::chat::v1::Event msg;
@@ -358,10 +387,12 @@ void Client::runEvents()
 		protocol::chat::v1::StreamEventsRequest req;
 		req.set_allocated_subscribe_to_homeserver_events(new protocol::chat::v1::StreamEventsRequest_SubscribeToHomeserverEvents);
 
+		qCDebug(STREAM_LIFECYCLE) << "Subscribing to homeserver events" << homeserver;
 		writeMutex.lock();
 		eventStream->Write(req, grpc::WriteOptions().set_write_through());
 		writeMutex.unlock();
 
+		qCDebug(STREAM_LIFECYCLE) << "Beginning loop for homeserver" << homeserver;
 		while (eventStream->Read(&msg)) {
 			if (msg.has_guild_added_to_list()) {
 				auto ev = msg.guild_added_to_list();
@@ -424,6 +455,7 @@ void Client::runEvents()
 			}
 		}
 
+		qCDebug(STREAM_LIFECYCLE) << "Finishing loop, closing thread for homeserver" << homeserver;
 		QCoreApplication::postEvent(this, new LoopFinished());
 	});
 }
@@ -432,10 +464,11 @@ void Client::stopEvents()
 {
 	shouldRunLoop = false;
 
+	qCDebug(STREAM_LIFECYCLE) << "Requested shutting down events for homeserver" << homeserver;
 	if (eventStream.get() != nullptr) {
-		qDebug() << "Finishing...";
+		qCDebug(STREAM_LIFECYCLE) << "Finishing shutting down events for homeserver" << homeserver;
 		eventStream->Finish();
-		qDebug() << "Finish";
+		qCDebug(STREAM_LIFECYCLE) << "Shut down events for homeserver" << homeserver;
 	}
 }
 
@@ -446,6 +479,8 @@ void Client::subscribeGuild(quint64 guild)
 
 void Client::consumeSession(protocol::auth::v1::Session session, const QString& homeserver)
 {
+	qCDebug(CLIENT_LIFECYCLE) << this << "Consuming a saved session for" << homeserver;
+
 	userToken = session.session_token();
 	userID = session.user_id();
 

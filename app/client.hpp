@@ -43,6 +43,7 @@ public:
 	std::unique_ptr<protocol::chat::v1::ChatService::Stub> chatKit;
 	std::unique_ptr<protocol::auth::v1::AuthService::Stub> authKit;
 	std::unique_ptr<protocol::mediaproxy::v1::MediaProxyService::Stub> mediaProxyKit;
+	QSet<quint64> subscribedGuilds;
 	QMutex writeMutex;
 	bool loopRunning = false;
 	bool shouldRunLoop = true;
