@@ -595,29 +595,29 @@
       <translation>Kijelentkezés</translation>
     </message>
     <message>
-      <location filename="../resources/StaccatoDrawer.qml" line="136"/>
+      <location filename="../resources/StaccatoDrawer.qml" line="140"/>
       <source>Delete</source>
       <translation>Törlés</translation>
     </message>
     <message>
-      <location filename="../resources/StaccatoDrawer.qml" line="136"/>
+      <location filename="../resources/StaccatoDrawer.qml" line="140"/>
       <source>Leave</source>
       <translation>Elhagy</translation>
     </message>
     <message>
-      <location filename="../resources/StaccatoDrawer.qml" line="140"/>
+      <location filename="../resources/StaccatoDrawer.qml" line="144"/>
       <source>Left guild</source>
       <extracomment>guild leaving succeeded</extracomment>
       <translation>Elhagyott szövetség</translation>
     </message>
     <message>
-      <location filename="../resources/StaccatoDrawer.qml" line="143"/>
+      <location filename="../resources/StaccatoDrawer.qml" line="147"/>
       <source>Failed to leave guild</source>
       <extracomment>guild leaving failed</extracomment>
       <translation>Szövetség elhagyása sikertelen</translation>
     </message>
     <message>
-      <location filename="../resources/StaccatoDrawer.qml" line="176"/>
+      <location filename="../resources/StaccatoDrawer.qml" line="180"/>
       <source>Channels</source>
       <translation>Csatornák</translation>
     </message>
