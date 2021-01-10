@@ -131,7 +131,10 @@ QQC2.Control {
 			property bool edit: false
 			visible: content != ""
 
-			padding: Kirigami.Units.largeSpacing * 2
+			topPadding: Kirigami.Units.largeSpacing * 1
+			bottomPadding: Kirigami.Units.largeSpacing * 1
+			leftPadding: Kirigami.Units.largeSpacing * 1
+			rightPadding: Kirigami.Units.largeSpacing * 1
 
 			Layout.minimumWidth: Kirigami.Units.gridUnit * 3
 			Layout.maximumWidth: (applicationWindow().wideScreen ? Math.max(messagesView.width / 3, Kirigami.Units.gridUnit * 15) : (messagesView.width * 0.9)) - Layout.leftMargin
@@ -174,7 +177,10 @@ QQC2.Control {
 				}
 				QQC2.Control {
 					visible: replyToID !== undefined
-					padding: 0
+					topPadding: 0
+					leftPadding: 6
+					rightPadding: 0
+					bottomPadding: 0
 
 					background: Item {
 						Rectangle {
@@ -184,27 +190,30 @@ QQC2.Control {
 								bottom: parent.bottom
 							}
 							width: 2
-							color: Kirigami.Theme.highlightColor
+							color: Kirigami.NameUtils.colorsFromString(replyCol.peeked["authorName"] || "")
 						}
 					}
 					contentItem: ColumnLayout {
+						id: replyCol
 						property var peeked: replyToID !== undefined ? messagesView.model.peekMessage(replyToID) || {} : {}
 						spacing: 1
 						QQC2.Label {
 							text: parent.peeked["authorName"] || ""
 							elide: Text.ElideRight
-							color: Kirigami.Theme.highlightColor
+							color: Kirigami.NameUtils.colorsFromString(parent.peeked["authorName"] || "")
 							textFormat: TextEdit.MarkdownText
 
 							Layout.fillWidth: true
 						}
 						QQC2.Label {
 							text: parent.peeked["content"] || ""
-							elide: Text.ElideRight
+							clip: true
 							textFormat: TextEdit.MarkdownText
 
 							Layout.fillWidth: true
 						}
+
+						Layout.fillWidth: true
 					}
 
 					Layout.fillWidth: true

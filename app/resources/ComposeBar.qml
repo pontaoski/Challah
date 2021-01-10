@@ -95,36 +95,46 @@ QQC2.ToolBar {
 			left: parent.left
 			right: parent.right
 		}
-		QQC2.Control {
-			id: replyingBar
-			visible: replyingToID !== ""
-			property string replyingToID: ""
-			property string replyingToAuthor: ""
-			property string replyingToContent: ""
+		spacing: 0
+		Expandable {
+			childVisible: replyingBar.replyingToID !== ""
 
-			padding: Kirigami.Units.gridUnit
-			contentItem: RowLayout {
-				Kirigami.Icon {
-					source: "dialog-messages"
-				}
-				ColumnLayout {
-					Kirigami.Heading {
-						level: 3
-						text: replyingBar.replyingToAuthor
-						textFormat: TextEdit.MarkdownText
+			QQC2.Control {
+				id: replyingBar
+				property string replyingToID: ""
+				property string replyingToAuthor: ""
+				property string replyingToContent: ""
+
+				anchors.left: parent.left
+				anchors.right: parent.right
+
+				padding: Kirigami.Units.gridUnit
+				contentItem: RowLayout {
+					Kirigami.Icon {
+						source: "dialog-messages"
 					}
-					QQC2.Label {
-						text: replyingBar.replyingToContent
-						textFormat: TextEdit.MarkdownText
+					ColumnLayout {
+						Kirigami.Heading {
+							level: 3
+							text: replyingBar.replyingToAuthor
+							textFormat: TextEdit.MarkdownText
+						}
+						QQC2.Label {
+							text: replyingBar.replyingToContent
+							textFormat: TextEdit.MarkdownText
+							clip: true
 
+							Layout.fillWidth: true
+						}
 						Layout.fillWidth: true
 					}
+					QQC2.ToolButton {
+						flat: true
+						icon.name: "dialog-close"
+						onClicked: replyingBar.replyingToID = ""
+					}
+
 					Layout.fillWidth: true
-				}
-				QQC2.ToolButton {
-					flat: true
-					icon.name: "dialog-close"
-					onClicked: replyingBar.replyingToID = ""
 				}
 			}
 

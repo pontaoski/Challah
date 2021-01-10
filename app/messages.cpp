@@ -432,10 +432,17 @@ QVariantMap MessagesModel::peekMessage(const QString& id)
 {
 	quint64 actualID = id.toULongLong();
 
+	auto author = [this](const MessageData& it) {
+		if (it.overrides.has_value()) {
+			return it.overrides->name;
+		}
+		return qobject_cast<ChannelsModel*>(parent())->userName(it.authorID);
+	};
+
 	for (const auto& item : messageData) {
 		if (item.id == actualID) {
 			return {
-				{ "authorName", qobject_cast<ChannelsModel*>(parent())->userName(item.authorID) },
+				{ "authorName", author(item) },
 				{ "content", item.text }
 			};
 		}
@@ -454,8 +461,15 @@ QVariantMap MessagesModel::peekMessage(const QString& id)
 		return QVariantMap();
 	}
 
+	auto name = QString();
+	if (resp.message().has_overrides()) {
+		name = QString::fromStdString(resp.message().overrides().name());
+	} else {
+		name = qobject_cast<ChannelsModel*>(parent())->userName(resp.message().author_id());
+	}
+
 	return {
-		{ "authorName", qobject_cast<ChannelsModel*>(parent())->userName(resp.message().author_id()) },
+		{ "authorName", name },
 		{ "content", QString::fromStdString(resp.message().content()) }
 	};
 }

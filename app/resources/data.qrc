@@ -23,6 +23,7 @@
         <file>Roles.qml</file>
         <file>Permissions.qml</file>
         <file>ImagePopup.qml</file>
+        <file>Expandable.qml</file>
         <file>InstantView.qml</file>
         <file>Stepper.qml</file>
         <file>UserPopup.qml</file>
