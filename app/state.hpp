@@ -6,7 +6,9 @@
 
 #include <QDebug>
 #include <QObject>
+#include "channels.hpp"
 #include "client.hpp"
+#include "messages.hpp"
 
 class QQuickTextDocument;
 
@@ -60,7 +62,10 @@ public:
 		}
 		return QString("https://%1/_harmony/media/download/%2").arg(split[0]).arg(split[1]);
 	}
+	Q_INVOKABLE ChannelsModel* channelsModel(const QString& guildID, const QString& homeserver);
+	Q_INVOKABLE MessagesModel* messagesModel(const QString& guildID, const QString& channelID, const QString& homeserver);
 	Q_SIGNAL void guildModelChanged();
+
 	Q_PROPERTY(GuildModel* guildModel READ getGuildModel NOTIFY guildModelChanged)
 	GuildModel* getGuildModel() const { return guildModel; }
 };

@@ -17,7 +17,12 @@ Kirigami.PageRoute {
 	Kirigami.ScrollablePage {
 		id: messagesRoute
 		Kirigami.Theme.colorSet: Kirigami.Theme.View
-		property var model: Kirigami.PageRouter.data
+
+		property var model: HState.messagesModel(
+			Kirigami.PageRouter.router.params.guildID,
+			Kirigami.PageRouter.router.params.channelID,
+			Kirigami.PageRouter.router.params.homeserver,
+		)
 
 		footer: ComposeBar { id: composeBar }
 
@@ -28,7 +33,7 @@ Kirigami.PageRoute {
 
 		ListView {
 			id: messagesView
-			model: Kirigami.PageRouter.data
+			model: messagesRoute.model
 			verticalLayoutDirection: ListView.BottomToTop
 			bottomMargin: 0
 			topMargin: 0

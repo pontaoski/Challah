@@ -123,13 +123,11 @@ Item {
 										return
 									}
 
-									channelsModel.workaroundModel = model['channelModel']
-
-									print(rightHandDrawer.model)
-									print(model)
-									print(model['channelModel'])
-									print(model['channelModel'].members)
-									rightHandDrawer.model = model['channelModel'].members
+									routerInstance.navigateToRoute({
+										"route": "guild",
+										"guildID": model['guildID'],
+										"homeserver": model['homeserver'],
+									})
 								}
 							}
 
@@ -218,7 +216,7 @@ Item {
 					id: channelsModel
 
 					model: workaroundModel
-					property var workaroundModel: null
+					property var workaroundModel: HState.channelsModel(routerInstance.params.guildID, routerInstance.params.homeserver)
 
 					delegate: Item {
 						id: itemer
@@ -245,16 +243,6 @@ Item {
 								}
 							}
 
-							onClicked: {
-								routerInstance.navigateToRoute(
-									{
-										"route": "messages",
-										"data": messagesModel,
-										"title": `#${channelName}`
-									}
-								)
-							}
-
 							actions: [
 								Kirigami.Action {
 									icon.name: "edit-delete"
@@ -273,11 +261,14 @@ Item {
 							drag.axis: Drag.YAxis
 
 							onClicked: {
-								routerInstance.navigateToRoute(
+								if (!!routerInstance.params.channelID) {
+									routerInstance.popRoute()
+								}
+								routerInstance.pushRoute(
 									{
 										"route": "messages",
-										"data": messagesModel,
-										"title": `#${channelName}`
+										"title": `#${channelName}`,
+										"channelID": channelID,
 									}
 								)
 							}

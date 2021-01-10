@@ -116,20 +116,31 @@ QVariant GuildModel::data(const QModelIndex &index, int role) const
 		return guilds[index.row()].homeserver;
 	case PictureRole:
 		return State::instance()->transformHMCURL(guilds[index.row()].picture, guilds[index.row()].homeserver);
-	case ChannelModelRole:
-		auto key = qMakePair(guilds[index.row()].guildID, guilds[index.row()].homeserver);
-		if (!d->models.contains(key)) {
-			auto hs = guilds[index.row()].homeserver;
-			if (hs.isEmpty()) {
-				hs = State::instance()->client->homeserver;
-			}
-			d->models.insert(key, new ChannelsModel(hs, guilds[index.row()].guildID));
-			QQmlEngine::setObjectOwnership(d->models[key], QQmlEngine::CppOwnership);
-		}
-		return QVariant::fromValue(d->models[key]);
 	}
 
 	return QVariant();
+}
+
+ChannelsModel* GuildModel::channelsModel(quint64 guildID, const QString &homeserver)
+{
+	for (auto guild : guilds) {
+		if (guild.guildID == guildID && guild.homeserver == homeserver) {
+			goto exists;
+		}
+	}
+	return nullptr;
+
+exists:
+	auto key = qMakePair(guildID, homeserver);
+	if (!d->models.contains(key)) {
+		auto hs = homeserver;
+		if (hs.isEmpty()) {
+			hs = State::instance()->client->homeserver;
+		}
+		d->models.insert(key, new ChannelsModel(hs, guildID));
+		QQmlEngine::setObjectOwnership(d->models[key], QQmlEngine::CppOwnership);
+	}
+	return d->models[key];
 }
 
 QHash<int, QByteArray> GuildModel::roleNames() const
@@ -137,7 +148,6 @@ QHash<int, QByteArray> GuildModel::roleNames() const
 	QHash<int,QByteArray> ret;
 	ret[GuildIDRole] = "guildID";
 	ret[GuildNameRole] = "guildName";
-	ret[ChannelModelRole] = "channelModel";
 	ret[IsOwnerRole] = "isOwner";
 	ret[HomeserverRole] = "homeserver";
 	ret[PictureRole] = "picture";

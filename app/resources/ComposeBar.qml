@@ -11,8 +11,16 @@ import QtQuick.Dialogs 1.3
 import com.github.HarmonyDevelopment.Staccato 1.0
 
 QQC2.ToolBar {
+	id: composeBar
+
 	position: QQC2.ToolBar.Footer
 	property alias replies: replyingBar
+
+	property var model: HState.messagesModel(
+		Kirigami.PageRouter.router.params.guildID,
+		Kirigami.PageRouter.router.params.channelID,
+		Kirigami.PageRouter.router.params.homeserver,
+	)
 
 	FileDialog {
 		id: fileDialog
@@ -56,10 +64,10 @@ QQC2.ToolBar {
 						let replyingTo = replyingBar.replyingToID
 						text = ""
 						replyingBar.replyingToID = ""
-						messageField.Kirigami.PageRouter.data.parentModel.uploadFile(
+						composeBar.model.parentModel.uploadFile(
 							uploadSheet.pendingUpload,
 							function(url) {
-								messageField.Kirigami.PageRouter.data.sendMessage(incomingText, replyingTo, [url])
+								composeBar.model.sendMessage(incomingText, replyingTo, [url])
 							},
 							function() {
 								root.showPassiveNotification(qsTr("Failed to upload file"))
@@ -168,15 +176,15 @@ QQC2.ToolBar {
 						return
 					}
 					if (uiSettings.personas.length == 0) {
-						Kirigami.PageRouter.data.sendMessage(text, replyingBar.replyingToID, [])
+						model.sendMessage(text, replyingBar.replyingToID, [])
 					} else {
 						switch (settingsCombo.model[settingsCombo.currentIndex].kind) {
 						case "default":
-							Kirigami.PageRouter.data.sendMessage(text, replyingBar.replyingToID, []); break
+							model.sendMessage(text, replyingBar.replyingToID, []); break
 						case "roleplay":
-							Kirigami.PageRouter.data.sendMessageAsRoleplay(text, replyingBar.replyingToID, [], settingsCombo.model[settingsCombo.currentIndex].name); break
+							model.sendMessageAsRoleplay(text, replyingBar.replyingToID, [], settingsCombo.model[settingsCombo.currentIndex].name); break
 						case "plurality":
-							Kirigami.PageRouter.data.sendMessageAsSystem(text, replyingBar.replyingToID, [], settingsCombo.model[settingsCombo.currentIndex].name); break
+							model.sendMessageAsSystem(text, replyingBar.replyingToID, [], settingsCombo.model[settingsCombo.currentIndex].name); break
 						}
 					}
 					text = ""

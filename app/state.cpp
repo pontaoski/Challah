@@ -6,6 +6,7 @@
 #include <QJSEngine>
 #include <QQuickTextDocument>
 
+#include "messages.hpp"
 #include "richtexter.hpp"
 #include "state.hpp"
 #include "channels.hpp"
@@ -70,6 +71,14 @@ bool State::startupLogin()
 	}
 
 	return false;
+}
+ChannelsModel* State::channelsModel(const QString& guildID, const QString& homeserver)
+{
+	return guildModel->channelsModel(guildID.toULongLong(), homeserver);
+}
+MessagesModel* State::messagesModel(const QString& guildID, const QString& channelID, const QString& homeserver)
+{
+	return channelsModel(guildID, homeserver)->messagesModel(channelID.toULongLong());
 }
 bool State::createGuild(const QString &name)
 {

@@ -12,7 +12,7 @@ import com.github.HarmonyDevelopment.Staccato 1.0
 Item {
 	id: drawer
 
-	implicitWidth: model !== null ? 250 : 0
+	implicitWidth: !!model ? 250 : 0
 
 	Kirigami.Theme.inherit: true
 	Kirigami.Theme.colorSet: Kirigami.Theme.View
@@ -31,7 +31,7 @@ Item {
 		}
 	}
 
-	property var model: null
+	property var model: HState.channelsModel(routerInstance.params.guildID, routerInstance.params.homeserver).members
 
 	ColumnLayout {
 		spacing: 0

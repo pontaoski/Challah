@@ -88,7 +88,6 @@ class ChannelsModel : public QAbstractListModel
 		ChannelIDRole = Qt::UserRole,
 		ChannelNameRole,
 		ChannelIsCategoryRole,
-		MessageModelRole
 	};
 
 	Q_PROPERTY(MembersModel* members READ getMembers CONSTANT FINAL)
@@ -107,6 +106,7 @@ public:
 	static ChannelsModel* modelFor(QString& homeserver, quint64 guild) {
 		return instances.value(qMakePair(homeserver, guild));
 	}
+	MessagesModel* messagesModel(quint64 channelID);
 
 	Q_INVOKABLE void deleteChannel(const QString& id);
 	Q_INVOKABLE void createChannel(const QString& name, QJSValue then, QJSValue elseDo);

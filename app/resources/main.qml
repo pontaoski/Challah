@@ -30,6 +30,7 @@ Kirigami.ApplicationWindow {
 				id: colView
 				implicitWidth: 400
 				onImplicitWidthChanged: implicitWidth = 400
+				clip: true
 				columnView {
 					columnResizeMode: Kirigami.ColumnView.SingleColumn
 				}
@@ -68,6 +69,7 @@ Kirigami.ApplicationWindow {
 					}
 
 					LoginRoute {}
+					GuildRoute {}
 					NoGuildRoute {}
 					MessagesRoute {}
 				}

@@ -347,15 +347,16 @@ QVariant ChannelsModel::data(const QModelIndex &index, int role) const
 		return channels[index.row()].name;
 	case ChannelIsCategoryRole:
 		return channels[index.row()].isCategory;
-	case MessageModelRole:
-		auto id = channels[index.row()].channelID;
-		if (!models.contains(id)) {
-			models[id] = new MessagesModel(const_cast<ChannelsModel*>(this), homeServer, guildID, id);
-		}
-		return QVariant::fromValue(models[id]);
 	}
 
 	return QVariant();
+}
+
+MessagesModel* ChannelsModel::messagesModel(quint64 id) {
+	if (!models.contains(id)) {
+		models[id] = new MessagesModel(const_cast<ChannelsModel*>(this), homeServer, guildID, id);
+	}
+	return models[id];
 }
 
 QHash<int, QByteArray> ChannelsModel::roleNames() const
@@ -364,7 +365,6 @@ QHash<int, QByteArray> ChannelsModel::roleNames() const
 	ret[ChannelIDRole] = "channelID";
 	ret[ChannelNameRole] = "channelName";
 	ret[ChannelIsCategoryRole] = "isCategory";
-	ret[MessageModelRole] = "messagesModel";
 
 	return ret;
 }
