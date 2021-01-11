@@ -64,6 +64,7 @@ QtApplication {
 			"protocol/chat/v1/permissions.proto",
 			"protocol/chat/v1/profile.proto",
 			"protocol/chat/v1/streaming.proto",
+			"protocol/chat/v1/postbox.proto",
 			"protocol/harmonytypes/v1/types.proto",
 			"protocol/mediaproxy/v1/mediaproxy.proto",
 		]
