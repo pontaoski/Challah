@@ -11,6 +11,7 @@
 #include "messages.hpp"
 
 class QQuickTextDocument;
+class UserRolesModel;
 
 class State : public QObject
 {
@@ -65,6 +66,7 @@ public:
 	Q_INVOKABLE ChannelsModel* channelsModel(const QString& guildID, const QString& homeserver);
 	Q_INVOKABLE MessagesModel* messagesModel(const QString& guildID, const QString& channelID, const QString& homeserver);
 	Q_SIGNAL void guildModelChanged();
+	Q_INVOKABLE UserRolesModel* userRoles(const QString& userID, const QString& guildID, const QString& homeserver);
 
 	Q_PROPERTY(GuildModel* guildModel READ getGuildModel NOTIFY guildModelChanged)
 	GuildModel* getGuildModel() const { return guildModel; }

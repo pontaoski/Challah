@@ -10,6 +10,7 @@
 #include "richtexter.hpp"
 #include "state.hpp"
 #include "channels.hpp"
+#include "userroles.hpp"
 
 State* State::s_instance;
 
@@ -57,6 +58,10 @@ void State::logOut()
 	guildModelChanged();
 
 	Q_EMIT loggedOut();
+}
+UserRolesModel* State::userRoles(const QString &userID, const QString &guildID, const QString &homeserver)
+{
+	return new UserRolesModel(userID.toULongLong(), guildID.toULongLong(), homeserver, nullptr);
 }
 bool State::startupLogin()
 {

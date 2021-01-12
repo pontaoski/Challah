@@ -16,9 +16,16 @@ Kirigami.OverlaySheet {
 
 	property string name: ""
 	property string source: ""
+	property string userID: ""
+	property var model: []
 
 	leftPadding: Kirigami.Units.gridUnit*2
 	rightPadding: Kirigami.Units.gridUnit*2
+
+	function begin() {
+		this.model = HState.userRoles(userID, routerInstance.params.guildID, routerInstance.params.homeserver)
+		this.open()
+	}
 
 	contentItem: ColumnLayout {
 		Layout.maximumWidth: Kirigami.Units.gridUnit * 20
@@ -37,9 +44,41 @@ Kirigami.OverlaySheet {
 			Layout.fillWidth: true
 		}
 
-		Kirigami.Heading {
-			text: qsTr("Roles")
-			level: 4
+		RowLayout {
+			Kirigami.Heading {
+				text: qsTr("Roles")
+				level: 4
+
+				Layout.fillWidth: true
+			}
+			QQC2.ToolButton {
+				id: giveButton
+				visible: (userPopupRoot.model || {}).editable || false
+				text: qsTr("Give Role...")
+				icon.name: "list-add"
+				onClicked: menuu.popup()
+			}
+			QQC2.Menu {
+				id: menuu
+				z: 99999
+
+				Repeater {
+					model: userPopupRoot.model.guildRoles
+
+					delegate: QQC2.MenuItem {
+						text: modelData['name']
+						onTriggered: userPopupRoot.model.add(modelData['id'])
+					}
+				}
+			}
+		}
+
+		Repeater {
+			model: userPopupRoot.model
+
+			delegate: QQC2.Button {
+				text: name
+			}
 		}
 
 		Kirigami.Heading {

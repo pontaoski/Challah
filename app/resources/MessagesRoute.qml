@@ -64,10 +64,11 @@ Kirigami.PageRoute {
 							id: popup
 							name: avvy.name
 							source: avvy.source
+							userID: avvy.parent.section.split("\t")[0]
 						}
 
 						actions.main: Kirigami.Action {
-							onTriggered: popup.open()
+							onTriggered: popup.begin()
 						}
 					}
 

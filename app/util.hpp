@@ -42,9 +42,11 @@ struct PleaseCall {
 };
 using PleaseCallEvent = CarrierEvent<14,PleaseCall>;
 
-bool checkStatus(grpc::Status status);
+bool checkStatusImpl(const char* file, int line, grpc::Status status);
+#define checkStatus(in) checkStatusImpl(__FILE__, __LINE__, in)
 
 using ExecuteEvent = CarrierEvent<15,std::function<void()>>;
+void runOnMainThread(std::function<void()>);
 
 struct GuildUpdate {
 	QString homeserver;
@@ -55,3 +57,11 @@ struct GuildUpdate {
 };
 
 using GuildListUpdateEvent = CarrierEvent<16,GuildUpdate>;
+
+template <typename T>
+T withGuildAndUserID(quint64 guildID, quint64 userID) {
+	T t;
+	t.set_guild_id(guildID);
+	t.set_user_id(userID);
+	return t;
+}

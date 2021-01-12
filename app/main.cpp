@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 #include "messages.hpp"
+#include "userroles.hpp"
 #ifdef Q_OS_ANDROID
 
 #include <QtAndroid>
@@ -61,6 +62,7 @@ int main(int argc, char *argv[])
 	qmlRegisterType<OverlappingPanels>("com.github.HarmonyDevelopment.Staccato", 1, 0, "OverlappingPanels");
 	qmlRegisterType<LoginManager>("com.github.HarmonyDevelopment.Staccato", 1, 0, "LoginManager");
 	qRegisterMetaType<MessagesModel*>();
+	qRegisterMetaType<UserRolesModel*>();
 	qmlRegisterUncreatableType<CopyInterceptor>("com.github.HarmonyDevelopment.Staccato", 1, 0, "Clipboard", "You cannot create an instance of Clipboard.");
 	qmlRegisterSingletonType<State>("com.github.HarmonyDevelopment.Staccato", 1, 0, "HState", [](QQmlEngine *, QJSEngine *) -> QObject * { return new State; });
 	qmlRegisterUncreatableType<ChannelsModel>("com.github.HarmonyDevelopment.ChannelsModel", 1, 0, "ChannelsModel", "You cannot create an instance of ChannelsModel.");
