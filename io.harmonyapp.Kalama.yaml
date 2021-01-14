@@ -75,7 +75,7 @@ modules:
       - type: git
         url: https://code.qt.io/qbs/qbs.git
         branch: 1.18
-        commit: 8621465db2c7fa10eb014ef14d55ec7dd3e085a0
+        commit: 01a8b6e11986a3260e911e6a95a0d85d17467c49
 # the app
   - name: kalama
     buildsystem: simple
