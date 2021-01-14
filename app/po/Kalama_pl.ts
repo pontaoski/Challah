@@ -36,7 +36,7 @@
       <translation>Napisz wiadomość...</translation>
     </message>
     <message>
-      <location filename="../resources/ComposeBar.qml" line="65"/>
+      <location filename="../resources/ComposeBar.qml" line="73"/>
       <source>Failed to upload file</source>
       <translation>Nie udało się przesłać pliku</translation>
     </message>
@@ -48,7 +48,7 @@
       <translation>Wyślij</translation>
     </message>
     <message>
-      <location filename="../resources/ComposeBar.qml" line="129"/>
+      <location filename="../resources/ComposeBar.qml" line="147"/>
       <source>Default</source>
       <translation>Domyślny</translation>
     </message>
@@ -63,6 +63,19 @@
       <source>Add attachment...</source>
       <extracomment>Send the message in the text field</extracomment>
       <translation>Dodaj załącznik...</translation>
+    </message>
+  </context>
+  <context>
+    <name>GuildRoute</name>
+    <message>
+      <location filename="../resources/GuildRoute.qml" line="16"/>
+      <source/>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <location filename="../resources/GuildRoute.qml" line="23"/>
+      <source>Select a channel to get chatting.</source>
+      <translation type="unfinished">Select a channel to get chatting.</translation>
     </message>
   </context>
   <context>
@@ -275,7 +288,7 @@
       <translation type="unfinished">Unselect</translation>
     </message>
     <message>
-      <location filename="../resources/MessageDelegate.qml" line="318"/>
+      <location filename="../resources/MessageDelegate.qml" line="327"/>
       <source>Instant View</source>
       <translation type="unfinished">Instant View</translation>
     </message>
@@ -519,6 +532,75 @@
     </message>
   </context>
   <context>
+    <name>QCoreApplication</name>
+    <message>
+      <location filename="../messages.cpp" line="165"/>
+      <source>%1 and %2</source>
+      <comment>Lists</comment>
+      <translation type="unfinished">%1 and %2</translation>
+    </message>
+    <message>
+      <location filename="../messages.cpp" line="184"/>
+      <location filename="../messages.cpp" line="188"/>
+      <source>%1, %2</source>
+      <comment>Lists</comment>
+      <extracomment>the middle of a list with 4 or more items: &quot;A, %1, %2, D, and E&quot;
+----------
+the start of a list, for example &quot;%1, %2, and C&quot;</extracomment>
+      <translation type="unfinished">%1, %2</translation>
+    </message>
+    <message>
+      <location filename="../messages.cpp" line="191"/>
+      <source>%1, and %2</source>
+      <comment>Lists</comment>
+      <extracomment>the end of a list, for example &quot;A, %1, and %2&quot;</extracomment>
+      <translation type="unfinished">%1, and %2</translation>
+    </message>
+  </context>
+  <context>
+    <name>QObject</name>
+    <message>
+      <location filename="../loginmanager.cpp" line="23"/>
+      <source>Select a login method</source>
+      <translation type="unfinished">Select a login method</translation>
+    </message>
+    <message>
+      <location filename="../loginmanager.cpp" line="24"/>
+      <source>Register</source>
+      <translation type="unfinished">Register</translation>
+    </message>
+    <message>
+      <location filename="../loginmanager.cpp" line="25"/>
+      <source>Login</source>
+      <translation>Zaloguj się</translation>
+    </message>
+    <message>
+      <location filename="../loginmanager.cpp" line="26"/>
+      <source>Other Options</source>
+      <translation type="unfinished">Other Options</translation>
+    </message>
+    <message>
+      <location filename="../loginmanager.cpp" line="27"/>
+      <source>Reset Password</source>
+      <translation type="unfinished">Reset Password</translation>
+    </message>
+    <message>
+      <location filename="../loginmanager.cpp" line="28"/>
+      <source>Email:</source>
+      <translation>Email:</translation>
+    </message>
+    <message>
+      <location filename="../loginmanager.cpp" line="29"/>
+      <source>Username:</source>
+      <translation type="unfinished">Username:</translation>
+    </message>
+    <message>
+      <location filename="../loginmanager.cpp" line="30"/>
+      <source>Password:</source>
+      <translation>Hasło:</translation>
+    </message>
+  </context>
+  <context>
     <name>RightDrawer</name>
     <message>
       <location filename="../resources/RightDrawer.qml" line="54"/>
@@ -595,29 +677,29 @@
       <translation>Wyloguj się</translation>
     </message>
     <message>
-      <location filename="../resources/StaccatoDrawer.qml" line="140"/>
+      <location filename="../resources/StaccatoDrawer.qml" line="138"/>
       <source>Delete</source>
       <translation>Usuń</translation>
     </message>
     <message>
-      <location filename="../resources/StaccatoDrawer.qml" line="140"/>
+      <location filename="../resources/StaccatoDrawer.qml" line="138"/>
       <source>Leave</source>
       <translation>Opuść</translation>
     </message>
     <message>
-      <location filename="../resources/StaccatoDrawer.qml" line="144"/>
+      <location filename="../resources/StaccatoDrawer.qml" line="142"/>
       <source>Left guild</source>
       <extracomment>guild leaving succeeded</extracomment>
       <translation>Opuszczono gildię</translation>
     </message>
     <message>
-      <location filename="../resources/StaccatoDrawer.qml" line="147"/>
+      <location filename="../resources/StaccatoDrawer.qml" line="145"/>
       <source>Failed to leave guild</source>
       <extracomment>guild leaving failed</extracomment>
       <translation>Nie udało się opuścić gildii</translation>
     </message>
     <message>
-      <location filename="../resources/StaccatoDrawer.qml" line="180"/>
+      <location filename="../resources/StaccatoDrawer.qml" line="178"/>
       <source>Channels</source>
       <translation>Kanały</translation>
     </message>
