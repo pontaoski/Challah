@@ -310,6 +310,13 @@ void ChannelsModel::customEvent(QEvent *event)
 	} else if (event->type() == ExecuteEvent::typeID) {
 		auto ev = reinterpret_cast<ExecuteEvent*>(event);
 		ev->data();
+	} else if (event->type() == TypingEvent::typeID) {
+		auto ev = reinterpret_cast<TypingEvent*>(event);
+
+		auto chanID = ev->data.channel_id();
+		if (models.contains(chanID)) {
+			QCoreApplication::postEvent(models[chanID], new TypingEvent(ev->data));
+		}
 	}
 }
 

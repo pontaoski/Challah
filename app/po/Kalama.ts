@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1">
+<TS version="2.1" language="en_US">
 <context>
     <name>ChannelSheet</name>
     <message>
@@ -29,39 +29,52 @@
 <context>
     <name>ComposeBar</name>
     <message>
-        <location filename="../resources/ComposeBar.qml" line="50"/>
-        <location filename="../resources/ComposeBar.qml" line="150"/>
+        <location filename="../resources/ComposeBar.qml" line="58"/>
+        <location filename="../resources/ComposeBar.qml" line="168"/>
         <source>Write a message...</source>
         <extracomment>Placeholder text for the message field</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../resources/ComposeBar.qml" line="65"/>
+        <location filename="../resources/ComposeBar.qml" line="73"/>
         <source>Failed to upload file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../resources/ComposeBar.qml" line="78"/>
-        <location filename="../resources/ComposeBar.qml" line="199"/>
+        <location filename="../resources/ComposeBar.qml" line="86"/>
+        <location filename="../resources/ComposeBar.qml" line="217"/>
         <source>Send</source>
         <extracomment>Send the message in the text field</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../resources/ComposeBar.qml" line="129"/>
+        <location filename="../resources/ComposeBar.qml" line="147"/>
         <source>Default</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../resources/ComposeBar.qml" line="153"/>
+        <location filename="../resources/ComposeBar.qml" line="171"/>
         <source>You do not have permissions to send a message to this channel.</source>
         <extracomment>Placeholder text for the message field when the user isn&apos;t allowed to send a message</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../resources/ComposeBar.qml" line="144"/>
+        <location filename="../resources/ComposeBar.qml" line="162"/>
         <source>Add attachment...</source>
         <extracomment>Send the message in the text field</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>GuildRoute</name>
+    <message>
+        <location filename="../resources/GuildRoute.qml" line="16"/>
+        <source></source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../resources/GuildRoute.qml" line="23"/>
+        <source>Select a channel to get chatting.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -224,6 +237,19 @@
     </message>
 </context>
 <context>
+    <name>LoginManager</name>
+    <message>
+        <location filename="../loginmanager.cpp" line="146"/>
+        <source>address@email.com</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../loginmanager.cpp" line="154"/>
+        <source>Submit</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>LoginRoute</name>
     <message>
         <location filename="../resources/LoginRoute.qml" line="17"/>
@@ -290,9 +316,21 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../resources/MessageDelegate.qml" line="318"/>
+        <location filename="../resources/MessageDelegate.qml" line="327"/>
         <source>Instant View</source>
         <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>MessagesModel</name>
+    <message numerus="yes">
+        <location filename="../messages.cpp" line="210"/>
+        <source>%1 are typing...</source>
+        <comment>Lists</comment>
+        <translation type="unfinished">
+            <numerusform>%1 is typing...</numerusform>
+            <numerusform>%1 are typing...</numerusform>
+        </translation>
     </message>
 </context>
 <context>
@@ -495,6 +533,75 @@
     </message>
 </context>
 <context>
+    <name>QCoreApplication</name>
+    <message>
+        <location filename="../messages.cpp" line="165"/>
+        <source>%1 and %2</source>
+        <comment>Lists</comment>
+        <translation type="unfinished">%1 und %2</translation>
+    </message>
+    <message>
+        <location filename="../messages.cpp" line="184"/>
+        <location filename="../messages.cpp" line="188"/>
+        <source>%1, %2</source>
+        <comment>Lists</comment>
+        <extracomment>the middle of a list with 4 or more items: &quot;A, %1, %2, D, and E&quot;
+----------
+the start of a list, for example &quot;%1, %2, and C&quot;</extracomment>
+        <translation type="unfinished">%1, %2</translation>
+    </message>
+    <message>
+        <location filename="../messages.cpp" line="191"/>
+        <source>%1, and %2</source>
+        <comment>Lists</comment>
+        <extracomment>the end of a list, for example &quot;A, %1, and %2&quot;</extracomment>
+        <translation type="unfinished">%1, and %2</translation>
+    </message>
+</context>
+<context>
+    <name>QObject</name>
+    <message>
+        <location filename="../loginmanager.cpp" line="23"/>
+        <source>Select a login method</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../loginmanager.cpp" line="24"/>
+        <source>Register</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../loginmanager.cpp" line="25"/>
+        <source>Login</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../loginmanager.cpp" line="26"/>
+        <source>Other Options</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../loginmanager.cpp" line="27"/>
+        <source>Reset Password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../loginmanager.cpp" line="28"/>
+        <source>Email:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../loginmanager.cpp" line="29"/>
+        <source>Username:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../loginmanager.cpp" line="30"/>
+        <source>Password:</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>RightDrawer</name>
     <message>
         <location filename="../resources/RightDrawer.qml" line="54"/>
@@ -571,29 +678,29 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../resources/StaccatoDrawer.qml" line="140"/>
+        <location filename="../resources/StaccatoDrawer.qml" line="138"/>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../resources/StaccatoDrawer.qml" line="140"/>
+        <location filename="../resources/StaccatoDrawer.qml" line="138"/>
         <source>Leave</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../resources/StaccatoDrawer.qml" line="144"/>
+        <location filename="../resources/StaccatoDrawer.qml" line="142"/>
         <source>Left guild</source>
         <extracomment>guild leaving succeeded</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../resources/StaccatoDrawer.qml" line="147"/>
+        <location filename="../resources/StaccatoDrawer.qml" line="145"/>
         <source>Failed to leave guild</source>
         <extracomment>guild leaving failed</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../resources/StaccatoDrawer.qml" line="180"/>
+        <location filename="../resources/StaccatoDrawer.qml" line="178"/>
         <source>Channels</source>
         <translation type="unfinished"></translation>
     </message>
@@ -609,22 +716,27 @@
 <context>
     <name>UserPopup</name>
     <message>
-        <location filename="../resources/UserPopup.qml" line="41"/>
+        <location filename="../resources/UserPopup.qml" line="49"/>
         <source>Roles</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../resources/UserPopup.qml" line="46"/>
+        <location filename="../resources/UserPopup.qml" line="57"/>
+        <source>Give Role...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../resources/UserPopup.qml" line="85"/>
         <source>Manage User</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../resources/UserPopup.qml" line="51"/>
+        <location filename="../resources/UserPopup.qml" line="90"/>
         <source>Kick User</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../resources/UserPopup.qml" line="60"/>
+        <location filename="../resources/UserPopup.qml" line="99"/>
         <source>Ban User</source>
         <translation type="unfinished"></translation>
     </message>

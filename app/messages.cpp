@@ -7,9 +7,13 @@
 #include <QNetworkRequest>
 #include <QNetworkReply>
 #include <QtConcurrent>
+#include <google/protobuf/empty.pb.h>
+#include <grpcpp/impl/codegen/client_context.h>
 
 #include "channels.hpp"
+#include "chat/v1/channels.pb.h"
 #include "messages.hpp"
+#include "qcoreapplication.h"
 
 using grpc::ClientContext;
 
@@ -43,6 +47,9 @@ void MessagesModel::customEvent(QEvent *event)
 	if (event->type() == MessageSentEvent::typeID) {
 		auto ev = reinterpret_cast<MessageSentEvent*>(event);
 		auto echoID = ev->data.echo_id();
+
+		userCounts.remove(ev->data.message().author_id());
+		typingIndicatorChanged();
 
 		if (echoes.contains(echoID)) {
 			auto msg = echoes[echoID];
@@ -124,7 +131,111 @@ void MessagesModel::customEvent(QEvent *event)
 	} else if (event->type() == ExecuteEvent::typeID) {
 		auto ev = reinterpret_cast<ExecuteEvent*>(event);
 		ev->data();
+	} else if (event->type() == TypingEvent::typeID) {
+		auto ev = reinterpret_cast<TypingEvent*>(event);
+		auto& data = ev->data;
+		auto uid = data.user_id();
+
+		if (uid == client->userID) {
+			return;
+		}
+
+		this->userCounts[uid] = this->userCounts.value(uid, 0) + 1;
+		typingIndicatorChanged();
+
+		QTimer::singleShot(3000, [this, uid] {
+			if (this->userCounts.contains(uid)) {
+				this->userCounts[uid]--;
+				if (this->userCounts[uid] < 1) {
+					this->userCounts.remove(uid);
+				}
+			}
+			typingIndicatorChanged();
+		});
 	}
+}
+
+QString localiseList(const QStringList& list)
+{
+	auto copy = list;
+
+	switch (copy.length()) {
+	case 0:
+		return QString();
+	case 1:
+		return copy[0];
+	case 2:
+		return QCoreApplication::tr("%1 and %2", "Lists").arg(copy[0]).arg(copy[1]);
+	}
+
+	Q_ASSERT(copy.length() >= 3);
+
+	auto front = copy.front();
+	copy.pop_front();
+
+	auto back = copy.back();
+	copy.pop_back();
+
+	auto middle = copy.front();
+	copy.pop_front();
+
+	while (copy.length() > 0) {
+		auto head = copy.front();
+		copy.pop_front();
+
+		//: the middle of a list with 4 or more items: "A, %1, %2, D, and E"
+		middle = QCoreApplication::tr("%1, %2", "Lists").arg(middle).arg(head);
+	}
+
+	//: the start of a list, for example "%1, %2, and C"
+	auto start = QCoreApplication::tr("%1, %2", "Lists").arg(front).arg(middle);
+
+	//: the end of a list, for example "A, %1, and %2"
+	auto end = QCoreApplication::tr("%1, and %2", "Lists").arg(start).arg(back);
+
+	Q_ASSERT(copy.length() == 0);
+
+	return end;
+}
+
+QString MessagesModel::typingIndicator()
+{
+	if (userCounts.keys().length() == 0) {
+		return QString();
+	}
+
+	QStringList names;
+	for (auto user : userCounts.keys()) {
+		names << channelsModel()->userName(user);
+	}
+	names.sort();
+
+	return tr("%1 are typing...", "Lists", names.count()).arg(localiseList(names));
+}
+
+void MessagesModel::typed()
+{
+	static bool shouldSend = true;
+	if (!shouldSend) return;
+
+	shouldSend = false;
+
+	QTimer::singleShot(1000, [] {
+		shouldSend = true;
+	});
+
+	QtConcurrent::run([=]{
+		ClientContext ctx;
+		client->authenticate(ctx);
+
+		protocol::chat::v1::TypingRequest req;
+		req.set_guild_id(guildID);
+		req.set_channel_id(channelID);
+
+		google::protobuf::Empty empty;
+
+		checkStatus(client->chatKit->Typing(&ctx, req, &empty));
+	});
 }
 
 int MessagesModel::rowCount(const QModelIndex& parent) const

@@ -112,6 +112,7 @@ class MessagesModel : public QAbstractListModel
 	QList<MessageData> messageData;
 	QHash<quint64,MessageData*> echoes;
 	QQmlPropertyMap* permissions;
+	QHash<quint64,int> userCounts;
 
 	friend class ChannelsModel;
 	friend class Client;
@@ -127,6 +128,7 @@ class MessagesModel : public QAbstractListModel
 
 	Q_PROPERTY(QQmlPropertyMap* permissions MEMBER permissions CONSTANT FINAL)
 	Q_PROPERTY(QString homeserver MEMBER homeServer CONSTANT FINAL)
+	Q_PROPERTY(QString typingIndicator READ typingIndicator NOTIFY typingIndicatorChanged)
 
 	enum Roles {
 		MessageTextRole = Qt::UserRole,
@@ -156,6 +158,8 @@ class MessagesModel : public QAbstractListModel
 	using Nobody = std::monostate;
 	using SendAs = std::variant<Nobody, Fronter, RoleplayCharacter>;
 
+	void reevaluateTypingIndicator();
+
 protected:
 	Q_INVOKABLE void customEvent(QEvent *event) override;
 
@@ -167,6 +171,10 @@ public:
 	bool canFetchMore(const QModelIndex& parent) const override;
 	void fetchMore(const QModelIndex& parent) override;
 
+	QString typingIndicator();
+	Q_SIGNAL void typingIndicatorChanged();
+
+	Q_INVOKABLE void typed();
 	Q_INVOKABLE bool isOwner() { return isGuildOwner; }
 	Q_INVOKABLE QString userID() { return QString::number(client->userID); }
 	Q_INVOKABLE QVariantMap peekMessage(const QString& id);

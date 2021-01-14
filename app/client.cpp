@@ -5,6 +5,7 @@
 #include <QtConcurrent>
 #include <QDebug>
 
+#include "messages.hpp"
 #include "qcoreapplication.h"
 #include "qloggingcategory.h"
 #include "state.hpp"
@@ -452,6 +453,10 @@ void Client::runEvents()
 				auto ev = msg.left_member();
 
 				QCoreApplication::postEvent(ChannelsModel::modelFor(homeserver, ev.guild_id()), new MemberLeftEvent(ev));
+			} else if (msg.has_typing()) {
+				auto ev = msg.typing();
+
+				QCoreApplication::postEvent(ChannelsModel::modelFor(homeserver, ev.guild_id()), new TypingEvent(ev));
 			}
 		}
 

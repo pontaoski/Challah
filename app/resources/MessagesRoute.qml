@@ -24,6 +24,32 @@ Kirigami.PageRoute {
 			Kirigami.PageRouter.router.params.homeserver,
 		)
 
+		header: Expandable {
+			childVisible: messagesRoute.model.typingIndicator
+			direction: Expandable.Direction.FromTop
+
+			QQC2.Control {
+				background: Rectangle {
+					Kirigami.Theme.inherit: false
+					Kirigami.Theme.colorSet: Kirigami.Theme.Header
+					color: Kirigami.Theme.backgroundColor
+
+					Kirigami.Separator {
+						anchors {
+							bottom: parent.bottom
+							left: parent.left
+							right: parent.right
+						}
+					}
+				}
+				padding: Kirigami.Units.largeSpacing
+				contentItem: QQC2.Label {
+					text: messagesRoute.model.typingIndicator
+				}
+				anchors.left: parent.left
+				anchors.right: parent.right
+			}
+		}
 		footer: ComposeBar { id: composeBar }
 
 		ItemSelectionModel {

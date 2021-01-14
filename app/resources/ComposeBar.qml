@@ -170,6 +170,9 @@ QQC2.ToolBar {
 					//: Placeholder text for the message field when the user isn't allowed to send a message
 					return qsTr("You do not have permissions to send a message to this channel.")
 				}
+				onTextChanged: {
+					model.typed()
+				}
 
 				Clipboard.paste: function(clipboard) {
 					if (clipboard.hasUrls) {

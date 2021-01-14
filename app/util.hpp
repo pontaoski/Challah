@@ -35,6 +35,7 @@ using GuildUpdatedEvent = CarrierEvent<10,protocol::chat::v1::Event_GuildUpdated
 using GuildDeletedEvent = CarrierEvent<11,protocol::chat::v1::Event_GuildDeleted>;
 using MemberJoinedEvent = CarrierEvent<12,protocol::chat::v1::Event_MemberJoined>;
 using MemberLeftEvent = CarrierEvent<13,protocol::chat::v1::Event_MemberLeft>;
+using TypingEvent = CarrierEvent<50, protocol::chat::v1::Event_Typing>;
 
 struct PleaseCall {
 	QJSValue func;
