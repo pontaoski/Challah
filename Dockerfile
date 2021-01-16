@@ -4,9 +4,9 @@ ARG QT_TAG=v5.15.2
 
 # QBS
 
-RUN cd && git clone git://code.qt.io/qt/qtbase.git --single-branch --branch ${QT_TAG} && cd qtbase \
-	&& ./configure -prefix /opt/nativetooling -opensource -confirm-license -no-gui -release -optimize-size -nomake tests -nomake examples \
-	&& make -j`nproc` && make install && rm -rf ~/qtbase
+RUN export QMAKESPEC=""; export XQMAKESPEC=""; export QMAKEPATH=""; export QMAKEFEATURES=""; cd; git clone git://code.qt.io/qt/qtbase.git --single-branch --branch ${QT_TAG}; cd qtbase; \
+	./configure -prefix /opt/nativetooling -opensource -confirm-license -no-gui -release -optimize-size -nomake tests -nomake examples; \
+	make -j`nproc`; make install; rm -rf ~/qtbase
 
 RUN /opt/helpers/build-cmake-native \
 	qbs https://github.com/qbs/qbs.git \
