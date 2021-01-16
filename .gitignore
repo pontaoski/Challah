@@ -2,6 +2,7 @@ default
 release
 build
 flatpak
+docker
 _flatpak_builder
 .vscode
 output
