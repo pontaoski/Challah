@@ -92,6 +92,11 @@ bool CopyInterceptor::eventFilter(QObject *object, QEvent *event)
 	return false;
 }
 
+void CopyInterceptor::copyText(const QString &txt)
+{
+	QGuiApplication::clipboard()->setText(txt);
+}
+
 CopyInterceptor *CopyInterceptor::qmlAttachedProperties(QObject* on)
 {
 	return new CopyInterceptor(on);

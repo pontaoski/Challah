@@ -22,6 +22,8 @@ public:
 	void setCopy(QJSValue val);
 	void setPaste(QJSValue val);
 
+	Q_INVOKABLE void copyText(const QString& txt);
+
 	bool eventFilter(QObject *object, QEvent *event);
 
 	static CopyInterceptor *qmlAttachedProperties(QObject* on);

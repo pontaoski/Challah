@@ -12,8 +12,8 @@ public:
 	QTextDocument* parent = nullptr;
 	QObject* field = nullptr;
 	bool ignoreSignals = false;
-	QString plaintextBuffer = QString();
 	QSet<ITextEntityFormatter*> formatters;
+	QList<QPair<QTextCursor,QString>> imageCursors;
 };
 
 class UnderlineFormatter : public ITextEntityFormatter {
@@ -65,7 +65,7 @@ public:
 		return regexp;
 	}
 	TextStyle styleFor(const QString&) const override {
-		QImage img(64, 64, QImage::Format_ARGB32);
+		QImage img(128, 128, QImage::Format_ARGB32);
 		img.fill(Qt::red);
 		return TextStyle {
 			img
@@ -123,28 +123,25 @@ void TextFormatter::handleTextChanged(int position, int charsRemoved, int charsA
 	QTextCursor curs(p->parent);
 	curs.setPosition(0);
 	curs.movePosition(QTextCursor::MoveOperation::End, QTextCursor::MoveMode::KeepAnchor);
-	curs.setCharFormat(QTextCharFormat());
 
-	if (charsRemoved == 0 and charsAdded > 0) {
-		QTextCursor bufferReader(p->parent);
-		bufferReader.setPosition(position);
-		bufferReader.setPosition(position + charsAdded, QTextCursor::KeepAnchor);
+	QTextCursor prev;
+	for (int i = 0; i < p->parent->characterCount(); i++) {
+		auto rune = p->parent->characterAt(i);
 
-		p->plaintextBuffer.insert(position, bufferReader.selectedText());
-	} else if (charsRemoved > 0 and charsAdded == 0) {
-		p->plaintextBuffer.remove(position, charsRemoved);
-	} else if (charsRemoved > 0 and charsAdded > 0) {
-		p->plaintextBuffer.remove(position, charsRemoved);
+		if (rune == QChar::ObjectReplacementCharacter) {
+			continue;
+		}
 
-		QTextCursor bufferReader(p->parent);
-		bufferReader.setPosition(position);
-		bufferReader.setPosition(position + charsAdded, QTextCursor::KeepAnchor);
-
-		p->plaintextBuffer.insert(position, bufferReader.selectedText());
+		QTextCursor clearer(p->parent);
+		clearer.setPosition(i);
+		clearer.movePosition(QTextCursor::MoveOperation::Right, QTextCursor::MoveMode::KeepAnchor, 1);
+		clearer.setCharFormat(QTextCharFormat());
 	}
 
+	auto plaintextBuffer = curs.selectedText();
+
 	for (auto formatter : p->formatters) {
-		auto matches = formatter->matches().globalMatch(p->plaintextBuffer);
+		auto matches = formatter->matches().globalMatch(plaintextBuffer);
 		while (matches.hasNext()) {
 			auto match = matches.next();
 			auto word = match.captured(1);
@@ -179,6 +176,12 @@ void TextFormatter::handleTextChanged(int position, int charsRemoved, int charsA
 				auto img = *style;
 
 				cursor.insertImage(img);
+
+				QTextCursor newCursor(p->parent);
+				newCursor.setPosition(match.capturedStart(1));
+				newCursor.movePosition(QTextCursor::MoveOperation::Right, QTextCursor::MoveMode::KeepAnchor, 1);
+
+				p->imageCursors << qMakePair(newCursor, word);
 
 			}
 		}
