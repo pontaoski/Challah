@@ -54,6 +54,25 @@ public:
 	}
 };
 
+class EmojiFormatter : public ITextEntityFormatter {
+public:
+	EmojiFormatter() {}
+	~EmojiFormatter() {}
+
+	const QRegularExpression regexp = QRegularExpression("(<:.*?:>)");
+
+	QRegularExpression matches() const override {
+		return regexp;
+	}
+	TextStyle styleFor(const QString&) const override {
+		QImage img(64, 64, QImage::Format_ARGB32);
+		img.fill(Qt::red);
+		return TextStyle {
+			img
+		};
+	}
+};
+
 TextFormatter::TextFormatter(QTextDocument* parent, QObject* field)
 {
 	p = new Private;
@@ -65,6 +84,7 @@ TextFormatter::TextFormatter(QTextDocument* parent, QObject* field)
 
 	registerFormatter(new UnderlineFormatter);
 	registerFormatter(new ItalicFormatter);
+	registerFormatter(new EmojiFormatter);
 
 	connect(parent, &QTextDocument::contentsChange, this, &TextFormatter::handleTextChanged);
 }
@@ -105,27 +125,23 @@ void TextFormatter::handleTextChanged(int position, int charsRemoved, int charsA
 	curs.movePosition(QTextCursor::MoveOperation::End, QTextCursor::MoveMode::KeepAnchor);
 	curs.setCharFormat(QTextCharFormat());
 
-	if (false) {
-		if (charsRemoved == 0 and charsAdded > 0) {
-			QTextCursor bufferReader(p->parent);
-			bufferReader.setPosition(position);
-			bufferReader.setPosition(position + charsAdded, QTextCursor::KeepAnchor);
+	if (charsRemoved == 0 and charsAdded > 0) {
+		QTextCursor bufferReader(p->parent);
+		bufferReader.setPosition(position);
+		bufferReader.setPosition(position + charsAdded, QTextCursor::KeepAnchor);
 
-			p->plaintextBuffer.insert(position, bufferReader.selectedText());
-		} else if (charsRemoved > 0 and charsAdded == 0) {
-			p->plaintextBuffer.remove(position - charsRemoved, charsRemoved);
-		} else if (charsRemoved > 0 and charsAdded > 0) {
-			p->plaintextBuffer.remove(position - charsRemoved, charsRemoved);
+		p->plaintextBuffer.insert(position, bufferReader.selectedText());
+	} else if (charsRemoved > 0 and charsAdded == 0) {
+		p->plaintextBuffer.remove(position, charsRemoved);
+	} else if (charsRemoved > 0 and charsAdded > 0) {
+		p->plaintextBuffer.remove(position, charsRemoved);
 
-			QTextCursor bufferReader(p->parent);
-			bufferReader.setPosition(position);
-			bufferReader.setPosition(position + charsAdded, QTextCursor::KeepAnchor);
+		QTextCursor bufferReader(p->parent);
+		bufferReader.setPosition(position);
+		bufferReader.setPosition(position + charsAdded, QTextCursor::KeepAnchor);
 
-			p->plaintextBuffer.insert(position - charsRemoved + 1, bufferReader.selectedText());
-		}
+		p->plaintextBuffer.insert(position, bufferReader.selectedText());
 	}
-
-	p->plaintextBuffer = curs.selectedText();
 
 	for (auto formatter : p->formatters) {
 		auto matches = formatter->matches().globalMatch(p->plaintextBuffer);
@@ -157,6 +173,13 @@ void TextFormatter::handleTextChanged(int position, int charsRemoved, int charsA
 				}
 
 				cursor.mergeCharFormat(fmt);
+
+			} else if (auto style = std::get_if<ImageStyle>(&format)) {
+
+				auto img = *style;
+
+				cursor.insertImage(img);
+
 			}
 		}
 	}
