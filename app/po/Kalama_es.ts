@@ -17,13 +17,13 @@
       <location filename="../resources/ChannelSheet.qml" line="30"/>
       <source>Created channel</source>
       <extracomment>the channel has been successfully created</extracomment>
-      <translation type="unfinished">Created channel</translation>
+      <translation>Canal creado</translation>
     </message>
     <message>
       <location filename="../resources/ChannelSheet.qml" line="32"/>
       <source>Failed to create channel</source>
       <extracomment>the channel failed to be created</extracomment>
-      <translation type="unfinished">Failed to create channel</translation>
+      <translation>Error durante la creación del canal</translation>
     </message>
   </context>
   <context>
@@ -33,36 +33,36 @@
       <location filename="../resources/ComposeBar.qml" line="139"/>
       <source>Write a message...</source>
       <extracomment>Placeholder text for the message field</extracomment>
-      <translation type="unfinished">Write a message...</translation>
+      <translation>Escribe...</translation>
     </message>
     <message>
       <location filename="../resources/ComposeBar.qml" line="73"/>
       <source>Failed to upload file</source>
-      <translation type="unfinished">Failed to upload file</translation>
+      <translation>Error al cargar el archivo</translation>
     </message>
     <message>
       <location filename="../resources/ComposeBar.qml" line="78"/>
       <location filename="../resources/ComposeBar.qml" line="192"/>
       <source>Send</source>
       <extracomment>Send the message in the text field</extracomment>
-      <translation type="unfinished">Send</translation>
+      <translation>Enviar</translation>
     </message>
     <message>
       <location filename="../resources/ComposeBar.qml" line="147"/>
       <source>Default</source>
-      <translation type="unfinished">Default</translation>
+      <translation>Predeterminado</translation>
     </message>
     <message>
       <location filename="../resources/ComposeBar.qml" line="142"/>
       <source>You do not have permissions to send a message to this channel.</source>
       <extracomment>Placeholder text for the message field when the user isn&apos;t allowed to send a message</extracomment>
-      <translation type="unfinished">You do not have permissions to send a message to this channel.</translation>
+      <translation>No tiene permisos para enviar un mensaje a este canal.</translation>
     </message>
     <message>
       <location filename="../resources/ComposeBar.qml" line="181"/>
       <source>Add attachment...</source>
       <extracomment>Send the message in the text field</extracomment>
-      <translation type="unfinished">Add attachment...</translation>
+      <translation>Agregar adjunto...</translation>
     </message>
   </context>
   <context>
@@ -75,7 +75,7 @@
     <message>
       <location filename="../resources/GuildRoute.qml" line="23"/>
       <source>Select a channel to get chatting.</source>
-      <translation type="unfinished">Select a channel to get chatting.</translation>
+      <translation>Selecciona un canal para juntarse a la discusión.</translation>
     </message>
   </context>
   <context>
@@ -83,7 +83,7 @@
     <message>
       <location filename="../resources/GuildSettings.qml" line="14"/>
       <source>Settings</source>
-      <translation type="unfinished">Settings</translation>
+      <translation>Preferencias</translation>
     </message>
   </context>
   <context>
@@ -92,46 +92,46 @@
       <location filename="../resources/GuildSheet.qml" line="54"/>
       <location filename="../resources/GuildSheet.qml" line="95"/>
       <source>Create Guild</source>
-      <translation type="unfinished">Create Guild</translation>
+      <translation>Crear Gremio</translation>
     </message>
     <message>
       <location filename="../resources/GuildSheet.qml" line="78"/>
       <source>Join Guild</source>
-      <translation type="unfinished">Join Guild</translation>
+      <translation>Únete a Gremio</translation>
     </message>
     <message>
       <location filename="../resources/GuildSheet.qml" line="92"/>
       <source>Guild Name:</source>
-      <translation type="unfinished">Guild Name:</translation>
+      <translation>Nombre del Gremio:</translation>
     </message>
     <message>
       <location filename="../resources/GuildSheet.qml" line="100"/>
       <source>Created guild</source>
       <extracomment>guild has been successfully created</extracomment>
-      <translation type="unfinished">Created guild</translation>
+      <translation>Gremio creado</translation>
     </message>
     <message>
       <location filename="../resources/GuildSheet.qml" line="103"/>
       <source>Failed to make guild</source>
       <extracomment>creating the guild failed</extracomment>
-      <translation type="unfinished">Failed to make guild</translation>
+      <translation>No se pudo crear la guild</translation>
     </message>
     <message>
       <location filename="../resources/GuildSheet.qml" line="119"/>
       <source>Join</source>
-      <translation type="unfinished">Join</translation>
+      <translation>Unirse</translation>
     </message>
     <message>
       <location filename="../resources/GuildSheet.qml" line="124"/>
       <source>Joined guild</source>
       <extracomment>guild has been successfully joined</extracomment>
-      <translation type="unfinished">Joined guild</translation>
+      <translation>Se unió al gremio</translation>
     </message>
     <message>
       <location filename="../resources/GuildSheet.qml" line="127"/>
       <source>Failed to join guild</source>
       <extracomment>joining the guild failed</extracomment>
-      <translation type="unfinished">Failed to join guild</translation>
+      <translation>No se pudo unirse al gremio</translation>
     </message>
   </context>
   <context>
@@ -139,7 +139,7 @@
     <message>
       <location filename="../resources/InstantView.qml" line="14"/>
       <source>Loading...</source>
-      <translation type="unfinished">Loading...</translation>
+      <translation>Cargando...</translation>
     </message>
   </context>
   <context>
@@ -147,54 +147,54 @@
     <message>
       <location filename="../resources/Invites.qml" line="13"/>
       <source>Invites</source>
-      <translation type="unfinished">Invites</translation>
+      <translation>Invitaciones</translation>
     </message>
     <message>
       <location filename="../resources/Invites.qml" line="18"/>
       <source>Create Invite...</source>
-      <translation type="unfinished">Create Invite...</translation>
+      <translation>Crear invitación...</translation>
     </message>
     <message>
       <location filename="../resources/Invites.qml" line="39"/>
       <source>Invite ID:</source>
-      <translation type="unfinished">Invite ID:</translation>
+      <translation>ID de invitación:</translation>
     </message>
     <message>
       <location filename="../resources/Invites.qml" line="49"/>
       <source>Restrict uses:</source>
-      <translation type="unfinished">Restrict uses:</translation>
+      <translation>Limitar usos:</translation>
     </message>
     <message>
       <location filename="../resources/Invites.qml" line="53"/>
       <source>Create Invite</source>
-      <translation type="unfinished">Create Invite</translation>
+      <translation>Crear invitación</translation>
     </message>
     <message>
       <location filename="../resources/Invites.qml" line="58"/>
       <source>Created invite</source>
       <extracomment>the invite was created successfully</extracomment>
-      <translation type="unfinished">Created invite</translation>
+      <translation>Invitación creada</translation>
     </message>
     <message>
       <location filename="../resources/Invites.qml" line="61"/>
       <source>Failed to create invite</source>
       <extracomment>the invite couldn&apos;t be created successfully</extracomment>
-      <translation type="unfinished">Failed to create invite</translation>
+      <translation>Error durante la creación del canal</translation>
     </message>
     <message>
       <location filename="../resources/Invites.qml" line="75"/>
       <source>Invite ID: %1</source>
-      <translation type="unfinished">Invite ID: %1</translation>
+      <translation>ID de invitación: %1</translation>
     </message>
     <message>
       <location filename="../resources/Invites.qml" line="79"/>
       <source>Possible Uses: %1 | Uses: %2 </source>
-      <translation type="unfinished">Possible Uses: %1 | Uses: %2 </translation>
+      <translation>Usos Posibles: %1 | Usos: %2 </translation>
     </message>
     <message>
       <location filename="../resources/Invites.qml" line="79"/>
       <source>Possible Uses: Infinite | Uses : %1</source>
-      <translation type="unfinished">Possible Uses: Infinite | Uses : %1</translation>
+      <translation>Usos Posibles: Infinito | Usos: %1</translation>
     </message>
   </context>
   <context>
@@ -251,7 +251,7 @@
       <location filename="../resources/MessageAction.qml" line="95"/>
       <location filename="../resources/MessageAction.qml" line="119"/>
       <source>Submit</source>
-      <translation type="unfinished">Submit</translation>
+      <translation>Enviar</translation>
     </message>
   </context>
   <context>
@@ -259,28 +259,28 @@
     <message>
       <location filename="../resources/MessageDelegate.qml" line="39"/>
       <source>Edit</source>
-      <translation type="unfinished">Edit</translation>
+      <translation>Editar</translation>
     </message>
     <message>
       <location filename="../resources/MessageDelegate.qml" line="46"/>
       <source>Delete</source>
-      <translation type="unfinished">Delete</translation>
+      <translation>Borrar</translation>
     </message>
     <message>
       <location filename="../resources/MessageDelegate.qml" line="53"/>
       <source>Reply</source>
-      <translation type="unfinished">Reply</translation>
+      <translation>Responder</translation>
     </message>
     <message>
       <location filename="../resources/MessageDelegate.qml" line="62"/>
       <location filename="../resources/MessageDelegate.qml" line="82"/>
       <source>Select</source>
-      <translation type="unfinished">Select</translation>
+      <translation>Seleccionar</translation>
     </message>
     <message>
       <location filename="../resources/MessageDelegate.qml" line="71"/>
       <source>Copy Selected Messages</source>
-      <translation type="unfinished">Copy Selected Messages</translation>
+      <translation>Copiar Mensajes Seleccionados</translation>
     </message>
     <message>
       <location filename="../resources/MessageDelegate.qml" line="82"/>
