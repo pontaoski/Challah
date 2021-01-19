@@ -6,12 +6,12 @@
     <message>
       <location filename="../resources/ChannelSheet.qml" line="21"/>
       <source>Channel Name:</source>
-      <translation type="unfinished">Channel Name:</translation>
+      <translation>Nombre del Canal:</translation>
     </message>
     <message>
       <location filename="../resources/ChannelSheet.qml" line="24"/>
       <source>Create Channel</source>
-      <translation type="unfinished">Create Channel</translation>
+      <translation>Crear Canal</translation>
     </message>
     <message>
       <location filename="../resources/ChannelSheet.qml" line="30"/>
