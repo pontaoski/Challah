@@ -6,24 +6,24 @@
     <message>
       <location filename="../resources/ChannelSheet.qml" line="21"/>
       <source>Channel Name:</source>
-      <translation type="unfinished">Channel Name:</translation>
+      <translation>Название Канала:</translation>
     </message>
     <message>
       <location filename="../resources/ChannelSheet.qml" line="24"/>
       <source>Create Channel</source>
-      <translation type="unfinished">Create Channel</translation>
+      <translation>Создать Канал</translation>
     </message>
     <message>
       <location filename="../resources/ChannelSheet.qml" line="30"/>
       <source>Created channel</source>
       <extracomment>the channel has been successfully created</extracomment>
-      <translation type="unfinished">Created channel</translation>
+      <translation>Канал создан</translation>
     </message>
     <message>
       <location filename="../resources/ChannelSheet.qml" line="32"/>
       <source>Failed to create channel</source>
       <extracomment>the channel failed to be created</extracomment>
-      <translation type="unfinished">Failed to create channel</translation>
+      <translation>Не удалось создать канал</translation>
     </message>
   </context>
   <context>
@@ -33,36 +33,36 @@
       <location filename="../resources/ComposeBar.qml" line="139"/>
       <source>Write a message...</source>
       <extracomment>Placeholder text for the message field</extracomment>
-      <translation type="unfinished">Write a message...</translation>
+      <translation>Напишите сообщение...</translation>
     </message>
     <message>
       <location filename="../resources/ComposeBar.qml" line="73"/>
       <source>Failed to upload file</source>
-      <translation type="unfinished">Failed to upload file</translation>
+      <translation>Не удалось загрузить файл</translation>
     </message>
     <message>
       <location filename="../resources/ComposeBar.qml" line="78"/>
       <location filename="../resources/ComposeBar.qml" line="192"/>
       <source>Send</source>
       <extracomment>Send the message in the text field</extracomment>
-      <translation type="unfinished">Send</translation>
+      <translation>Отправить</translation>
     </message>
     <message>
       <location filename="../resources/ComposeBar.qml" line="147"/>
       <source>Default</source>
-      <translation type="unfinished">Default</translation>
+      <translation>По умолчанию</translation>
     </message>
     <message>
       <location filename="../resources/ComposeBar.qml" line="142"/>
       <source>You do not have permissions to send a message to this channel.</source>
       <extracomment>Placeholder text for the message field when the user isn&apos;t allowed to send a message</extracomment>
-      <translation type="unfinished">You do not have permissions to send a message to this channel.</translation>
+      <translation>У вас нет прав на отправку сообщения в этот канал.</translation>
     </message>
     <message>
       <location filename="../resources/ComposeBar.qml" line="181"/>
       <source>Add attachment...</source>
       <extracomment>Send the message in the text field</extracomment>
-      <translation type="unfinished">Add attachment...</translation>
+      <translation>Добавить вложение...</translation>
     </message>
   </context>
   <context>
@@ -75,7 +75,7 @@
     <message>
       <location filename="../resources/GuildRoute.qml" line="23"/>
       <source>Select a channel to get chatting.</source>
-      <translation type="unfinished">Select a channel to get chatting.</translation>
+      <translation>Выберите канал, чтобы начать общаться.</translation>
     </message>
   </context>
   <context>
@@ -83,7 +83,7 @@
     <message>
       <location filename="../resources/GuildSettings.qml" line="14"/>
       <source>Settings</source>
-      <translation type="unfinished">Settings</translation>
+      <translation>Настройки</translation>
     </message>
   </context>
   <context>
@@ -92,29 +92,29 @@
       <location filename="../resources/GuildSheet.qml" line="54"/>
       <location filename="../resources/GuildSheet.qml" line="95"/>
       <source>Create Guild</source>
-      <translation type="unfinished">Create Guild</translation>
+      <translation>Создать Гильдию</translation>
     </message>
     <message>
       <location filename="../resources/GuildSheet.qml" line="78"/>
       <source>Join Guild</source>
-      <translation type="unfinished">Join Guild</translation>
+      <translation>Вступить в гильдию</translation>
     </message>
     <message>
       <location filename="../resources/GuildSheet.qml" line="92"/>
       <source>Guild Name:</source>
-      <translation type="unfinished">Guild Name:</translation>
+      <translation>Название гильдии:</translation>
     </message>
     <message>
       <location filename="../resources/GuildSheet.qml" line="100"/>
       <source>Created guild</source>
       <extracomment>guild has been successfully created</extracomment>
-      <translation type="unfinished">Created guild</translation>
+      <translation>Гильдия создана</translation>
     </message>
     <message>
       <location filename="../resources/GuildSheet.qml" line="103"/>
       <source>Failed to make guild</source>
       <extracomment>creating the guild failed</extracomment>
-      <translation type="unfinished">Failed to make guild</translation>
+      <translation>Не удалось создать гильдию</translation>
     </message>
     <message>
       <location filename="../resources/GuildSheet.qml" line="119"/>
