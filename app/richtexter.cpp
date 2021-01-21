@@ -1,4 +1,6 @@
 #include "richtexter.hpp"
+#include "qtextformat.h"
+#include "state.hpp"
 
 #include <QDebug>
 #include <QEvent>
@@ -6,6 +8,7 @@
 #include <QTextCursor>
 #include <QKeyEvent>
 #include <QKeySequence>
+#include <QTextBlock>
 
 class TextFormatter::Private {
 public:
@@ -14,6 +17,7 @@ public:
 	bool ignoreSignals = false;
 	QSet<ITextEntityFormatter*> formatters;
 	QList<QPair<QTextCursor,QString>> imageCursors;
+	QString homeserver;
 };
 
 class UnderlineFormatter : public ITextEntityFormatter {
@@ -26,7 +30,7 @@ public:
 	QRegularExpression matches() const override {
 		return regexp;
 	}
-	TextStyle styleFor(const QString&) const override {
+	TextStyle styleFor(const QString&, const FormatContext&) const override {
 		return TextStyle {
 			CharacterStyle {
 				.underline = true
@@ -45,7 +49,7 @@ public:
 	QRegularExpression matches() const override {
 		return regexp;
 	}
-	TextStyle styleFor(const QString&) const override {
+	TextStyle styleFor(const QString&, const FormatContext&) const override {
 		return TextStyle {
 			CharacterStyle {
 				.italic = true
@@ -64,21 +68,25 @@ public:
 	QRegularExpression matches() const override {
 		return regexp;
 	}
-	TextStyle styleFor(const QString&) const override {
-		QImage img(128, 128, QImage::Format_ARGB32);
-		img.fill(Qt::red);
+	TextStyle styleFor(const QString& emoji, const FormatContext& ctx) const override {
 		return TextStyle {
-			img
+			ImageStyle {
+				.source = State::instance()->transformHMCURL(emoji.mid(2).chopped(2), ctx.homeserver),
+				.size = QSizeF(22, 22)
+			}
 		};
 	}
 };
 
-TextFormatter::TextFormatter(QTextDocument* parent, QObject* field)
+TextFormatter::TextFormatter(QTextDocument* parent, const QString& homeserver, QObject* field)
 {
+	s_instances[field] = this;
+
 	p = new Private;
 
 	p->parent = parent;
 	p->field = field;
+	p->homeserver = homeserver;
 
 	field->installEventFilter(this);
 
@@ -91,6 +99,8 @@ TextFormatter::TextFormatter(QTextDocument* parent, QObject* field)
 
 TextFormatter::~TextFormatter()
 {
+	s_instances.remove(parent());
+
 	delete p;
 }
 
@@ -112,6 +122,58 @@ bool TextFormatter::eventFilter(QObject *object, QEvent *event)
 		}
 	}
 	return false;
+}
+
+QString TextFormatter::plaintext()
+{
+	return plaintext(0, p->parent->characterCount());
+}
+
+QMap<QObject*,TextFormatter*> TextFormatter::s_instances;
+
+QString TextFormatter::plaintext(int from, int to)
+{
+	QString ret;
+	ret.reserve(to - from);
+
+	int offsetFrom = from, offsetTo = to;
+	int pos = 0;
+	bool pastFrom = false, pastTo = false;
+
+	for (int i = 0; i < p->parent->blockCount(); i++) {
+		auto currentBlock = p->parent->findBlockByNumber(i);
+
+		QTextBlock::iterator it;
+		for (it = currentBlock.begin(); !(it.atEnd()); ++it) {
+			QTextFragment currentFragment = it.fragment();
+
+			if (currentFragment.isValid()) {
+				if (currentFragment.charFormat().isImageFormat()) {
+					ret += currentFragment.charFormat().toImageFormat().anchorHref();
+					currentFragment.charFormat().toImageFormat().anchorHref().length();
+					pos += currentFragment.text().length();
+					if (!pastFrom) {
+						offsetFrom += currentFragment.charFormat().toImageFormat().anchorHref().length();
+					}
+					if (!pastTo) {
+						offsetTo += currentFragment.charFormat().toImageFormat().anchorHref().length();
+					}
+				} else {
+					ret += currentFragment.text();
+					pos += currentFragment.text().length();
+				}
+			}
+
+			if (pos > offsetFrom) {
+				pastFrom = true;
+			}
+			if (pos > offsetTo) {
+				pastTo = true;
+			}
+		}
+	}
+
+	return ret.mid(offsetFrom, offsetTo - offsetFrom);
 }
 
 void TextFormatter::handleTextChanged(int position, int charsRemoved, int charsAdded)
@@ -140,13 +202,17 @@ void TextFormatter::handleTextChanged(int position, int charsRemoved, int charsA
 
 	auto plaintextBuffer = curs.selectedText();
 
+	auto ctx = FormatContext {
+		.homeserver = p->homeserver
+	};
+
 	for (auto formatter : p->formatters) {
 		auto matches = formatter->matches().globalMatch(plaintextBuffer);
 		while (matches.hasNext()) {
 			auto match = matches.next();
 			auto word = match.captured(1);
 
-			auto format = formatter->styleFor(word);
+			auto format = formatter->styleFor(word, ctx);
 
 			QTextCursor cursor(p->parent);
 			cursor.setPosition(match.capturedStart(1));
@@ -175,11 +241,22 @@ void TextFormatter::handleTextChanged(int position, int charsRemoved, int charsA
 
 				auto img = *style;
 
-				cursor.insertImage(img);
+				cursor.insertImage(img.source);
 
 				QTextCursor newCursor(p->parent);
 				newCursor.setPosition(match.capturedStart(1));
 				newCursor.movePosition(QTextCursor::MoveOperation::Right, QTextCursor::MoveMode::KeepAnchor, 1);
+
+				if (img.size.has_value()) {
+					QTextImageFormat format;
+					format.setHeight(img.size.value().height());
+					format.setWidth(img.size.value().width());
+					format.setName(img.source);
+					format.setAnchorHref(word);
+					format.setVerticalAlignment(QTextCharFormat::AlignBottom);
+
+					newCursor.setCharFormat(format);
+				}
 
 				p->imageCursors << qMakePair(newCursor, word);
 

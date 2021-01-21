@@ -80,7 +80,11 @@ QQC2.ToolBar {
 
 					Keys.onReturnPressed: send()
 
-					Component.onCompleted: HState.bindTextDocument(this.textDocument, this)
+					Clipboard.copy: function() {
+						Clipboard.copyText(Clipboard.richPlaintextRange(this.selectionStart, this.selectionEnd))
+						return true
+					}
+					Component.onCompleted: HState.bindTextDocument(this.textDocument, routerInstance.params.homeserver, this)
 				}
 				QQC2.Button {
 					text: qsTr("Send")
@@ -181,7 +185,11 @@ QQC2.ToolBar {
 						return true
 					}
 				}
-				Component.onCompleted: HState.bindTextDocument(this.textDocument, this)
+				Clipboard.copy: function() {
+					Clipboard.copyText(Clipboard.richPlaintextRange(this.selectionStart, this.selectionEnd))
+					return true
+				}
+				Component.onCompleted: HState.bindTextDocument(this.textDocument, routerInstance.params.homeserver, this)
 				Layout.fillWidth: true
 
 				function send() {

@@ -127,9 +127,9 @@ void State::customEvent(QEvent *event)
 	}
 }
 
-void State::bindTextDocument(QQuickTextDocument* doc, QObject* field)
+void State::bindTextDocument(QQuickTextDocument* doc, const QString& homeserver, QObject* field)
 {
-	new TextFormatter(doc->textDocument(), field);
+	new TextFormatter(doc->textDocument(), homeserver, field);
 }
 
 void callJS(QJSValue func, QList<QVariant> args)

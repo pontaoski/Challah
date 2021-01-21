@@ -1,6 +1,8 @@
 #include "copyinterceptor.hpp"
 #include "copyinterceptor_p.hpp"
 
+#include "richtexter.hpp"
+
 #include <QClipboard>
 #include <QGuiApplication>
 #include <QKeyEvent>
@@ -91,6 +93,27 @@ bool CopyInterceptor::eventFilter(QObject *object, QEvent *event)
 	}
 	return false;
 }
+
+QString CopyInterceptor::richPlaintext()
+{
+	if (!TextFormatter::s_instances.contains(parent())) {
+		return {};
+	}
+
+	auto formatter = TextFormatter::s_instances[parent()];
+	return formatter->plaintext();
+}
+
+QString CopyInterceptor::richPlaintextRange(int from, int to)
+{
+	if (!TextFormatter::s_instances.contains(parent())) {
+		return {};
+	}
+
+	auto formatter = TextFormatter::s_instances[parent()];
+	return formatter->plaintext(from, to);
+}
+
 
 void CopyInterceptor::copyText(const QString &txt)
 {

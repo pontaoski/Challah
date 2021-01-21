@@ -44,7 +44,7 @@ public:
 	Q_INVOKABLE bool createGuild(const QString& name);
 	Q_INVOKABLE bool joinGuild(const QString& inviteLink);
 	Q_INVOKABLE bool leaveGuild(const QString& homeserver, const QString& id, bool isOwner);
-	Q_INVOKABLE void bindTextDocument(QQuickTextDocument* doc, QObject* field);
+	Q_INVOKABLE void bindTextDocument(QQuickTextDocument* doc, const QString& homeserver, QObject* field);
 	Q_INVOKABLE QString transformHMCURL(const QString& url, const QString& homeserver) {
 		auto hs = homeserver;
 		if (hs.isEmpty()) {

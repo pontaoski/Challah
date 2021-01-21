@@ -23,6 +23,8 @@ public:
 	void setPaste(QJSValue val);
 
 	Q_INVOKABLE void copyText(const QString& txt);
+	Q_INVOKABLE QString richPlaintext();
+	Q_INVOKABLE QString richPlaintextRange(int from, int to);
 
 	bool eventFilter(QObject *object, QEvent *event);
 
