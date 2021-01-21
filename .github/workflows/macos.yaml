@@ -35,13 +35,13 @@ jobs:
         run: |
           export QML2_IMPORT_PATH=/usr/local/lib/qt5/qml
           qbs
-          mkdir -p ./default/Kalama.4faaf09d/Kalama.app/PlugIns/
-          cp -r /usr/local/Cellar/qt/5.15.2/plugins/platforms ./default/Kalama.4faaf09d/Kalama.app/PlugIns/
-          macdeployqt default/Kalama.4faaf09d/Kalama.app -qmldir=app/resources -dmg -verbose=3 $(find default/Kalama.4faaf09d/Kalama.app -name '*.dylib' -exec echo -n "-executable={} " \;)
+          mkdir -p ./default/Challah.81be376b/Challah.app/PlugIns/
+          cp -r /usr/local/Cellar/qt/5.15.2/plugins/platforms ./default/Challah.81be376b/Challah.app/PlugIns/
+          macdeployqt default/Challah.81be376b/Challah.app -qmldir=app/resources -dmg -verbose=3 $(find default/Challah.81be376b/Challah.app -name '*.dylib' -exec echo -n "-executable={} " \;)
 
       - name: DMG File
         uses: actions/upload-artifact@v2
         with:
           name: DMG File
           path: |
-            default/Kalama.4faaf09d/Kalama.dmg
+            default/Challah.81be376b/Challah.dmg

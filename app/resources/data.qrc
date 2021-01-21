@@ -14,7 +14,7 @@
         <file>RecursiveMenuActionComponent.qml</file>
         <file>RightDrawer.qml</file>
         <file>StaccatoDrawer.qml</file>
-        <file>KalamaSettings.qml</file>
+        <file>ChallahSettings.qml</file>
         <file>UISettings.qml</file>
         <file>ResponsiveMenu.qml</file>
         <file>ResponsiveMenuItem.qml</file>
@@ -31,6 +31,6 @@
         <file>qmldir</file>
     </qresource>
     <qresource prefix="/img">
-        <file>io.harmonyapp.Kalama.svg</file>
+        <file>io.harmonyapp.Challah.svg</file>
     </qresource>
 </RCC>

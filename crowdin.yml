@@ -1,3 +1,3 @@
 files:
-  - source: /app/po/Kalama.ts
-    translation: /app/po/Kalama_%two_letters_code%.ts
+  - source: /app/po/Challah.ts
+    translation: /app/po/Challah_%two_letters_code%.ts

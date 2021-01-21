@@ -70,7 +70,7 @@ Item {
 
 								ResponsiveMenuItem {
 									text: qsTr("Settings")
-									onTriggered: root.pageStack.layers.push(Qt.resolvedUrl("KalamaSettings.qml"), {})
+									onTriggered: root.pageStack.layers.push(Qt.resolvedUrl("ChallahSettings.qml"), {})
 								}
 								ResponsiveMenuItem {
 									text: qsTr("Log Out")

@@ -22,7 +22,7 @@ Kirigami.PageRoute {
 			anchors.centerIn: parent
 
 			Image {
-				source: "qrc:/img/io.harmonyapp.Kalama.svg"
+				source: "qrc:/img/io.harmonyapp.Challah.svg"
 				sourceSize {
 					width: Layout.preferredWidth
 					height: Layout.preferredWidth
@@ -35,7 +35,7 @@ Kirigami.PageRoute {
 			}
 
 			Kirigami.Heading {
-				text: qsTr("Welcome to Kalama")
+				text: qsTr("Welcome to Challah")
 				horizontalAlignment: Text.AlignHCenter
 
 				Layout.fillWidth: true

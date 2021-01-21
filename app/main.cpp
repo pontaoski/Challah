@@ -75,12 +75,12 @@ int main(int argc, char *argv[])
 	qtTranslator.load("qt_" + QLocale::system().name(), QLibraryInfo::location(QLibraryInfo::TranslationsPath));
 	app->installTranslator(&qtTranslator);
 
-	QTranslator kalamaTranslator;
-	kalamaTranslator.load("Kalama_" + QLocale::system().name(), ":/po/");
-	app->installTranslator(&kalamaTranslator);
+	QTranslator ChallahTranslator;
+	ChallahTranslator.load("Challah_" + QLocale::system().name(), ":/po/");
+	app->installTranslator(&ChallahTranslator);
 
-	QApplication::setWindowIcon(QIcon::fromTheme(QString("io.harmonyapp.Kalama")));
-	QApplication::setDesktopFileName("io.harmonyapp.Kalama.desktop");
+	QApplication::setWindowIcon(QIcon::fromTheme(QString("io.harmonyapp.Challah")));
+	QApplication::setDesktopFileName("io.harmonyapp.Challah.desktop");
 	QApplication::setOrganizationName("Harmony Development");
 	QApplication::setOrganizationDomain("io.harmonyapp");
 

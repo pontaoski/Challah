@@ -1,5 +1,5 @@
 QtApplication {
-	name: "Kalama"
+	name: "Challah"
 
 	protobuf.cpp.importPaths: ["protocol"]
 	protobuf.cpp.useGrpc: true
@@ -22,19 +22,19 @@ QtApplication {
 	]
 
 	Group {
-		files: ["resources/io.harmonyapp.Kalama.svg"]
+		files: ["resources/io.harmonyapp.Challah.svg"]
 		qbs.install: qbs.targetOS.contains("linux")
 		qbs.installDir: "share/icons/hicolor/scalable/apps"
 	}
 
 	Group {
-		files: ["io.harmonyapp.Kalama.appdata.xml"]
+		files: ["io.harmonyapp.Challah.appdata.xml"]
 		qbs.install: qbs.targetOS.contains("linux")
 		qbs.installDir: "share/metainfo"
 	}
 
 	Group {
-		files: ["io.harmonyapp.Kalama.desktop"]
+		files: ["io.harmonyapp.Challah.desktop"]
 		qbs.install: qbs.targetOS.contains("linux")
 		qbs.installDir: "share/applications"
 	}
