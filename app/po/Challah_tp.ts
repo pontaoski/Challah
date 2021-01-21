@@ -202,7 +202,7 @@
     <message>
       <location filename="../resources/ChallahSettings.qml" line="14"/>
       <source>Settings</source>
-      <translation type="unfinished">Settings</translation>
+      <translation>wile</translation>
     </message>
     <message>
       <location filename="../resources/ChallahSettings.qml" line="23"/>
@@ -259,7 +259,7 @@
     <message>
       <location filename="../resources/LoginRoute.qml" line="38"/>
       <source>Welcome to Challah</source>
-      <translation>o kama pona tawa ilo Challah</translation>
+      <translation type="unfinished">Welcome to Challah</translation>
     </message>
     <message>
       <location filename="../resources/LoginRoute.qml" line="44"/>
