@@ -29,8 +29,8 @@
   <context>
     <name>ComposeBar</name>
     <message>
-      <location filename="../resources/ComposeBar.qml" line="50"/>
-      <location filename="../resources/ComposeBar.qml" line="139"/>
+      <location filename="../resources/ComposeBar.qml" line="58"/>
+      <location filename="../resources/ComposeBar.qml" line="168"/>
       <source>Write a message...</source>
       <extracomment>Placeholder text for the message field</extracomment>
       <translation>Escribe...</translation>
@@ -41,8 +41,8 @@
       <translation>Error al cargar el archivo</translation>
     </message>
     <message>
-      <location filename="../resources/ComposeBar.qml" line="78"/>
-      <location filename="../resources/ComposeBar.qml" line="192"/>
+      <location filename="../resources/ComposeBar.qml" line="86"/>
+      <location filename="../resources/ComposeBar.qml" line="217"/>
       <source>Send</source>
       <extracomment>Send the message in the text field</extracomment>
       <translation>Enviar</translation>
@@ -53,13 +53,13 @@
       <translation>Predeterminado</translation>
     </message>
     <message>
-      <location filename="../resources/ComposeBar.qml" line="142"/>
+      <location filename="../resources/ComposeBar.qml" line="171"/>
       <source>You do not have permissions to send a message to this channel.</source>
       <extracomment>Placeholder text for the message field when the user isn&apos;t allowed to send a message</extracomment>
       <translation>No tiene permisos para enviar un mensaje a este canal.</translation>
     </message>
     <message>
-      <location filename="../resources/ComposeBar.qml" line="181"/>
+      <location filename="../resources/ComposeBar.qml" line="162"/>
       <source>Add attachment...</source>
       <extracomment>Send the message in the text field</extracomment>
       <translation>Agregar adjunto...</translation>
@@ -198,12 +198,63 @@
     </message>
   </context>
   <context>
+    <name>ChallahSettings</name>
+    <message>
+      <location filename="../resources/ChallahSettings.qml" line="14"/>
+      <source>Settings</source>
+      <translation>Preferencias</translation>
+    </message>
+    <message>
+      <location filename="../resources/ChallahSettings.qml" line="23"/>
+      <source>Personas</source>
+      <extracomment>Personas are alternate identities; e.g. for roleplay reasons</extracomment>
+      <translation>Identidades</translation>
+    </message>
+    <message>
+      <location filename="../resources/ChallahSettings.qml" line="25"/>
+      <source>New Persona</source>
+      <translation>Nueva Identidad</translation>
+    </message>
+    <message>
+      <location filename="../resources/ChallahSettings.qml" line="38"/>
+      <source>Persona Name:</source>
+      <translation>Nombre de la Identidad:</translation>
+    </message>
+    <message>
+      <location filename="../resources/ChallahSettings.qml" line="44"/>
+      <source>Roleplay</source>
+      <translation>Verlo del Rol</translation>
+    </message>
+    <message>
+      <location filename="../resources/ChallahSettings.qml" line="53"/>
+      <source>Persona Kind:</source>
+      <translation>Tipo de Identidad:</translation>
+    </message>
+    <message>
+      <location filename="../resources/ChallahSettings.qml" line="56"/>
+      <source>Create</source>
+      <translation>Crear</translation>
+    </message>
+  </context>
+  <context>
+    <name>LoginManager</name>
+    <message>
+      <location filename="../loginmanager.cpp" line="146"/>
+      <source>address@email.com</source>
+      <translation>dirección@correo.es</translation>
+    </message>
+    <message>
+      <location filename="../loginmanager.cpp" line="154"/>
+      <source>Submit</source>
+      <translation>Enviar</translation>
+    </message>
+  </context>
+  <context>
     <name>LoginRoute</name>
     <message>
       <location filename="../resources/LoginRoute.qml" line="17"/>
-      <location filename="../resources/LoginRoute.qml" line="64"/>
-      <source>Login</source>
-      <translation type="unfinished">Login</translation>
+      <source>Welcome</source>
+      <translation>Bienvenida</translation>
     </message>
     <message>
       <location filename="../resources/LoginRoute.qml" line="38"/>
@@ -211,37 +262,14 @@
       <translation type="unfinished">Welcome to Challah</translation>
     </message>
     <message>
-      <location filename="../resources/LoginRoute.qml" line="48"/>
-      <source>email@address.com</source>
-      <extracomment>placeholder for email</extracomment>
-      <translation type="unfinished">email@address.com</translation>
-    </message>
-    <message>
-      <location filename="../resources/LoginRoute.qml" line="50"/>
-      <source>Email:</source>
-      <translation type="unfinished">Email:</translation>
-    </message>
-    <message>
-      <location filename="../resources/LoginRoute.qml" line="56"/>
-      <source>Homeserver:</source>
-      <translation type="unfinished">Homeserver:</translation>
+      <location filename="../resources/LoginRoute.qml" line="44"/>
+      <source>Enter your homeserver to continue</source>
+      <translation>Juntate a su servidor principal para continuar</translation>
     </message>
     <message>
       <location filename="../resources/LoginRoute.qml" line="61"/>
-      <source>Password:</source>
-      <translation type="unfinished">Password:</translation>
-    </message>
-    <message>
-      <location filename="../resources/LoginRoute.qml" line="68"/>
-      <source>Logged in</source>
-      <extracomment>the user logged in successfully</extracomment>
-      <translation type="unfinished">Logged in</translation>
-    </message>
-    <message>
-      <location filename="../resources/LoginRoute.qml" line="71"/>
-      <source>Failed to log in</source>
-      <extracomment>login failed</extracomment>
-      <translation type="unfinished">Failed to log in</translation>
+      <source>Continue</source>
+      <translation>Continuar</translation>
     </message>
   </context>
   <context>
@@ -294,42 +322,15 @@
     </message>
   </context>
   <context>
-    <name>ChallahSettings</name>
-    <message>
-      <location filename="../resources/ChallahSettings.qml" line="14"/>
-      <source>Settings</source>
-      <translation type="unfinished">Settings</translation>
-    </message>
-    <message>
-      <location filename="../resources/ChallahSettings.qml" line="23"/>
-      <source>Personas</source>
-      <extracomment>Personas are alternate identities; e.g. for roleplay reasons</extracomment>
-      <translation type="unfinished">Personas</translation>
-    </message>
-    <message>
-      <location filename="../resources/ChallahSettings.qml" line="25"/>
-      <source>New Persona</source>
-      <translation type="unfinished">New Persona</translation>
-    </message>
-    <message>
-      <location filename="../resources/ChallahSettings.qml" line="38"/>
-      <source>Persona Name:</source>
-      <translation type="unfinished">Persona Name:</translation>
-    </message>
-    <message>
-      <location filename="../resources/ChallahSettings.qml" line="44"/>
-      <source>Roleplay</source>
-      <translation type="unfinished">Roleplay</translation>
-    </message>
-    <message>
-      <location filename="../resources/ChallahSettings.qml" line="53"/>
-      <source>Persona Kind:</source>
-      <translation type="unfinished">Persona Kind:</translation>
-    </message>
-    <message>
-      <location filename="../resources/ChallahSettings.qml" line="56"/>
-      <source>Create</source>
-      <translation type="unfinished">Create</translation>
+    <name>MessagesModel</name>
+    <message numerus="yes">
+      <location filename="../messages.cpp" line="210"/>
+      <source>%1 are typing...</source>
+      <comment>Lists</comment>
+      <translation type="unfinished">
+        <numerusform>%1 are typing...</numerusform>
+        <numerusform>%1 are typing...</numerusform>
+      </translation>
     </message>
   </context>
   <context>
@@ -702,6 +703,42 @@ the start of a list, for example &quot;%1, %2, and C&quot;</extracomment>
       <location filename="../resources/StaccatoDrawer.qml" line="178"/>
       <source>Channels</source>
       <translation type="unfinished">Channels</translation>
+    </message>
+  </context>
+  <context>
+    <name>Stepper</name>
+    <message>
+      <location filename="../resources/Stepper.qml" line="14"/>
+      <source>Login</source>
+      <translation type="unfinished">Login</translation>
+    </message>
+  </context>
+  <context>
+    <name>UserPopup</name>
+    <message>
+      <location filename="../resources/UserPopup.qml" line="49"/>
+      <source>Roles</source>
+      <translation type="unfinished">Roles</translation>
+    </message>
+    <message>
+      <location filename="../resources/UserPopup.qml" line="57"/>
+      <source>Give Role...</source>
+      <translation type="unfinished">Give Role...</translation>
+    </message>
+    <message>
+      <location filename="../resources/UserPopup.qml" line="85"/>
+      <source>Manage User</source>
+      <translation type="unfinished">Manage User</translation>
+    </message>
+    <message>
+      <location filename="../resources/UserPopup.qml" line="90"/>
+      <source>Kick User</source>
+      <translation type="unfinished">Kick User</translation>
+    </message>
+    <message>
+      <location filename="../resources/UserPopup.qml" line="99"/>
+      <source>Ban User</source>
+      <translation type="unfinished">Ban User</translation>
     </message>
   </context>
 </TS>
