@@ -1,3 +1,3 @@
-# Stakkato
+# Challah
 
 The friendly chat application.
