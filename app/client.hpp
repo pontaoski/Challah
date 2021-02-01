@@ -10,14 +10,7 @@
 
 #include "grpc++/grpc++.h"
 
-#include "chat/v1/chat.grpc.pb.h"
-#include "chat/v1/chat.pb.h"
-
-#include "auth/v1/auth.grpc.pb.h"
-#include "auth/v1/auth.pb.h"
-
-#include "mediaproxy/v1/mediaproxy.grpc.pb.h"
-#include "mediaproxy/v1/mediaproxy.pb.h"
+#include "protos.hpp"
 
 #include "guild.hpp"
 #include "util.hpp"
@@ -31,23 +24,19 @@ class Client : public QObject
 	static Client* mainClient;
 	static QMap<QString,Client*> clients;
 
-	std::unique_ptr<grpc::ClientReaderWriterInterface<protocol::chat::v1::StreamEventsRequest,protocol::chat::v1::Event>> eventStream;
+	std::unique_ptr<Receive__protocol_chat_v1_Event__Send__protocol_chat_v1_StreamEventsRequest__Stream> eventStream;
 
 	friend class State;
 	friend class LoginManager;
 
 public:
 	QString homeserver;
-	std::string userToken;
-	std::shared_ptr<grpc::Channel> client;
-	std::unique_ptr<protocol::chat::v1::ChatService::Stub> chatKit;
-	std::unique_ptr<protocol::auth::v1::AuthService::Stub> authKit;
-	std::unique_ptr<protocol::mediaproxy::v1::MediaProxyService::Stub> mediaProxyKit;
+	QString userToken;
+	std::unique_ptr<ChatServiceServiceClient> chatKit;
+	std::unique_ptr<AuthServiceServiceClient> authKit;
+	std::unique_ptr<MediaProxyServiceServiceClient> mediaProxyKit;
 	QSet<quint64> subscribedGuilds;
-	QMutex writeMutex;
-	bool loopRunning = false;
-	bool shouldRunLoop = true;
-	void authenticate(grpc::ClientContext& ctx);
+	bool shouldRestartStreams = true;
 
 private:
 	void federateOtherClient(Client* client, const QString& target);

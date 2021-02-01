@@ -5,6 +5,8 @@
 #include <QQuickItem>
 #include <QQmlProperty>
 
+#define theHeaders {{"Authorization", client->userToken}}
+
 auto conn = ConnHelper::connect;
 
 auto setProp(
@@ -83,17 +85,12 @@ void LoginManager::customEvent(QEvent* event)
 					QtConcurrent::run([opt, this] {
 						auto client = State::instance()->client;
 
-						ClientContext ctx;
-						client->authenticate(ctx);
-
 						protocol::auth::v1::NextStepRequest req;
 						req.set_auth_id(d->authID.toStdString());
 						req.set_allocated_choice(new protocol::auth::v1::NextStepRequest_Choice());
 						req.mutable_choice()->set_choice(opt);
 
-						protocol::auth::v1::AuthStep resp;
-
-						if (!checkStatus(client->authKit->NextStep(&ctx, req, &resp))) {
+						if (!resultOk(client->authKit->NextStep(req, theHeaders))) {
 							QCoreApplication::postEvent(this, new ErrorEvent());
 						}
 					});
@@ -163,9 +160,6 @@ void LoginManager::customEvent(QEvent* event)
 				QtConcurrent::run([items, this] {
 					auto client = State::instance()->client;
 
-					ClientContext ctx;
-					client->authenticate(ctx);
-
 					protocol::auth::v1::NextStepRequest req;
 					req.set_auth_id(d->authID.toStdString());
 					req.set_allocated_form(new protocol::auth::v1::NextStepRequest_Form);
@@ -182,7 +176,7 @@ void LoginManager::customEvent(QEvent* event)
 
 					protocol::auth::v1::AuthStep resp;
 
-					if (!checkStatus(client->authKit->NextStep(&ctx, req, &resp))) {
+					if (!resultOk(client->authKit->NextStep(req, theHeaders))) {
 						QCoreApplication::postEvent(this, new ErrorEvent());
 					}
 				});

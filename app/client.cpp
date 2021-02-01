@@ -16,6 +16,8 @@
 #include <unistd.h>
 #include "logging.hpp"
 
+#define theHeaders {{"Authentication", userToken}}
+
 using grpc::ClientContext;
 
 class LoopFinished : public QEvent {
@@ -34,22 +36,15 @@ public:
 	quint64 gid;
 };
 
-void Client::authenticate(grpc::ClientContext &ctx)
-{
-	ctx.AddMetadata("auth", userToken);
-}
-
 bool Client::refreshGuilds()
 {
-	ClientContext ctx;
-	authenticate(ctx);
-
 	auto req = protocol::chat::v1::GetGuildListRequest{};
-	protocol::chat::v1::GetGuildListResponse resp;
 
-	if (!checkStatus(chatKit->GetGuildList(&ctx, req, &resp))) {
+	auto result = chatKit->GetGuildList(req, theHeaders);
+	if (!resultOk(result)) {
 		return false;
 	}
+	auto resp = unwrap(result);
 
 	State::instance()->guildModel->guilds.clear();
 	State::instance()->guildModel->beginResetModel();
@@ -103,22 +98,19 @@ Client* Client::instanceForHomeserver(const QString& homeserver)
 
 GuildRepl Client::guildInfo(quint64 id)
 {
-	ClientContext ctx;
-	authenticate(ctx);
-
 	auto req = protocol::chat::v1::GetGuildRequest {};
 	req.set_guild_id(id);
 
-	auto repl = protocol::chat::v1::GetGuildResponse {};
-
-	if (!checkStatus(chatKit->GetGuild(&ctx, req, &repl))) {
+	auto result = chatKit->GetGuild(req, theHeaders);
+	if (!resultOk(result)) {
 		return GuildRepl{};
 	}
+	auto resp = unwrap(result);
 
 	return GuildRepl {
-		.ownerID = repl.guild_owner(),
-		.name = QString::fromStdString(repl.guild_name()),
-		.picture = QString::fromStdString(repl.guild_picture()),
+		.ownerID = resp.guild_owner(),
+		.name = QString::fromStdString(resp.guild_name()),
+		.picture = QString::fromStdString(resp.guild_picture()),
 	};
 }
 
@@ -126,34 +118,33 @@ void Client::federateOtherClient(Client* client, const QString& target)
 {
 	qCDebug(CLIENT_LIFECYCLE) << this << "Federating new client" << client << "to" << target << "from" << homeserver;
 
-	client->client = grpc::CreateChannel(target.toStdString(), grpc::SslCredentials(grpc::SslCredentialsOptions()));
 	client->homeserver = target;
-	client->chatKit = protocol::chat::v1::ChatService::NewStub(client->client);
-	client->authKit = protocol::auth::v1::AuthService::NewStub(client->client);
-	client->mediaProxyKit = protocol::mediaproxy::v1::MediaProxyService::NewStub(client->client);
-
-	ClientContext ctx;
-	authenticate(ctx);
+	client->chatKit = std::unique_ptr<ChatServiceServiceClient>(new ChatServiceServiceClient(target, true));
+	client->authKit = std::unique_ptr<AuthServiceServiceClient>(new AuthServiceServiceClient(target, true));
+	client->mediaProxyKit = std::unique_ptr<MediaProxyServiceServiceClient>(new MediaProxyServiceServiceClient(target, true));
 
 	auto req = protocol::auth::v1::FederateRequest{};
 	req.set_target(target.toStdString());
-	auto repl = protocol::auth::v1::FederateReply{};
 
-	if (!checkStatus(authKit->Federate(&ctx, req, &repl))) {
+	auto result = authKit->Federate(req, theHeaders);
+	if (!resultOk(result)) {
 		return;
 	}
 
 	ClientContext ctx2;
 
 	auto req2 = protocol::auth::v1::LoginFederatedRequest {};
-	auto repl2 = protocol::auth::v1::Session {};
+	req2.set_auth_token(unwrap(result).token());
+	req2.set_domain(homeserver.toStdString());
 
-	if (!checkStatus(client->authKit->LoginFederated(&ctx2, req2, &repl2))) {
+	auto result2 = client->authKit->LoginFederated(req2);
+	if (!resultOk(result2)) {
 		return;
 	}
+	auto resp = unwrap(result2);
 
-	client->userToken = repl2.session_token();
-	client->userID = repl2.user_id();
+	client->userToken = QString::fromStdString(resp.session_token());
+	client->userID = resp.user_id();
 
 	client->runEvents();
 }
@@ -163,63 +154,39 @@ QMap<QString,Client*> Client::clients;
 
 bool Client::createGuild(const QString &name)
 {
-	ClientContext ctx;
-	authenticate(ctx);
-
 	auto req = protocol::chat::v1::CreateGuildRequest{};
 	req.set_guild_name(name.toStdString());
 
-	auto resp = protocol::chat::v1::CreateGuildResponse{};
-
-	if (!checkStatus(chatKit->CreateGuild(&ctx, req, &resp))) {
+	auto result = chatKit->CreateGuild(req, theHeaders);
+	if (!resultOk(result)) {
 		return false;
 	}
-
-	ClientContext ctx2;
-	authenticate(ctx2);
+	auto resp = unwrap(result);
 
 	auto req2 = protocol::chat::v1::AddGuildToGuildListRequest{};
 	req2.set_guild_id(resp.guild_id());
 
-	auto resp2 = protocol::chat::v1::AddGuildToGuildListResponse{};
-
-	if (!checkStatus(chatKit->AddGuildToGuildList(&ctx2, req2, &resp2))) {
-		return false;
-	}
-
-	return true;
+	return resultOk(chatKit->AddGuildToGuildList(req2));
 }
 
 bool Client::joinInvite(const QString& invite)
 {
-	protocol::chat::v1::JoinGuildResponse resp;
-	{
-		ClientContext ctx;
-		authenticate(ctx);
+	protocol::chat::v1::JoinGuildRequest req;
+	req.set_invite_id(invite.toStdString());
 
-		protocol::chat::v1::JoinGuildRequest req;
-		req.set_invite_id(invite.toStdString());
-
-		if (!checkStatus(chatKit->JoinGuild(&ctx, req, &resp))) {
-			return false;
-		}
+	auto result = chatKit->JoinGuild(req, theHeaders);
+	if (!resultOk(result)) {
+		return false;
 	}
-	{
-		auto client = mainInstance();
+	auto resp = unwrap(result);
 
-		ClientContext ctx;
-		client->authenticate(ctx);
+	auto client = mainInstance();
 
-		protocol::chat::v1::AddGuildToGuildListRequest req;
-		req.set_guild_id(resp.guild_id());
-		req.set_homeserver(homeserver.toStdString());
+	protocol::chat::v1::AddGuildToGuildListRequest req2;
+	req2.set_guild_id(resp.guild_id());
+	req2.set_homeserver(homeserver.toStdString());
 
-		protocol::chat::v1::AddGuildToGuildListResponse resp2;
-
-		if (!checkStatus(client->chatKit->AddGuildToGuildList(&ctx, req, &resp2))) {
-			return false;
-		}
-	}
+	return resultOk(client->chatKit->AddGuildToGuildList(req2, {{"Authorization", client->userToken}}));
 
 	return true;
 }
@@ -227,55 +194,37 @@ bool Client::joinInvite(const QString& invite)
 bool Client::leaveGuild(quint64 id, bool isOwner)
 {
 	if (!isOwner) {
-		ClientContext ctx;
-		authenticate(ctx);
-
 		protocol::chat::v1::LeaveGuildRequest req;
 		req.set_guild_id(id);
-		google::protobuf::Empty resp;
 
-		if (!checkStatus(chatKit->LeaveGuild(&ctx, req, &resp))) {
+		if (!resultOk(chatKit->LeaveGuild(req, theHeaders))) {
 			return false;
 		}
 	} else {
-		ClientContext ctx;
-		authenticate(ctx);
-
 		protocol::chat::v1::DeleteGuildRequest req;
 		req.set_guild_id(id);
-		google::protobuf::Empty resp;
 
-		if (!checkStatus(chatKit->DeleteGuild(&ctx, req, &resp))) {
+		if (!resultOk(chatKit->DeleteGuild(req, theHeaders))) {
 			return false;
 		}
 	}
 
 	auto client = mainInstance();
 
-	ClientContext ctx;
-	client->authenticate(ctx);
-
 	protocol::chat::v1::RemoveGuildFromGuildListRequest req;
 	req.set_guild_id(id);
 	req.set_homeserver(homeserver.toStdString());
-	protocol::chat::v1::RemoveGuildFromGuildListResponse resp;
 
-	if (!checkStatus(client->chatKit->RemoveGuildFromGuildList(&ctx, req, &resp))) {
-		return false;
-	}
-
-	return true;
+	return resultOk(client->chatKit->RemoveGuildFromGuildList(req, {{"Authorization", client->userToken}}));
 }
 
 bool Client::forgeNewConnection()
 {
 	qCDebug(CLIENT_LIFECYCLE) << this << "Creating new gRPC channels for homeserver" << homeserver;
 
-	client = grpc::CreateChannel(homeserver.toStdString(), grpc::SslCredentials(grpc::SslCredentialsOptions()));
-
-	chatKit = protocol::chat::v1::ChatService::NewStub(client);
-	authKit = protocol::auth::v1::AuthService::NewStub(client);
-	mediaProxyKit = protocol::mediaproxy::v1::MediaProxyService::NewStub(client);
+	chatKit = std::unique_ptr<ChatServiceServiceClient>(new ChatServiceServiceClient(homeserver, true));
+	authKit = std::unique_ptr<AuthServiceServiceClient>(new AuthServiceServiceClient(homeserver, true));
+	mediaProxyKit = std::unique_ptr<MediaProxyServiceServiceClient>(new MediaProxyServiceServiceClient(homeserver, true));
 
 	return true;
 }
@@ -288,7 +237,7 @@ bool Client::consumeToken(const QString& token, quint64 userID, const QString& h
 
 	this->homeserver = homeserver;
 	this->userID = userID;
-	this->userToken = token.toStdString();
+	this->userToken = token;
 
 	forgeNewConnection();
 
@@ -303,10 +252,6 @@ bool Client::consumeToken(const QString& token, quint64 userID, const QString& h
 
 bool Client::hasPermission(const QString& node, quint64 guildID, quint64 channelID)
 {
-	ClientContext ctx;
-	authenticate(ctx);
-
-	protocol::chat::v1::QueryPermissionsResponse resp;
 	protocol::chat::v1::QueryPermissionsRequest req;
 	req.set_guild_id(guildID);
 	if (channelID != 0) {
@@ -314,11 +259,12 @@ bool Client::hasPermission(const QString& node, quint64 guildID, quint64 channel
 	}
 	req.set_check_for(node.toStdString());
 
-	if (!checkStatus(chatKit->QueryHasPermission(&ctx, req, &resp))) {
+	auto result = chatKit->QueryHasPermission(req, theHeaders);
+	if (!resultOk(result)) {
 		return false;
 	}
 
-	return resp.ok();
+	return unwrap(result).ok();
 }
 
 void Client::customEvent(QEvent *event)
@@ -326,75 +272,54 @@ void Client::customEvent(QEvent *event)
 	if (auto ev = dynamic_cast<LoopFinished*>(event)) {
 		Q_UNUSED(ev);
 
-		qCDebug(STREAM_LIFECYCLE) << "Loop finished for homeserver" << homeserver;
-		loopRunning = false;
-		if (shouldRunLoop) {
-			qCDebug(STREAM_LIFECYCLE) << "Posting start loop request for homeserver" << homeserver;
-			QCoreApplication::postEvent(this, new StartLoop());
-			qCDebug(STREAM_LIFECYCLE) << "Reposting guild subscribe requests for homeserver" << homeserver;
-			for (auto guild : subscribedGuilds) {
-				qCDebug(STREAM_LIFECYCLE) << "Reposting subscribe" << guild << homeserver;
-				QCoreApplication::postEvent(this, new Subscribe(guild));
-			}
-			subscribedGuilds.clear();
+		qCDebug(STREAM_LIFECYCLE) << "Posting start loop request for homeserver" << homeserver;
+		QCoreApplication::postEvent(this, new StartLoop());
+		qCDebug(STREAM_LIFECYCLE) << "Reposting guild subscribe requests for homeserver" << homeserver;
+		for (auto guild : subscribedGuilds) {
+			qCDebug(STREAM_LIFECYCLE) << "Reposting subscribe" << guild << homeserver;
+			QCoreApplication::postEvent(this, new Subscribe(guild));
 		}
+		subscribedGuilds.clear();
 	} else if (auto ev = dynamic_cast<StartLoop*>(event)) {
 		Q_UNUSED(ev);
 
-		qCDebug(STREAM_LIFECYCLE) << "Got a start loop request, forging new connections for homeserver" << homeserver;
-		forgeNewConnection();
 		runEvents();
 	} else if (auto ev = dynamic_cast<Subscribe*>(event)) {
 		if (subscribedGuilds.contains(ev->gid)) return;
 
-		if (loopRunning) {
+		if (eventStream->isValid()) {
+			qCDebug(STREAM_LIFECYCLE) << "Subscribing to guild" << ev->gid << "on homeserver" << homeserver;
+			subscribedGuilds << ev->gid;
 			protocol::chat::v1::StreamEventsRequest req;
 			auto subReq = new protocol::chat::v1::StreamEventsRequest_SubscribeToGuild;
 			subReq->set_guild_id(ev->gid);
 			req.set_allocated_subscribe_to_guild(subReq);
-
-			qCDebug(STREAM_LIFECYCLE) << "Subscribing to guild" << ev->gid << "on homeserver" << homeserver;
-
-			writeMutex.lock();
-			subscribedGuilds << ev->gid;
-			eventStream->Write(req, grpc::WriteOptions().set_write_through());
-			writeMutex.unlock();
-
+			eventStream->send(req);
 			qCDebug(STREAM_LIFECYCLE) << "Now subscribed to guilds" << subscribedGuilds << "on homeserver" << homeserver;
 		} else {
 			qCDebug(STREAM_LIFECYCLE) << "Got a request to subscribe to guild on homeserver" << homeserver << "but the stream is closed";
-			if (shouldRunLoop) {
-				qCDebug(STREAM_LIFECYCLE) << "Posting a start loop request and another subscribe request...";
-				QCoreApplication::postEvent(this, new StartLoop());
-				QCoreApplication::postEvent(this, new Subscribe(ev->gid));
-			}
+			qCDebug(STREAM_LIFECYCLE) << "Posting a start loop request and another subscribe request...";
+			QCoreApplication::postEvent(this, new StartLoop());
+			QCoreApplication::postEvent(this, new Subscribe(ev->gid));
 		}
 	}
 }
 
 void Client::runEvents()
 {
-	loopRunning = true;
+	qCDebug(STREAM_LIFECYCLE) << "Creating new stream for homeserver" << homeserver;
+	eventStream = std::unique_ptr<Receive__protocol_chat_v1_Event__Send__protocol_chat_v1_StreamEventsRequest__Stream>(chatKit->StreamEvents());
 
-	QtConcurrent::run([=] {
-		ClientContext ctx;
-		authenticate(ctx);
+	protocol::chat::v1::StreamEventsRequest req;
+	req.set_allocated_subscribe_to_homeserver_events(new protocol::chat::v1::StreamEventsRequest_SubscribeToHomeserverEvents);
 
-		qCDebug(STREAM_LIFECYCLE) << "Creating new stream for homeserver" << homeserver;
-		eventStream = chatKit->StreamEvents(&ctx);
+	qCDebug(STREAM_LIFECYCLE) << "Subscribing to homeserver events" << homeserver;
+	eventStream->send(req);
 
-		protocol::chat::v1::Event msg;
-
-		protocol::chat::v1::StreamEventsRequest req;
-		req.set_allocated_subscribe_to_homeserver_events(new protocol::chat::v1::StreamEventsRequest_SubscribeToHomeserverEvents);
-
-		qCDebug(STREAM_LIFECYCLE) << "Subscribing to homeserver events" << homeserver;
-		writeMutex.lock();
-		eventStream->Write(req, grpc::WriteOptions().set_write_through());
-		writeMutex.unlock();
-
-		qCDebug(STREAM_LIFECYCLE) << "Beginning loop for homeserver" << homeserver;
-		while (eventStream->Read(&msg)) {
+	connect(
+		eventStream.get(),
+		&Receive__protocol_chat_v1_Event__Send__protocol_chat_v1_StreamEventsRequest__Stream::receivedMessage,
+		[=](const protocol::chat::v1::Event& msg) {
 			if (msg.has_guild_added_to_list()) {
 				auto ev = msg.guild_added_to_list();
 
@@ -459,20 +384,28 @@ void Client::runEvents()
 				QCoreApplication::postEvent(ChannelsModel::modelFor(homeserver, ev.guild_id()), new TypingEvent(ev));
 			}
 		}
-
-		qCDebug(STREAM_LIFECYCLE) << "Finishing loop, closing thread for homeserver" << homeserver;
-		QCoreApplication::postEvent(this, new LoopFinished());
-	});
+	);
+	connect(
+		eventStream.get(),
+		&QWebSocket::disconnected,
+		[=] {
+			qCDebug(STREAM_LIFECYCLE) << "Stream finished for homeserver" << homeserver;
+			if (shouldRestartStreams) {
+				qCDebug(STREAM_LIFECYCLE) << "Posting loop finished event" << homeserver;
+				QCoreApplication::postEvent(this, new LoopFinished());
+			}
+		}
+	);
 }
 
 void Client::stopEvents()
 {
-	shouldRunLoop = false;
+	shouldRestartStreams = false;
 
 	qCDebug(STREAM_LIFECYCLE) << "Requested shutting down events for homeserver" << homeserver;
 	if (eventStream.get() != nullptr) {
 		qCDebug(STREAM_LIFECYCLE) << "Finishing shutting down events for homeserver" << homeserver;
-		eventStream->Finish();
+		eventStream->close();
 		qCDebug(STREAM_LIFECYCLE) << "Shut down events for homeserver" << homeserver;
 	}
 }
@@ -486,7 +419,7 @@ void Client::consumeSession(protocol::auth::v1::Session session, const QString& 
 {
 	qCDebug(CLIENT_LIFECYCLE) << this << "Consuming a saved session for" << homeserver;
 
-	userToken = session.session_token();
+	userToken = QString::fromStdString(session.session_token());
 	userID = session.user_id();
 
 	QSettings settings;

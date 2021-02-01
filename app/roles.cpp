@@ -1,7 +1,6 @@
 #include "roles.hpp"
 
-#include "chat/v1/chat.grpc.pb.h"
-#include "chat/v1/chat.pb.h"
+#include "protos.hpp"
 
 #include "client.hpp"
 #include "util.hpp"
@@ -9,7 +8,7 @@
 
 #include <QColor>
 
-#define doContext(c) ClientContext c; client->authenticate(c)
+#define theHeaders {{"Authorization", client->userToken}}
 
 using grpc::ClientContext;
 
@@ -23,13 +22,11 @@ RolesModel::RolesModel(QString homeserver, quint64 guildID) : QAbstractListModel
 	client = Client::instanceForHomeserver(homeServer);
 	d = new Private;
 
-	doContext(ctx);
-
 	protocol::chat::v1::GetGuildRolesRequest req;
 	req.set_guild_id(guildID);
 	protocol::chat::v1::GetGuildRolesResponse resp;
 
-	checkStatus(client->chatKit->GetGuildRoles(&ctx, req, &resp));
+	checkStatus(client->chatKit->GetGuildRoles(req, theHeaders));
 
 	auto roles = resp.roles();
 	for (auto role : roles) {
@@ -61,7 +58,7 @@ void RolesModel::moveRoleFromTo(int from, int to)
 		req.set_before_id(d->roles[to+1].role_id());
 	}
 
-	checkStatus(client->chatKit->MoveRole(&ctx, req, &resp));
+	checkStatus(client->chatKit->MoveRole(req, theHeaders));
 }
 
 int RolesModel::rowCount(const QModelIndex& parent) const
@@ -131,7 +128,7 @@ bool RolesModel::createRole(const QString& name, const QColor& colour)
 
 	protocol::chat::v1::AddGuildRoleResponse resp;
 
-	if (!checkStatus(client->chatKit->AddGuildRole(&ctx, req, &resp))) {
+	if (!checkStatus(client->chatKit->AddGuildRole(req, theHeaders))) {
 		return false;
 	}
 

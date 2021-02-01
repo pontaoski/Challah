@@ -36,7 +36,7 @@ UserRolesModel::UserRolesModel(
 
 	protocol::chat::v1::GetUserRolesResponse resp;
 
-	if (!checkStatus(d->client->chatKit->GetUserRoles(&ctx, req, &resp))) {
+	if (!checkStatus(d->client->chatKit->GetUserRoles(req, theHeaders))) {
 		d->errored = true;
 		return;
 	}
@@ -157,7 +157,7 @@ void UserRolesModel::remove(const QModelIndex& idx)
 			req.add_take_role_ids(d->userRoles[idx.row()]);
 			google::protobuf::Empty resp;
 
-			if (!checkStatus(d->client->chatKit->ManageUserRoles(&ctx, req, &resp))) {
+			if (!checkStatus(d->client->chatKit->ManageUserRoles(req, theHeaders))) {
 				return;
 			}
 
@@ -184,7 +184,7 @@ void UserRolesModel::add(const QString &role)
 			req.add_give_role_ids(id);
 			google::protobuf::Empty resp;
 
-			if (!checkStatus(d->client->chatKit->ManageUserRoles(&ctx, req, &resp))) {
+			if (!checkStatus(d->client->chatKit->ManageUserRoles(req, theHeaders))) {
 				return;
 			}
 

@@ -5,7 +5,9 @@
 #include <QQmlComponent>
 
 #include "loginmanager.hpp"
-#include "auth/v1/auth.grpc.pb.h"
+
+#include "protos.hpp"
+
 #include "util.hpp"
 #include "state.hpp"
 

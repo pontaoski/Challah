@@ -8,11 +8,11 @@
 #include <QEvent>
 #include <QJSValue>
 #include <optional>
+#include <variant>
 
 #include "client.hpp"
 
-#include "chat/v1/chat.grpc.pb.h"
-#include "chat/v1/chat.pb.h"
+#include "protos.hpp"
 
 template<int id, class T>
 class CarrierEvent : public QEvent {
@@ -66,3 +66,10 @@ T withGuildAndUserID(quint64 guildID, quint64 userID) {
 	t.set_user_id(userID);
 	return t;
 }
+
+template <typename T>
+bool resultOk(const T& t) {
+	return !std::holds_alternative<QString>(t);
+}
+
+#define unwrap(t) std::get<0>(t)

@@ -1,26 +1,29 @@
 #include "invites.hpp"
+#include "util.hpp"
 
 using grpc::ClientContext;
 
-InviteModel::InviteModel(ChannelsModel *parent, QString homeServer, quint64 guildID) : QAbstractListModel(), homeserver(homeServer), guildID(guildID)
+#define theHeaders {{"Authorization", client->userToken}}
+
+InviteModel::InviteModel(ChannelsModel *parent, QString homeServer, quint64 guildID) : QAbstractListModel(parent), homeserver(homeServer), guildID(guildID)
 {
 	client = Client::instanceForHomeserver(homeServer);
 
-	ClientContext ctx;
-	client->authenticate(ctx);
-
 	protocol::chat::v1::GetGuildInvitesRequest req;
 	req.set_guild_id(guildID);
-	protocol::chat::v1::GetGuildInvitesResponse resp;
 
-	if (checkStatus(client->chatKit->GetGuildInvites(&ctx, req, &resp))) {
-		for (auto invite : resp.invites()) {
-			invites << Invite {
-				.id = QString::fromStdString(invite.invite_id()),
-				.possibleUses = invite.possible_uses(),
-				.useCount = invite.use_count()
-			};
-		}
+	auto result = client->chatKit->GetGuildInvites(req, theHeaders);
+	if (!resultOk(result)) {
+		return;
+	}
+	auto resp = unwrap(result);
+
+	for (auto invite : resp.invites()) {
+		invites << Invite {
+			.id = QString::fromStdString(invite.invite_id()),
+			.possibleUses = invite.possible_uses(),
+			.useCount = invite.use_count()
+		};
 	}
 }
 
@@ -62,18 +65,16 @@ QHash<int,QByteArray> InviteModel::roleNames() const
 
 bool InviteModel::createInvite(const QString& id, qint32 possibleUses)
 {
-	ClientContext ctx;
-	client->authenticate(ctx);
-
 	protocol::chat::v1::CreateInviteRequest req;
 	req.set_guild_id(guildID);
 	req.set_name(id.toStdString());
 	req.set_possible_uses(possibleUses);
-	protocol::chat::v1::CreateInviteResponse resp;
 
-	if (!checkStatus(client->chatKit->CreateInvite(&ctx, req, &resp))) {
+	auto result = client->chatKit->CreateInvite(req, theHeaders);
+	if (!resultOk(result)) {
 		return false;
 	}
+	auto resp = unwrap(result);
 
 	beginInsertRows(QModelIndex(), invites.length(), invites.length());
 	invites << Invite {
@@ -88,15 +89,11 @@ bool InviteModel::createInvite(const QString& id, qint32 possibleUses)
 
 bool InviteModel::deleteInvite(const QString& id)
 {
-	ClientContext ctx;
-	client->authenticate(ctx);
-
 	protocol::chat::v1::DeleteInviteRequest req;
 	req.set_guild_id(guildID);
 	req.set_invite_id(id.toStdString());
-	google::protobuf::Empty resp;
 
-	if (!checkStatus(client->chatKit->DeleteInvite(&ctx, req, &resp))) {
+	if (!resultOk(client->chatKit->DeleteInvite(req, theHeaders))) {
 		return false;
 	}
 
