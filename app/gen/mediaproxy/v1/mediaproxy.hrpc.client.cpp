@@ -14,6 +14,7 @@ auto MediaProxyServiceServiceClient::FetchLinkMetadata(const protocol::mediaprox
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
 
+	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -49,6 +50,7 @@ auto MediaProxyServiceServiceClient::InstantView(const protocol::mediaproxy::v1:
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
 
+	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -84,6 +86,7 @@ auto MediaProxyServiceServiceClient::CanInstantView(const protocol::mediaproxy::
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
 
+	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {

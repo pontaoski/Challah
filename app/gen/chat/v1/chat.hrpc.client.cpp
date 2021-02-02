@@ -14,6 +14,7 @@ auto ChatServiceServiceClient::CreateGuild(const protocol::chat::v1::CreateGuild
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
 
+	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -49,6 +50,7 @@ auto ChatServiceServiceClient::CreateInvite(const protocol::chat::v1::CreateInvi
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
 
+	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -84,6 +86,7 @@ auto ChatServiceServiceClient::CreateChannel(const protocol::chat::v1::CreateCha
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
 
+	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -119,6 +122,7 @@ auto ChatServiceServiceClient::CreateEmotePack(const protocol::chat::v1::CreateE
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
 
+	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -154,6 +158,7 @@ auto ChatServiceServiceClient::GetGuildList(const protocol::chat::v1::GetGuildLi
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
 
+	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -189,6 +194,7 @@ auto ChatServiceServiceClient::AddGuildToGuildList(const protocol::chat::v1::Add
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
 
+	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -224,6 +230,7 @@ auto ChatServiceServiceClient::RemoveGuildFromGuildList(const protocol::chat::v1
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
 
+	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -259,6 +266,7 @@ auto ChatServiceServiceClient::GetGuild(const protocol::chat::v1::GetGuildReques
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
 
+	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -294,6 +302,7 @@ auto ChatServiceServiceClient::GetGuildInvites(const protocol::chat::v1::GetGuil
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
 
+	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -329,6 +338,7 @@ auto ChatServiceServiceClient::GetGuildMembers(const protocol::chat::v1::GetGuil
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
 
+	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -364,6 +374,7 @@ auto ChatServiceServiceClient::GetGuildChannels(const protocol::chat::v1::GetGui
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
 
+	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -399,6 +410,7 @@ auto ChatServiceServiceClient::GetChannelMessages(const protocol::chat::v1::GetC
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
 
+	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -434,6 +446,7 @@ auto ChatServiceServiceClient::GetMessage(const protocol::chat::v1::GetMessageRe
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
 
+	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -469,6 +482,7 @@ auto ChatServiceServiceClient::GetEmotePacks(const protocol::chat::v1::GetEmoteP
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
 
+	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -504,6 +518,7 @@ auto ChatServiceServiceClient::GetEmotePackEmotes(const protocol::chat::v1::GetE
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
 
+	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -539,6 +554,7 @@ auto ChatServiceServiceClient::UpdateGuildInformation(const protocol::chat::v1::
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
 
+	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -574,6 +590,7 @@ auto ChatServiceServiceClient::UpdateChannelInformation(const protocol::chat::v1
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
 
+	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -609,6 +626,7 @@ auto ChatServiceServiceClient::UpdateChannelOrder(const protocol::chat::v1::Upda
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
 
+	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -644,6 +662,7 @@ auto ChatServiceServiceClient::UpdateMessage(const protocol::chat::v1::UpdateMes
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
 
+	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -679,6 +698,7 @@ auto ChatServiceServiceClient::AddEmoteToPack(const protocol::chat::v1::AddEmote
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
 
+	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -714,6 +734,7 @@ auto ChatServiceServiceClient::DeleteGuild(const protocol::chat::v1::DeleteGuild
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
 
+	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -749,6 +770,7 @@ auto ChatServiceServiceClient::DeleteInvite(const protocol::chat::v1::DeleteInvi
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
 
+	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -784,6 +806,7 @@ auto ChatServiceServiceClient::DeleteChannel(const protocol::chat::v1::DeleteCha
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
 
+	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -819,6 +842,7 @@ auto ChatServiceServiceClient::DeleteMessage(const protocol::chat::v1::DeleteMes
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
 
+	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -854,6 +878,7 @@ auto ChatServiceServiceClient::DeleteEmoteFromPack(const protocol::chat::v1::Del
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
 
+	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -889,6 +914,7 @@ auto ChatServiceServiceClient::DeleteEmotePack(const protocol::chat::v1::DeleteE
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
 
+	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -924,6 +950,7 @@ auto ChatServiceServiceClient::DequipEmotePack(const protocol::chat::v1::DequipE
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
 
+	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -959,6 +986,7 @@ auto ChatServiceServiceClient::JoinGuild(const protocol::chat::v1::JoinGuildRequ
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
 
+	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -994,6 +1022,7 @@ auto ChatServiceServiceClient::LeaveGuild(const protocol::chat::v1::LeaveGuildRe
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
 
+	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -1029,6 +1058,7 @@ auto ChatServiceServiceClient::TriggerAction(const protocol::chat::v1::TriggerAc
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
 
+	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -1064,6 +1094,7 @@ auto ChatServiceServiceClient::SendMessage(const protocol::chat::v1::SendMessage
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
 
+	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -1099,6 +1130,7 @@ auto ChatServiceServiceClient::QueryHasPermission(const protocol::chat::v1::Quer
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
 
+	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -1134,6 +1166,7 @@ auto ChatServiceServiceClient::SetPermissions(const protocol::chat::v1::SetPermi
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
 
+	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -1169,6 +1202,7 @@ auto ChatServiceServiceClient::GetPermissions(const protocol::chat::v1::GetPermi
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
 
+	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -1204,6 +1238,7 @@ auto ChatServiceServiceClient::MoveRole(const protocol::chat::v1::MoveRoleReques
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
 
+	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -1239,6 +1274,7 @@ auto ChatServiceServiceClient::GetGuildRoles(const protocol::chat::v1::GetGuildR
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
 
+	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -1274,6 +1310,7 @@ auto ChatServiceServiceClient::AddGuildRole(const protocol::chat::v1::AddGuildRo
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
 
+	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -1309,6 +1346,7 @@ auto ChatServiceServiceClient::ModifyGuildRole(const protocol::chat::v1::ModifyG
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
 
+	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -1344,6 +1382,7 @@ auto ChatServiceServiceClient::DeleteGuildRole(const protocol::chat::v1::DeleteG
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
 
+	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -1379,6 +1418,7 @@ auto ChatServiceServiceClient::ManageUserRoles(const protocol::chat::v1::ManageU
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
 
+	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -1414,6 +1454,7 @@ auto ChatServiceServiceClient::GetUserRoles(const protocol::chat::v1::GetUserRol
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
 
+	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -1477,6 +1518,7 @@ auto ChatServiceServiceClient::GetUser(const protocol::chat::v1::GetUserRequest&
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
 
+	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -1512,6 +1554,7 @@ auto ChatServiceServiceClient::GetUserMetadata(const protocol::chat::v1::GetUser
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
 
+	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -1547,6 +1590,7 @@ auto ChatServiceServiceClient::ProfileUpdate(const protocol::chat::v1::ProfileUp
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
 
+	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -1582,6 +1626,7 @@ auto ChatServiceServiceClient::Typing(const protocol::chat::v1::TypingRequest& i
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
 
+	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -1617,6 +1662,7 @@ auto ChatServiceServiceClient::PreviewGuild(const protocol::chat::v1::PreviewGui
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
 
+	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {

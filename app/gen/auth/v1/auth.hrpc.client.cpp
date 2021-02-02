@@ -14,6 +14,7 @@ auto AuthServiceServiceClient::Federate(const protocol::auth::v1::FederateReques
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
 
+	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -49,6 +50,7 @@ auto AuthServiceServiceClient::LoginFederated(const protocol::auth::v1::LoginFed
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
 
+	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -84,6 +86,7 @@ auto AuthServiceServiceClient::Key(const google::protobuf::Empty& in, QMap<QByte
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
 
+	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -119,6 +122,7 @@ auto AuthServiceServiceClient::BeginAuth(const google::protobuf::Empty& in, QMap
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
 
+	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -154,6 +158,7 @@ auto AuthServiceServiceClient::NextStep(const protocol::auth::v1::NextStepReques
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
 
+	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -189,6 +194,7 @@ auto AuthServiceServiceClient::StepBack(const protocol::auth::v1::StepBackReques
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
 
+	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {

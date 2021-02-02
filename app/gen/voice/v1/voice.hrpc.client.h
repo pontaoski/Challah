@@ -43,10 +43,9 @@ class Receive__protocol_voice_v1_Signal__Send__protocol_voice_v1_ClientSignal__S
 class VoiceServiceServiceClient {
 	QString host;
 	bool secure;
-	QSharedPointer<QNetworkAccessManager> nam;
 	QString httpProtocol() const { return secure ? QStringLiteral("https://") : QStringLiteral("http://"); }
 	QString wsProtocol() const { return secure ? QStringLiteral("wss://") : QStringLiteral("ws://"); }
-	public: explicit VoiceServiceServiceClient(const QString& host, bool secure) : host(host), secure(secure), nam(new QNetworkAccessManager) {}
+	public: explicit VoiceServiceServiceClient(const QString& host, bool secure) : host(host), secure(secure) {}
 public:
 	template<typename T> using Result = std::variant<T, QString>;
 	[[ nodiscard ]] Receive__protocol_voice_v1_Signal__Send__protocol_voice_v1_ClientSignal__Stream* Connect(QMap<QByteArray,QString> headers = {});

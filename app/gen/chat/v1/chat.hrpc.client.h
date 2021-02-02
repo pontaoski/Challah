@@ -76,10 +76,9 @@ class Receive__protocol_chat_v1_SyncEvent__Stream : public QWebSocket {
 class ChatServiceServiceClient {
 	QString host;
 	bool secure;
-	QSharedPointer<QNetworkAccessManager> nam;
 	QString httpProtocol() const { return secure ? QStringLiteral("https://") : QStringLiteral("http://"); }
 	QString wsProtocol() const { return secure ? QStringLiteral("wss://") : QStringLiteral("ws://"); }
-	public: explicit ChatServiceServiceClient(const QString& host, bool secure) : host(host), secure(secure), nam(new QNetworkAccessManager) {}
+	public: explicit ChatServiceServiceClient(const QString& host, bool secure) : host(host), secure(secure) {}
 public:
 	template<typename T> using Result = std::variant<T, QString>;
 	[[ nodiscard ]] Result<protocol::chat::v1::CreateGuildResponse> CreateGuild(const protocol::chat::v1::CreateGuildRequest& in, QMap<QByteArray,QString> headers = {});

@@ -32,10 +32,9 @@ class Receive__protocol_auth_v1_AuthStep__Stream : public QWebSocket {
 class AuthServiceServiceClient {
 	QString host;
 	bool secure;
-	QSharedPointer<QNetworkAccessManager> nam;
 	QString httpProtocol() const { return secure ? QStringLiteral("https://") : QStringLiteral("http://"); }
 	QString wsProtocol() const { return secure ? QStringLiteral("wss://") : QStringLiteral("ws://"); }
-	public: explicit AuthServiceServiceClient(const QString& host, bool secure) : host(host), secure(secure), nam(new QNetworkAccessManager) {}
+	public: explicit AuthServiceServiceClient(const QString& host, bool secure) : host(host), secure(secure) {}
 public:
 	template<typename T> using Result = std::variant<T, QString>;
 	[[ nodiscard ]] Result<protocol::auth::v1::FederateReply> Federate(const protocol::auth::v1::FederateRequest& in, QMap<QByteArray,QString> headers = {});
