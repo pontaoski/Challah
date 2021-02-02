@@ -29,10 +29,11 @@ class Receive__protocol_voice_v1_Signal__Send__protocol_voice_v1_ClientSignal__S
 
 
 	public: bool send(const protocol::voice::v1::ClientSignal& in) {
-		QByteArray data = QByteArray::fromStdString(in.SerializeAsString());
-		if (data.length() == 0) {
+		std::string strData;
+		if (!in.SerializeToString(&strData)) {
 			return false;
 		}
+		QByteArray data = QByteArray::fromStdString(strData);
 
 		auto count = sendBinaryMessage(data);
 		return count == data.length();
@@ -48,5 +49,5 @@ class VoiceServiceServiceClient {
 	public: explicit VoiceServiceServiceClient(const QString& host, bool secure) : host(host), secure(secure), nam(new QNetworkAccessManager) {}
 public:
 	template<typename T> using Result = std::variant<T, QString>;
-	Receive__protocol_voice_v1_Signal__Send__protocol_voice_v1_ClientSignal__Stream* Connect();
+	[[ nodiscard ]] Receive__protocol_voice_v1_Signal__Send__protocol_voice_v1_ClientSignal__Stream* Connect(QMap<QByteArray,QString> headers = {});
 };

@@ -308,5 +308,5 @@ void LoginManager::beginLogin(const QString& homeserver)
 	client->homeserver = homeserver;
 	client->forgeNewConnection();
 
-	QtConcurrent::run([this] { runWork(); });
+	runWork();
 }

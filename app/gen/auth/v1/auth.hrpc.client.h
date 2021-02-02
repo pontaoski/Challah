@@ -44,5 +44,5 @@ public:
 	[[ nodiscard ]] Result<protocol::auth::v1::BeginAuthResponse> BeginAuth(const google::protobuf::Empty& in, QMap<QByteArray,QString> headers = {});
 	[[ nodiscard ]] Result<protocol::auth::v1::AuthStep> NextStep(const protocol::auth::v1::NextStepRequest& in, QMap<QByteArray,QString> headers = {});
 	[[ nodiscard ]] Result<protocol::auth::v1::AuthStep> StepBack(const protocol::auth::v1::StepBackRequest& in, QMap<QByteArray,QString> headers = {});
-// todo client <- server stream
+	[[ nodiscard ]] Receive__protocol_auth_v1_AuthStep__Stream* StreamSteps(const protocol::auth::v1::StreamStepsRequest& in, QMap<QByteArray,QString> headers = {});
 };

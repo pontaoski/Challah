@@ -1,8 +1,6 @@
 #include "invites.hpp"
 #include "util.hpp"
 
-using grpc::ClientContext;
-
 #define theHeaders {{"Authorization", client->userToken}}
 
 InviteModel::InviteModel(ChannelsModel *parent, QString homeServer, quint64 guildID) : QAbstractListModel(parent), homeserver(homeServer), guildID(guildID)

@@ -13,8 +13,7 @@
 
 #include <QtConcurrent>
 
-using grpc::ClientContext;
-#define do(ctx) ClientContext ctx; d->client->authenticate(ctx)
+#define theHeaders {{"Authorization", d->client->userToken}}
 
 UserRolesModel::UserRolesModel(
 	quint64 userID,
@@ -28,39 +27,35 @@ UserRolesModel::UserRolesModel(
 	d->userID = userID;
 	d->guildID = guildID;
 
-	do(ctx);
-
 	protocol::chat::v1::GetUserRolesRequest req;
 	req.set_user_id(userID);
 	req.set_guild_id(guildID);
 
-	protocol::chat::v1::GetUserRolesResponse resp;
-
-	if (!checkStatus(d->client->chatKit->GetUserRoles(req, theHeaders))) {
+	auto result = d->client->chatKit->GetUserRoles(req, theHeaders);
+	if (!resultOk(result)) {
 		d->errored = true;
 		return;
 	}
+	auto resp = unwrap(result);
 
 	protocol::chat::v1::GetGuildRolesRequest req2;
 	req2.set_guild_id(guildID);
 
-	protocol::chat::v1::GetGuildRolesResponse resp2;
-	do(ctx2);
-
-	if (!checkStatus(d->client->chatKit->GetGuildRoles(&ctx2, req2, &resp2))) {
+	auto result2 = d->client->chatKit->GetGuildRoles(req2, theHeaders);
+	if (!resultOk(result2)) {
 		d->errored = true;
 		return;
 	}
+	auto resp2 = unwrap(result2);
 
-	do(ctx3);
 	protocol::chat::v1::QueryPermissionsRequest req3;
 	req3.set_guild_id(guildID);
-	protocol::chat::v1::QueryPermissionsResponse resp3;
 
-	if (!checkStatus(d->client->chatKit->QueryHasPermission(&ctx3, req3, &resp3))) {
+	auto result3 = d->client->chatKit->QueryHasPermission(req3, theHeaders);
+	if (!resultOk(result3)) {
 		d->editable = false;
 	} else {
-		d->editable = resp3.ok();
+		d->editable = unwrap(result3).ok();
 	}
 
 	for (auto guildrole : resp2.roles()) {
@@ -149,15 +144,12 @@ void UserRolesModel::remove(const QModelIndex& idx)
 
 	QtConcurrent::run([this, idx] {
 		{
-			do(ctx);
-
 			protocol::chat::v1::ManageUserRolesRequest req;
 			req.set_guild_id(d->guildID);
 			req.set_user_id(d->userID);
 			req.add_take_role_ids(d->userRoles[idx.row()]);
-			google::protobuf::Empty resp;
 
-			if (!checkStatus(d->client->chatKit->ManageUserRoles(req, theHeaders))) {
+			if (!resultOk(d->client->chatKit->ManageUserRoles(req, theHeaders))) {
 				return;
 			}
 
@@ -176,15 +168,12 @@ void UserRolesModel::add(const QString &role)
 
 	QtConcurrent::run([this, id] {
 		{
-			do(ctx);
-
 			protocol::chat::v1::ManageUserRolesRequest req;
 			req.set_guild_id(d->guildID);
 			req.set_user_id(d->userID);
 			req.add_give_role_ids(id);
-			google::protobuf::Empty resp;
 
-			if (!checkStatus(d->client->chatKit->ManageUserRoles(req, theHeaders))) {
+			if (!resultOk(d->client->chatKit->ManageUserRoles(req, theHeaders))) {
 				return;
 			}
 

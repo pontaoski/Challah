@@ -11,8 +11,6 @@
 #include "util.hpp"
 #include "state.hpp"
 
-using grpc::ClientContext;
-
 class ErrorEvent : public QEvent
 {
 public:

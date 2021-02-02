@@ -9,6 +9,7 @@
 #include <QJSValue>
 #include <optional>
 #include <variant>
+#include <QDebug>
 
 #include "client.hpp"
 
@@ -43,9 +44,6 @@ struct PleaseCall {
 };
 using PleaseCallEvent = CarrierEvent<14,PleaseCall>;
 
-bool checkStatusImpl(const char* file, int line, grpc::Status status);
-#define checkStatus(in) checkStatusImpl(__FILE__, __LINE__, in)
-
 using ExecuteEvent = CarrierEvent<15,std::function<void()>>;
 void runOnMainThread(std::function<void()>);
 
@@ -67,9 +65,15 @@ T withGuildAndUserID(quint64 guildID, quint64 userID) {
 	return t;
 }
 
+#define resultOk(t) resultOkImpl(t, __FILE__, __LINE__)
+
 template <typename T>
-bool resultOk(const T& t) {
-	return !std::holds_alternative<QString>(t);
+[[nodiscard]] bool resultOkImpl(const T& t, const char* file, int line) {
+	auto result = !std::holds_alternative<QString>(t);
+	if (!result) {
+		qDebug() << "Result not OK at" << file << ":" << line << std::get<QString>(t);
+	}
+	return result;
 }
 
 #define unwrap(t) std::get<0>(t)

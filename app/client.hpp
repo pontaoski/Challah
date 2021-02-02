@@ -8,8 +8,6 @@
 #include <QAbstractListModel>
 #include <QList>
 
-#include "grpc++/grpc++.h"
-
 #include "protos.hpp"
 
 #include "guild.hpp"

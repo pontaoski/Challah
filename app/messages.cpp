@@ -8,7 +8,6 @@
 #include <QNetworkReply>
 #include <QtConcurrent>
 #include <google/protobuf/empty.pb.h>
-#include <grpcpp/impl/codegen/client_context.h>
 
 #include "channels.hpp"
 #include "chat/v1/channels.pb.h"
@@ -17,8 +16,6 @@
 #include "util.hpp"
 
 #define theHeaders {{"Authorization", client->userToken}}
-
-using grpc::ClientContext;
 
 MessagesModel::MessagesModel(ChannelsModel *parent, QString homeServer, quint64 guildID, quint64 channelID)
 	: QAbstractListModel((QObject*)parent),

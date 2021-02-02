@@ -20,8 +20,6 @@ struct PermissionsModel::Private
 	QList<protocol::chat::v1::Permission> perms;
 };
 
-using grpc::ClientContext;
-
 PermissionsModel::PermissionsModel(QString homeserver, quint64 guildID, quint64 roleID) : QAbstractListModel(), homeserver(homeserver), guildID(guildID), roleID(roleID)
 {
 	client = Client::instanceForHomeserver(homeserver);

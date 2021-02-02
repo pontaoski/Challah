@@ -23,6 +23,10 @@ QtApplication {
 		"gen/auth/v1/*.cpp",
 		"gen/mediaproxy/v1/*.cpp",
 		"gen/voice/v1/*.cpp",
+		"gen/chat/v1/*.h",
+		"gen/auth/v1/*.h",
+		"gen/mediaproxy/v1/*.h",
+		"gen/voice/v1/*.h",
 		"resources/data.qrc"
 	]
 

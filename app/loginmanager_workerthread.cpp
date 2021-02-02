@@ -18,8 +18,6 @@ void LoginManager::runWork()
 	d->authID = QString::fromStdString(resp.auth_id());
 	d->authIDMutex.unlock();
 
-	protocol::auth::v1::AuthStep step;
-
 	protocol::auth::v1::NextStepRequest req2;
 	req2.set_auth_id(d->authID.toStdString());
 	auto result2 = client->authKit->NextStep(req2, theHeaders);
@@ -34,19 +32,17 @@ void LoginManager::runWork()
 	protocol::auth::v1::StreamStepsRequest streamReq;
 	streamReq.set_auth_id(resp.auth_id());
 
-	qFatal("unimplemented");
+	auto stepStream = client->authKit->StreamSteps(streamReq, theHeaders);
+	connect(stepStream, &Receive__protocol_auth_v1_AuthStep__Stream::receivedMessage, [=](const protocol::auth::v1::AuthStep& step) {
+		qDebug() << "mu";
+		if (step.has_session()) {
+			QCoreApplication::postEvent(this, new SessionEvent(step.session()));
+			stepStream->deleteLater();
+		}
 
-	// auto stepStream = client->authKit->StreamSteps(&ctx, streamReq);
-	// stepStream->WaitForInitialMetadata();
-
-	// while (stepStream->Read(&step)) {
-	// 	if (step.has_session()) {
-	// 		QCoreApplication::postEvent(this, new SessionEvent(step.session()));
-	// 		return;
-	// 	}
-
-	// 	QCoreApplication::postEvent(this, new StepEvent(step));
-	// }
-
-	// QCoreApplication::postEvent(this, new ErrorEvent);
+		QCoreApplication::postEvent(this, new StepEvent(step));
+	});
+	connect(stepStream, &QWebSocket::disconnected, [=] {
+		stepStream->deleteLater();
+	});
 }

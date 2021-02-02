@@ -19,8 +19,6 @@
 
 #define theHeaders {{"Authorization", client->userToken}}
 
-using grpc::ClientContext;
-
 MembersModel::MembersModel(QString homeserver, quint64 guildID, ChannelsModel* model) : QAbstractListModel(), homeServer(homeserver), guildID(guildID), model(model)
 {
 	client = Client::instanceForHomeserver(homeServer);

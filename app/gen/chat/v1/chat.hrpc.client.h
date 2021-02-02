@@ -41,10 +41,11 @@ class Receive__protocol_chat_v1_Event__Send__protocol_chat_v1_StreamEventsReques
 
 
 	public: bool send(const protocol::chat::v1::StreamEventsRequest& in) {
-		QByteArray data = QByteArray::fromStdString(in.SerializeAsString());
-		if (data.length() == 0) {
+		std::string strData;
+		if (!in.SerializeToString(&strData)) {
 			return false;
 		}
+		QByteArray data = QByteArray::fromStdString(strData);
 
 		auto count = sendBinaryMessage(data);
 		return count == data.length();
@@ -122,8 +123,8 @@ public:
 	[[ nodiscard ]] Result<google::protobuf::Empty> DeleteGuildRole(const protocol::chat::v1::DeleteGuildRoleRequest& in, QMap<QByteArray,QString> headers = {});
 	[[ nodiscard ]] Result<google::protobuf::Empty> ManageUserRoles(const protocol::chat::v1::ManageUserRolesRequest& in, QMap<QByteArray,QString> headers = {});
 	[[ nodiscard ]] Result<protocol::chat::v1::GetUserRolesResponse> GetUserRoles(const protocol::chat::v1::GetUserRolesRequest& in, QMap<QByteArray,QString> headers = {});
-	Receive__protocol_chat_v1_Event__Send__protocol_chat_v1_StreamEventsRequest__Stream* StreamEvents();
-// todo client <- server stream
+	[[ nodiscard ]] Receive__protocol_chat_v1_Event__Send__protocol_chat_v1_StreamEventsRequest__Stream* StreamEvents(QMap<QByteArray,QString> headers = {});
+	[[ nodiscard ]] Receive__protocol_chat_v1_SyncEvent__Stream* Sync(const protocol::chat::v1::SyncRequest& in, QMap<QByteArray,QString> headers = {});
 	[[ nodiscard ]] Result<protocol::chat::v1::GetUserResponse> GetUser(const protocol::chat::v1::GetUserRequest& in, QMap<QByteArray,QString> headers = {});
 	[[ nodiscard ]] Result<protocol::chat::v1::GetUserMetadataResponse> GetUserMetadata(const protocol::chat::v1::GetUserMetadataRequest& in, QMap<QByteArray,QString> headers = {});
 	[[ nodiscard ]] Result<google::protobuf::Empty> ProfileUpdate(const protocol::chat::v1::ProfileUpdateRequest& in, QMap<QByteArray,QString> headers = {});

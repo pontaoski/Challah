@@ -12,13 +12,10 @@
 #include "client.hpp"
 #include "util.hpp"
 #include "channels.hpp"
-#include <grpc/impl/codegen/connectivity_state.h>
 #include <unistd.h>
 #include "logging.hpp"
 
-#define theHeaders {{"Authentication", userToken}}
-
-using grpc::ClientContext;
+#define theHeaders {{"Authorization", userToken}}
 
 class LoopFinished : public QEvent {
 public:
@@ -131,8 +128,6 @@ void Client::federateOtherClient(Client* client, const QString& target)
 		return;
 	}
 
-	ClientContext ctx2;
-
 	auto req2 = protocol::auth::v1::LoginFederatedRequest {};
 	req2.set_auth_token(unwrap(result).token());
 	req2.set_domain(homeserver.toStdString());
@@ -220,7 +215,7 @@ bool Client::leaveGuild(quint64 id, bool isOwner)
 
 bool Client::forgeNewConnection()
 {
-	qCDebug(CLIENT_LIFECYCLE) << this << "Creating new gRPC channels for homeserver" << homeserver;
+	qCDebug(CLIENT_LIFECYCLE) << this << "Creating new hRPC channels for homeserver" << homeserver;
 
 	chatKit = std::unique_ptr<ChatServiceServiceClient>(new ChatServiceServiceClient(homeserver, true));
 	authKit = std::unique_ptr<AuthServiceServiceClient>(new AuthServiceServiceClient(homeserver, true));

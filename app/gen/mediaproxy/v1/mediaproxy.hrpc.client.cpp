@@ -1,18 +1,18 @@
 #include "mediaproxy/v1/mediaproxy.hrpc.client.h"
 auto MediaProxyServiceServiceClient::FetchLinkMetadata(const protocol::mediaproxy::v1::FetchLinkMetadataRequest& in, QMap<QByteArray,QString> headers) -> MediaProxyServiceServiceClient::Result<protocol::mediaproxy::v1::SiteMetadata>
 {
-	QByteArray data = QByteArray::fromStdString(in.SerializeAsString());
-
-	if (data.length() == 0) {
-		return {QStringLiteral("failed to serialize protobuf")};
-	}
+	std::string strData;
+	if (!in.SerializeToString(&strData)) { return {QStringLiteral("failed to serialize protobuf")}; }
+	QByteArray data = QByteArray::fromStdString(strData);
 
 	QUrl serviceURL = QUrl(httpProtocol()+host);
+	serviceURL.setPath(QStringLiteral("/protocol.mediaproxy.v1.MediaProxyService/FetchLinkMetadata"));
 
 	QNetworkRequest req(serviceURL);
 	for (const auto& item : headers.keys()) {
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
+	req.setRawHeader("content-type", "application/octet-stream");
 
 	auto val = nam->post(req, data);
 
@@ -20,7 +20,7 @@ auto MediaProxyServiceServiceClient::FetchLinkMetadata(const protocol::mediaprox
 		QCoreApplication::processEvents();
 	}
 
-	if (val->error() == QNetworkReply::NoError) {
+	if (val->error() != QNetworkReply::NoError) {
 		return {QStringLiteral("network failure(%1): %2").arg(val->error()).arg(val->errorString())};
 	}
 
@@ -36,18 +36,18 @@ auto MediaProxyServiceServiceClient::FetchLinkMetadata(const protocol::mediaprox
 }
 auto MediaProxyServiceServiceClient::InstantView(const protocol::mediaproxy::v1::InstantViewRequest& in, QMap<QByteArray,QString> headers) -> MediaProxyServiceServiceClient::Result<protocol::mediaproxy::v1::InstantViewResponse>
 {
-	QByteArray data = QByteArray::fromStdString(in.SerializeAsString());
-
-	if (data.length() == 0) {
-		return {QStringLiteral("failed to serialize protobuf")};
-	}
+	std::string strData;
+	if (!in.SerializeToString(&strData)) { return {QStringLiteral("failed to serialize protobuf")}; }
+	QByteArray data = QByteArray::fromStdString(strData);
 
 	QUrl serviceURL = QUrl(httpProtocol()+host);
+	serviceURL.setPath(QStringLiteral("/protocol.mediaproxy.v1.MediaProxyService/InstantView"));
 
 	QNetworkRequest req(serviceURL);
 	for (const auto& item : headers.keys()) {
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
+	req.setRawHeader("content-type", "application/octet-stream");
 
 	auto val = nam->post(req, data);
 
@@ -55,7 +55,7 @@ auto MediaProxyServiceServiceClient::InstantView(const protocol::mediaproxy::v1:
 		QCoreApplication::processEvents();
 	}
 
-	if (val->error() == QNetworkReply::NoError) {
+	if (val->error() != QNetworkReply::NoError) {
 		return {QStringLiteral("network failure(%1): %2").arg(val->error()).arg(val->errorString())};
 	}
 
@@ -71,18 +71,18 @@ auto MediaProxyServiceServiceClient::InstantView(const protocol::mediaproxy::v1:
 }
 auto MediaProxyServiceServiceClient::CanInstantView(const protocol::mediaproxy::v1::InstantViewRequest& in, QMap<QByteArray,QString> headers) -> MediaProxyServiceServiceClient::Result<protocol::mediaproxy::v1::CanInstantViewResponse>
 {
-	QByteArray data = QByteArray::fromStdString(in.SerializeAsString());
-
-	if (data.length() == 0) {
-		return {QStringLiteral("failed to serialize protobuf")};
-	}
+	std::string strData;
+	if (!in.SerializeToString(&strData)) { return {QStringLiteral("failed to serialize protobuf")}; }
+	QByteArray data = QByteArray::fromStdString(strData);
 
 	QUrl serviceURL = QUrl(httpProtocol()+host);
+	serviceURL.setPath(QStringLiteral("/protocol.mediaproxy.v1.MediaProxyService/CanInstantView"));
 
 	QNetworkRequest req(serviceURL);
 	for (const auto& item : headers.keys()) {
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
+	req.setRawHeader("content-type", "application/octet-stream");
 
 	auto val = nam->post(req, data);
 
@@ -90,7 +90,7 @@ auto MediaProxyServiceServiceClient::CanInstantView(const protocol::mediaproxy::
 		QCoreApplication::processEvents();
 	}
 
-	if (val->error() == QNetworkReply::NoError) {
+	if (val->error() != QNetworkReply::NoError) {
 		return {QStringLiteral("network failure(%1): %2").arg(val->error()).arg(val->errorString())};
 	}
 
