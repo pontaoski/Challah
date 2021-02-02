@@ -76,4 +76,4 @@ template <typename T>
 	return result;
 }
 
-#define unwrap(t) std::get<0>(t)
+#define unwrap(t) (*(std::get_if<0>(&t)))
