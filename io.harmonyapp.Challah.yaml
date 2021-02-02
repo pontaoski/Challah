@@ -1,8 +1,8 @@
-app-id: io.harmonyapp.Kalama
+app-id: io.harmonyapp.Challah
 runtime: org.kde.Platform
 runtime-version: "5.15"
 sdk: org.kde.Sdk
-command: Kalama
+command: Challah
 finish-args:
   - --share=ipc
   - --device=dri
@@ -30,28 +30,15 @@ cleanup:
 
 modules:
 # stuff we don't modify
-  - name: grpc
-    buildsystem: cmake
+  - name: protobuf
+    buildsystem: autotools
     config-opts:
       - -DBUILD_SHARED_LIBS=on
-      - -DCARES_SHARED=on
-      - -DCARES_STATIC=off
-      - -DgRPC_BUILD_CSHARP_EXT=OFF
-      - -DgRPC_BUILD_GRPC_CSHARP_PLUGIN=OFF
-      - -DgRPC_BUILD_GRPC_NODE_PLUGIN=OFF
-      - -DgRPC_BUILD_GRPC_OBJECTIVE_C_PL=OFF
-      - -DgRPC_BUILD_GRPC_PHP_PLUGIN=OFF
-      - -DgRPC_BUILD_GRPC_PYTHON_PLUGIN=OFF
-      - -Dprotobuf_BUILD_SHARED_LIBS=on
-      - -DgRPC_BUILD_GRPC_RUBY_PLUGIN=OFF
-      - -DRE2_BUILD_TESTING=off
-      - -DgRPC_BUILD_TESTS=off
-      - -DgRPC_SSL_PROVIDER=package
-      - -DgRPC_ZLIB_PROVIDER=package
     sources:
-      - type: git
-        url: https://github.com/grpc/grpc
-        tag: v1.28.2
+      - type: archive
+        url: https://github.com/protocolbuffers/protobuf/releases/download/v3.14.0/protobuf-cpp-3.14.0.tar.gz
+        sha256: 50ec5a07c0c55d4ec536dd49021f2e194a26bfdbc531d03d1e9d4d3e27175659
+
   - name: kf5-extra-cmake-modules
     buildsystem: cmake
     builddir: true
@@ -75,16 +62,16 @@ modules:
       - type: git
         url: https://code.qt.io/qbs/qbs.git
         branch: 1.18
-        commit: 01a8b6e11986a3260e911e6a95a0d85d17467c49
+        commit: 8621465db2c7fa10eb014ef14d55ec7dd3e085a0
 # the app
-  - name: kalama
+  - name: challah
     buildsystem: simple
     post-install:
-    - cp -r release/install-root/app/bin/Kalama /app/bin/
+    - cp -r release/install-root/app/bin/Challah /app/bin/
     - cp -r release/install-root/app/share/* /app/share/
     build-commands:
       - qbs config:release modules.cpp.treatWarningsAsErrors:false installPrefix:/app -j2
     sources:
       - type: git
-        url: https://github.com/harmony-development/Kalama
+        url: https://github.com/harmony-development/Challah
         branch: main
