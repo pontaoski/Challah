@@ -289,7 +289,7 @@ void Client::customEvent(QEvent *event)
 			auto subReq = new protocol::chat::v1::StreamEventsRequest_SubscribeToGuild;
 			subReq->set_guild_id(ev->gid);
 			req.set_allocated_subscribe_to_guild(subReq);
-			eventStream->send(req);
+			qDebug() << eventStream->send(req);
 			qCDebug(STREAM_LIFECYCLE) << "Now subscribed to guilds" << subscribedGuilds << "on homeserver" << homeserver;
 		} else {
 			qCDebug(STREAM_LIFECYCLE) << "Got a request to subscribe to guild on homeserver" << homeserver << "but the stream is closed";
@@ -303,7 +303,7 @@ void Client::customEvent(QEvent *event)
 void Client::runEvents()
 {
 	qCDebug(STREAM_LIFECYCLE) << "Creating new stream for homeserver" << homeserver;
-	eventStream = std::unique_ptr<Receive__protocol_chat_v1_Event__Send__protocol_chat_v1_StreamEventsRequest__Stream>(chatKit->StreamEvents());
+	eventStream = std::unique_ptr<Receive__protocol_chat_v1_Event__Send__protocol_chat_v1_StreamEventsRequest__Stream>(chatKit->StreamEvents(theHeaders));
 
 	protocol::chat::v1::StreamEventsRequest req;
 	req.set_allocated_subscribe_to_homeserver_events(new protocol::chat::v1::StreamEventsRequest_SubscribeToHomeserverEvents);
