@@ -419,9 +419,11 @@ QString ChannelsModel::userName(quint64 id)
 		protocol::chat::v1::GetUserRequest req;
 		req.set_user_id(id);
 
-		protocol::chat::v1::GetUserResponse resp;
-
-		client->chatKit->GetUser(req, theHeaders);
+		auto result = client->chatKit->GetUser(req, theHeaders);
+		if (!resultOk(result)) {
+			return "...";
+		}
+		auto resp = unwrap(result);
 
 		users[id] = QString::fromStdString(resp.user_name());
 		avatars[id] = QString::fromStdString(resp.user_avatar());
@@ -435,9 +437,11 @@ QString ChannelsModel::avatarURL(quint64 id)
 		protocol::chat::v1::GetUserRequest req;
 		req.set_user_id(id);
 
-		protocol::chat::v1::GetUserResponse resp;
-
-		client->chatKit->GetUser(req, theHeaders);
+		auto result = client->chatKit->GetUser(req, theHeaders);
+		if (!resultOk(result)) {
+			return "";
+		}
+		auto resp = unwrap(result);
 
 		users[id] = QString::fromStdString(resp.user_name());
 		avatars[id] = QString::fromStdString(resp.user_avatar());

@@ -93,6 +93,7 @@ struct MessageData
 			.overrides = overrides,
 			.attachments = attachments,
 			.status = State::Sent,
+			.echoID = 0,
 		};
 	}
 };

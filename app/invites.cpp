@@ -27,6 +27,8 @@ InviteModel::InviteModel(ChannelsModel *parent, QString homeServer, quint64 guil
 
 int InviteModel::rowCount(const QModelIndex& parent) const
 {
+	Q_UNUSED(parent)
+
 	return invites.count();
 }
 

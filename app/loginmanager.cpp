@@ -48,7 +48,7 @@ void LoginManager::customEvent(QEvent* event)
 		auto client = State::instance()->client;
 		client->consumeSession(ev->data, client->homeserver);
 	}
-	else if (auto ev = dynamic_cast<ErrorEvent*>(event))
+	else if (dynamic_cast<ErrorEvent*>(event))
 	{
 		Q_EMIT State::instance()->loginFailure();
 	}
@@ -61,7 +61,7 @@ void LoginManager::customEvent(QEvent* event)
 
 			auto column = (QQuickItem*) d->columnLayoutComponent->create(qmlContext(this));
 
-			auto heading = (QQuickItem*) d->kirigamiHeadingComponent->createWithInitialProperties(
+			d->kirigamiHeadingComponent->createWithInitialProperties(
 				{
 					{"text", translate(choice.title())},
 					{"parent", QVariant::fromValue(column)}
@@ -70,7 +70,7 @@ void LoginManager::customEvent(QEvent* event)
 			);
 
 			for (auto& opt : choice.options()) {
-				auto button = (QQuickItem*) d->buttonComponent->createWithInitialProperties(
+				auto button = d->buttonComponent->createWithInitialProperties(
 					{
 						{"text", translate(opt)},
 						{"parent", QVariant::fromValue(column)},
@@ -211,6 +211,10 @@ void LoginManager::customEvent(QEvent* event)
 			setProp(subtitle, "Layout.fillWidth", true);
 			setProp(subtitle, "wrapMode", Qt::TextWordWrap);
 		}; break;
+		case protocol::auth::v1::AuthStep::StepCase::kSession:
+			break;
+		case protocol::auth::v1::AuthStep::StepCase::STEP_NOT_SET:
+			break;
 		}
 	}
 }
