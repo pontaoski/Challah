@@ -7,8 +7,7 @@
 #include <QAbstractListModel>
 #include <QQmlPropertyMap>
 
-#include "chat/v1/chat.grpc.pb.h"
-#include "chat/v1/chat.pb.h"
+#include "protos.hpp"
 
 #include "messages.hpp"
 #include "util.hpp"

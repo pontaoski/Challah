@@ -1,60 +1,48 @@
 #include "loginmanager.hpp"
 #include "loginmanager_p.hpp"
+#include "util.hpp"
+
+#define theHeaders {{"Authorization", client->userToken}}
 
 void LoginManager::runWork()
 {
 	auto client = State::instance()->client;
 
-	protocol::auth::v1::BeginAuthResponse beginAuth;
-
-	{
-		ClientContext ctx;
-		client->authenticate(ctx);
-
-		if (!checkStatus(client->authKit->BeginAuth(&ctx, google::protobuf::Empty{}, &beginAuth))) {
-			QCoreApplication::postEvent(this, new ErrorEvent);
-			return;
-		}
+	auto result = client->authKit->BeginAuth(google::protobuf::Empty{}, theHeaders);
+	if (!resultOk(result)) {
+		QCoreApplication::postEvent(this, new ErrorEvent);
 	}
+	auto resp = unwrap(result);
 
 	d->authIDMutex.lock();
-	d->authID = QString::fromStdString(beginAuth.auth_id());
+	d->authID = QString::fromStdString(resp.auth_id());
 	d->authIDMutex.unlock();
 
-	ClientContext ctx;
-	client->authenticate(ctx);
-
-	protocol::auth::v1::AuthStep step;
-
-	{
-		ClientContext ctx2;
-		client->authenticate(ctx2);
-
-		protocol::auth::v1::NextStepRequest req;
-		req.set_auth_id(d->authID.toStdString());
-
-		if (!checkStatus(client->authKit->NextStep(&ctx2, req, &step))) {
-			QCoreApplication::postEvent(this, new ErrorEvent);
-			return;
-		}
-
-		QCoreApplication::postEvent(this, new StepEvent(step));
+	protocol::auth::v1::NextStepRequest req2;
+	req2.set_auth_id(d->authID.toStdString());
+	auto result2 = client->authKit->NextStep(req2, theHeaders);
+	if (!resultOk(result2)) {
+		QCoreApplication::postEvent(this, new ErrorEvent);
+		return;
 	}
+	auto resp2 = unwrap(result2);
+
+	QCoreApplication::postEvent(this, new StepEvent(resp2));
 
 	protocol::auth::v1::StreamStepsRequest streamReq;
-	streamReq.set_auth_id(beginAuth.auth_id());
+	streamReq.set_auth_id(resp.auth_id());
 
-	auto stepStream = client->authKit->StreamSteps(&ctx, streamReq);
-	stepStream->WaitForInitialMetadata();
-
-	while (stepStream->Read(&step)) {
+	auto stepStream = client->authKit->StreamSteps(streamReq, theHeaders);
+	connect(stepStream, &Receive__protocol_auth_v1_AuthStep__Stream::receivedMessage, [=](const protocol::auth::v1::AuthStep& step) {
+		qDebug() << "mu";
 		if (step.has_session()) {
 			QCoreApplication::postEvent(this, new SessionEvent(step.session()));
-			return;
+			stepStream->deleteLater();
 		}
 
 		QCoreApplication::postEvent(this, new StepEvent(step));
-	}
-
-	QCoreApplication::postEvent(this, new ErrorEvent);
+	});
+	connect(stepStream, &QWebSocket::disconnected, [=] {
+		stepStream->deleteLater();
+	});
 }

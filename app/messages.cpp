@@ -8,14 +8,14 @@
 #include <QNetworkReply>
 #include <QtConcurrent>
 #include <google/protobuf/empty.pb.h>
-#include <grpcpp/impl/codegen/client_context.h>
 
 #include "channels.hpp"
 #include "chat/v1/channels.pb.h"
 #include "messages.hpp"
 #include "qcoreapplication.h"
+#include "util.hpp"
 
-using grpc::ClientContext;
+#define theHeaders {{"Authorization", client->userToken}}
 
 MessagesModel::MessagesModel(ChannelsModel *parent, QString homeServer, quint64 guildID, quint64 channelID)
 	: QAbstractListModel((QObject*)parent),
@@ -30,14 +30,12 @@ MessagesModel::MessagesModel(ChannelsModel *parent, QString homeServer, quint64 
 	permissions->insert("canDeleteOthers", client->hasPermission("messages.manage.delete", guildID));
 
 	QtConcurrent::run([=] {
-		ClientContext ctx;
-		client->authenticate(ctx);
-
 		protocol::chat::v1::GetGuildRequest req;
 		req.set_guild_id(guildID);
-		protocol::chat::v1::GetGuildResponse resp;
-		if (checkStatus(client->chatKit->GetGuild(&ctx, req, &resp))) {
-			isGuildOwner = client->userID == resp.guild_owner();
+
+		auto result = client->chatKit->GetGuild(req, theHeaders);
+		if (resultOk(result)) {
+			isGuildOwner = client->userID == unwrap(result).guild_owner();
 		}
 	});
 }
@@ -225,16 +223,11 @@ void MessagesModel::typed()
 	});
 
 	QtConcurrent::run([=]{
-		ClientContext ctx;
-		client->authenticate(ctx);
-
 		protocol::chat::v1::TypingRequest req;
 		req.set_guild_id(guildID);
 		req.set_channel_id(channelID);
 
-		google::protobuf::Empty empty;
-
-		checkStatus(client->chatKit->Typing(&ctx, req, &empty));
+		resultOk(client->chatKit->Typing(req, theHeaders));
 	});
 }
 
@@ -431,10 +424,7 @@ void MessagesModel::sendMessageFull(const QString& message, const QString &reply
 	protocol::chat::v1::SendMessageResponse empty;
 
 	QtConcurrent::run([=]() mutable {
-		ClientContext ctx;
-		client->authenticate(ctx);
-
-		client->chatKit->SendMessage(&ctx, req, &empty);
+		client->chatKit->SendMessage(req, theHeaders);
 	});
 }
 
@@ -463,12 +453,9 @@ void MessagesModel::fetchMore(const QModelIndex& parent)
 	}
 
 	QtConcurrent::run([=] {
-		ClientContext ctx;
-		client->authenticate(ctx);
-
-		protocol::chat::v1::GetChannelMessagesResponse resp;
-
-		if (checkStatus(client->chatKit->GetChannelMessages(&ctx, req, &resp))) {
+		auto result = client->chatKit->GetChannelMessages(req, theHeaders);
+		if (resultOk(result)) {
+			auto resp = unwrap(result);
 			QCoreApplication::postEvent(this, new ExecuteEvent([resp, this] {
 				if (resp.messages_size() == 0) {
 					atEnd = true;
@@ -493,9 +480,6 @@ void MessagesModel::fetchMore(const QModelIndex& parent)
 
 void MessagesModel::triggerAction(const QString& messageID, const QString &name, const QString &data)
 {
-	ClientContext ctx;
-	client->authenticate(ctx);
-
 	protocol::chat::v1::TriggerActionRequest req;
 	req.set_guild_id(guildID);
 	req.set_channel_id(channelID);
@@ -504,39 +488,30 @@ void MessagesModel::triggerAction(const QString& messageID, const QString &name,
 	if (data != QString()) {
 		req.set_action_data(data.toStdString());
 	}
-	google::protobuf::Empty resp;
 
-	checkStatus(client->chatKit->TriggerAction(&ctx, req, &resp));
+	client->chatKit->TriggerAction(req, theHeaders);
 }
 
 void MessagesModel::editMessage(const QString& id, const QString &content)
 {
-	ClientContext ctx;
-	client->authenticate(ctx);
-
 	protocol::chat::v1::UpdateMessageRequest req;
 	req.set_guild_id(guildID);
 	req.set_channel_id(channelID);
 	req.set_message_id(id.toULongLong());
 	req.set_content(content.toStdString());
 	req.set_update_content(true);
-	google::protobuf::Empty resp;
 
-	checkStatus(client->chatKit->UpdateMessage(&ctx, req, &resp));
+	client->chatKit->UpdateMessage(req, theHeaders);
 }
 
 void MessagesModel::deleteMessage(const QString& id)
 {
-	ClientContext ctx;
-	client->authenticate(ctx);
-
 	protocol::chat::v1::DeleteMessageRequest req;
 	req.set_guild_id(guildID);
 	req.set_channel_id(channelID);
 	req.set_message_id(id.toULongLong());
-	google::protobuf::Empty resp;
 
-	checkStatus(client->chatKit->DeleteMessage(&ctx, req, &resp));
+	client->chatKit->DeleteMessage(req, theHeaders);
 }
 
 QVariantMap MessagesModel::peekMessage(const QString& id)
@@ -559,16 +534,14 @@ QVariantMap MessagesModel::peekMessage(const QString& id)
 		}
 	}
 
-	ClientContext ctx;
-	client->authenticate(ctx);
-
 	protocol::chat::v1::GetMessageRequest req;
 	req.set_guild_id(guildID);
 	req.set_channel_id(channelID);
 	req.set_message_id(actualID);
 	protocol::chat::v1::GetMessageResponse resp;
 
-	if (!checkStatus(client->chatKit->GetMessage(&ctx, req, &resp))) {
+	auto result = client->chatKit->GetMessage(req, theHeaders);
+	if (!resultOk(result)) {
 		return QVariantMap();
 	}
 

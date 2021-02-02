@@ -3,12 +3,11 @@
 #include "client.hpp"
 #include "util.hpp"
 
-#include "chat/v1/chat.grpc.pb.h"
-#include "chat/v1/chat.pb.h"
+#include "protos.hpp"
 
 #include <QJSEngine>
 
-#define doContext(c) ClientContext c; client->authenticate(c)
+#define theHeaders {{"Authorization", client->userToken}}
 
 enum Roles
 {
@@ -21,21 +20,22 @@ struct PermissionsModel::Private
 	QList<protocol::chat::v1::Permission> perms;
 };
 
-using grpc::ClientContext;
-
 PermissionsModel::PermissionsModel(QString homeserver, quint64 guildID, quint64 roleID) : QAbstractListModel(), homeserver(homeserver), guildID(guildID), roleID(roleID)
 {
 	client = Client::instanceForHomeserver(homeserver);
 	d = new Private;
 
-	doContext(ctx);
-
 	protocol::chat::v1::GetPermissionsRequest req;
 	req.set_guild_id(guildID);
 	req.set_role_id(roleID);
-	protocol::chat::v1::GetPermissionsResponse resp;
 
-	checkStatus(client->chatKit->GetPermissions(&ctx, req, &resp));
+	auto result = client->chatKit->GetPermissions(req, theHeaders);
+	if (!resultOk(result)) {
+		qWarning("TODO: implement error handling");
+		isDirty = false;
+		return;
+	}
+	auto resp = unwrap(result);
 
 	auto perms = resp.perms().permissions();
 	for (auto perm : perms) {
@@ -148,10 +148,7 @@ void PermissionsModel::save()
 	}
 	req.set_allocated_perms(list);
 
-	google::protobuf::Empty resp;
-
-	doContext(ctx);
-	if (checkStatus(client->chatKit->SetPermissions(&ctx, req, &resp))) {
+	if (resultOk(client->chatKit->SetPermissions(req, theHeaders))) {
 		isDirty = false;
 		Q_EMIT isDirtyChanged();
 	}

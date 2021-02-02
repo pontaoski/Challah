@@ -12,8 +12,7 @@
 
 #include <google/protobuf/util/json_util.h>
 
-#include "chat/v1/chat.grpc.pb.h"
-#include "chat/v1/chat.pb.h"
+#include "protos.hpp"
 
 #include "client.hpp"
 #include "util.hpp"
@@ -94,6 +93,7 @@ struct MessageData
 			.overrides = overrides,
 			.attachments = attachments,
 			.status = State::Sent,
+			.echoID = 0,
 		};
 	}
 };

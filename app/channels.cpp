@@ -17,23 +17,21 @@
 #include "util.hpp"
 #include "state.hpp"
 
-#define doContext ClientContext ctx; client->authenticate(ctx)
-
-using grpc::ClientContext;
+#define theHeaders {{"Authorization", client->userToken}}
 
 MembersModel::MembersModel(QString homeserver, quint64 guildID, ChannelsModel* model) : QAbstractListModel(), homeServer(homeserver), guildID(guildID), model(model)
 {
 	client = Client::instanceForHomeserver(homeServer);
 
 	QtConcurrent::run([=] {
-		ClientContext ctx;
-		client->authenticate(ctx);
-
 		protocol::chat::v1::GetGuildMembersRequest req;
 		req.set_guild_id(guildID);
-		protocol::chat::v1::GetGuildMembersResponse resp;
 
-		checkStatus(client->chatKit->GetGuildMembers(&ctx, req, &resp));
+		auto result = client->chatKit->GetGuildMembers(req, theHeaders);
+		if (!resultOk(result)) {
+			return;
+		}
+		auto resp = unwrap(result);
 
 		beginResetModel();
 		for (auto member : resp.members()) {
@@ -121,14 +119,14 @@ ChannelsModel::ChannelsModel(QString homeServer, quint64 guildID) : QAbstractLis
 	}
 
 	QtConcurrent::run([=] {
-		ClientContext ctx;
-		client->authenticate(ctx);
-
 		protocol::chat::v1::GetGuildChannelsRequest req;
 		req.set_guild_id(guildID);
 
-		protocol::chat::v1::GetGuildChannelsResponse resp;
-		checkStatus(client->chatKit->GetGuildChannels(&ctx, req, &resp));
+		auto result = client->chatKit->GetGuildChannels(req, theHeaders);
+		if (!resultOk(result)) {
+			return;
+		}
+		auto resp = unwrap(result);
 
 		QCoreApplication::postEvent(this, new ExecuteEvent([resp, this]{
 			beginResetModel();
@@ -153,7 +151,7 @@ void ChannelsModel::moveChannelFromTo(int from, int to)
 {
 	QtConcurrent::run([=] {
 		auto fromChan = channels[from];
-		doContext;
+
 		protocol::chat::v1::UpdateChannelOrderRequest req;
 		google::protobuf::Empty resp;
 		req.set_guild_id(guildID);
@@ -168,25 +166,23 @@ void ChannelsModel::moveChannelFromTo(int from, int to)
 			req.set_next_id(channels[to+1].channelID);
 		}
 
-		checkStatus(client->chatKit->UpdateChannelOrder(&ctx, req, &resp));
+		client->chatKit->UpdateChannelOrder(req, theHeaders);
 	});
 }
 
 void ChannelsModel::grabInstantView(const QString& url, QJSValue then)
 {
 	QtConcurrent::run([url, this](QJSValue then) {
-		doContext;
-
 		protocol::mediaproxy::v1::InstantViewRequest req;
-		protocol::mediaproxy::v1::InstantViewResponse resp;
 
 		req.set_url(url.toStdString());
-		if (!checkStatus(client->mediaProxyKit->InstantView(&ctx, req, &resp))) {
+		auto result = client->mediaProxyKit->InstantView(req, theHeaders);
+
+		if (!resultOk(result)) {
 			return;
 		}
-		if (!resp.is_valid()) {
-			return;
-		}
+
+		auto resp = unwrap(result);
 
 		callJS(then, {QString::fromStdString(resp.content())});
 	}, then);
@@ -202,14 +198,16 @@ void ChannelsModel::checkCanInstantView(const QStringList& url, QJSValue then)
 			obj["from_url"] = item;
 
 			{
-				doContext;
-
 				protocol::mediaproxy::v1::InstantViewRequest req;
 				protocol::mediaproxy::v1::CanInstantViewResponse resp;
 
 				req.set_url(item.toStdString());
 
-				if (checkStatus(client->mediaProxyKit->CanInstantView(&ctx, req, &resp))) {
+				auto result = client->mediaProxyKit->CanInstantView(req, theHeaders);
+
+				if (resultOk(result)) {
+					auto resp = unwrap(result);
+
 					obj["instant_view_ok"] = resp.can_instant_view();
 					canInstantView = resp.can_instant_view();
 				} else {
@@ -217,20 +215,21 @@ void ChannelsModel::checkCanInstantView(const QStringList& url, QJSValue then)
 				}
 			}
 			{
-				doContext;
-
 				protocol::mediaproxy::v1::FetchLinkMetadataRequest req;
 				protocol::mediaproxy::v1::SiteMetadata resp;
 
 				req.set_url(item.toStdString());
 
-				checkStatus(client->mediaProxyKit->FetchLinkMetadata(&ctx, req, &resp));
+				auto result = client->mediaProxyKit->FetchLinkMetadata(req, theHeaders);
+				if (resultOk(result)) {
+					auto resp = unwrap(result);
 
-				obj["page_title"] = QString::fromStdString(resp.page_title());
-				obj["site_title"] = QString::fromStdString(resp.site_title());
-				obj["description"] = QString::fromStdString(resp.description());
-				obj["preview_image"] = QString::fromStdString(resp.image());
-				obj["url"] = QString::fromStdString(resp.url());
+					obj["page_title"] = QString::fromStdString(resp.page_title());
+					obj["site_title"] = QString::fromStdString(resp.site_title());
+					obj["description"] = QString::fromStdString(resp.description());
+					obj["preview_image"] = QString::fromStdString(resp.image());
+					obj["url"] = QString::fromStdString(resp.url());
+				}
 			}
 
 			list << obj;
@@ -336,8 +335,7 @@ void ChannelsModel::setGuildPicture(const QString& url)
 
 		google::protobuf::Empty resp;
 
-		doContext;
-		checkStatus(client->chatKit->UpdateGuildInformation(&ctx, req, &resp));
+		client->chatKit->UpdateGuildInformation(req, theHeaders);
 	});
 }
 
@@ -379,22 +377,18 @@ QHash<int, QByteArray> ChannelsModel::roleNames() const
 void ChannelsModel::deleteChannel(const QString& channel)
 {
 	QtConcurrent::run([=] {
-		doContext;
-
 		protocol::chat::v1::DeleteChannelRequest req;
 		req.set_guild_id(this->guildID);
 		req.set_channel_id(channel.toULongLong());
 
 		google::protobuf::Empty resp;
-		checkStatus(client->chatKit->DeleteChannel(&ctx, req, &resp));
+		client->chatKit->DeleteChannel(req, theHeaders);
 	});
 }
 
 void ChannelsModel::createChannel(const QString& name, QJSValue then, QJSValue elseDo)
 {
 	QtConcurrent::run([=] {
-		doContext;
-
 		quint64 last = 0;
 
 		for (auto channel : channels) {
@@ -411,7 +405,7 @@ void ChannelsModel::createChannel(const QString& name, QJSValue then, QJSValue e
 
 		protocol::chat::v1::CreateChannelResponse resp;
 
-		if (checkStatus(client->chatKit->CreateChannel(&ctx, req, &resp))) {
+		if (resultOk(client->chatKit->CreateChannel(req, theHeaders))) {
 			callJS(then, {});
 		} else {
 			callJS(elseDo, {});
@@ -422,14 +416,14 @@ void ChannelsModel::createChannel(const QString& name, QJSValue then, QJSValue e
 QString ChannelsModel::userName(quint64 id)
 {
 	if (!users.contains(id)) {
-		doContext;
-
 		protocol::chat::v1::GetUserRequest req;
 		req.set_user_id(id);
 
-		protocol::chat::v1::GetUserResponse resp;
-
-		checkStatus(client->chatKit->GetUser(&ctx, req, &resp));
+		auto result = client->chatKit->GetUser(req, theHeaders);
+		if (!resultOk(result)) {
+			return "...";
+		}
+		auto resp = unwrap(result);
 
 		users[id] = QString::fromStdString(resp.user_name());
 		avatars[id] = QString::fromStdString(resp.user_avatar());
@@ -440,14 +434,14 @@ QString ChannelsModel::userName(quint64 id)
 QString ChannelsModel::avatarURL(quint64 id)
 {
 	if (!users.contains(id)) {
-		doContext;
-
 		protocol::chat::v1::GetUserRequest req;
 		req.set_user_id(id);
 
-		protocol::chat::v1::GetUserResponse resp;
-
-		checkStatus(client->chatKit->GetUser(&ctx, req, &resp));
+		auto result = client->chatKit->GetUser(req, theHeaders);
+		if (!resultOk(result)) {
+			return "";
+		}
+		auto resp = unwrap(result);
 
 		users[id] = QString::fromStdString(resp.user_name());
 		avatars[id] = QString::fromStdString(resp.user_avatar());
@@ -485,7 +479,7 @@ void ChannelsModel::uploadFile(const QUrl& url, QJSValue then, QJSValue elseDo, 
 
 	QUrl reqUrl("https://" + homeServer + "/_harmony/media/upload?" + query.query());
 	QNetworkRequest req(reqUrl);
-	req.setRawHeader(QByteArrayLiteral("Authorization"), QString::fromStdString(client->userToken).toLocal8Bit());
+	req.setRawHeader(QByteArrayLiteral("Authorization"), client->userToken.toLocal8Bit());
 
 	auto reply = nam->post(req, mp);
 

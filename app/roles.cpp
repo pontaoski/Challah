@@ -1,7 +1,6 @@
 #include "roles.hpp"
 
-#include "chat/v1/chat.grpc.pb.h"
-#include "chat/v1/chat.pb.h"
+#include "protos.hpp"
 
 #include "client.hpp"
 #include "util.hpp"
@@ -9,9 +8,7 @@
 
 #include <QColor>
 
-#define doContext(c) ClientContext c; client->authenticate(c)
-
-using grpc::ClientContext;
+#define theHeaders {{"Authorization", client->userToken}}
 
 struct RolesModel::Private
 {
@@ -23,13 +20,14 @@ RolesModel::RolesModel(QString homeserver, quint64 guildID) : QAbstractListModel
 	client = Client::instanceForHomeserver(homeServer);
 	d = new Private;
 
-	doContext(ctx);
-
 	protocol::chat::v1::GetGuildRolesRequest req;
 	req.set_guild_id(guildID);
-	protocol::chat::v1::GetGuildRolesResponse resp;
 
-	checkStatus(client->chatKit->GetGuildRoles(&ctx, req, &resp));
+	auto result = client->chatKit->GetGuildRoles(req, theHeaders);
+	if (!resultOk(result)) {
+		return;
+	}
+	auto resp = unwrap(result);
 
 	auto roles = resp.roles();
 	for (auto role : roles) {
@@ -45,12 +43,9 @@ void RolesModel::moveRoleFromTo(int from, int to)
 {
 	auto fromRole = d->roles[from];
 
-	doContext(ctx);
-
 	protocol::chat::v1::MoveRoleRequest req;
 	req.set_guild_id(guildID);
 	req.set_role_id(fromRole.role_id());
-	protocol::chat::v1::MoveRoleResponse resp;
 
 	if (to == 0) {
 		req.set_before_id(d->roles[0].role_id());
@@ -61,7 +56,7 @@ void RolesModel::moveRoleFromTo(int from, int to)
 		req.set_before_id(d->roles[to+1].role_id());
 	}
 
-	checkStatus(client->chatKit->MoveRole(&ctx, req, &resp));
+	client->chatKit->MoveRole(req, theHeaders);
 }
 
 int RolesModel::rowCount(const QModelIndex& parent) const
@@ -103,16 +98,13 @@ bool RolesModel::setData(const QModelIndex& index, const QVariant& value, int ro
 	{
 	case NameRole:
 		{
-			doContext(ctx);
-
 			protocol::chat::v1::ModifyGuildRoleRequest req;
 			req.set_guild_id(guildID);
 			req.set_allocated_role(new protocol::chat::v1::Role);
 			req.set_modify_name(true);
 			req.mutable_role()->set_name(value.toString().toStdString());
-			google::protobuf::Empty empty;
 
-			return checkStatus(client->chatKit->ModifyGuildRole(&ctx, req, &empty));
+			return resultOk(client->chatKit->ModifyGuildRole(req));
 		}
 	}
 
@@ -121,19 +113,17 @@ bool RolesModel::setData(const QModelIndex& index, const QVariant& value, int ro
 
 bool RolesModel::createRole(const QString& name, const QColor& colour)
 {
-	doContext(ctx);
-
 	protocol::chat::v1::AddGuildRoleRequest req;
 	req.set_guild_id(guildID);
 	req.set_allocated_role(new protocol::chat::v1::Role);
 	req.mutable_role()->set_name(name.toStdString());
 	req.mutable_role()->set_color(colour.rgba());
 
-	protocol::chat::v1::AddGuildRoleResponse resp;
-
-	if (!checkStatus(client->chatKit->AddGuildRole(&ctx, req, &resp))) {
+	auto result = client->chatKit->AddGuildRole(req, theHeaders);
+	if (!resultOk(result)) {
 		return false;
 	}
+	auto resp = unwrap(result);
 
 	beginInsertRows(QModelIndex(), d->roles.length(), d->roles.length());
 	req.mutable_role()->set_role_id(resp.role_id());

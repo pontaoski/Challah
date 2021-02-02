@@ -177,6 +177,8 @@ public:
 			kind = Move; break;
 		case Qt::TouchPointReleased:
 			kind = Up; break;
+		default:
+			break;
 		}
 		if (kind == -1) {
 			event->ignore();

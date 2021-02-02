@@ -5,6 +5,8 @@
 #include <QQuickItem>
 #include <QQmlProperty>
 
+#define theHeaders {{"Authorization", client->userToken}}
+
 auto conn = ConnHelper::connect;
 
 auto setProp(
@@ -46,7 +48,7 @@ void LoginManager::customEvent(QEvent* event)
 		auto client = State::instance()->client;
 		client->consumeSession(ev->data, client->homeserver);
 	}
-	else if (auto ev = dynamic_cast<ErrorEvent*>(event))
+	else if (dynamic_cast<ErrorEvent*>(event))
 	{
 		Q_EMIT State::instance()->loginFailure();
 	}
@@ -59,7 +61,7 @@ void LoginManager::customEvent(QEvent* event)
 
 			auto column = (QQuickItem*) d->columnLayoutComponent->create(qmlContext(this));
 
-			auto heading = (QQuickItem*) d->kirigamiHeadingComponent->createWithInitialProperties(
+			d->kirigamiHeadingComponent->createWithInitialProperties(
 				{
 					{"text", translate(choice.title())},
 					{"parent", QVariant::fromValue(column)}
@@ -68,7 +70,7 @@ void LoginManager::customEvent(QEvent* event)
 			);
 
 			for (auto& opt : choice.options()) {
-				auto button = (QQuickItem*) d->buttonComponent->createWithInitialProperties(
+				auto button = d->buttonComponent->createWithInitialProperties(
 					{
 						{"text", translate(opt)},
 						{"parent", QVariant::fromValue(column)},
@@ -83,17 +85,12 @@ void LoginManager::customEvent(QEvent* event)
 					QtConcurrent::run([opt, this] {
 						auto client = State::instance()->client;
 
-						ClientContext ctx;
-						client->authenticate(ctx);
-
 						protocol::auth::v1::NextStepRequest req;
 						req.set_auth_id(d->authID.toStdString());
 						req.set_allocated_choice(new protocol::auth::v1::NextStepRequest_Choice());
 						req.mutable_choice()->set_choice(opt);
 
-						protocol::auth::v1::AuthStep resp;
-
-						if (!checkStatus(client->authKit->NextStep(&ctx, req, &resp))) {
+						if (!resultOk(client->authKit->NextStep(req, theHeaders))) {
 							QCoreApplication::postEvent(this, new ErrorEvent());
 						}
 					});
@@ -163,9 +160,6 @@ void LoginManager::customEvent(QEvent* event)
 				QtConcurrent::run([items, this] {
 					auto client = State::instance()->client;
 
-					ClientContext ctx;
-					client->authenticate(ctx);
-
 					protocol::auth::v1::NextStepRequest req;
 					req.set_auth_id(d->authID.toStdString());
 					req.set_allocated_form(new protocol::auth::v1::NextStepRequest_Form);
@@ -182,7 +176,7 @@ void LoginManager::customEvent(QEvent* event)
 
 					protocol::auth::v1::AuthStep resp;
 
-					if (!checkStatus(client->authKit->NextStep(&ctx, req, &resp))) {
+					if (!resultOk(client->authKit->NextStep(req, theHeaders))) {
 						QCoreApplication::postEvent(this, new ErrorEvent());
 					}
 				});
@@ -217,6 +211,10 @@ void LoginManager::customEvent(QEvent* event)
 			setProp(subtitle, "Layout.fillWidth", true);
 			setProp(subtitle, "wrapMode", Qt::TextWordWrap);
 		}; break;
+		case protocol::auth::v1::AuthStep::StepCase::kSession:
+			break;
+		case protocol::auth::v1::AuthStep::StepCase::STEP_NOT_SET:
+			break;
 		}
 	}
 }
@@ -314,5 +312,5 @@ void LoginManager::beginLogin(const QString& homeserver)
 	client->homeserver = homeserver;
 	client->forgeNewConnection();
 
-	QtConcurrent::run([this] { runWork(); });
+	runWork();
 }
