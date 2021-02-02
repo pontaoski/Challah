@@ -21,5 +21,5 @@ jobs:
         key: ${{ runner.os }}-${{ hashFiles('**/lockfiles') }}
     - uses: bilelmoussaoui/flatpak-github-actions@v2
       with:
-        bundle: "kalama.flatpak"
-        manifest-path: "io.harmonyapp.Kalama.yaml"
+        bundle: "challah.flatpak"
+        manifest-path: "io.harmonyapp.Challah.yaml"
