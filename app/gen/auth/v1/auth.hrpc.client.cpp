@@ -1,9 +1,31 @@
 #include "auth/v1/auth.hrpc.client.h"
+#include "QThreadStorage"
+namespace {
+QThreadStorage<QNetworkAccessManager*> globalNam;
+void initialiseGlobalNam(bool secure, const QString& host) {
+	if (globalNam.hasLocalData()) {
+		return;
+	}
+
+	auto split = host.split(":");
+	auto hname = split[0];
+	auto port = split[1].toInt();
+	
+	globalNam.setLocalData(new QNetworkAccessManager);
+	if (secure) {
+		globalNam.localData()->connectToHostEncrypted(hname, port);
+	} else {
+		globalNam.localData()->connectToHost(hname, port);
+	}
+}
+}
 auto AuthServiceServiceClient::Federate(const protocol::auth::v1::FederateRequest& in, QMap<QByteArray,QString> headers) -> AuthServiceServiceClient::Result<protocol::auth::v1::FederateReply>
 {
 	std::string strData;
 	if (!in.SerializeToString(&strData)) { return {QStringLiteral("failed to serialize protobuf")}; }
 	QByteArray data = QByteArray::fromStdString(strData);
+
+	initialiseGlobalNam(secure, host);
 
 	QUrl serviceURL = QUrl(httpProtocol()+host);
 	serviceURL.setPath(QStringLiteral("/protocol.auth.v1.AuthService/Federate"));
@@ -13,8 +35,9 @@ auto AuthServiceServiceClient::Federate(const protocol::auth::v1::FederateReques
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
+	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
-	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
+	auto nam = globalNam.localData();
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -41,6 +64,8 @@ auto AuthServiceServiceClient::LoginFederated(const protocol::auth::v1::LoginFed
 	if (!in.SerializeToString(&strData)) { return {QStringLiteral("failed to serialize protobuf")}; }
 	QByteArray data = QByteArray::fromStdString(strData);
 
+	initialiseGlobalNam(secure, host);
+
 	QUrl serviceURL = QUrl(httpProtocol()+host);
 	serviceURL.setPath(QStringLiteral("/protocol.auth.v1.AuthService/LoginFederated"));
 
@@ -49,8 +74,9 @@ auto AuthServiceServiceClient::LoginFederated(const protocol::auth::v1::LoginFed
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
+	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
-	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
+	auto nam = globalNam.localData();
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -77,6 +103,8 @@ auto AuthServiceServiceClient::Key(const google::protobuf::Empty& in, QMap<QByte
 	if (!in.SerializeToString(&strData)) { return {QStringLiteral("failed to serialize protobuf")}; }
 	QByteArray data = QByteArray::fromStdString(strData);
 
+	initialiseGlobalNam(secure, host);
+
 	QUrl serviceURL = QUrl(httpProtocol()+host);
 	serviceURL.setPath(QStringLiteral("/protocol.auth.v1.AuthService/Key"));
 
@@ -85,8 +113,9 @@ auto AuthServiceServiceClient::Key(const google::protobuf::Empty& in, QMap<QByte
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
+	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
-	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
+	auto nam = globalNam.localData();
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -113,6 +142,8 @@ auto AuthServiceServiceClient::BeginAuth(const google::protobuf::Empty& in, QMap
 	if (!in.SerializeToString(&strData)) { return {QStringLiteral("failed to serialize protobuf")}; }
 	QByteArray data = QByteArray::fromStdString(strData);
 
+	initialiseGlobalNam(secure, host);
+
 	QUrl serviceURL = QUrl(httpProtocol()+host);
 	serviceURL.setPath(QStringLiteral("/protocol.auth.v1.AuthService/BeginAuth"));
 
@@ -121,8 +152,9 @@ auto AuthServiceServiceClient::BeginAuth(const google::protobuf::Empty& in, QMap
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
+	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
-	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
+	auto nam = globalNam.localData();
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -149,6 +181,8 @@ auto AuthServiceServiceClient::NextStep(const protocol::auth::v1::NextStepReques
 	if (!in.SerializeToString(&strData)) { return {QStringLiteral("failed to serialize protobuf")}; }
 	QByteArray data = QByteArray::fromStdString(strData);
 
+	initialiseGlobalNam(secure, host);
+
 	QUrl serviceURL = QUrl(httpProtocol()+host);
 	serviceURL.setPath(QStringLiteral("/protocol.auth.v1.AuthService/NextStep"));
 
@@ -157,8 +191,9 @@ auto AuthServiceServiceClient::NextStep(const protocol::auth::v1::NextStepReques
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
+	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
-	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
+	auto nam = globalNam.localData();
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -185,6 +220,8 @@ auto AuthServiceServiceClient::StepBack(const protocol::auth::v1::StepBackReques
 	if (!in.SerializeToString(&strData)) { return {QStringLiteral("failed to serialize protobuf")}; }
 	QByteArray data = QByteArray::fromStdString(strData);
 
+	initialiseGlobalNam(secure, host);
+
 	QUrl serviceURL = QUrl(httpProtocol()+host);
 	serviceURL.setPath(QStringLiteral("/protocol.auth.v1.AuthService/StepBack"));
 
@@ -193,8 +230,9 @@ auto AuthServiceServiceClient::StepBack(const protocol::auth::v1::StepBackReques
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
+	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
-	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
+	auto nam = globalNam.localData();
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {

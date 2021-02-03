@@ -1,9 +1,31 @@
 #include "chat/v1/chat.hrpc.client.h"
+#include "QThreadStorage"
+namespace {
+QThreadStorage<QNetworkAccessManager*> globalNam;
+void initialiseGlobalNam(bool secure, const QString& host) {
+	if (globalNam.hasLocalData()) {
+		return;
+	}
+
+	auto split = host.split(":");
+	auto hname = split[0];
+	auto port = split[1].toInt();
+	
+	globalNam.setLocalData(new QNetworkAccessManager);
+	if (secure) {
+		globalNam.localData()->connectToHostEncrypted(hname, port);
+	} else {
+		globalNam.localData()->connectToHost(hname, port);
+	}
+}
+}
 auto ChatServiceServiceClient::CreateGuild(const protocol::chat::v1::CreateGuildRequest& in, QMap<QByteArray,QString> headers) -> ChatServiceServiceClient::Result<protocol::chat::v1::CreateGuildResponse>
 {
 	std::string strData;
 	if (!in.SerializeToString(&strData)) { return {QStringLiteral("failed to serialize protobuf")}; }
 	QByteArray data = QByteArray::fromStdString(strData);
+
+	initialiseGlobalNam(secure, host);
 
 	QUrl serviceURL = QUrl(httpProtocol()+host);
 	serviceURL.setPath(QStringLiteral("/protocol.chat.v1.ChatService/CreateGuild"));
@@ -13,8 +35,9 @@ auto ChatServiceServiceClient::CreateGuild(const protocol::chat::v1::CreateGuild
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
+	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
-	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
+	auto nam = globalNam.localData();
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -41,6 +64,8 @@ auto ChatServiceServiceClient::CreateInvite(const protocol::chat::v1::CreateInvi
 	if (!in.SerializeToString(&strData)) { return {QStringLiteral("failed to serialize protobuf")}; }
 	QByteArray data = QByteArray::fromStdString(strData);
 
+	initialiseGlobalNam(secure, host);
+
 	QUrl serviceURL = QUrl(httpProtocol()+host);
 	serviceURL.setPath(QStringLiteral("/protocol.chat.v1.ChatService/CreateInvite"));
 
@@ -49,8 +74,9 @@ auto ChatServiceServiceClient::CreateInvite(const protocol::chat::v1::CreateInvi
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
+	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
-	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
+	auto nam = globalNam.localData();
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -77,6 +103,8 @@ auto ChatServiceServiceClient::CreateChannel(const protocol::chat::v1::CreateCha
 	if (!in.SerializeToString(&strData)) { return {QStringLiteral("failed to serialize protobuf")}; }
 	QByteArray data = QByteArray::fromStdString(strData);
 
+	initialiseGlobalNam(secure, host);
+
 	QUrl serviceURL = QUrl(httpProtocol()+host);
 	serviceURL.setPath(QStringLiteral("/protocol.chat.v1.ChatService/CreateChannel"));
 
@@ -85,8 +113,9 @@ auto ChatServiceServiceClient::CreateChannel(const protocol::chat::v1::CreateCha
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
+	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
-	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
+	auto nam = globalNam.localData();
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -113,6 +142,8 @@ auto ChatServiceServiceClient::CreateEmotePack(const protocol::chat::v1::CreateE
 	if (!in.SerializeToString(&strData)) { return {QStringLiteral("failed to serialize protobuf")}; }
 	QByteArray data = QByteArray::fromStdString(strData);
 
+	initialiseGlobalNam(secure, host);
+
 	QUrl serviceURL = QUrl(httpProtocol()+host);
 	serviceURL.setPath(QStringLiteral("/protocol.chat.v1.ChatService/CreateEmotePack"));
 
@@ -121,8 +152,9 @@ auto ChatServiceServiceClient::CreateEmotePack(const protocol::chat::v1::CreateE
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
+	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
-	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
+	auto nam = globalNam.localData();
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -149,6 +181,8 @@ auto ChatServiceServiceClient::GetGuildList(const protocol::chat::v1::GetGuildLi
 	if (!in.SerializeToString(&strData)) { return {QStringLiteral("failed to serialize protobuf")}; }
 	QByteArray data = QByteArray::fromStdString(strData);
 
+	initialiseGlobalNam(secure, host);
+
 	QUrl serviceURL = QUrl(httpProtocol()+host);
 	serviceURL.setPath(QStringLiteral("/protocol.chat.v1.ChatService/GetGuildList"));
 
@@ -157,8 +191,9 @@ auto ChatServiceServiceClient::GetGuildList(const protocol::chat::v1::GetGuildLi
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
+	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
-	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
+	auto nam = globalNam.localData();
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -185,6 +220,8 @@ auto ChatServiceServiceClient::AddGuildToGuildList(const protocol::chat::v1::Add
 	if (!in.SerializeToString(&strData)) { return {QStringLiteral("failed to serialize protobuf")}; }
 	QByteArray data = QByteArray::fromStdString(strData);
 
+	initialiseGlobalNam(secure, host);
+
 	QUrl serviceURL = QUrl(httpProtocol()+host);
 	serviceURL.setPath(QStringLiteral("/protocol.chat.v1.ChatService/AddGuildToGuildList"));
 
@@ -193,8 +230,9 @@ auto ChatServiceServiceClient::AddGuildToGuildList(const protocol::chat::v1::Add
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
+	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
-	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
+	auto nam = globalNam.localData();
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -221,6 +259,8 @@ auto ChatServiceServiceClient::RemoveGuildFromGuildList(const protocol::chat::v1
 	if (!in.SerializeToString(&strData)) { return {QStringLiteral("failed to serialize protobuf")}; }
 	QByteArray data = QByteArray::fromStdString(strData);
 
+	initialiseGlobalNam(secure, host);
+
 	QUrl serviceURL = QUrl(httpProtocol()+host);
 	serviceURL.setPath(QStringLiteral("/protocol.chat.v1.ChatService/RemoveGuildFromGuildList"));
 
@@ -229,8 +269,9 @@ auto ChatServiceServiceClient::RemoveGuildFromGuildList(const protocol::chat::v1
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
+	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
-	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
+	auto nam = globalNam.localData();
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -257,6 +298,8 @@ auto ChatServiceServiceClient::GetGuild(const protocol::chat::v1::GetGuildReques
 	if (!in.SerializeToString(&strData)) { return {QStringLiteral("failed to serialize protobuf")}; }
 	QByteArray data = QByteArray::fromStdString(strData);
 
+	initialiseGlobalNam(secure, host);
+
 	QUrl serviceURL = QUrl(httpProtocol()+host);
 	serviceURL.setPath(QStringLiteral("/protocol.chat.v1.ChatService/GetGuild"));
 
@@ -265,8 +308,9 @@ auto ChatServiceServiceClient::GetGuild(const protocol::chat::v1::GetGuildReques
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
+	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
-	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
+	auto nam = globalNam.localData();
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -293,6 +337,8 @@ auto ChatServiceServiceClient::GetGuildInvites(const protocol::chat::v1::GetGuil
 	if (!in.SerializeToString(&strData)) { return {QStringLiteral("failed to serialize protobuf")}; }
 	QByteArray data = QByteArray::fromStdString(strData);
 
+	initialiseGlobalNam(secure, host);
+
 	QUrl serviceURL = QUrl(httpProtocol()+host);
 	serviceURL.setPath(QStringLiteral("/protocol.chat.v1.ChatService/GetGuildInvites"));
 
@@ -301,8 +347,9 @@ auto ChatServiceServiceClient::GetGuildInvites(const protocol::chat::v1::GetGuil
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
+	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
-	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
+	auto nam = globalNam.localData();
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -329,6 +376,8 @@ auto ChatServiceServiceClient::GetGuildMembers(const protocol::chat::v1::GetGuil
 	if (!in.SerializeToString(&strData)) { return {QStringLiteral("failed to serialize protobuf")}; }
 	QByteArray data = QByteArray::fromStdString(strData);
 
+	initialiseGlobalNam(secure, host);
+
 	QUrl serviceURL = QUrl(httpProtocol()+host);
 	serviceURL.setPath(QStringLiteral("/protocol.chat.v1.ChatService/GetGuildMembers"));
 
@@ -337,8 +386,9 @@ auto ChatServiceServiceClient::GetGuildMembers(const protocol::chat::v1::GetGuil
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
+	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
-	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
+	auto nam = globalNam.localData();
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -365,6 +415,8 @@ auto ChatServiceServiceClient::GetGuildChannels(const protocol::chat::v1::GetGui
 	if (!in.SerializeToString(&strData)) { return {QStringLiteral("failed to serialize protobuf")}; }
 	QByteArray data = QByteArray::fromStdString(strData);
 
+	initialiseGlobalNam(secure, host);
+
 	QUrl serviceURL = QUrl(httpProtocol()+host);
 	serviceURL.setPath(QStringLiteral("/protocol.chat.v1.ChatService/GetGuildChannels"));
 
@@ -373,8 +425,9 @@ auto ChatServiceServiceClient::GetGuildChannels(const protocol::chat::v1::GetGui
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
+	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
-	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
+	auto nam = globalNam.localData();
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -401,6 +454,8 @@ auto ChatServiceServiceClient::GetChannelMessages(const protocol::chat::v1::GetC
 	if (!in.SerializeToString(&strData)) { return {QStringLiteral("failed to serialize protobuf")}; }
 	QByteArray data = QByteArray::fromStdString(strData);
 
+	initialiseGlobalNam(secure, host);
+
 	QUrl serviceURL = QUrl(httpProtocol()+host);
 	serviceURL.setPath(QStringLiteral("/protocol.chat.v1.ChatService/GetChannelMessages"));
 
@@ -409,8 +464,9 @@ auto ChatServiceServiceClient::GetChannelMessages(const protocol::chat::v1::GetC
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
+	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
-	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
+	auto nam = globalNam.localData();
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -437,6 +493,8 @@ auto ChatServiceServiceClient::GetMessage(const protocol::chat::v1::GetMessageRe
 	if (!in.SerializeToString(&strData)) { return {QStringLiteral("failed to serialize protobuf")}; }
 	QByteArray data = QByteArray::fromStdString(strData);
 
+	initialiseGlobalNam(secure, host);
+
 	QUrl serviceURL = QUrl(httpProtocol()+host);
 	serviceURL.setPath(QStringLiteral("/protocol.chat.v1.ChatService/GetMessage"));
 
@@ -445,8 +503,9 @@ auto ChatServiceServiceClient::GetMessage(const protocol::chat::v1::GetMessageRe
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
+	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
-	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
+	auto nam = globalNam.localData();
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -473,6 +532,8 @@ auto ChatServiceServiceClient::GetEmotePacks(const protocol::chat::v1::GetEmoteP
 	if (!in.SerializeToString(&strData)) { return {QStringLiteral("failed to serialize protobuf")}; }
 	QByteArray data = QByteArray::fromStdString(strData);
 
+	initialiseGlobalNam(secure, host);
+
 	QUrl serviceURL = QUrl(httpProtocol()+host);
 	serviceURL.setPath(QStringLiteral("/protocol.chat.v1.ChatService/GetEmotePacks"));
 
@@ -481,8 +542,9 @@ auto ChatServiceServiceClient::GetEmotePacks(const protocol::chat::v1::GetEmoteP
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
+	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
-	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
+	auto nam = globalNam.localData();
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -509,6 +571,8 @@ auto ChatServiceServiceClient::GetEmotePackEmotes(const protocol::chat::v1::GetE
 	if (!in.SerializeToString(&strData)) { return {QStringLiteral("failed to serialize protobuf")}; }
 	QByteArray data = QByteArray::fromStdString(strData);
 
+	initialiseGlobalNam(secure, host);
+
 	QUrl serviceURL = QUrl(httpProtocol()+host);
 	serviceURL.setPath(QStringLiteral("/protocol.chat.v1.ChatService/GetEmotePackEmotes"));
 
@@ -517,8 +581,9 @@ auto ChatServiceServiceClient::GetEmotePackEmotes(const protocol::chat::v1::GetE
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
+	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
-	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
+	auto nam = globalNam.localData();
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -545,6 +610,8 @@ auto ChatServiceServiceClient::UpdateGuildInformation(const protocol::chat::v1::
 	if (!in.SerializeToString(&strData)) { return {QStringLiteral("failed to serialize protobuf")}; }
 	QByteArray data = QByteArray::fromStdString(strData);
 
+	initialiseGlobalNam(secure, host);
+
 	QUrl serviceURL = QUrl(httpProtocol()+host);
 	serviceURL.setPath(QStringLiteral("/protocol.chat.v1.ChatService/UpdateGuildInformation"));
 
@@ -553,8 +620,9 @@ auto ChatServiceServiceClient::UpdateGuildInformation(const protocol::chat::v1::
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
+	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
-	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
+	auto nam = globalNam.localData();
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -581,6 +649,8 @@ auto ChatServiceServiceClient::UpdateChannelInformation(const protocol::chat::v1
 	if (!in.SerializeToString(&strData)) { return {QStringLiteral("failed to serialize protobuf")}; }
 	QByteArray data = QByteArray::fromStdString(strData);
 
+	initialiseGlobalNam(secure, host);
+
 	QUrl serviceURL = QUrl(httpProtocol()+host);
 	serviceURL.setPath(QStringLiteral("/protocol.chat.v1.ChatService/UpdateChannelInformation"));
 
@@ -589,8 +659,9 @@ auto ChatServiceServiceClient::UpdateChannelInformation(const protocol::chat::v1
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
+	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
-	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
+	auto nam = globalNam.localData();
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -617,6 +688,8 @@ auto ChatServiceServiceClient::UpdateChannelOrder(const protocol::chat::v1::Upda
 	if (!in.SerializeToString(&strData)) { return {QStringLiteral("failed to serialize protobuf")}; }
 	QByteArray data = QByteArray::fromStdString(strData);
 
+	initialiseGlobalNam(secure, host);
+
 	QUrl serviceURL = QUrl(httpProtocol()+host);
 	serviceURL.setPath(QStringLiteral("/protocol.chat.v1.ChatService/UpdateChannelOrder"));
 
@@ -625,8 +698,9 @@ auto ChatServiceServiceClient::UpdateChannelOrder(const protocol::chat::v1::Upda
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
+	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
-	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
+	auto nam = globalNam.localData();
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -653,6 +727,8 @@ auto ChatServiceServiceClient::UpdateMessage(const protocol::chat::v1::UpdateMes
 	if (!in.SerializeToString(&strData)) { return {QStringLiteral("failed to serialize protobuf")}; }
 	QByteArray data = QByteArray::fromStdString(strData);
 
+	initialiseGlobalNam(secure, host);
+
 	QUrl serviceURL = QUrl(httpProtocol()+host);
 	serviceURL.setPath(QStringLiteral("/protocol.chat.v1.ChatService/UpdateMessage"));
 
@@ -661,8 +737,9 @@ auto ChatServiceServiceClient::UpdateMessage(const protocol::chat::v1::UpdateMes
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
+	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
-	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
+	auto nam = globalNam.localData();
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -689,6 +766,8 @@ auto ChatServiceServiceClient::AddEmoteToPack(const protocol::chat::v1::AddEmote
 	if (!in.SerializeToString(&strData)) { return {QStringLiteral("failed to serialize protobuf")}; }
 	QByteArray data = QByteArray::fromStdString(strData);
 
+	initialiseGlobalNam(secure, host);
+
 	QUrl serviceURL = QUrl(httpProtocol()+host);
 	serviceURL.setPath(QStringLiteral("/protocol.chat.v1.ChatService/AddEmoteToPack"));
 
@@ -697,8 +776,9 @@ auto ChatServiceServiceClient::AddEmoteToPack(const protocol::chat::v1::AddEmote
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
+	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
-	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
+	auto nam = globalNam.localData();
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -725,6 +805,8 @@ auto ChatServiceServiceClient::DeleteGuild(const protocol::chat::v1::DeleteGuild
 	if (!in.SerializeToString(&strData)) { return {QStringLiteral("failed to serialize protobuf")}; }
 	QByteArray data = QByteArray::fromStdString(strData);
 
+	initialiseGlobalNam(secure, host);
+
 	QUrl serviceURL = QUrl(httpProtocol()+host);
 	serviceURL.setPath(QStringLiteral("/protocol.chat.v1.ChatService/DeleteGuild"));
 
@@ -733,8 +815,9 @@ auto ChatServiceServiceClient::DeleteGuild(const protocol::chat::v1::DeleteGuild
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
+	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
-	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
+	auto nam = globalNam.localData();
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -761,6 +844,8 @@ auto ChatServiceServiceClient::DeleteInvite(const protocol::chat::v1::DeleteInvi
 	if (!in.SerializeToString(&strData)) { return {QStringLiteral("failed to serialize protobuf")}; }
 	QByteArray data = QByteArray::fromStdString(strData);
 
+	initialiseGlobalNam(secure, host);
+
 	QUrl serviceURL = QUrl(httpProtocol()+host);
 	serviceURL.setPath(QStringLiteral("/protocol.chat.v1.ChatService/DeleteInvite"));
 
@@ -769,8 +854,9 @@ auto ChatServiceServiceClient::DeleteInvite(const protocol::chat::v1::DeleteInvi
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
+	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
-	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
+	auto nam = globalNam.localData();
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -797,6 +883,8 @@ auto ChatServiceServiceClient::DeleteChannel(const protocol::chat::v1::DeleteCha
 	if (!in.SerializeToString(&strData)) { return {QStringLiteral("failed to serialize protobuf")}; }
 	QByteArray data = QByteArray::fromStdString(strData);
 
+	initialiseGlobalNam(secure, host);
+
 	QUrl serviceURL = QUrl(httpProtocol()+host);
 	serviceURL.setPath(QStringLiteral("/protocol.chat.v1.ChatService/DeleteChannel"));
 
@@ -805,8 +893,9 @@ auto ChatServiceServiceClient::DeleteChannel(const protocol::chat::v1::DeleteCha
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
+	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
-	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
+	auto nam = globalNam.localData();
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -833,6 +922,8 @@ auto ChatServiceServiceClient::DeleteMessage(const protocol::chat::v1::DeleteMes
 	if (!in.SerializeToString(&strData)) { return {QStringLiteral("failed to serialize protobuf")}; }
 	QByteArray data = QByteArray::fromStdString(strData);
 
+	initialiseGlobalNam(secure, host);
+
 	QUrl serviceURL = QUrl(httpProtocol()+host);
 	serviceURL.setPath(QStringLiteral("/protocol.chat.v1.ChatService/DeleteMessage"));
 
@@ -841,8 +932,9 @@ auto ChatServiceServiceClient::DeleteMessage(const protocol::chat::v1::DeleteMes
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
+	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
-	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
+	auto nam = globalNam.localData();
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -869,6 +961,8 @@ auto ChatServiceServiceClient::DeleteEmoteFromPack(const protocol::chat::v1::Del
 	if (!in.SerializeToString(&strData)) { return {QStringLiteral("failed to serialize protobuf")}; }
 	QByteArray data = QByteArray::fromStdString(strData);
 
+	initialiseGlobalNam(secure, host);
+
 	QUrl serviceURL = QUrl(httpProtocol()+host);
 	serviceURL.setPath(QStringLiteral("/protocol.chat.v1.ChatService/DeleteEmoteFromPack"));
 
@@ -877,8 +971,9 @@ auto ChatServiceServiceClient::DeleteEmoteFromPack(const protocol::chat::v1::Del
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
+	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
-	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
+	auto nam = globalNam.localData();
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -905,6 +1000,8 @@ auto ChatServiceServiceClient::DeleteEmotePack(const protocol::chat::v1::DeleteE
 	if (!in.SerializeToString(&strData)) { return {QStringLiteral("failed to serialize protobuf")}; }
 	QByteArray data = QByteArray::fromStdString(strData);
 
+	initialiseGlobalNam(secure, host);
+
 	QUrl serviceURL = QUrl(httpProtocol()+host);
 	serviceURL.setPath(QStringLiteral("/protocol.chat.v1.ChatService/DeleteEmotePack"));
 
@@ -913,8 +1010,9 @@ auto ChatServiceServiceClient::DeleteEmotePack(const protocol::chat::v1::DeleteE
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
+	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
-	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
+	auto nam = globalNam.localData();
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -941,6 +1039,8 @@ auto ChatServiceServiceClient::DequipEmotePack(const protocol::chat::v1::DequipE
 	if (!in.SerializeToString(&strData)) { return {QStringLiteral("failed to serialize protobuf")}; }
 	QByteArray data = QByteArray::fromStdString(strData);
 
+	initialiseGlobalNam(secure, host);
+
 	QUrl serviceURL = QUrl(httpProtocol()+host);
 	serviceURL.setPath(QStringLiteral("/protocol.chat.v1.ChatService/DequipEmotePack"));
 
@@ -949,8 +1049,9 @@ auto ChatServiceServiceClient::DequipEmotePack(const protocol::chat::v1::DequipE
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
+	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
-	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
+	auto nam = globalNam.localData();
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -977,6 +1078,8 @@ auto ChatServiceServiceClient::JoinGuild(const protocol::chat::v1::JoinGuildRequ
 	if (!in.SerializeToString(&strData)) { return {QStringLiteral("failed to serialize protobuf")}; }
 	QByteArray data = QByteArray::fromStdString(strData);
 
+	initialiseGlobalNam(secure, host);
+
 	QUrl serviceURL = QUrl(httpProtocol()+host);
 	serviceURL.setPath(QStringLiteral("/protocol.chat.v1.ChatService/JoinGuild"));
 
@@ -985,8 +1088,9 @@ auto ChatServiceServiceClient::JoinGuild(const protocol::chat::v1::JoinGuildRequ
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
+	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
-	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
+	auto nam = globalNam.localData();
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -1013,6 +1117,8 @@ auto ChatServiceServiceClient::LeaveGuild(const protocol::chat::v1::LeaveGuildRe
 	if (!in.SerializeToString(&strData)) { return {QStringLiteral("failed to serialize protobuf")}; }
 	QByteArray data = QByteArray::fromStdString(strData);
 
+	initialiseGlobalNam(secure, host);
+
 	QUrl serviceURL = QUrl(httpProtocol()+host);
 	serviceURL.setPath(QStringLiteral("/protocol.chat.v1.ChatService/LeaveGuild"));
 
@@ -1021,8 +1127,9 @@ auto ChatServiceServiceClient::LeaveGuild(const protocol::chat::v1::LeaveGuildRe
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
+	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
-	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
+	auto nam = globalNam.localData();
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -1049,6 +1156,8 @@ auto ChatServiceServiceClient::TriggerAction(const protocol::chat::v1::TriggerAc
 	if (!in.SerializeToString(&strData)) { return {QStringLiteral("failed to serialize protobuf")}; }
 	QByteArray data = QByteArray::fromStdString(strData);
 
+	initialiseGlobalNam(secure, host);
+
 	QUrl serviceURL = QUrl(httpProtocol()+host);
 	serviceURL.setPath(QStringLiteral("/protocol.chat.v1.ChatService/TriggerAction"));
 
@@ -1057,8 +1166,9 @@ auto ChatServiceServiceClient::TriggerAction(const protocol::chat::v1::TriggerAc
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
+	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
-	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
+	auto nam = globalNam.localData();
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -1085,6 +1195,8 @@ auto ChatServiceServiceClient::SendMessage(const protocol::chat::v1::SendMessage
 	if (!in.SerializeToString(&strData)) { return {QStringLiteral("failed to serialize protobuf")}; }
 	QByteArray data = QByteArray::fromStdString(strData);
 
+	initialiseGlobalNam(secure, host);
+
 	QUrl serviceURL = QUrl(httpProtocol()+host);
 	serviceURL.setPath(QStringLiteral("/protocol.chat.v1.ChatService/SendMessage"));
 
@@ -1093,8 +1205,9 @@ auto ChatServiceServiceClient::SendMessage(const protocol::chat::v1::SendMessage
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
+	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
-	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
+	auto nam = globalNam.localData();
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -1121,6 +1234,8 @@ auto ChatServiceServiceClient::QueryHasPermission(const protocol::chat::v1::Quer
 	if (!in.SerializeToString(&strData)) { return {QStringLiteral("failed to serialize protobuf")}; }
 	QByteArray data = QByteArray::fromStdString(strData);
 
+	initialiseGlobalNam(secure, host);
+
 	QUrl serviceURL = QUrl(httpProtocol()+host);
 	serviceURL.setPath(QStringLiteral("/protocol.chat.v1.ChatService/QueryHasPermission"));
 
@@ -1129,8 +1244,9 @@ auto ChatServiceServiceClient::QueryHasPermission(const protocol::chat::v1::Quer
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
+	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
-	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
+	auto nam = globalNam.localData();
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -1157,6 +1273,8 @@ auto ChatServiceServiceClient::SetPermissions(const protocol::chat::v1::SetPermi
 	if (!in.SerializeToString(&strData)) { return {QStringLiteral("failed to serialize protobuf")}; }
 	QByteArray data = QByteArray::fromStdString(strData);
 
+	initialiseGlobalNam(secure, host);
+
 	QUrl serviceURL = QUrl(httpProtocol()+host);
 	serviceURL.setPath(QStringLiteral("/protocol.chat.v1.ChatService/SetPermissions"));
 
@@ -1165,8 +1283,9 @@ auto ChatServiceServiceClient::SetPermissions(const protocol::chat::v1::SetPermi
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
+	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
-	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
+	auto nam = globalNam.localData();
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -1193,6 +1312,8 @@ auto ChatServiceServiceClient::GetPermissions(const protocol::chat::v1::GetPermi
 	if (!in.SerializeToString(&strData)) { return {QStringLiteral("failed to serialize protobuf")}; }
 	QByteArray data = QByteArray::fromStdString(strData);
 
+	initialiseGlobalNam(secure, host);
+
 	QUrl serviceURL = QUrl(httpProtocol()+host);
 	serviceURL.setPath(QStringLiteral("/protocol.chat.v1.ChatService/GetPermissions"));
 
@@ -1201,8 +1322,9 @@ auto ChatServiceServiceClient::GetPermissions(const protocol::chat::v1::GetPermi
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
+	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
-	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
+	auto nam = globalNam.localData();
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -1229,6 +1351,8 @@ auto ChatServiceServiceClient::MoveRole(const protocol::chat::v1::MoveRoleReques
 	if (!in.SerializeToString(&strData)) { return {QStringLiteral("failed to serialize protobuf")}; }
 	QByteArray data = QByteArray::fromStdString(strData);
 
+	initialiseGlobalNam(secure, host);
+
 	QUrl serviceURL = QUrl(httpProtocol()+host);
 	serviceURL.setPath(QStringLiteral("/protocol.chat.v1.ChatService/MoveRole"));
 
@@ -1237,8 +1361,9 @@ auto ChatServiceServiceClient::MoveRole(const protocol::chat::v1::MoveRoleReques
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
+	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
-	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
+	auto nam = globalNam.localData();
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -1265,6 +1390,8 @@ auto ChatServiceServiceClient::GetGuildRoles(const protocol::chat::v1::GetGuildR
 	if (!in.SerializeToString(&strData)) { return {QStringLiteral("failed to serialize protobuf")}; }
 	QByteArray data = QByteArray::fromStdString(strData);
 
+	initialiseGlobalNam(secure, host);
+
 	QUrl serviceURL = QUrl(httpProtocol()+host);
 	serviceURL.setPath(QStringLiteral("/protocol.chat.v1.ChatService/GetGuildRoles"));
 
@@ -1273,8 +1400,9 @@ auto ChatServiceServiceClient::GetGuildRoles(const protocol::chat::v1::GetGuildR
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
+	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
-	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
+	auto nam = globalNam.localData();
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -1301,6 +1429,8 @@ auto ChatServiceServiceClient::AddGuildRole(const protocol::chat::v1::AddGuildRo
 	if (!in.SerializeToString(&strData)) { return {QStringLiteral("failed to serialize protobuf")}; }
 	QByteArray data = QByteArray::fromStdString(strData);
 
+	initialiseGlobalNam(secure, host);
+
 	QUrl serviceURL = QUrl(httpProtocol()+host);
 	serviceURL.setPath(QStringLiteral("/protocol.chat.v1.ChatService/AddGuildRole"));
 
@@ -1309,8 +1439,9 @@ auto ChatServiceServiceClient::AddGuildRole(const protocol::chat::v1::AddGuildRo
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
+	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
-	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
+	auto nam = globalNam.localData();
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -1337,6 +1468,8 @@ auto ChatServiceServiceClient::ModifyGuildRole(const protocol::chat::v1::ModifyG
 	if (!in.SerializeToString(&strData)) { return {QStringLiteral("failed to serialize protobuf")}; }
 	QByteArray data = QByteArray::fromStdString(strData);
 
+	initialiseGlobalNam(secure, host);
+
 	QUrl serviceURL = QUrl(httpProtocol()+host);
 	serviceURL.setPath(QStringLiteral("/protocol.chat.v1.ChatService/ModifyGuildRole"));
 
@@ -1345,8 +1478,9 @@ auto ChatServiceServiceClient::ModifyGuildRole(const protocol::chat::v1::ModifyG
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
+	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
-	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
+	auto nam = globalNam.localData();
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -1373,6 +1507,8 @@ auto ChatServiceServiceClient::DeleteGuildRole(const protocol::chat::v1::DeleteG
 	if (!in.SerializeToString(&strData)) { return {QStringLiteral("failed to serialize protobuf")}; }
 	QByteArray data = QByteArray::fromStdString(strData);
 
+	initialiseGlobalNam(secure, host);
+
 	QUrl serviceURL = QUrl(httpProtocol()+host);
 	serviceURL.setPath(QStringLiteral("/protocol.chat.v1.ChatService/DeleteGuildRole"));
 
@@ -1381,8 +1517,9 @@ auto ChatServiceServiceClient::DeleteGuildRole(const protocol::chat::v1::DeleteG
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
+	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
-	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
+	auto nam = globalNam.localData();
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -1409,6 +1546,8 @@ auto ChatServiceServiceClient::ManageUserRoles(const protocol::chat::v1::ManageU
 	if (!in.SerializeToString(&strData)) { return {QStringLiteral("failed to serialize protobuf")}; }
 	QByteArray data = QByteArray::fromStdString(strData);
 
+	initialiseGlobalNam(secure, host);
+
 	QUrl serviceURL = QUrl(httpProtocol()+host);
 	serviceURL.setPath(QStringLiteral("/protocol.chat.v1.ChatService/ManageUserRoles"));
 
@@ -1417,8 +1556,9 @@ auto ChatServiceServiceClient::ManageUserRoles(const protocol::chat::v1::ManageU
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
+	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
-	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
+	auto nam = globalNam.localData();
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -1445,6 +1585,8 @@ auto ChatServiceServiceClient::GetUserRoles(const protocol::chat::v1::GetUserRol
 	if (!in.SerializeToString(&strData)) { return {QStringLiteral("failed to serialize protobuf")}; }
 	QByteArray data = QByteArray::fromStdString(strData);
 
+	initialiseGlobalNam(secure, host);
+
 	QUrl serviceURL = QUrl(httpProtocol()+host);
 	serviceURL.setPath(QStringLiteral("/protocol.chat.v1.ChatService/GetUserRoles"));
 
@@ -1453,8 +1595,9 @@ auto ChatServiceServiceClient::GetUserRoles(const protocol::chat::v1::GetUserRol
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
+	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
-	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
+	auto nam = globalNam.localData();
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -1509,6 +1652,8 @@ auto ChatServiceServiceClient::GetUser(const protocol::chat::v1::GetUserRequest&
 	if (!in.SerializeToString(&strData)) { return {QStringLiteral("failed to serialize protobuf")}; }
 	QByteArray data = QByteArray::fromStdString(strData);
 
+	initialiseGlobalNam(secure, host);
+
 	QUrl serviceURL = QUrl(httpProtocol()+host);
 	serviceURL.setPath(QStringLiteral("/protocol.chat.v1.ChatService/GetUser"));
 
@@ -1517,8 +1662,9 @@ auto ChatServiceServiceClient::GetUser(const protocol::chat::v1::GetUserRequest&
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
+	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
-	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
+	auto nam = globalNam.localData();
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -1545,6 +1691,8 @@ auto ChatServiceServiceClient::GetUserMetadata(const protocol::chat::v1::GetUser
 	if (!in.SerializeToString(&strData)) { return {QStringLiteral("failed to serialize protobuf")}; }
 	QByteArray data = QByteArray::fromStdString(strData);
 
+	initialiseGlobalNam(secure, host);
+
 	QUrl serviceURL = QUrl(httpProtocol()+host);
 	serviceURL.setPath(QStringLiteral("/protocol.chat.v1.ChatService/GetUserMetadata"));
 
@@ -1553,8 +1701,9 @@ auto ChatServiceServiceClient::GetUserMetadata(const protocol::chat::v1::GetUser
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
+	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
-	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
+	auto nam = globalNam.localData();
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -1581,6 +1730,8 @@ auto ChatServiceServiceClient::ProfileUpdate(const protocol::chat::v1::ProfileUp
 	if (!in.SerializeToString(&strData)) { return {QStringLiteral("failed to serialize protobuf")}; }
 	QByteArray data = QByteArray::fromStdString(strData);
 
+	initialiseGlobalNam(secure, host);
+
 	QUrl serviceURL = QUrl(httpProtocol()+host);
 	serviceURL.setPath(QStringLiteral("/protocol.chat.v1.ChatService/ProfileUpdate"));
 
@@ -1589,8 +1740,9 @@ auto ChatServiceServiceClient::ProfileUpdate(const protocol::chat::v1::ProfileUp
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
+	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
-	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
+	auto nam = globalNam.localData();
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -1617,6 +1769,8 @@ auto ChatServiceServiceClient::Typing(const protocol::chat::v1::TypingRequest& i
 	if (!in.SerializeToString(&strData)) { return {QStringLiteral("failed to serialize protobuf")}; }
 	QByteArray data = QByteArray::fromStdString(strData);
 
+	initialiseGlobalNam(secure, host);
+
 	QUrl serviceURL = QUrl(httpProtocol()+host);
 	serviceURL.setPath(QStringLiteral("/protocol.chat.v1.ChatService/Typing"));
 
@@ -1625,8 +1779,9 @@ auto ChatServiceServiceClient::Typing(const protocol::chat::v1::TypingRequest& i
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
+	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
-	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
+	auto nam = globalNam.localData();
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -1653,6 +1808,8 @@ auto ChatServiceServiceClient::PreviewGuild(const protocol::chat::v1::PreviewGui
 	if (!in.SerializeToString(&strData)) { return {QStringLiteral("failed to serialize protobuf")}; }
 	QByteArray data = QByteArray::fromStdString(strData);
 
+	initialiseGlobalNam(secure, host);
+
 	QUrl serviceURL = QUrl(httpProtocol()+host);
 	serviceURL.setPath(QStringLiteral("/protocol.chat.v1.ChatService/PreviewGuild"));
 
@@ -1661,8 +1818,9 @@ auto ChatServiceServiceClient::PreviewGuild(const protocol::chat::v1::PreviewGui
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
+	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
-	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
+	auto nam = globalNam.localData();
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {

@@ -1,9 +1,31 @@
 #include "mediaproxy/v1/mediaproxy.hrpc.client.h"
+#include "QThreadStorage"
+namespace {
+QThreadStorage<QNetworkAccessManager*> globalNam;
+void initialiseGlobalNam(bool secure, const QString& host) {
+	if (globalNam.hasLocalData()) {
+		return;
+	}
+
+	auto split = host.split(":");
+	auto hname = split[0];
+	auto port = split[1].toInt();
+	
+	globalNam.setLocalData(new QNetworkAccessManager);
+	if (secure) {
+		globalNam.localData()->connectToHostEncrypted(hname, port);
+	} else {
+		globalNam.localData()->connectToHost(hname, port);
+	}
+}
+}
 auto MediaProxyServiceServiceClient::FetchLinkMetadata(const protocol::mediaproxy::v1::FetchLinkMetadataRequest& in, QMap<QByteArray,QString> headers) -> MediaProxyServiceServiceClient::Result<protocol::mediaproxy::v1::SiteMetadata>
 {
 	std::string strData;
 	if (!in.SerializeToString(&strData)) { return {QStringLiteral("failed to serialize protobuf")}; }
 	QByteArray data = QByteArray::fromStdString(strData);
+
+	initialiseGlobalNam(secure, host);
 
 	QUrl serviceURL = QUrl(httpProtocol()+host);
 	serviceURL.setPath(QStringLiteral("/protocol.mediaproxy.v1.MediaProxyService/FetchLinkMetadata"));
@@ -13,8 +35,9 @@ auto MediaProxyServiceServiceClient::FetchLinkMetadata(const protocol::mediaprox
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
+	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
-	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
+	auto nam = globalNam.localData();
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -41,6 +64,8 @@ auto MediaProxyServiceServiceClient::InstantView(const protocol::mediaproxy::v1:
 	if (!in.SerializeToString(&strData)) { return {QStringLiteral("failed to serialize protobuf")}; }
 	QByteArray data = QByteArray::fromStdString(strData);
 
+	initialiseGlobalNam(secure, host);
+
 	QUrl serviceURL = QUrl(httpProtocol()+host);
 	serviceURL.setPath(QStringLiteral("/protocol.mediaproxy.v1.MediaProxyService/InstantView"));
 
@@ -49,8 +74,9 @@ auto MediaProxyServiceServiceClient::InstantView(const protocol::mediaproxy::v1:
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
+	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
-	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
+	auto nam = globalNam.localData();
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
@@ -77,6 +103,8 @@ auto MediaProxyServiceServiceClient::CanInstantView(const protocol::mediaproxy::
 	if (!in.SerializeToString(&strData)) { return {QStringLiteral("failed to serialize protobuf")}; }
 	QByteArray data = QByteArray::fromStdString(strData);
 
+	initialiseGlobalNam(secure, host);
+
 	QUrl serviceURL = QUrl(httpProtocol()+host);
 	serviceURL.setPath(QStringLiteral("/protocol.mediaproxy.v1.MediaProxyService/CanInstantView"));
 
@@ -85,8 +113,9 @@ auto MediaProxyServiceServiceClient::CanInstantView(const protocol::mediaproxy::
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
 	req.setRawHeader("content-type", "application/octet-stream");
+	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
-	auto nam = QSharedPointer<QNetworkAccessManager>(new QNetworkAccessManager);
+	auto nam = globalNam.localData();
 	auto val = nam->post(req, data);
 
 	while (!val->isFinished()) {
