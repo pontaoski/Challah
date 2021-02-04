@@ -217,9 +217,9 @@ bool Client::forgeNewConnection()
 {
 	qCDebug(CLIENT_LIFECYCLE) << this << "Creating new hRPC channels for homeserver" << homeserver;
 
-	chatKit = std::unique_ptr<ChatServiceServiceClient>(new ChatServiceServiceClient(homeserver, true));
-	authKit = std::unique_ptr<AuthServiceServiceClient>(new AuthServiceServiceClient(homeserver, true));
-	mediaProxyKit = std::unique_ptr<MediaProxyServiceServiceClient>(new MediaProxyServiceServiceClient(homeserver, true));
+	chatKit = std::unique_ptr<ChatServiceServiceClient>(new ChatServiceServiceClient(homeserver, !qEnvironmentVariableIsSet("CHALLAH_INSECURE")));
+	authKit = std::unique_ptr<AuthServiceServiceClient>(new AuthServiceServiceClient(homeserver, !qEnvironmentVariableIsSet("CHALLAH_INSECURE")));
+	mediaProxyKit = std::unique_ptr<MediaProxyServiceServiceClient>(new MediaProxyServiceServiceClient(homeserver, !qEnvironmentVariableIsSet("CHALLAH_INSECURE")));
 
 	return true;
 }
