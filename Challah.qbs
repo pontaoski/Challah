@@ -3,14 +3,15 @@ Project {
 		"app/Source.qbs",
 	]
 
-	property bool vendored: false
+	property bool vendoredProtobuf: false
+	property bool vendoredKirigami: false
 
 	SubProject {
 		filePath: "vendor/Kirigami.qbs"
-		condition: project.vendored
+		condition: project.vendoredKirigami
 	}
 	SubProject {
 		filePath: "vendor/protobuf.qbs"
-		condition: project.vendored
+		condition: project.vendoredProtobuf
 	}
 }
