@@ -40,8 +40,13 @@
 
 #ifdef CHALLAH_VENDORED_DEPS
 
+#define KIRIGAMI_BUILD_TYPE_STATIC
+
+#include "../vendor/kirigami/src/kirigamiplugin.h"
 #include <QtPlugin>
 Q_IMPORT_PLUGIN(KirigamiPlugin)
+
+#undef KIRIGAMI_BUILD_TYPE_STATIC
 
 #endif
 
@@ -64,6 +69,12 @@ int main(int argc, char *argv[])
 	QApplication::setStyle("Breeze");
 	QIcon::setThemeName("breeze");
 	QQuickStyle::setStyle("org.kde.desktop");
+#endif
+
+	QQmlApplicationEngine engine;
+
+#if defined(CHALLAH_VENDORED_DEPS)
+	KirigamiPlugin::getInstance().registerTypes(&engine);
 #endif
 
 	qmlRegisterType<OverlappingPanels>("com.github.HarmonyDevelopment.Staccato", 1, 0, "OverlappingPanels");
@@ -91,7 +102,6 @@ int main(int argc, char *argv[])
 	QApplication::setOrganizationName("Harmony Development");
 	QApplication::setOrganizationDomain("io.harmonyapp");
 
-	QQmlApplicationEngine engine;
 	const QUrl url(QStringLiteral("qrc:/main.qml"));
 	QObject::connect(
 		&engine, &QQmlApplicationEngine::objectCreated,
