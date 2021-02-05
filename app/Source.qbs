@@ -30,7 +30,9 @@ QtApplication {
 		"gen/mediaproxy/v1/*.h",
 		"gen/voice/v1/*.h",
 		"resources/data.qrc"
-	]
+	].concat(
+		project.vendoredKirigami ? ["../vendor/kirigami/kirigami.qrc"] : []
+	)
 
 	Group {
 		files: ["resources/io.harmonyapp.Challah.svg"]

@@ -12,6 +12,8 @@ StaticLibrary {
 		"kirigami/src/libkirigami/*.h",
 	]
 
+	Qt.core.pluginMetaData: ["uri=org.kde.kirigami"]
+
 	cpp.includePaths: [buildDirectory, sourceDirectory, "kirigami/src", "kirigami/src/libkirigami"]
 	cpp.defines: ["QT_NO_CAST_FROM_ASCII", "QT_STATICPLUGIN"]
 

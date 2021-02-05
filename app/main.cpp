@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
 
 #ifdef Q_OS_ANDROID
 	QQuickStyle::setStyle(QStringLiteral("Material"));
-#elif defined(Q_OS_LINUX)
+#elif defined(Q_OS_LINUX) && !defined(CHALLAH_VENDORED_DEPS)
 	QApplication::setStyle("Breeze");
 	QIcon::setThemeName("breeze");
 	QQuickStyle::setStyle("org.kde.desktop");
