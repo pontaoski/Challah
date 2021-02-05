@@ -2,7 +2,7 @@ QtApplication {
 	name: "Challah"
 
 	protobuf.cpp.importPaths: ["protocol"]
-	protobuf.cpp.linkLibraries: !project.vendoredProtobuf
+	// protobuf.cpp.linkLibraries: !project.vendoredProtobuf
 
 	cpp.defines: project.vendoredKirigami ? ["CHALLAH_VENDORED_DEPS"] : []
 	cpp.cppFlags: ['-Werror=return-type']
