@@ -2,7 +2,9 @@ QtApplication {
 	name: "Challah"
 
 	protobuf.cpp.importPaths: ["protocol"]
+	protobuf.cpp.linkLibraries: !project.vendored
 
+	cpp.defines: project.vendored ? ["CHALLAH_VENDORED_DEPS"] : []
 	cpp.cppFlags: ['-Werror=return-type']
 	cpp.cxxLanguageVersion: "c++17"
 	cpp.debugInformation: true
@@ -84,5 +86,7 @@ QtApplication {
 	Depends { name: "bundle" }
 	Depends { name: "cpp" }
 	Depends { name: "protobuf.cpp" }
+	Depends { name: "vendored_protobuf"; condition: project.vendored }
+	Depends { name: "vendored_kirigami"; condition: project.vendored }
 	Depends { name: "Qt"; submodules: ["gui", "concurrent", "widgets", "websockets", "quick", "quickcontrols2", "qml"] }
 }

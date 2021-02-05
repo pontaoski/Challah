@@ -38,6 +38,13 @@
 #include "loginmanager.hpp"
 #include "copyinterceptor.hpp"
 
+#ifdef CHALLAH_VENDORED_DEPS
+
+#include <QtPlugin>
+Q_IMPORT_PLUGIN(KirigamiPlugin)
+
+#endif
+
 int main(int argc, char *argv[])
 {
 	QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);

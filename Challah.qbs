@@ -3,12 +3,14 @@ Project {
 		"app/Source.qbs",
 	]
 
+	property bool vendored: false
+
 	SubProject {
 		filePath: "vendor/Kirigami.qbs"
-		condition: qbs.targetOS.contains("android")
+		condition: project.vendored
 	}
 	SubProject {
-		filePath: "vendor/grpc.qbs"
-		condition: qbs.targetOS.contains("android")
+		filePath: "vendor/protobuf.qbs"
+		condition: project.vendored
 	}
 }

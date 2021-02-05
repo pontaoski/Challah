@@ -1,14 +1,19 @@
 StaticLibrary {
-	name: "kirigami"
+	name: "vendored_kirigami"
 
 	files: [
-		"**.qrc",
-		"src/**.cpp",
-		"src/**.h",
+		"kirigami/kirigami.qrc",
+		"kirigami/src/scenegraph/shaders/shaders.qrc",
+		"kirigami/src/*.cpp",
+		"kirigami/src/*.h",
+		"kirigami/src/scenegraph/*.cpp",
+		"kirigami/src/scenegraph/*.h",
+		"kirigami/src/libkirigami/*.cpp",
+		"kirigami/src/libkirigami/*.h",
 	]
 
-	cpp.includePaths: [buildDirectory, "src/libkirigami"]
-	cpp.defines: ["QT_NO_CAST_FROM_ASCII", "KIRIGAMI_BUILD_TYPE_STATIC"]
+	cpp.includePaths: [buildDirectory, sourceDirectory, "kirigami/src", "kirigami/src/libkirigami"]
+	cpp.defines: ["QT_NO_CAST_FROM_ASCII", "QT_STATICPLUGIN"]
 
 	Depends { name: "cpp" }
 	Depends { name: "Qt"; submodules: ["core", "qml", "quick", "gui", "svg", "network", "quickcontrols2", "concurrent"] }

@@ -1,0 +1,1 @@
+#define KIRIGAMI2_EXPORT

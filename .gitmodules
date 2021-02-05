@@ -4,6 +4,6 @@
 [submodule "vendor/kirigami"]
 	path = vendor/kirigami
 	url = https://invent.kde.org/frameworks/kirigami
-[submodule "vendor/grpc"]
-	path = vendor/grpc
-	url = https://github.com/grpc/grpc
+[submodule "vendor/protobuf"]
+	path = vendor/protobuf
+	url = https://github.com/protocolbuffers/protobuf.git
