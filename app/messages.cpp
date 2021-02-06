@@ -310,6 +310,8 @@ QVariant MessagesModel::data(const QModelIndex& index, int role) const
 			author(idx),
 			messageData[idx].date.date().toString(),
 		}.join("\t");
+	case IsOwnMessageRole:
+		return messageData[idx].authorID == client->userID;
 	case MessageQuirkRole: {
 		QVariantMap quirks;
 		if (messageData.length() > (idx+1)) {
@@ -349,6 +351,7 @@ QHash<int,QByteArray> MessagesModel::roleNames() const
 	ret[MessageAttachmentsRole] = "attachments";
 	ret[MessageQuirkRole] = "quirks";
 	ret[MessageModelIndexRole] = "modelIndex";
+	ret[IsOwnMessageRole] = "isOwnMessage";
 
 	return ret;
 }

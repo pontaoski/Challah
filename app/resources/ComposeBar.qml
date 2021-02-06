@@ -160,6 +160,9 @@ QQC2.ToolBar {
 				QQC2.ToolTip.visible: hovered
 				//: Send the message in the text field
 				QQC2.ToolTip.text: qsTr("Add attachment...")
+
+				Layout.preferredHeight: messageField.implicitHeight
+				Layout.preferredWidth: messageField.implicitHeight
 			}
 			QQC2.TextArea {
 				id: messageField
@@ -173,6 +176,8 @@ QQC2.ToolBar {
 				onTextChanged: {
 					model.typed()
 				}
+
+				padding: 8
 
 				Clipboard.paste: function(clipboard) {
 					if (clipboard.hasUrls) {
@@ -218,6 +223,9 @@ QQC2.ToolBar {
 				QQC2.ToolTip.visible: hovered
 				//: Send the message in the text field
 				QQC2.ToolTip.text: qsTr("Send")
+
+				Layout.preferredHeight: messageField.implicitHeight
+				Layout.preferredWidth: messageField.implicitHeight
 			}
 		}
 	}

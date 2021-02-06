@@ -13,6 +13,8 @@ Kirigami.ApplicationWindow {
 	minimumWidth: 300
 	width: 1000
 
+	wideScreen: width > 500
+
 	UISettings { id: uiSettings }
 
 	pageStack.globalToolBar.showNavigationButtons: 0

@@ -140,6 +140,7 @@ QQC2.Control {
 			Layout.maximumWidth: (applicationWindow().wideScreen ? Math.max(messagesView.width / 3, Kirigami.Units.gridUnit * 15) : (messagesView.width * 0.9)) - Layout.leftMargin
 			Layout.preferredWidth: theThing.data.length > 0 ? Layout.maximumWidth : -1
 			Layout.leftMargin: Kirigami.Units.gridUnit * 2 + Kirigami.Units.largeSpacing
+			Layout.alignment: (isOwnMessage && (!applicationWindow().wideScreen)) ? Qt.AlignRight : Qt.AlignLeft
 			Kirigami.Theme.colorSet: messagesRoute.model.userID() == authorID ? Kirigami.Theme.Button : Kirigami.Theme.Window
 
 			implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset, implicitContentWidth + leftPadding + rightPadding)
@@ -165,7 +166,7 @@ QQC2.Control {
 			}
 			contentItem: ColumnLayout {
 				QQC2.Label {
-					visible: !!quirks["previousAuthorDifferent"] || !!quirks["dateHeader"]
+					visible: !isOwnMessage && (!!quirks["previousAuthorDifferent"] || !!quirks["dateHeader"])
 					text: authorName
 					color: Kirigami.NameUtils.colorsFromString(authorName)
 

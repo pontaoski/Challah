@@ -82,6 +82,8 @@ Kirigami.PageRoute {
 						width: Kirigami.Units.gridUnit * 2
 						height: Kirigami.Units.gridUnit * 2
 
+						visible: !(avvy.parent.section.split("\t")[0] === messagesView.model.userID() && (!applicationWindow().wideScreen))
+
 						anchors {
 							bottom: parent.top
 						}
@@ -103,7 +105,15 @@ Kirigami.PageRoute {
 				}
 			}
 
-			delegate: MessageDelegate {}
+			delegate: ColumnLayout {
+				MessageDelegate {
+					Layout.alignment: (isOwnMessage && (!applicationWindow().wideScreen)) ? Qt.AlignRight : Qt.AlignLeft
+				}
+				anchors.left: parent.left
+				anchors.right: parent.right
+
+				Layout.fillWidth: true
+			}
 
 			add: Transition {
 				NumberAnimation {

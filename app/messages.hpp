@@ -146,6 +146,7 @@ class MessagesModel : public QAbstractListModel
 		MessageQuirkRole,
 		MessageModelIndexRole,
 		MessageStatusRole,
+		IsOwnMessageRole,
 	};
 
 	struct Fronter {
