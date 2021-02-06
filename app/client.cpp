@@ -283,20 +283,27 @@ void Client::customEvent(QEvent *event)
 		if (subscribedGuilds.contains(ev->gid)) return;
 
 		if (eventStream->isValid()) {
+		before:
 			qCDebug(STREAM_LIFECYCLE) << "Subscribing to guild" << ev->gid << "on homeserver" << homeserver;
 			subscribedGuilds << ev->gid;
 			protocol::chat::v1::StreamEventsRequest req;
 			auto subReq = new protocol::chat::v1::StreamEventsRequest_SubscribeToGuild;
 			subReq->set_guild_id(ev->gid);
 			req.set_allocated_subscribe_to_guild(subReq);
-			qDebug() << eventStream->send(req);
+			eventStream->send(req);
+
 			qCDebug(STREAM_LIFECYCLE) << "Now subscribed to guilds" << subscribedGuilds << "on homeserver" << homeserver;
+
+			goto after;
 		} else {
 			qCDebug(STREAM_LIFECYCLE) << "Got a request to subscribe to guild on homeserver" << homeserver << "but the stream is closed";
-			qCDebug(STREAM_LIFECYCLE) << "Posting a start loop request and another subscribe request...";
-			QCoreApplication::postEvent(this, new StartLoop());
-			QCoreApplication::postEvent(this, new Subscribe(ev->gid));
+			qCDebug(STREAM_LIFECYCLE) << "Starting the stream...";
+
+			runEvents();
+			goto before;
 		}
+	after:
+		;
 	}
 }
 
