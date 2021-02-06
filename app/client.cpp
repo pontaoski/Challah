@@ -161,7 +161,7 @@ bool Client::createGuild(const QString &name)
 	auto req2 = protocol::chat::v1::AddGuildToGuildListRequest{};
 	req2.set_guild_id(resp.guild_id());
 
-	return resultOk(chatKit->AddGuildToGuildList(req2));
+	return resultOk(chatKit->AddGuildToGuildList(req2, theHeaders));
 }
 
 bool Client::joinInvite(const QString& invite)
