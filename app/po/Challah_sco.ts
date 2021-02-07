@@ -114,7 +114,7 @@
     <message>
       <location filename="../resources/GuildRoute.qml" line="23"/>
       <source>Select a channel to get chatting.</source>
-      <translation>Pick a channel tae git bletherin.</translation>
+      <translation>Select a channel tae git bletherin.</translation>
     </message>
   </context>
   <context>
@@ -287,38 +287,38 @@
     <message>
       <location filename="../resources/MessageDelegate.qml" line="39"/>
       <source>Edit</source>
-      <translation type="unfinished">Edit</translation>
+      <translation>Eedit</translation>
     </message>
     <message>
       <location filename="../resources/MessageDelegate.qml" line="46"/>
       <source>Delete</source>
-      <translation type="unfinished">Delete</translation>
+      <translation>Delete</translation>
     </message>
     <message>
       <location filename="../resources/MessageDelegate.qml" line="53"/>
       <source>Reply</source>
-      <translation type="unfinished">Reply</translation>
+      <translation>Repone</translation>
     </message>
     <message>
       <location filename="../resources/MessageDelegate.qml" line="62"/>
       <location filename="../resources/MessageDelegate.qml" line="82"/>
       <source>Select</source>
-      <translation type="unfinished">Select</translation>
+      <translation>Select</translation>
     </message>
     <message>
       <location filename="../resources/MessageDelegate.qml" line="71"/>
       <source>Copy Selected Messages</source>
-      <translation type="unfinished">Copy Selected Messages</translation>
+      <translation>Copy Selectit Messages</translation>
     </message>
     <message>
       <location filename="../resources/MessageDelegate.qml" line="82"/>
       <source>Unselect</source>
-      <translation type="unfinished">Unselect</translation>
+      <translation>Unselect</translation>
     </message>
     <message>
       <location filename="../resources/MessageDelegate.qml" line="328"/>
       <source>Instant View</source>
-      <translation type="unfinished">Instant View</translation>
+      <translation>Instant View</translation>
     </message>
   </context>
   <context>
@@ -327,9 +327,9 @@
       <location filename="../messages.cpp" line="211"/>
       <source>%1 are typing...</source>
       <comment>Lists</comment>
-      <translation type="unfinished">
-        <numerusform>%1 are typing...</numerusform>
-        <numerusform>%1 are typing...</numerusform>
+      <translation>
+        <numerusform>%1 are teepin...</numerusform>
+        <numerusform>%1 are teepin...</numerusform>
       </translation>
     </message>
   </context>
@@ -338,17 +338,17 @@
     <message>
       <location filename="../resources/NoGuildRoute.qml" line="16"/>
       <source>Guilds</source>
-      <translation type="unfinished">Guilds</translation>
+      <translation>Guilds</translation>
     </message>
     <message>
       <location filename="../resources/NoGuildRoute.qml" line="23"/>
       <source>Click a guild to get chatting.</source>
-      <translation type="unfinished">Click a guild to get chatting.</translation>
+      <translation>Click a guide tae git bletherin.</translation>
     </message>
     <message>
       <location filename="../resources/NoGuildRoute.qml" line="30"/>
       <source>Join or Create Guild...</source>
-      <translation type="unfinished">Join or Create Guild...</translation>
+      <translation>Jyne or Mak Guild...</translation>
     </message>
   </context>
   <context>
@@ -359,142 +359,142 @@
       <location filename="../resources/Permissions.qml" line="124"/>
       <location filename="../resources/Permissions.qml" line="125"/>
       <source>Permissions</source>
-      <translation type="unfinished">Permissions</translation>
+      <translation>Permeesions</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="25"/>
       <source>Add Permission...</source>
-      <translation type="unfinished">Add Permission...</translation>
+      <translation>Add Permeesion...</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="30"/>
       <source>Save Permissions</source>
-      <translation type="unfinished">Save Permissions</translation>
+      <translation>Sauf Permeesions</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="42"/>
       <source>Allow Or Deny</source>
-      <translation type="unfinished">Allow Or Deny</translation>
+      <translation>Allou Or Denee</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="48"/>
       <source>Allow or deny access to this permission to members with this role?</source>
-      <translation type="unfinished">Allow or deny access to this permission to members with this role?</translation>
+      <translation>Allou or denee aiccess tae this permeesion tae members wi this role?</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="53"/>
       <source>Allow</source>
-      <translation type="unfinished">Allow</translation>
+      <translation>Allou</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="60"/>
       <source>Deny</source>
-      <translation type="unfinished">Deny</translation>
+      <translation>Denee</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="72"/>
       <source>Trigger Actions</source>
-      <translation type="unfinished">Trigger Actions</translation>
+      <translation>Stairt Actions</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="73"/>
       <source>Change Channel Names</source>
-      <translation type="unfinished">Change Channel Names</translation>
+      <translation>Chynge Channel Names</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="74"/>
       <source>Create Channels</source>
-      <translation type="unfinished">Create Channels</translation>
+      <translation>Mak Channels</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="75"/>
       <source>Delete Channels</source>
-      <translation type="unfinished">Delete Channels</translation>
+      <translation>Delete Channels</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="76"/>
       <source>Move Channels</source>
-      <translation type="unfinished">Move Channels</translation>
+      <translation>Muive Channels</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="77"/>
       <source>Change Guild Name</source>
-      <translation type="unfinished">Change Guild Name</translation>
+      <translation>Chynge Guild Name</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="78"/>
       <source>Delete Guild</source>
-      <translation type="unfinished">Delete Guild</translation>
+      <translation>Delete Guild</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="79"/>
       <source>Create Invites</source>
-      <translation type="unfinished">Create Invites</translation>
+      <translation>Mak Inveets</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="80"/>
       <source>View Invites</source>
-      <translation type="unfinished">View Invites</translation>
+      <translation>View Inveets</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="81"/>
       <source>Delete Others&apos; Messages</source>
-      <translation type="unfinished">Delete Others&apos; Messages</translation>
+      <translation>Delete Ithers&apos; Messages</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="82"/>
       <source>Send Messages</source>
-      <translation type="unfinished">Send Messages</translation>
+      <translation>Send Messages</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="83"/>
       <source>Read Messages</source>
-      <translation type="unfinished">Read Messages</translation>
+      <translation>Read Messages</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="84"/>
       <source>Get Permissions</source>
-      <translation type="unfinished">Get Permissions</translation>
+      <translation>Git Permeesions</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="85"/>
       <source>Set Permissions</source>
-      <translation type="unfinished">Set Permissions</translation>
+      <translation>Set Permeesions</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="86"/>
       <source>Check Permissions</source>
-      <translation type="unfinished">Check Permissions</translation>
+      <translation>Chack Permeesions</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="87"/>
       <source>View Roles</source>
-      <translation type="unfinished">View Roles</translation>
+      <translation>View Roles</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="88"/>
       <source>Manage Roles</source>
-      <translation type="unfinished">Manage Roles</translation>
+      <translation>Manage Roles</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="89"/>
       <source>View Users&apos; Roles</source>
-      <translation type="unfinished">View Users&apos; Roles</translation>
+      <translation>View Uisers&apos; Roles</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="90"/>
       <source>Manage Users&apos; Roles</source>
-      <translation type="unfinished">Manage Users&apos; Roles</translation>
+      <translation>Manage Uisers&apos; Roles</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="100"/>
       <source>Add Permissions</source>
-      <translation type="unfinished">Add Permissions</translation>
+      <translation>Add Permeesions</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="111"/>
       <source>Actions</source>
-      <translation type="unfinished">Actions</translation>
+      <translation>Actions</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="112"/>
@@ -502,26 +502,26 @@
       <location filename="../resources/Permissions.qml" line="114"/>
       <location filename="../resources/Permissions.qml" line="115"/>
       <source>Channels</source>
-      <translation type="unfinished">Channels</translation>
+      <translation>Channels</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="116"/>
       <location filename="../resources/Permissions.qml" line="117"/>
       <source>Guild</source>
-      <translation type="unfinished">Guild</translation>
+      <translation>Guild</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="118"/>
       <location filename="../resources/Permissions.qml" line="119"/>
       <source>Invites</source>
-      <translation type="unfinished">Invites</translation>
+      <translation>Inveets</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="120"/>
       <location filename="../resources/Permissions.qml" line="121"/>
       <location filename="../resources/Permissions.qml" line="122"/>
       <source>Messages</source>
-      <translation type="unfinished">Messages</translation>
+      <translation>Messages</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="126"/>
@@ -529,7 +529,7 @@
       <location filename="../resources/Permissions.qml" line="128"/>
       <location filename="../resources/Permissions.qml" line="129"/>
       <source>Roles</source>
-      <translation type="unfinished">Roles</translation>
+      <translation>Roles</translation>
     </message>
   </context>
   <context>
@@ -538,7 +538,7 @@
       <location filename="../messages.cpp" line="166"/>
       <source>%1 and %2</source>
       <comment>Lists</comment>
-      <translation type="unfinished">%1 and %2</translation>
+      <translation>%1 an %2</translation>
     </message>
     <message>
       <location filename="../messages.cpp" line="185"/>
@@ -548,14 +548,14 @@
       <extracomment>the middle of a list with 4 or more items: &quot;A, %1, %2, D, and E&quot;
 ----------
 the start of a list, for example &quot;%1, %2, and C&quot;</extracomment>
-      <translation type="unfinished">%1, %2</translation>
+      <translation>%1, %2</translation>
     </message>
     <message>
       <location filename="../messages.cpp" line="192"/>
       <source>%1, and %2</source>
       <comment>Lists</comment>
       <extracomment>the end of a list, for example &quot;A, %1, and %2&quot;</extracomment>
-      <translation type="unfinished">%1, and %2</translation>
+      <translation>%1, an %2</translation>
     </message>
   </context>
   <context>
@@ -563,42 +563,42 @@ the start of a list, for example &quot;%1, %2, and C&quot;</extracomment>
     <message>
       <location filename="../loginmanager.cpp" line="25"/>
       <source>Select a login method</source>
-      <translation type="unfinished">Select a login method</translation>
+      <translation>Select a wey fur loggin in</translation>
     </message>
     <message>
       <location filename="../loginmanager.cpp" line="26"/>
       <source>Register</source>
-      <translation type="unfinished">Register</translation>
+      <translation>Register</translation>
     </message>
     <message>
       <location filename="../loginmanager.cpp" line="27"/>
       <source>Login</source>
-      <translation type="unfinished">Login</translation>
+      <translation>Login</translation>
     </message>
     <message>
       <location filename="../loginmanager.cpp" line="28"/>
       <source>Other Options</source>
-      <translation type="unfinished">Other Options</translation>
+      <translation>Ither Options</translation>
     </message>
     <message>
       <location filename="../loginmanager.cpp" line="29"/>
       <source>Reset Password</source>
-      <translation type="unfinished">Reset Password</translation>
+      <translation>Reset Trystwird</translation>
     </message>
     <message>
       <location filename="../loginmanager.cpp" line="30"/>
       <source>Email:</source>
-      <translation type="unfinished">Email:</translation>
+      <translation>Email:</translation>
     </message>
     <message>
       <location filename="../loginmanager.cpp" line="31"/>
       <source>Username:</source>
-      <translation type="unfinished">Username:</translation>
+      <translation>Uisername:</translation>
     </message>
     <message>
       <location filename="../loginmanager.cpp" line="32"/>
       <source>Password:</source>
-      <translation type="unfinished">Password:</translation>
+      <translation>Trystwird:</translation>
     </message>
   </context>
   <context>
@@ -607,17 +607,17 @@ the start of a list, for example &quot;%1, %2, and C&quot;</extracomment>
       <location filename="../resources/RightDrawer.qml" line="54"/>
       <source>Guild Info</source>
       <extracomment>a heading for the right drawer which shows guild info</extracomment>
-      <translation type="unfinished">Guild Info</translation>
+      <translation>Guild Info</translation>
     </message>
     <message>
       <location filename="../resources/RightDrawer.qml" line="111"/>
       <source>Failed to upload file</source>
-      <translation type="unfinished">Failed to upload file</translation>
+      <translation>Failt tae uplaid file</translation>
     </message>
     <message>
       <location filename="../resources/RightDrawer.qml" line="145"/>
       <source>%L1 members</source>
-      <translation type="unfinished">%L1 members</translation>
+      <translation>%L1 members</translation>
     </message>
   </context>
   <context>
@@ -625,44 +625,44 @@ the start of a list, for example &quot;%1, %2, and C&quot;</extracomment>
     <message>
       <location filename="../resources/Roles.qml" line="15"/>
       <source>Roles</source>
-      <translation type="unfinished">Roles</translation>
+      <translation>Roles</translation>
     </message>
     <message>
       <location filename="../resources/Roles.qml" line="22"/>
       <source>Create Role...</source>
-      <translation type="unfinished">Create Role...</translation>
+      <translation>Mak Role...</translation>
     </message>
     <message>
       <location filename="../resources/Roles.qml" line="30"/>
       <source>Edit Default Permissions...</source>
-      <translation type="unfinished">Edit Default Permissions...</translation>
+      <translation>Eedit Default Permeessions...</translation>
     </message>
     <message>
       <location filename="../resources/Roles.qml" line="50"/>
       <source>Role Name:</source>
-      <translation type="unfinished">Role Name:</translation>
+      <translation>Role Name:</translation>
     </message>
     <message>
       <location filename="../resources/Roles.qml" line="62"/>
       <source>Role Color:</source>
-      <translation type="unfinished">Role Color:</translation>
+      <translation>Role Colour:</translation>
     </message>
     <message>
       <location filename="../resources/Roles.qml" line="65"/>
       <source>Create Role</source>
-      <translation type="unfinished">Create Role</translation>
+      <translation>Mak Role</translation>
     </message>
     <message>
       <location filename="../resources/Roles.qml" line="70"/>
       <source>Created role</source>
       <extracomment>the role was created successfully</extracomment>
-      <translation type="unfinished">Created role</translation>
+      <translation>Makkit role</translation>
     </message>
     <message>
       <location filename="../resources/Roles.qml" line="73"/>
       <source>Failed to create role</source>
       <extracomment>the role couldn&apos;t be created successfully</extracomment>
-      <translation type="unfinished">Failed to create role</translation>
+      <translation>Failt tae mak role</translation>
     </message>
   </context>
   <context>
@@ -670,39 +670,39 @@ the start of a list, for example &quot;%1, %2, and C&quot;</extracomment>
     <message>
       <location filename="../resources/StaccatoDrawer.qml" line="72"/>
       <source>Settings</source>
-      <translation type="unfinished">Settings</translation>
+      <translation>Settins</translation>
     </message>
     <message>
       <location filename="../resources/StaccatoDrawer.qml" line="76"/>
       <source>Log Out</source>
-      <translation type="unfinished">Log Out</translation>
+      <translation>Log Oot</translation>
     </message>
     <message>
       <location filename="../resources/StaccatoDrawer.qml" line="138"/>
       <source>Delete</source>
-      <translation type="unfinished">Delete</translation>
+      <translation>Delete</translation>
     </message>
     <message>
       <location filename="../resources/StaccatoDrawer.qml" line="138"/>
       <source>Leave</source>
-      <translation type="unfinished">Leave</translation>
+      <translation>Leave</translation>
     </message>
     <message>
       <location filename="../resources/StaccatoDrawer.qml" line="142"/>
       <source>Left guild</source>
       <extracomment>guild leaving succeeded</extracomment>
-      <translation type="unfinished">Left guild</translation>
+      <translation>Leaved guild</translation>
     </message>
     <message>
       <location filename="../resources/StaccatoDrawer.qml" line="145"/>
       <source>Failed to leave guild</source>
       <extracomment>guild leaving failed</extracomment>
-      <translation type="unfinished">Failed to leave guild</translation>
+      <translation>Failt tae leave guild</translation>
     </message>
     <message>
       <location filename="../resources/StaccatoDrawer.qml" line="178"/>
       <source>Channels</source>
-      <translation type="unfinished">Channels</translation>
+      <translation>Channels</translation>
     </message>
   </context>
   <context>
@@ -710,7 +710,7 @@ the start of a list, for example &quot;%1, %2, and C&quot;</extracomment>
     <message>
       <location filename="../resources/Stepper.qml" line="14"/>
       <source>Login</source>
-      <translation type="unfinished">Login</translation>
+      <translation>Login</translation>
     </message>
   </context>
   <context>
@@ -718,27 +718,27 @@ the start of a list, for example &quot;%1, %2, and C&quot;</extracomment>
     <message>
       <location filename="../resources/UserPopup.qml" line="49"/>
       <source>Roles</source>
-      <translation type="unfinished">Roles</translation>
+      <translation>Roles</translation>
     </message>
     <message>
       <location filename="../resources/UserPopup.qml" line="57"/>
       <source>Give Role...</source>
-      <translation type="unfinished">Give Role...</translation>
+      <translation>Gie Role...</translation>
     </message>
     <message>
       <location filename="../resources/UserPopup.qml" line="85"/>
       <source>Manage User</source>
-      <translation type="unfinished">Manage User</translation>
+      <translation>Manage Uiser</translation>
     </message>
     <message>
       <location filename="../resources/UserPopup.qml" line="90"/>
       <source>Kick User</source>
-      <translation type="unfinished">Kick User</translation>
+      <translation>Kick Uiser</translation>
     </message>
     <message>
       <location filename="../resources/UserPopup.qml" line="99"/>
       <source>Ban User</source>
-      <translation type="unfinished">Ban User</translation>
+      <translation>Ban Uiser</translation>
     </message>
   </context>
 </TS>
