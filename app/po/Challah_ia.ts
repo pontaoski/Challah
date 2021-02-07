@@ -6,7 +6,7 @@
     <message>
       <location filename="../resources/ChallahSettings.qml" line="14"/>
       <source>Settings</source>
-      <translation type="unfinished">Settings</translation>
+      <translation>Preferentias</translation>
     </message>
     <message>
       <location filename="../resources/ChallahSettings.qml" line="23"/>
@@ -27,7 +27,7 @@
     <message>
       <location filename="../resources/ChallahSettings.qml" line="44"/>
       <source>Roleplay</source>
-      <translation type="unfinished">Roleplay</translation>
+      <translation>Jocar al rolo</translation>
     </message>
     <message>
       <location filename="../resources/ChallahSettings.qml" line="53"/>
@@ -37,7 +37,7 @@
     <message>
       <location filename="../resources/ChallahSettings.qml" line="56"/>
       <source>Create</source>
-      <translation type="unfinished">Create</translation>
+      <translation>Crea</translation>
     </message>
   </context>
   <context>
@@ -45,12 +45,12 @@
     <message>
       <location filename="../resources/ChannelSheet.qml" line="21"/>
       <source>Channel Name:</source>
-      <translation type="unfinished">Channel Name:</translation>
+      <translation>Nomine de Canal:</translation>
     </message>
     <message>
       <location filename="../resources/ChannelSheet.qml" line="24"/>
       <source>Create Channel</source>
-      <translation type="unfinished">Create Channel</translation>
+      <translation>Crea Canal</translation>
     </message>
     <message>
       <location filename="../resources/ChannelSheet.qml" line="30"/>
@@ -84,7 +84,7 @@
       <location filename="../resources/ComposeBar.qml" line="225"/>
       <source>Send</source>
       <extracomment>Send the message in the text field</extracomment>
-      <translation type="unfinished">Send</translation>
+      <translation>Inviar</translation>
     </message>
     <message>
       <location filename="../resources/ComposeBar.qml" line="147"/>
@@ -122,7 +122,7 @@
     <message>
       <location filename="../resources/GuildSettings.qml" line="14"/>
       <source>Settings</source>
-      <translation type="unfinished">Settings</translation>
+      <translation>Preferentias</translation>
     </message>
   </context>
   <context>
@@ -141,7 +141,7 @@
     <message>
       <location filename="../resources/GuildSheet.qml" line="92"/>
       <source>Guild Name:</source>
-      <translation type="unfinished">Guild Name:</translation>
+      <translation>Nomine de corporation:</translation>
     </message>
     <message>
       <location filename="../resources/GuildSheet.qml" line="100"/>
@@ -241,12 +241,12 @@
     <message>
       <location filename="../loginmanager.cpp" line="143"/>
       <source>address@email.com</source>
-      <translation type="unfinished">address@email.com</translation>
+      <translation>adresse@e-mail.com</translation>
     </message>
     <message>
       <location filename="../loginmanager.cpp" line="151"/>
       <source>Submit</source>
-      <translation type="unfinished">Submit</translation>
+      <translation>Submitter</translation>
     </message>
   </context>
   <context>
@@ -254,12 +254,12 @@
     <message>
       <location filename="../resources/LoginRoute.qml" line="17"/>
       <source>Welcome</source>
-      <translation type="unfinished">Welcome</translation>
+      <translation>Benvenite</translation>
     </message>
     <message>
       <location filename="../resources/LoginRoute.qml" line="38"/>
       <source>Welcome to Challah</source>
-      <translation type="unfinished">Welcome to Challah</translation>
+      <translation>Benvenite a Challah</translation>
     </message>
     <message>
       <location filename="../resources/LoginRoute.qml" line="44"/>
@@ -269,7 +269,7 @@
     <message>
       <location filename="../resources/LoginRoute.qml" line="61"/>
       <source>Continue</source>
-      <translation type="unfinished">Continue</translation>
+      <translation>Continuar</translation>
     </message>
   </context>
   <context>
@@ -279,7 +279,7 @@
       <location filename="../resources/MessageAction.qml" line="95"/>
       <location filename="../resources/MessageAction.qml" line="119"/>
       <source>Submit</source>
-      <translation type="unfinished">Submit</translation>
+      <translation>Submitter</translation>
     </message>
   </context>
   <context>
@@ -287,23 +287,23 @@
     <message>
       <location filename="../resources/MessageDelegate.qml" line="39"/>
       <source>Edit</source>
-      <translation type="unfinished">Edit</translation>
+      <translation>Editar</translation>
     </message>
     <message>
       <location filename="../resources/MessageDelegate.qml" line="46"/>
       <source>Delete</source>
-      <translation type="unfinished">Delete</translation>
+      <translation>Deler</translation>
     </message>
     <message>
       <location filename="../resources/MessageDelegate.qml" line="53"/>
       <source>Reply</source>
-      <translation type="unfinished">Reply</translation>
+      <translation>Responder</translation>
     </message>
     <message>
       <location filename="../resources/MessageDelegate.qml" line="62"/>
       <location filename="../resources/MessageDelegate.qml" line="82"/>
       <source>Select</source>
-      <translation type="unfinished">Select</translation>
+      <translation>Selectionar</translation>
     </message>
     <message>
       <location filename="../resources/MessageDelegate.qml" line="71"/>
@@ -337,7 +337,7 @@
     <message>
       <location filename="../resources/NoGuildRoute.qml" line="16"/>
       <source>Guilds</source>
-      <translation type="unfinished">Guilds</translation>
+      <translation>Corporations</translation>
     </message>
     <message>
       <location filename="../resources/NoGuildRoute.qml" line="23"/>
@@ -358,7 +358,7 @@
       <location filename="../resources/Permissions.qml" line="124"/>
       <location filename="../resources/Permissions.qml" line="125"/>
       <source>Permissions</source>
-      <translation type="unfinished">Permissions</translation>
+      <translation>Permissions</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="25"/>
@@ -373,7 +373,7 @@
     <message>
       <location filename="../resources/Permissions.qml" line="42"/>
       <source>Allow Or Deny</source>
-      <translation type="unfinished">Allow Or Deny</translation>
+      <translation>Permitter o Negar</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="48"/>
@@ -383,12 +383,12 @@
     <message>
       <location filename="../resources/Permissions.qml" line="53"/>
       <source>Allow</source>
-      <translation type="unfinished">Allow</translation>
+      <translation>Permitter</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="60"/>
       <source>Deny</source>
-      <translation type="unfinished">Deny</translation>
+      <translation>Negar</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="72"/>
@@ -493,7 +493,7 @@
     <message>
       <location filename="../resources/Permissions.qml" line="111"/>
       <source>Actions</source>
-      <translation type="unfinished">Actions</translation>
+      <translation>Actions</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="112"/>
@@ -501,13 +501,13 @@
       <location filename="../resources/Permissions.qml" line="114"/>
       <location filename="../resources/Permissions.qml" line="115"/>
       <source>Channels</source>
-      <translation type="unfinished">Channels</translation>
+      <translation>Canals</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="116"/>
       <location filename="../resources/Permissions.qml" line="117"/>
       <source>Guild</source>
-      <translation type="unfinished">Guild</translation>
+      <translation>Corporations</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="118"/>
@@ -520,7 +520,7 @@
       <location filename="../resources/Permissions.qml" line="121"/>
       <location filename="../resources/Permissions.qml" line="122"/>
       <source>Messages</source>
-      <translation type="unfinished">Messages</translation>
+      <translation>Messages</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="126"/>
@@ -528,7 +528,7 @@
       <location filename="../resources/Permissions.qml" line="128"/>
       <location filename="../resources/Permissions.qml" line="129"/>
       <source>Roles</source>
-      <translation type="unfinished">Roles</translation>
+      <translation>Rolos</translation>
     </message>
   </context>
   <context>
@@ -567,12 +567,12 @@ the start of a list, for example &quot;%1, %2, and C&quot;</extracomment>
     <message>
       <location filename="../loginmanager.cpp" line="26"/>
       <source>Register</source>
-      <translation type="unfinished">Register</translation>
+      <translation>Registrar</translation>
     </message>
     <message>
       <location filename="../loginmanager.cpp" line="27"/>
       <source>Login</source>
-      <translation type="unfinished">Login</translation>
+      <translation>Aperir session</translation>
     </message>
     <message>
       <location filename="../loginmanager.cpp" line="28"/>
@@ -582,22 +582,22 @@ the start of a list, for example &quot;%1, %2, and C&quot;</extracomment>
     <message>
       <location filename="../loginmanager.cpp" line="29"/>
       <source>Reset Password</source>
-      <translation type="unfinished">Reset Password</translation>
+      <translation>Reinitialisar Contrasigno</translation>
     </message>
     <message>
       <location filename="../loginmanager.cpp" line="30"/>
       <source>Email:</source>
-      <translation type="unfinished">Email:</translation>
+      <translation>E-mail:</translation>
     </message>
     <message>
       <location filename="../loginmanager.cpp" line="31"/>
       <source>Username:</source>
-      <translation type="unfinished">Username:</translation>
+      <translation>Nomine de usator:</translation>
     </message>
     <message>
       <location filename="../loginmanager.cpp" line="32"/>
       <source>Password:</source>
-      <translation type="unfinished">Password:</translation>
+      <translation>Contrasigno:</translation>
     </message>
   </context>
   <context>
@@ -624,7 +624,7 @@ the start of a list, for example &quot;%1, %2, and C&quot;</extracomment>
     <message>
       <location filename="../resources/Roles.qml" line="15"/>
       <source>Roles</source>
-      <translation type="unfinished">Roles</translation>
+      <translation>Rolos</translation>
     </message>
     <message>
       <location filename="../resources/Roles.qml" line="22"/>
@@ -639,12 +639,12 @@ the start of a list, for example &quot;%1, %2, and C&quot;</extracomment>
     <message>
       <location filename="../resources/Roles.qml" line="50"/>
       <source>Role Name:</source>
-      <translation type="unfinished">Role Name:</translation>
+      <translation>Nomine de rolo:</translation>
     </message>
     <message>
       <location filename="../resources/Roles.qml" line="62"/>
       <source>Role Color:</source>
-      <translation type="unfinished">Role Color:</translation>
+      <translation>Color de rolo:</translation>
     </message>
     <message>
       <location filename="../resources/Roles.qml" line="65"/>
@@ -669,17 +669,17 @@ the start of a list, for example &quot;%1, %2, and C&quot;</extracomment>
     <message>
       <location filename="../resources/StaccatoDrawer.qml" line="72"/>
       <source>Settings</source>
-      <translation type="unfinished">Settings</translation>
+      <translation>Preferentias</translation>
     </message>
     <message>
       <location filename="../resources/StaccatoDrawer.qml" line="76"/>
       <source>Log Out</source>
-      <translation type="unfinished">Log Out</translation>
+      <translation>Clauder session</translation>
     </message>
     <message>
       <location filename="../resources/StaccatoDrawer.qml" line="138"/>
       <source>Delete</source>
-      <translation type="unfinished">Delete</translation>
+      <translation>Deler</translation>
     </message>
     <message>
       <location filename="../resources/StaccatoDrawer.qml" line="138"/>
@@ -701,7 +701,7 @@ the start of a list, for example &quot;%1, %2, and C&quot;</extracomment>
     <message>
       <location filename="../resources/StaccatoDrawer.qml" line="178"/>
       <source>Channels</source>
-      <translation type="unfinished">Channels</translation>
+      <translation>Canals</translation>
     </message>
   </context>
   <context>
@@ -709,7 +709,7 @@ the start of a list, for example &quot;%1, %2, and C&quot;</extracomment>
     <message>
       <location filename="../resources/Stepper.qml" line="14"/>
       <source>Login</source>
-      <translation type="unfinished">Login</translation>
+      <translation>Aperir session</translation>
     </message>
   </context>
   <context>
@@ -717,7 +717,7 @@ the start of a list, for example &quot;%1, %2, and C&quot;</extracomment>
     <message>
       <location filename="../resources/UserPopup.qml" line="49"/>
       <source>Roles</source>
-      <translation type="unfinished">Roles</translation>
+      <translation>Rolos</translation>
     </message>
     <message>
       <location filename="../resources/UserPopup.qml" line="57"/>
