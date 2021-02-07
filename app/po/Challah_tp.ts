@@ -12,22 +12,22 @@
       <location filename="../resources/ChallahSettings.qml" line="23"/>
       <source>Personas</source>
       <extracomment>Personas are alternate identities; e.g. for roleplay reasons</extracomment>
-      <translation type="unfinished">Personas</translation>
+      <translation>nimi</translation>
     </message>
     <message>
       <location filename="../resources/ChallahSettings.qml" line="25"/>
       <source>New Persona</source>
-      <translation type="unfinished">New Persona</translation>
+      <translation>pali e nimi sin</translation>
     </message>
     <message>
       <location filename="../resources/ChallahSettings.qml" line="38"/>
       <source>Persona Name:</source>
-      <translation type="unfinished">Persona Name:</translation>
+      <translation>nimi ona:</translation>
     </message>
     <message>
       <location filename="../resources/ChallahSettings.qml" line="44"/>
       <source>Roleplay</source>
-      <translation type="unfinished">Roleplay</translation>
+      <translation>pali musi</translation>
     </message>
     <message>
       <location filename="../resources/ChallahSettings.qml" line="53"/>
