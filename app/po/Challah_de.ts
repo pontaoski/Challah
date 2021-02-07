@@ -259,7 +259,7 @@
     <message>
       <location filename="../resources/LoginRoute.qml" line="38"/>
       <source>Welcome to Challah</source>
-      <translation type="unfinished">Welcome to Challah</translation>
+      <translation>Willkommen bei Challah</translation>
     </message>
     <message>
       <location filename="../resources/LoginRoute.qml" line="44"/>
@@ -327,9 +327,9 @@
       <location filename="../messages.cpp" line="211"/>
       <source>%1 are typing...</source>
       <comment>Lists</comment>
-      <translation type="unfinished">
+      <translation>
         <numerusform>%1 tippt...</numerusform>
-        <numerusform>%1 are typing...</numerusform>
+        <numerusform>%1 tippen...</numerusform>
       </translation>
     </message>
   </context>
