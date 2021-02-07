@@ -1,6 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="pt" sourcelanguage="en">
+<TS version="2.1" language="pt-BR" sourcelanguage="en">
+  <context>
+    <name>ChallahSettings</name>
+    <message>
+      <location filename="../resources/ChallahSettings.qml" line="14"/>
+      <source>Settings</source>
+      <translation type="unfinished">Settings</translation>
+    </message>
+    <message>
+      <location filename="../resources/ChallahSettings.qml" line="23"/>
+      <source>Personas</source>
+      <extracomment>Personas are alternate identities; e.g. for roleplay reasons</extracomment>
+      <translation type="unfinished">Personas</translation>
+    </message>
+    <message>
+      <location filename="../resources/ChallahSettings.qml" line="25"/>
+      <source>New Persona</source>
+      <translation type="unfinished">New Persona</translation>
+    </message>
+    <message>
+      <location filename="../resources/ChallahSettings.qml" line="38"/>
+      <source>Persona Name:</source>
+      <translation type="unfinished">Persona Name:</translation>
+    </message>
+    <message>
+      <location filename="../resources/ChallahSettings.qml" line="44"/>
+      <source>Roleplay</source>
+      <translation type="unfinished">Roleplay</translation>
+    </message>
+    <message>
+      <location filename="../resources/ChallahSettings.qml" line="53"/>
+      <source>Persona Kind:</source>
+      <translation type="unfinished">Persona Kind:</translation>
+    </message>
+    <message>
+      <location filename="../resources/ChallahSettings.qml" line="56"/>
+      <source>Create</source>
+      <translation type="unfinished">Create</translation>
+    </message>
+  </context>
   <context>
     <name>ChannelSheet</name>
     <message>
@@ -30,7 +69,7 @@
     <name>ComposeBar</name>
     <message>
       <location filename="../resources/ComposeBar.qml" line="58"/>
-      <location filename="../resources/ComposeBar.qml" line="168"/>
+      <location filename="../resources/ComposeBar.qml" line="171"/>
       <source>Write a message...</source>
       <extracomment>Placeholder text for the message field</extracomment>
       <translation type="unfinished">Write a message...</translation>
@@ -42,7 +81,7 @@
     </message>
     <message>
       <location filename="../resources/ComposeBar.qml" line="86"/>
-      <location filename="../resources/ComposeBar.qml" line="217"/>
+      <location filename="../resources/ComposeBar.qml" line="225"/>
       <source>Send</source>
       <extracomment>Send the message in the text field</extracomment>
       <translation type="unfinished">Send</translation>
@@ -53,7 +92,7 @@
       <translation type="unfinished">Default</translation>
     </message>
     <message>
-      <location filename="../resources/ComposeBar.qml" line="171"/>
+      <location filename="../resources/ComposeBar.qml" line="174"/>
       <source>You do not have permissions to send a message to this channel.</source>
       <extracomment>Placeholder text for the message field when the user isn&apos;t allowed to send a message</extracomment>
       <translation type="unfinished">You do not have permissions to send a message to this channel.</translation>
@@ -198,53 +237,14 @@
     </message>
   </context>
   <context>
-    <name>ChallahSettings</name>
-    <message>
-      <location filename="../resources/ChallahSettings.qml" line="14"/>
-      <source>Settings</source>
-      <translation type="unfinished">Settings</translation>
-    </message>
-    <message>
-      <location filename="../resources/ChallahSettings.qml" line="23"/>
-      <source>Personas</source>
-      <extracomment>Personas are alternate identities; e.g. for roleplay reasons</extracomment>
-      <translation type="unfinished">Personas</translation>
-    </message>
-    <message>
-      <location filename="../resources/ChallahSettings.qml" line="25"/>
-      <source>New Persona</source>
-      <translation type="unfinished">New Persona</translation>
-    </message>
-    <message>
-      <location filename="../resources/ChallahSettings.qml" line="38"/>
-      <source>Persona Name:</source>
-      <translation type="unfinished">Persona Name:</translation>
-    </message>
-    <message>
-      <location filename="../resources/ChallahSettings.qml" line="44"/>
-      <source>Roleplay</source>
-      <translation type="unfinished">Roleplay</translation>
-    </message>
-    <message>
-      <location filename="../resources/ChallahSettings.qml" line="53"/>
-      <source>Persona Kind:</source>
-      <translation type="unfinished">Persona Kind:</translation>
-    </message>
-    <message>
-      <location filename="../resources/ChallahSettings.qml" line="56"/>
-      <source>Create</source>
-      <translation type="unfinished">Create</translation>
-    </message>
-  </context>
-  <context>
     <name>LoginManager</name>
     <message>
-      <location filename="../loginmanager.cpp" line="146"/>
+      <location filename="../loginmanager.cpp" line="143"/>
       <source>address@email.com</source>
       <translation type="unfinished">address@email.com</translation>
     </message>
     <message>
-      <location filename="../loginmanager.cpp" line="154"/>
+      <location filename="../loginmanager.cpp" line="151"/>
       <source>Submit</source>
       <translation type="unfinished">Submit</translation>
     </message>
@@ -316,7 +316,7 @@
       <translation type="unfinished">Unselect</translation>
     </message>
     <message>
-      <location filename="../resources/MessageDelegate.qml" line="327"/>
+      <location filename="../resources/MessageDelegate.qml" line="328"/>
       <source>Instant View</source>
       <translation type="unfinished">Instant View</translation>
     </message>
@@ -324,7 +324,7 @@
   <context>
     <name>MessagesModel</name>
     <message numerus="yes">
-      <location filename="../messages.cpp" line="210"/>
+      <location filename="../messages.cpp" line="211"/>
       <source>%1 are typing...</source>
       <comment>Lists</comment>
       <translation type="unfinished">
@@ -535,14 +535,14 @@
   <context>
     <name>QCoreApplication</name>
     <message>
-      <location filename="../messages.cpp" line="165"/>
+      <location filename="../messages.cpp" line="166"/>
       <source>%1 and %2</source>
       <comment>Lists</comment>
       <translation type="unfinished">%1 and %2</translation>
     </message>
     <message>
-      <location filename="../messages.cpp" line="184"/>
-      <location filename="../messages.cpp" line="188"/>
+      <location filename="../messages.cpp" line="185"/>
+      <location filename="../messages.cpp" line="189"/>
       <source>%1, %2</source>
       <comment>Lists</comment>
       <extracomment>the middle of a list with 4 or more items: &quot;A, %1, %2, D, and E&quot;
@@ -551,7 +551,7 @@ the start of a list, for example &quot;%1, %2, and C&quot;</extracomment>
       <translation type="unfinished">%1, %2</translation>
     </message>
     <message>
-      <location filename="../messages.cpp" line="191"/>
+      <location filename="../messages.cpp" line="192"/>
       <source>%1, and %2</source>
       <comment>Lists</comment>
       <extracomment>the end of a list, for example &quot;A, %1, and %2&quot;</extracomment>
@@ -561,42 +561,42 @@ the start of a list, for example &quot;%1, %2, and C&quot;</extracomment>
   <context>
     <name>QObject</name>
     <message>
-      <location filename="../loginmanager.cpp" line="23"/>
+      <location filename="../loginmanager.cpp" line="25"/>
       <source>Select a login method</source>
       <translation type="unfinished">Select a login method</translation>
     </message>
     <message>
-      <location filename="../loginmanager.cpp" line="24"/>
+      <location filename="../loginmanager.cpp" line="26"/>
       <source>Register</source>
       <translation type="unfinished">Register</translation>
     </message>
     <message>
-      <location filename="../loginmanager.cpp" line="25"/>
+      <location filename="../loginmanager.cpp" line="27"/>
       <source>Login</source>
       <translation type="unfinished">Login</translation>
     </message>
     <message>
-      <location filename="../loginmanager.cpp" line="26"/>
+      <location filename="../loginmanager.cpp" line="28"/>
       <source>Other Options</source>
       <translation type="unfinished">Other Options</translation>
     </message>
     <message>
-      <location filename="../loginmanager.cpp" line="27"/>
+      <location filename="../loginmanager.cpp" line="29"/>
       <source>Reset Password</source>
       <translation type="unfinished">Reset Password</translation>
     </message>
     <message>
-      <location filename="../loginmanager.cpp" line="28"/>
+      <location filename="../loginmanager.cpp" line="30"/>
       <source>Email:</source>
       <translation type="unfinished">Email:</translation>
     </message>
     <message>
-      <location filename="../loginmanager.cpp" line="29"/>
+      <location filename="../loginmanager.cpp" line="31"/>
       <source>Username:</source>
       <translation type="unfinished">Username:</translation>
     </message>
     <message>
-      <location filename="../loginmanager.cpp" line="30"/>
+      <location filename="../loginmanager.cpp" line="32"/>
       <source>Password:</source>
       <translation type="unfinished">Password:</translation>
     </message>
