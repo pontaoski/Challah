@@ -1,202 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="zh-TW" sourcelanguage="en">
-  <context>
-    <name>ChannelSheet</name>
-    <message>
-      <location filename="../resources/ChannelSheet.qml" line="21"/>
-      <source>Channel Name:</source>
-      <translation type="unfinished">Channel Name:</translation>
-    </message>
-    <message>
-      <location filename="../resources/ChannelSheet.qml" line="24"/>
-      <source>Create Channel</source>
-      <translation type="unfinished">Create Channel</translation>
-    </message>
-    <message>
-      <location filename="../resources/ChannelSheet.qml" line="30"/>
-      <source>Created channel</source>
-      <extracomment>the channel has been successfully created</extracomment>
-      <translation type="unfinished">Created channel</translation>
-    </message>
-    <message>
-      <location filename="../resources/ChannelSheet.qml" line="32"/>
-      <source>Failed to create channel</source>
-      <extracomment>the channel failed to be created</extracomment>
-      <translation type="unfinished">Failed to create channel</translation>
-    </message>
-  </context>
-  <context>
-    <name>ComposeBar</name>
-    <message>
-      <location filename="../resources/ComposeBar.qml" line="58"/>
-      <location filename="../resources/ComposeBar.qml" line="168"/>
-      <source>Write a message...</source>
-      <extracomment>Placeholder text for the message field</extracomment>
-      <translation type="unfinished">Write a message...</translation>
-    </message>
-    <message>
-      <location filename="../resources/ComposeBar.qml" line="73"/>
-      <source>Failed to upload file</source>
-      <translation type="unfinished">Failed to upload file</translation>
-    </message>
-    <message>
-      <location filename="../resources/ComposeBar.qml" line="86"/>
-      <location filename="../resources/ComposeBar.qml" line="217"/>
-      <source>Send</source>
-      <extracomment>Send the message in the text field</extracomment>
-      <translation type="unfinished">Send</translation>
-    </message>
-    <message>
-      <location filename="../resources/ComposeBar.qml" line="147"/>
-      <source>Default</source>
-      <translation type="unfinished">Default</translation>
-    </message>
-    <message>
-      <location filename="../resources/ComposeBar.qml" line="171"/>
-      <source>You do not have permissions to send a message to this channel.</source>
-      <extracomment>Placeholder text for the message field when the user isn&apos;t allowed to send a message</extracomment>
-      <translation type="unfinished">You do not have permissions to send a message to this channel.</translation>
-    </message>
-    <message>
-      <location filename="../resources/ComposeBar.qml" line="162"/>
-      <source>Add attachment...</source>
-      <extracomment>Send the message in the text field</extracomment>
-      <translation type="unfinished">Add attachment...</translation>
-    </message>
-  </context>
-  <context>
-    <name>GuildRoute</name>
-    <message>
-      <location filename="../resources/GuildRoute.qml" line="16"/>
-      <source/>
-      <translation type="unfinished"/>
-    </message>
-    <message>
-      <location filename="../resources/GuildRoute.qml" line="23"/>
-      <source>Select a channel to get chatting.</source>
-      <translation type="unfinished">Select a channel to get chatting.</translation>
-    </message>
-  </context>
-  <context>
-    <name>GuildSettings</name>
-    <message>
-      <location filename="../resources/GuildSettings.qml" line="14"/>
-      <source>Settings</source>
-      <translation type="unfinished">Settings</translation>
-    </message>
-  </context>
-  <context>
-    <name>GuildSheet</name>
-    <message>
-      <location filename="../resources/GuildSheet.qml" line="54"/>
-      <location filename="../resources/GuildSheet.qml" line="95"/>
-      <source>Create Guild</source>
-      <translation type="unfinished">Create Guild</translation>
-    </message>
-    <message>
-      <location filename="../resources/GuildSheet.qml" line="78"/>
-      <source>Join Guild</source>
-      <translation type="unfinished">Join Guild</translation>
-    </message>
-    <message>
-      <location filename="../resources/GuildSheet.qml" line="92"/>
-      <source>Guild Name:</source>
-      <translation type="unfinished">Guild Name:</translation>
-    </message>
-    <message>
-      <location filename="../resources/GuildSheet.qml" line="100"/>
-      <source>Created guild</source>
-      <extracomment>guild has been successfully created</extracomment>
-      <translation type="unfinished">Created guild</translation>
-    </message>
-    <message>
-      <location filename="../resources/GuildSheet.qml" line="103"/>
-      <source>Failed to make guild</source>
-      <extracomment>creating the guild failed</extracomment>
-      <translation type="unfinished">Failed to make guild</translation>
-    </message>
-    <message>
-      <location filename="../resources/GuildSheet.qml" line="119"/>
-      <source>Join</source>
-      <translation type="unfinished">Join</translation>
-    </message>
-    <message>
-      <location filename="../resources/GuildSheet.qml" line="124"/>
-      <source>Joined guild</source>
-      <extracomment>guild has been successfully joined</extracomment>
-      <translation type="unfinished">Joined guild</translation>
-    </message>
-    <message>
-      <location filename="../resources/GuildSheet.qml" line="127"/>
-      <source>Failed to join guild</source>
-      <extracomment>joining the guild failed</extracomment>
-      <translation type="unfinished">Failed to join guild</translation>
-    </message>
-  </context>
-  <context>
-    <name>InstantView</name>
-    <message>
-      <location filename="../resources/InstantView.qml" line="14"/>
-      <source>Loading...</source>
-      <translation type="unfinished">Loading...</translation>
-    </message>
-  </context>
-  <context>
-    <name>Invites</name>
-    <message>
-      <location filename="../resources/Invites.qml" line="13"/>
-      <source>Invites</source>
-      <translation type="unfinished">Invites</translation>
-    </message>
-    <message>
-      <location filename="../resources/Invites.qml" line="18"/>
-      <source>Create Invite...</source>
-      <translation type="unfinished">Create Invite...</translation>
-    </message>
-    <message>
-      <location filename="../resources/Invites.qml" line="39"/>
-      <source>Invite ID:</source>
-      <translation type="unfinished">Invite ID:</translation>
-    </message>
-    <message>
-      <location filename="../resources/Invites.qml" line="49"/>
-      <source>Restrict uses:</source>
-      <translation type="unfinished">Restrict uses:</translation>
-    </message>
-    <message>
-      <location filename="../resources/Invites.qml" line="53"/>
-      <source>Create Invite</source>
-      <translation type="unfinished">Create Invite</translation>
-    </message>
-    <message>
-      <location filename="../resources/Invites.qml" line="58"/>
-      <source>Created invite</source>
-      <extracomment>the invite was created successfully</extracomment>
-      <translation type="unfinished">Created invite</translation>
-    </message>
-    <message>
-      <location filename="../resources/Invites.qml" line="61"/>
-      <source>Failed to create invite</source>
-      <extracomment>the invite couldn&apos;t be created successfully</extracomment>
-      <translation type="unfinished">Failed to create invite</translation>
-    </message>
-    <message>
-      <location filename="../resources/Invites.qml" line="75"/>
-      <source>Invite ID: %1</source>
-      <translation type="unfinished">Invite ID: %1</translation>
-    </message>
-    <message>
-      <location filename="../resources/Invites.qml" line="79"/>
-      <source>Possible Uses: %1 | Uses: %2 </source>
-      <translation type="unfinished">Possible Uses: %1 | Uses: %2 </translation>
-    </message>
-    <message>
-      <location filename="../resources/Invites.qml" line="79"/>
-      <source>Possible Uses: Infinite | Uses : %1</source>
-      <translation type="unfinished">Possible Uses: Infinite | Uses : %1</translation>
-    </message>
-  </context>
+<TS version="2.1" language="zh-CN" sourcelanguage="en">
   <context>
     <name>ChallahSettings</name>
     <message>
@@ -237,16 +41,212 @@
     </message>
   </context>
   <context>
+    <name>ChannelSheet</name>
+    <message>
+      <location filename="../resources/ChannelSheet.qml" line="21"/>
+      <source>Channel Name:</source>
+      <translation>频道名称：</translation>
+    </message>
+    <message>
+      <location filename="../resources/ChannelSheet.qml" line="24"/>
+      <source>Create Channel</source>
+      <translation>创建频道</translation>
+    </message>
+    <message>
+      <location filename="../resources/ChannelSheet.qml" line="30"/>
+      <source>Created channel</source>
+      <extracomment>the channel has been successfully created</extracomment>
+      <translation>成功创建频道</translation>
+    </message>
+    <message>
+      <location filename="../resources/ChannelSheet.qml" line="32"/>
+      <source>Failed to create channel</source>
+      <extracomment>the channel failed to be created</extracomment>
+      <translation>创建频道失败</translation>
+    </message>
+  </context>
+  <context>
+    <name>ComposeBar</name>
+    <message>
+      <location filename="../resources/ComposeBar.qml" line="58"/>
+      <location filename="../resources/ComposeBar.qml" line="171"/>
+      <source>Write a message...</source>
+      <extracomment>Placeholder text for the message field</extracomment>
+      <translation>撰写一条消息...</translation>
+    </message>
+    <message>
+      <location filename="../resources/ComposeBar.qml" line="73"/>
+      <source>Failed to upload file</source>
+      <translation type="unfinished">Failed to upload file</translation>
+    </message>
+    <message>
+      <location filename="../resources/ComposeBar.qml" line="86"/>
+      <location filename="../resources/ComposeBar.qml" line="225"/>
+      <source>Send</source>
+      <extracomment>Send the message in the text field</extracomment>
+      <translation>发送</translation>
+    </message>
+    <message>
+      <location filename="../resources/ComposeBar.qml" line="147"/>
+      <source>Default</source>
+      <translation type="unfinished">Default</translation>
+    </message>
+    <message>
+      <location filename="../resources/ComposeBar.qml" line="174"/>
+      <source>You do not have permissions to send a message to this channel.</source>
+      <extracomment>Placeholder text for the message field when the user isn&apos;t allowed to send a message</extracomment>
+      <translation type="unfinished">You do not have permissions to send a message to this channel.</translation>
+    </message>
+    <message>
+      <location filename="../resources/ComposeBar.qml" line="162"/>
+      <source>Add attachment...</source>
+      <extracomment>Send the message in the text field</extracomment>
+      <translation type="unfinished">Add attachment...</translation>
+    </message>
+  </context>
+  <context>
+    <name>GuildRoute</name>
+    <message>
+      <location filename="../resources/GuildRoute.qml" line="16"/>
+      <source/>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <location filename="../resources/GuildRoute.qml" line="23"/>
+      <source>Select a channel to get chatting.</source>
+      <translation type="unfinished">Select a channel to get chatting.</translation>
+    </message>
+  </context>
+  <context>
+    <name>GuildSettings</name>
+    <message>
+      <location filename="../resources/GuildSettings.qml" line="14"/>
+      <source>Settings</source>
+      <translation type="unfinished">Settings</translation>
+    </message>
+  </context>
+  <context>
+    <name>GuildSheet</name>
+    <message>
+      <location filename="../resources/GuildSheet.qml" line="54"/>
+      <location filename="../resources/GuildSheet.qml" line="95"/>
+      <source>Create Guild</source>
+      <translation>创建公会</translation>
+    </message>
+    <message>
+      <location filename="../resources/GuildSheet.qml" line="78"/>
+      <source>Join Guild</source>
+      <translation>加入公会</translation>
+    </message>
+    <message>
+      <location filename="../resources/GuildSheet.qml" line="92"/>
+      <source>Guild Name:</source>
+      <translation>公会名称：</translation>
+    </message>
+    <message>
+      <location filename="../resources/GuildSheet.qml" line="100"/>
+      <source>Created guild</source>
+      <extracomment>guild has been successfully created</extracomment>
+      <translation>成功创建公会</translation>
+    </message>
+    <message>
+      <location filename="../resources/GuildSheet.qml" line="103"/>
+      <source>Failed to make guild</source>
+      <extracomment>creating the guild failed</extracomment>
+      <translation>创建公会失败</translation>
+    </message>
+    <message>
+      <location filename="../resources/GuildSheet.qml" line="119"/>
+      <source>Join</source>
+      <translation>加入</translation>
+    </message>
+    <message>
+      <location filename="../resources/GuildSheet.qml" line="124"/>
+      <source>Joined guild</source>
+      <extracomment>guild has been successfully joined</extracomment>
+      <translation>成功加入公会</translation>
+    </message>
+    <message>
+      <location filename="../resources/GuildSheet.qml" line="127"/>
+      <source>Failed to join guild</source>
+      <extracomment>joining the guild failed</extracomment>
+      <translation>加入公会失败</translation>
+    </message>
+  </context>
+  <context>
+    <name>InstantView</name>
+    <message>
+      <location filename="../resources/InstantView.qml" line="14"/>
+      <source>Loading...</source>
+      <translation type="unfinished">Loading...</translation>
+    </message>
+  </context>
+  <context>
+    <name>Invites</name>
+    <message>
+      <location filename="../resources/Invites.qml" line="13"/>
+      <source>Invites</source>
+      <translation>邀请</translation>
+    </message>
+    <message>
+      <location filename="../resources/Invites.qml" line="18"/>
+      <source>Create Invite...</source>
+      <translation>创建邀请...</translation>
+    </message>
+    <message>
+      <location filename="../resources/Invites.qml" line="39"/>
+      <source>Invite ID:</source>
+      <translation>邀请码：</translation>
+    </message>
+    <message>
+      <location filename="../resources/Invites.qml" line="49"/>
+      <source>Restrict uses:</source>
+      <translation>限制使用次数：</translation>
+    </message>
+    <message>
+      <location filename="../resources/Invites.qml" line="53"/>
+      <source>Create Invite</source>
+      <translation>创建邀请</translation>
+    </message>
+    <message>
+      <location filename="../resources/Invites.qml" line="58"/>
+      <source>Created invite</source>
+      <extracomment>the invite was created successfully</extracomment>
+      <translation>成功创建邀请</translation>
+    </message>
+    <message>
+      <location filename="../resources/Invites.qml" line="61"/>
+      <source>Failed to create invite</source>
+      <extracomment>the invite couldn&apos;t be created successfully</extracomment>
+      <translation>创建邀请失败</translation>
+    </message>
+    <message>
+      <location filename="../resources/Invites.qml" line="75"/>
+      <source>Invite ID: %1</source>
+      <translation type="unfinished">Invite ID: %1</translation>
+    </message>
+    <message>
+      <location filename="../resources/Invites.qml" line="79"/>
+      <source>Possible Uses: %1 | Uses: %2 </source>
+      <translation type="unfinished">Possible Uses: %1 | Uses: %2 </translation>
+    </message>
+    <message>
+      <location filename="../resources/Invites.qml" line="79"/>
+      <source>Possible Uses: Infinite | Uses : %1</source>
+      <translation type="unfinished">Possible Uses: Infinite | Uses : %1</translation>
+    </message>
+  </context>
+  <context>
     <name>LoginManager</name>
     <message>
-      <location filename="../loginmanager.cpp" line="146"/>
+      <location filename="../loginmanager.cpp" line="143"/>
       <source>address@email.com</source>
       <translation type="unfinished">address@email.com</translation>
     </message>
     <message>
-      <location filename="../loginmanager.cpp" line="154"/>
+      <location filename="../loginmanager.cpp" line="151"/>
       <source>Submit</source>
-      <translation type="unfinished">Submit</translation>
+      <translation>提交</translation>
     </message>
   </context>
   <context>
@@ -279,7 +279,7 @@
       <location filename="../resources/MessageAction.qml" line="95"/>
       <location filename="../resources/MessageAction.qml" line="119"/>
       <source>Submit</source>
-      <translation type="unfinished">Submit</translation>
+      <translation>提交</translation>
     </message>
   </context>
   <context>
@@ -287,17 +287,17 @@
     <message>
       <location filename="../resources/MessageDelegate.qml" line="39"/>
       <source>Edit</source>
-      <translation type="unfinished">Edit</translation>
+      <translation>编辑</translation>
     </message>
     <message>
       <location filename="../resources/MessageDelegate.qml" line="46"/>
       <source>Delete</source>
-      <translation type="unfinished">Delete</translation>
+      <translation>删除</translation>
     </message>
     <message>
       <location filename="../resources/MessageDelegate.qml" line="53"/>
       <source>Reply</source>
-      <translation type="unfinished">Reply</translation>
+      <translation>回复</translation>
     </message>
     <message>
       <location filename="../resources/MessageDelegate.qml" line="62"/>
@@ -316,7 +316,7 @@
       <translation type="unfinished">Unselect</translation>
     </message>
     <message>
-      <location filename="../resources/MessageDelegate.qml" line="327"/>
+      <location filename="../resources/MessageDelegate.qml" line="328"/>
       <source>Instant View</source>
       <translation type="unfinished">Instant View</translation>
     </message>
@@ -324,7 +324,7 @@
   <context>
     <name>MessagesModel</name>
     <message numerus="yes">
-      <location filename="../messages.cpp" line="210"/>
+      <location filename="../messages.cpp" line="211"/>
       <source>%1 are typing...</source>
       <comment>Lists</comment>
       <translation type="unfinished">
@@ -337,17 +337,17 @@
     <message>
       <location filename="../resources/NoGuildRoute.qml" line="16"/>
       <source>Guilds</source>
-      <translation type="unfinished">Guilds</translation>
+      <translation>公会</translation>
     </message>
     <message>
       <location filename="../resources/NoGuildRoute.qml" line="23"/>
       <source>Click a guild to get chatting.</source>
-      <translation type="unfinished">Click a guild to get chatting.</translation>
+      <translation>点击一个公会来进行聊天</translation>
     </message>
     <message>
       <location filename="../resources/NoGuildRoute.qml" line="30"/>
       <source>Join or Create Guild...</source>
-      <translation type="unfinished">Join or Create Guild...</translation>
+      <translation>加入或创建公会...</translation>
     </message>
   </context>
   <context>
@@ -501,7 +501,7 @@
       <location filename="../resources/Permissions.qml" line="114"/>
       <location filename="../resources/Permissions.qml" line="115"/>
       <source>Channels</source>
-      <translation type="unfinished">Channels</translation>
+      <translation>频道</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="116"/>
@@ -513,7 +513,7 @@
       <location filename="../resources/Permissions.qml" line="118"/>
       <location filename="../resources/Permissions.qml" line="119"/>
       <source>Invites</source>
-      <translation type="unfinished">Invites</translation>
+      <translation>邀请</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="120"/>
@@ -534,14 +534,14 @@
   <context>
     <name>QCoreApplication</name>
     <message>
-      <location filename="../messages.cpp" line="165"/>
+      <location filename="../messages.cpp" line="166"/>
       <source>%1 and %2</source>
       <comment>Lists</comment>
       <translation type="unfinished">%1 and %2</translation>
     </message>
     <message>
-      <location filename="../messages.cpp" line="184"/>
-      <location filename="../messages.cpp" line="188"/>
+      <location filename="../messages.cpp" line="185"/>
+      <location filename="../messages.cpp" line="189"/>
       <source>%1, %2</source>
       <comment>Lists</comment>
       <extracomment>the middle of a list with 4 or more items: &quot;A, %1, %2, D, and E&quot;
@@ -550,7 +550,7 @@ the start of a list, for example &quot;%1, %2, and C&quot;</extracomment>
       <translation type="unfinished">%1, %2</translation>
     </message>
     <message>
-      <location filename="../messages.cpp" line="191"/>
+      <location filename="../messages.cpp" line="192"/>
       <source>%1, and %2</source>
       <comment>Lists</comment>
       <extracomment>the end of a list, for example &quot;A, %1, and %2&quot;</extracomment>
@@ -560,44 +560,44 @@ the start of a list, for example &quot;%1, %2, and C&quot;</extracomment>
   <context>
     <name>QObject</name>
     <message>
-      <location filename="../loginmanager.cpp" line="23"/>
+      <location filename="../loginmanager.cpp" line="25"/>
       <source>Select a login method</source>
       <translation type="unfinished">Select a login method</translation>
     </message>
     <message>
-      <location filename="../loginmanager.cpp" line="24"/>
+      <location filename="../loginmanager.cpp" line="26"/>
       <source>Register</source>
       <translation type="unfinished">Register</translation>
     </message>
     <message>
-      <location filename="../loginmanager.cpp" line="25"/>
+      <location filename="../loginmanager.cpp" line="27"/>
       <source>Login</source>
-      <translation type="unfinished">Login</translation>
+      <translation>登录</translation>
     </message>
     <message>
-      <location filename="../loginmanager.cpp" line="26"/>
+      <location filename="../loginmanager.cpp" line="28"/>
       <source>Other Options</source>
       <translation type="unfinished">Other Options</translation>
     </message>
     <message>
-      <location filename="../loginmanager.cpp" line="27"/>
+      <location filename="../loginmanager.cpp" line="29"/>
       <source>Reset Password</source>
       <translation type="unfinished">Reset Password</translation>
     </message>
     <message>
-      <location filename="../loginmanager.cpp" line="28"/>
+      <location filename="../loginmanager.cpp" line="30"/>
       <source>Email:</source>
-      <translation type="unfinished">Email:</translation>
+      <translation>电子邮件：</translation>
     </message>
     <message>
-      <location filename="../loginmanager.cpp" line="29"/>
+      <location filename="../loginmanager.cpp" line="31"/>
       <source>Username:</source>
       <translation type="unfinished">Username:</translation>
     </message>
     <message>
-      <location filename="../loginmanager.cpp" line="30"/>
+      <location filename="../loginmanager.cpp" line="32"/>
       <source>Password:</source>
-      <translation type="unfinished">Password:</translation>
+      <translation>密码：</translation>
     </message>
   </context>
   <context>
@@ -606,7 +606,7 @@ the start of a list, for example &quot;%1, %2, and C&quot;</extracomment>
       <location filename="../resources/RightDrawer.qml" line="54"/>
       <source>Guild Info</source>
       <extracomment>a heading for the right drawer which shows guild info</extracomment>
-      <translation type="unfinished">Guild Info</translation>
+      <translation>公会信息</translation>
     </message>
     <message>
       <location filename="../resources/RightDrawer.qml" line="111"/>
@@ -616,7 +616,7 @@ the start of a list, for example &quot;%1, %2, and C&quot;</extracomment>
     <message>
       <location filename="../resources/RightDrawer.qml" line="145"/>
       <source>%L1 members</source>
-      <translation type="unfinished">%L1 members</translation>
+      <translation>%L1 个成员</translation>
     </message>
   </context>
   <context>
@@ -674,34 +674,34 @@ the start of a list, for example &quot;%1, %2, and C&quot;</extracomment>
     <message>
       <location filename="../resources/StaccatoDrawer.qml" line="76"/>
       <source>Log Out</source>
-      <translation type="unfinished">Log Out</translation>
+      <translation>登出</translation>
     </message>
     <message>
       <location filename="../resources/StaccatoDrawer.qml" line="138"/>
       <source>Delete</source>
-      <translation type="unfinished">Delete</translation>
+      <translation>删除</translation>
     </message>
     <message>
       <location filename="../resources/StaccatoDrawer.qml" line="138"/>
       <source>Leave</source>
-      <translation type="unfinished">Leave</translation>
+      <translation>退出</translation>
     </message>
     <message>
       <location filename="../resources/StaccatoDrawer.qml" line="142"/>
       <source>Left guild</source>
       <extracomment>guild leaving succeeded</extracomment>
-      <translation type="unfinished">Left guild</translation>
+      <translation>成功退出公会</translation>
     </message>
     <message>
       <location filename="../resources/StaccatoDrawer.qml" line="145"/>
       <source>Failed to leave guild</source>
       <extracomment>guild leaving failed</extracomment>
-      <translation type="unfinished">Failed to leave guild</translation>
+      <translation>退出公会失败</translation>
     </message>
     <message>
       <location filename="../resources/StaccatoDrawer.qml" line="178"/>
       <source>Channels</source>
-      <translation type="unfinished">Channels</translation>
+      <translation>频道</translation>
     </message>
   </context>
   <context>
@@ -709,7 +709,7 @@ the start of a list, for example &quot;%1, %2, and C&quot;</extracomment>
     <message>
       <location filename="../resources/Stepper.qml" line="14"/>
       <source>Login</source>
-      <translation type="unfinished">Login</translation>
+      <translation>登录</translation>
     </message>
   </context>
   <context>
