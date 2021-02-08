@@ -37,7 +37,7 @@
     <message>
       <location filename="../resources/ChallahSettings.qml" line="56"/>
       <source>Create</source>
-      <translation>Crea</translation>
+      <translation>Crear</translation>
     </message>
   </context>
   <context>
@@ -50,7 +50,7 @@
     <message>
       <location filename="../resources/ChannelSheet.qml" line="24"/>
       <source>Create Channel</source>
-      <translation>Crea Canal</translation>
+      <translation>Crear Canal</translation>
     </message>
     <message>
       <location filename="../resources/ChannelSheet.qml" line="30"/>
@@ -131,7 +131,7 @@
       <location filename="../resources/GuildSheet.qml" line="54"/>
       <location filename="../resources/GuildSheet.qml" line="95"/>
       <source>Create Guild</source>
-      <translation type="unfinished">Create Guild</translation>
+      <translation>Crear Corporation</translation>
     </message>
     <message>
       <location filename="../resources/GuildSheet.qml" line="78"/>
@@ -403,7 +403,7 @@
     <message>
       <location filename="../resources/Permissions.qml" line="74"/>
       <source>Create Channels</source>
-      <translation type="unfinished">Create Channels</translation>
+      <translation>Crear Canals</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="75"/>
@@ -629,7 +629,7 @@ the start of a list, for example &quot;%1, %2, and C&quot;</extracomment>
     <message>
       <location filename="../resources/Roles.qml" line="22"/>
       <source>Create Role...</source>
-      <translation type="unfinished">Create Role...</translation>
+      <translation>Crear Rolo...</translation>
     </message>
     <message>
       <location filename="../resources/Roles.qml" line="30"/>
@@ -649,7 +649,7 @@ the start of a list, for example &quot;%1, %2, and C&quot;</extracomment>
     <message>
       <location filename="../resources/Roles.qml" line="65"/>
       <source>Create Role</source>
-      <translation type="unfinished">Create Role</translation>
+      <translation>Crear Rolo</translation>
     </message>
     <message>
       <location filename="../resources/Roles.qml" line="70"/>
