@@ -206,7 +206,7 @@
     <message>
       <location filename="../resources/Invites.qml" line="53"/>
       <source>Create Invite</source>
-      <translation type="unfinished">Create Invite</translation>
+      <translation>Crear Invitation</translation>
     </message>
     <message>
       <location filename="../resources/Invites.qml" line="58"/>
@@ -337,7 +337,7 @@
     <message>
       <location filename="../resources/NoGuildRoute.qml" line="16"/>
       <source>Guilds</source>
-      <translation>Corporations</translation>
+      <translation>Corporationes</translation>
     </message>
     <message>
       <location filename="../resources/NoGuildRoute.qml" line="23"/>
@@ -358,7 +358,7 @@
       <location filename="../resources/Permissions.qml" line="124"/>
       <location filename="../resources/Permissions.qml" line="125"/>
       <source>Permissions</source>
-      <translation>Permissions</translation>
+      <translation>Permissiones</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="25"/>
@@ -428,7 +428,7 @@
     <message>
       <location filename="../resources/Permissions.qml" line="79"/>
       <source>Create Invites</source>
-      <translation>Crear Invitations</translation>
+      <translation>Crear Invitationes</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="80"/>
@@ -493,7 +493,7 @@
     <message>
       <location filename="../resources/Permissions.qml" line="111"/>
       <source>Actions</source>
-      <translation>Actions</translation>
+      <translation>Actiones</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="112"/>
@@ -507,7 +507,7 @@
       <location filename="../resources/Permissions.qml" line="116"/>
       <location filename="../resources/Permissions.qml" line="117"/>
       <source>Guild</source>
-      <translation>Corporations</translation>
+      <translation>Corporationes</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="118"/>
@@ -592,7 +592,7 @@ the start of a list, for example &quot;%1, %2, and C&quot;</extracomment>
     <message>
       <location filename="../loginmanager.cpp" line="31"/>
       <source>Username:</source>
-      <translation>Nomine de usator:</translation>
+      <translation>Nomine de Usator:</translation>
     </message>
     <message>
       <location filename="../loginmanager.cpp" line="32"/>
@@ -639,12 +639,12 @@ the start of a list, for example &quot;%1, %2, and C&quot;</extracomment>
     <message>
       <location filename="../resources/Roles.qml" line="50"/>
       <source>Role Name:</source>
-      <translation>Nomine de rolo:</translation>
+      <translation>Nomine de Rolo:</translation>
     </message>
     <message>
       <location filename="../resources/Roles.qml" line="62"/>
       <source>Role Color:</source>
-      <translation>Color de rolo:</translation>
+      <translation>Color de Rolo:</translation>
     </message>
     <message>
       <location filename="../resources/Roles.qml" line="65"/>
@@ -674,7 +674,7 @@ the start of a list, for example &quot;%1, %2, and C&quot;</extracomment>
     <message>
       <location filename="../resources/StaccatoDrawer.qml" line="76"/>
       <source>Log Out</source>
-      <translation>Clauder session</translation>
+      <translation>Clauder Session</translation>
     </message>
     <message>
       <location filename="../resources/StaccatoDrawer.qml" line="138"/>
@@ -709,7 +709,7 @@ the start of a list, for example &quot;%1, %2, and C&quot;</extracomment>
     <message>
       <location filename="../resources/Stepper.qml" line="14"/>
       <source>Login</source>
-      <translation>Aperir session</translation>
+      <translation>Aperir Session</translation>
     </message>
   </context>
   <context>
