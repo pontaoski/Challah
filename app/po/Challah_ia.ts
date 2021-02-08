@@ -141,7 +141,7 @@
     <message>
       <location filename="../resources/GuildSheet.qml" line="92"/>
       <source>Guild Name:</source>
-      <translation>Nomine de corporation:</translation>
+      <translation>Nomine de Corporation:</translation>
     </message>
     <message>
       <location filename="../resources/GuildSheet.qml" line="100"/>
@@ -186,17 +186,17 @@
     <message>
       <location filename="../resources/Invites.qml" line="13"/>
       <source>Invites</source>
-      <translation type="unfinished">Invites</translation>
+      <translation>Invitations</translation>
     </message>
     <message>
       <location filename="../resources/Invites.qml" line="18"/>
       <source>Create Invite...</source>
-      <translation type="unfinished">Create Invite...</translation>
+      <translation>Crear Invitation...</translation>
     </message>
     <message>
       <location filename="../resources/Invites.qml" line="39"/>
       <source>Invite ID:</source>
-      <translation type="unfinished">Invite ID:</translation>
+      <translation>Invitation ID:</translation>
     </message>
     <message>
       <location filename="../resources/Invites.qml" line="49"/>
@@ -428,7 +428,7 @@
     <message>
       <location filename="../resources/Permissions.qml" line="79"/>
       <source>Create Invites</source>
-      <translation type="unfinished">Create Invites</translation>
+      <translation>Crear Invitations</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="80"/>
@@ -606,7 +606,7 @@ the start of a list, for example &quot;%1, %2, and C&quot;</extracomment>
       <location filename="../resources/RightDrawer.qml" line="54"/>
       <source>Guild Info</source>
       <extracomment>a heading for the right drawer which shows guild info</extracomment>
-      <translation type="unfinished">Guild Info</translation>
+      <translation>Informationes de Corporation</translation>
     </message>
     <message>
       <location filename="../resources/RightDrawer.qml" line="111"/>
