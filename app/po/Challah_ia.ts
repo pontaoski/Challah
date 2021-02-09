@@ -158,7 +158,7 @@
     <message>
       <location filename="../resources/GuildSheet.qml" line="119"/>
       <source>Join</source>
-      <translation type="unfinished">Join</translation>
+      <translation>Unir</translation>
     </message>
     <message>
       <location filename="../resources/GuildSheet.qml" line="124"/>
@@ -178,7 +178,7 @@
     <message>
       <location filename="../resources/InstantView.qml" line="14"/>
       <source>Loading...</source>
-      <translation type="unfinished">Loading...</translation>
+      <translation>Cargente...</translation>
     </message>
   </context>
   <context>
@@ -443,7 +443,7 @@
     <message>
       <location filename="../resources/Permissions.qml" line="82"/>
       <source>Send Messages</source>
-      <translation type="unfinished">Send Messages</translation>
+      <translation>Inviar Messages</translation>
     </message>
     <message>
       <location filename="../resources/Permissions.qml" line="83"/>
