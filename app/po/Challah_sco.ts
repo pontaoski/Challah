@@ -343,7 +343,7 @@
     <message>
       <location filename="../resources/NoGuildRoute.qml" line="23"/>
       <source>Click a guild to get chatting.</source>
-      <translation>Click a guide tae git bletherin.</translation>
+      <translation>Click a guild tae git bletherin.</translation>
     </message>
     <message>
       <location filename="../resources/NoGuildRoute.qml" line="30"/>
