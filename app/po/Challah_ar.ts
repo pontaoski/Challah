@@ -6,23 +6,23 @@
     <message>
       <location filename="../resources/ChallahSettings.qml" line="14"/>
       <source>Settings</source>
-      <translation type="unfinished">Settings</translation>
+      <translation>إعدادات</translation>
     </message>
     <message>
       <location filename="../resources/ChallahSettings.qml" line="23"/>
       <source>Personas</source>
       <extracomment>Personas are alternate identities; e.g. for roleplay reasons</extracomment>
-      <translation type="unfinished">Personas</translation>
+      <translation>الشخصية</translation>
     </message>
     <message>
       <location filename="../resources/ChallahSettings.qml" line="25"/>
       <source>New Persona</source>
-      <translation type="unfinished">New Persona</translation>
+      <translation>شخصية جديدة</translation>
     </message>
     <message>
       <location filename="../resources/ChallahSettings.qml" line="38"/>
       <source>Persona Name:</source>
-      <translation type="unfinished">Persona Name:</translation>
+      <translation>اسم الشخصية:</translation>
     </message>
     <message>
       <location filename="../resources/ChallahSettings.qml" line="44"/>
