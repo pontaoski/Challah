@@ -6,7 +6,7 @@
     <message>
       <location filename="../resources/ChallahSettings.qml" line="14"/>
       <source>Settings</source>
-      <translation type="unfinished">Settings</translation>
+      <translation>Instellings</translation>
     </message>
     <message>
       <location filename="../resources/ChallahSettings.qml" line="23"/>
