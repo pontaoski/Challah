@@ -94,7 +94,7 @@ public:
 				return true;
 			}
 
-			if (m_translation == QPointF() or m_swipeState != SwipeState::Horizontal) {
+			if (m_translation == QPointF() || m_swipeState != SwipeState::Horizontal) {
 				return false;
 			}
 			m_swipeState = NotStarted;
