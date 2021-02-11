@@ -20,8 +20,8 @@ QQC2.Popup {
 	background: Item {}
 	Image {
 		id: popupImage
-		x: (parent.QQC2.Overlay.overlay.width / 2) - (this.implicitWidth / 2)
-		y: (parent.QQC2.Overlay.overlay.height / 2) - (this.implicitHeight / 2)
+		x: ((parent.QQC2.Overlay.overlay || {width: 0}).width / 2) - (this.implicitWidth / 2)
+		y: ((parent.QQC2.Overlay.overlay || {height: 0}).height / 2) - (this.implicitHeight / 2)
 
 		PinchArea {
 			anchors.fill: parent

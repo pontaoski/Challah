@@ -31,7 +31,7 @@ Item {
 		}
 	}
 
-	property var model: HState.channelsModel(routerInstance.params.guildID, routerInstance.params.homeserver).members
+	property var model: (HState.channelsModel(routerInstance.params.guildID, routerInstance.params.homeserver) || {members: null}).members
 
 	ColumnLayout {
 		spacing: 0
@@ -94,8 +94,8 @@ Item {
 				contentItem: ColumnLayout {
 					Kirigami.Theme.colorSet: Kirigami.Theme.Header
 					Kirigami.Avatar {
-						source: drawer.model.picture
-						name: drawer.model.name
+						source: (drawer.model || {picture: ""}).picture
+						name: (drawer.model || {name: ""}).name
 
 						FileDialog {
 							id: fileDialog
@@ -118,7 +118,7 @@ Item {
 
 						ImagePopup {
 							id: imagePopup
-							source: drawer.model.picture
+							source: (drawer.model || {picture: ""}).picture
 						}
 
 						actions.main: Kirigami.Action {
@@ -135,7 +135,7 @@ Item {
 					}
 
 					Kirigami.Heading {
-						text: drawer.model.name
+						text: (drawer.model || {name: ""}).name
 						level: 2
 
 						horizontalAlignment: Text.AlignHCenter

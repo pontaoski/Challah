@@ -180,7 +180,7 @@ Item {
 					}
 					ToolButton {
 						icon.name: "settings-configure"
-						visible: channelsModel.workaroundModel.permissions.canViewInvites || channelsModel.workaroundModel.permissions.canManageRoles
+						visible: ((channelsModel.workaroundModel || {permissions: null}).permissions || {canViewInvites: false}).canViewInvites || ((channelsModel.workaroundModel || {permissions: null}).permissions || {canManageRoles: false}).canManageRoles
 						onClicked: root.pageStack.layers.push(Qt.resolvedUrl("GuildSettings.qml"), {
 							"invitesModel": channelsModel.workaroundModel.permissions.canViewInvites ? channelsModel.workaroundModel.invitesModel() : null,
 							"rolesModel": channelsModel.workaroundModel.permissions.canManageRoles ? channelsModel.workaroundModel.rolesModel() : null
@@ -188,7 +188,7 @@ Item {
 					}
 					ToolButton {
 						icon.name: "list-add"
-						visible: channelsModel.workaroundModel.permissions.canCreate
+						visible: ((channelsModel.workaroundModel || {permissions: null}).permissions || {canCreate: false}).canCreate
 						onClicked: sheety.open()
 					}
 				}

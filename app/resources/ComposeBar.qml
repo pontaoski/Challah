@@ -161,8 +161,8 @@ QQC2.ToolBar {
 				//: Send the message in the text field
 				QQC2.ToolTip.text: qsTr("Add attachment...")
 
-				Layout.preferredHeight: messageField.implicitHeight
-				Layout.preferredWidth: messageField.implicitHeight
+				Layout.fillHeight: true
+				Layout.preferredWidth: height
 			}
 			QQC2.TextArea {
 				id: messageField
@@ -224,8 +224,8 @@ QQC2.ToolBar {
 				//: Send the message in the text field
 				QQC2.ToolTip.text: qsTr("Send")
 
-				Layout.preferredHeight: messageField.implicitHeight
-				Layout.preferredWidth: messageField.implicitHeight
+				Layout.fillHeight: true
+				Layout.preferredWidth: height
 			}
 		}
 	}
