@@ -52,11 +52,11 @@ bool Client::refreshGuilds()
 		auto data = Client::instanceForHomeserver(QString::fromStdString(guild.host()))->guildInfo(guild.guild_id());
 
 		State::instance()->guildModel->guilds << Guild {
-			.guildID = guild.guild_id(),
-			.ownerID = data.ownerID,
-			.homeserver = QString::fromStdString(guild.host()),
-			.name = data.name,
-			.picture = data.picture,
+			guild.guild_id(),
+			data.ownerID,
+			QString::fromStdString(guild.host()),
+			data.name,
+			data.picture,
 		};
 	}
 
@@ -105,9 +105,9 @@ GuildRepl Client::guildInfo(quint64 id)
 	auto resp = unwrap(result);
 
 	return GuildRepl {
-		.ownerID = resp.guild_owner(),
-		.name = QString::fromStdString(resp.guild_name()),
-		.picture = QString::fromStdString(resp.guild_picture()),
+		resp.guild_owner(),
+		QString::fromStdString(resp.guild_name()),
+		QString::fromStdString(resp.guild_picture()),
 	};
 }
 
@@ -328,11 +328,11 @@ void Client::runEvents()
 				auto data = Client::instanceForHomeserver(QString::fromStdString(ev.homeserver()))->guildInfo(ev.guild_id());
 
 				Q_EMIT State::instance()->guildModel->addGuild(Guild {
-					.guildID = ev.guild_id(),
-					.ownerID = data.ownerID,
-					.homeserver = QString::fromStdString(ev.homeserver()),
-					.name = data.name,
-					.picture = data.picture,
+					ev.guild_id(),
+					data.ownerID,
+					QString::fromStdString(ev.homeserver()),
+					data.name,
+					data.picture,
 				});
 			} else if (msg.has_guild_removed_from_list()) {
 				auto ev = msg.guild_removed_from_list();

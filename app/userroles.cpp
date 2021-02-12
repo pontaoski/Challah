@@ -60,11 +60,11 @@ UserRolesModel::UserRolesModel(
 
 	for (auto guildrole : resp2.roles()) {
 		d->guildRoles[guildrole.role_id()] = RoleData {
-			.name = QString::fromStdString(guildrole.name()),
-			.color = QColor::fromRgba(guildrole.color()),
-			.hoist = guildrole.hoist(),
-			.pingable = guildrole.pingable(),
-			.id = guildrole.role_id(),
+			QString::fromStdString(guildrole.name()),
+			QColor::fromRgba(guildrole.color()),
+			guildrole.hoist(),
+			guildrole.pingable(),
+			guildrole.role_id(),
 		};
 	}
 

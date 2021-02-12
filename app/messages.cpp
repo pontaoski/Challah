@@ -403,12 +403,15 @@ void MessagesModel::sendMessageFull(const QString& message, const QString &reply
 		;
 	} else if (auto fronter = std::get_if<Fronter>(&as)) {
 		incoming.overrides = MessageData::Override {
-			.name = fronter->name,
-			.reason = MessageData::Override::Plurality,
+			fronter->name,
+			QString(),
+			MessageData::Override::Plurality,
 		};
 	} else if (auto character = std::get_if<RoleplayCharacter>(&as)) {
 		incoming.overrides = MessageData::Override {
-			.name = character->name
+			character->name,
+			QString(),
+			MessageData::Override::Reason(0),
 		};
 	}
 	incoming.status = MessageData::Sending;

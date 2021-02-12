@@ -82,18 +82,18 @@ struct MessageData
 		}
 
 		return MessageData {
-			.text = QString::fromStdString(msg.content()),
-			.authorID = msg.author_id(),
-			.id = msg.message_id(),
-			.date = QDateTime::fromTime_t(msg.created_at().seconds()),
-			.actions = document["actions"],
-			.embeds = document["embeds"],
-			.editedAt = QDateTime(),
-			.replyTo = msg.in_reply_to(),
-			.overrides = overrides,
-			.attachments = attachments,
-			.status = State::Sent,
-			.echoID = 0,
+			QString::fromStdString(msg.content()),
+			msg.author_id(),
+			msg.message_id(),
+			QDateTime::fromTime_t(msg.created_at().seconds()),
+			document["actions"],
+			document["embeds"],
+			QDateTime(),
+			msg.in_reply_to(),
+			overrides,
+			attachments,
+			State::Sent,
+			0,
 		};
 	}
 };
@@ -187,13 +187,13 @@ public:
 	Q_INVOKABLE void sendMessageAsSystem(const QString& content, const QString& replyTo, const QStringList& attachments, const QString& memberName)
 	{
 		sendMessageFull(content, replyTo, attachments, SendAs(Fronter {
-			.name = memberName
+			memberName
 		}));
 	}
 	Q_INVOKABLE void sendMessageAsRoleplay(const QString& content, const QString& replyTo, const QStringList& attachments, const QString& characterName)
 	{
 		sendMessageFull(content, replyTo, attachments, SendAs(RoleplayCharacter {
-			.name = characterName
+			characterName
 		}));
 	}
 	Q_INVOKABLE void editMessage(const QString& id, const QString& content);

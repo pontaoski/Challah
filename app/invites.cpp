@@ -18,9 +18,9 @@ InviteModel::InviteModel(ChannelsModel *parent, QString homeServer, quint64 guil
 
 	for (auto invite : resp.invites()) {
 		invites << Invite {
-			.id = QString::fromStdString(invite.invite_id()),
-			.possibleUses = invite.possible_uses(),
-			.useCount = invite.use_count()
+			QString::fromStdString(invite.invite_id()),
+			invite.possible_uses(),
+			invite.use_count()
 		};
 	}
 }
@@ -78,9 +78,9 @@ bool InviteModel::createInvite(const QString& id, qint32 possibleUses)
 
 	beginInsertRows(QModelIndex(), invites.length(), invites.length());
 	invites << Invite {
-		.id = QString::fromStdString(resp.name()),
-		.possibleUses = possibleUses,
-		.useCount = 0
+		QString::fromStdString(resp.name()),
+		possibleUses,
+		0
 	};
 	endInsertRows();
 

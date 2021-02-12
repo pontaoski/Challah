@@ -29,7 +29,10 @@ public:
 	TextStyle styleFor(const QString&) const override {
 		return TextStyle {
 			CharacterStyle {
-				.underline = true
+				{},
+				{},
+				true, // underline
+				{},
 			}
 		};
 	}
@@ -48,7 +51,10 @@ public:
 	TextStyle styleFor(const QString&) const override {
 		return TextStyle {
 			CharacterStyle {
-				.italic = true
+				{},
+				{},
+				{},
+				true // italic
 			}
 		};
 	}

@@ -132,9 +132,9 @@ ChannelsModel::ChannelsModel(QString homeServer, quint64 guildID) : QAbstractLis
 			beginResetModel();
 			for (auto chan : resp.channels()) {
 				channels << Channel {
-					.channelID = chan.channel_id(),
-					.name = QString::fromStdString(chan.channel_name()),
-					.isCategory = chan.is_category(),
+					chan.channel_id(),
+					QString::fromStdString(chan.channel_name()),
+					chan.is_category(),
 				};
 			}
 			endResetModel();
