@@ -31,18 +31,6 @@
 #include <QLibraryInfo>
 #include <QTranslator>
 
-#ifdef CHALLAH_VENDORED_DEPS
-
-#define KIRIGAMI_BUILD_TYPE_STATIC
-
-#include "../vendor/kirigami/src/kirigamiplugin.h"
-#include <QtPlugin>
-Q_IMPORT_PLUGIN(KirigamiPlugin)
-
-#undef KIRIGAMI_BUILD_TYPE_STATIC
-
-#endif
-
 int main(int argc, char *argv[])
 {
 	QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);

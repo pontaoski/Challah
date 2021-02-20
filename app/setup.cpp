@@ -11,6 +11,18 @@
 
 #include "setup.hpp"
 
+#ifdef CHALLAH_VENDORED_DEPS
+
+#define KIRIGAMI_BUILD_TYPE_STATIC
+
+#include "../vendor/kirigami/src/kirigamiplugin.h"
+#include <QtPlugin>
+Q_IMPORT_PLUGIN(KirigamiPlugin)
+
+#undef KIRIGAMI_BUILD_TYPE_STATIC
+
+#endif
+
 void setupQML()
 {
 #if defined(CHALLAH_VENDORED_DEPS)
