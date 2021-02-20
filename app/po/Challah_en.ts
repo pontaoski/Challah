@@ -731,12 +731,12 @@ the start of a list, for example &quot;%1, %2, and C&quot;</extracomment>
       <translation>Manage User</translation>
     </message>
     <message>
-      <location filename="../resources/UserPopup.qml" line="90"/>
+      <location filename="../resources/UserPopup.qml" line="92"/>
       <source>Kick User</source>
       <translation>Kick User</translation>
     </message>
     <message>
-      <location filename="../resources/UserPopup.qml" line="99"/>
+      <location filename="../resources/UserPopup.qml" line="104"/>
       <source>Ban User</source>
       <translation>Ban User</translation>
     </message>
