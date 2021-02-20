@@ -54,11 +54,15 @@ Kirigami.PageRoute {
 				id: homeserver
 				placeholderText: "chat.harmonyapp.io:2289"
 
+				objectName: "LoginRoute-Homeserver-TextField"
+
 				Layout.fillWidth: true
 			}
 
 			QQC2.Button {
 				text: qsTr("Continue")
+
+				objectName: "LoginRoute-Homeserver-Continue"
 
 				Layout.alignment: Qt.AlignHCenter
 

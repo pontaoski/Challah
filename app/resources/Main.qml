@@ -10,6 +10,8 @@ import com.github.HarmonyDevelopment.Staccato 1.0
 Kirigami.ApplicationWindow {
 	id: root
 
+	property bool testing: false
+
 	minimumWidth: 300
 	width: 1000
 
@@ -57,6 +59,8 @@ Kirigami.ApplicationWindow {
 					id: routerInstance
 
 					initialRoute: {
+						if (root.testing) return "login"
+
 						if (HState.startupLogin()) {
 							leftHandDrawer.shouldShow = true
 							return "no-guild"

@@ -1,8 +1,8 @@
 QtApplication {
-	name: "Challah"
+	name: "tst_challah"
 
 	protobuf.cpp.importPaths: ["protocol"]
-	// protobuf.cpp._linkLibraries: !project.vendoredProtobuf
+	type: ["application", "autotest"]
 
 	cpp.defines: project.vendoredKirigami ? ["CHALLAH_VENDORED_DEPS"] : []
 	cpp.cppFlags: ['-Werror=return-type']
@@ -34,25 +34,13 @@ QtApplication {
 		project.vendoredKirigami ? ["../vendor/kirigami/kirigami.qrc"] : []
 	)
 	excludeFiles: [
-		"tst.cpp",
+		"main.cpp",
 	]
 
 	Group {
-		files: ["resources/io.harmonyapp.Challah.svg"]
-		qbs.install: qbs.targetOS.contains("linux")
-		qbs.installDir: "share/icons/hicolor/scalable/apps"
-	}
-
-	Group {
-		files: ["io.harmonyapp.Challah.appdata.xml"]
-		qbs.install: qbs.targetOS.contains("linux")
-		qbs.installDir: "share/metainfo"
-	}
-
-	Group {
-		files: ["io.harmonyapp.Challah.desktop"]
-		qbs.install: qbs.targetOS.contains("linux")
-		qbs.installDir: "share/applications"
+		files: ["test/tst_*.qml"]
+		qbs.install: true
+		qbs.installDir: "bin"
 	}
 
 	install: qbs.targetOS.contains("linux")
@@ -93,5 +81,5 @@ QtApplication {
 	Depends { name: "protobuf.cpp" }
 	Depends { name: "vendored_protobuf"; condition: project.vendoredProtobuf }
 	Depends { name: "vendored_kirigami"; condition: project.vendoredKirigami }
-	Depends { name: "Qt"; submodules: ["gui", "concurrent", "widgets", "websockets", "quick", "quickcontrols2", "qml"] }
+	Depends { name: "Qt"; submodules: ["gui", "qmltest", "concurrent", "widgets", "websockets", "quick", "quickcontrols2", "qml"] }
 }

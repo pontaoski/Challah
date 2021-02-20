@@ -24,5 +24,6 @@ public:
 	LoginManager();
 	~LoginManager();
 	Q_INVOKABLE void beginLogin(const QString& hs);
+	Q_INVOKABLE void reparent(QQuickItem* child, QQuickItem* to);
 	Q_SIGNAL void placeItem(QQuickItem* item);
 };

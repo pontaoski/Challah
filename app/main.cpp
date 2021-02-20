@@ -2,8 +2,8 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-#include "messages.hpp"
-#include "userroles.hpp"
+#include "setup.hpp"
+
 #ifdef Q_OS_ANDROID
 
 #include <QtAndroid>
@@ -27,16 +27,9 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QQuickStyle>
-
-#include "state.hpp"
-#include "channels.hpp"
-#include "invites.hpp"
-#include "overlappingpanels.hpp"
-#include "roles.hpp"
-#include "permissions.hpp"
-#include "promise.hpp"
-#include "loginmanager.hpp"
-#include "copyinterceptor.hpp"
+#include <QThreadPool>
+#include <QLibraryInfo>
+#include <QTranslator>
 
 #ifdef CHALLAH_VENDORED_DEPS
 
@@ -72,22 +65,7 @@ int main(int argc, char *argv[])
 #endif
 
 	QQmlApplicationEngine engine;
-
-#if defined(CHALLAH_VENDORED_DEPS)
-	KirigamiPlugin::getInstance().registerTypes(&engine);
-#endif
-
-	qmlRegisterType<OverlappingPanels>("com.github.HarmonyDevelopment.Staccato", 1, 0, "OverlappingPanels");
-	qmlRegisterType<LoginManager>("com.github.HarmonyDevelopment.Staccato", 1, 0, "LoginManager");
-	qRegisterMetaType<MessagesModel*>();
-	qRegisterMetaType<UserRolesModel*>();
-	qmlRegisterUncreatableType<CopyInterceptor>("com.github.HarmonyDevelopment.Staccato", 1, 0, "Clipboard", "You cannot create an instance of Clipboard.");
-	qmlRegisterSingletonType<State>("com.github.HarmonyDevelopment.Staccato", 1, 0, "HState", [](QQmlEngine *, QJSEngine *) -> QObject * { return new State; });
-	qmlRegisterUncreatableType<ChannelsModel>("com.github.HarmonyDevelopment.ChannelsModel", 1, 0, "ChannelsModel", "You cannot create an instance of ChannelsModel.");
-	qmlRegisterUncreatableType<InviteModel>("com.github.HarmonyDevelopment.InviteModel", 1, 0, "InviteModel", "You cannot create an instance of InviteModel.");
-	qmlRegisterUncreatableType<RolesModel>("com.github.HarmonyDevelopment.RolesModel", 1, 0, "RolesModel", "You cannot create an instance of RolesModel.");
-	qmlRegisterUncreatableType<PermissionsModel>("com.github.HarmonyDevelopment.PermissionsModel", 1, 0, "PermissionsModel", "You cannot create an instance of PermissionsModel.");
-	qmlRegisterUncreatableType<Promise>("com.github.HarmonyDevelopment.Promise", 1, 0, "Promise", "You cannot create an instance of Promise.");
+	setupQML();
 
 	QTranslator qtTranslator;
 	qtTranslator.load("qt_" + QLocale::system().name(), QLibraryInfo::location(QLibraryInfo::TranslationsPath));
@@ -102,7 +80,7 @@ int main(int argc, char *argv[])
 	QApplication::setOrganizationName("Harmony Development");
 	QApplication::setOrganizationDomain("io.harmonyapp");
 
-	const QUrl url(QStringLiteral("qrc:/main.qml"));
+	const QUrl url(QStringLiteral("qrc:/Main.qml"));
 	QObject::connect(
 		&engine, &QQmlApplicationEngine::objectCreated,
 		app, [url](QObject *obj, const QUrl &objUrl) {

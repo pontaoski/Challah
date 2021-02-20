@@ -19,10 +19,11 @@ Kirigami.Page {
 	property LoginManager manager: LoginManager {
 		onPlaceItem: {
 			thePage.current.visible = false
-
 			thePage.current = item
 			item.parent = thePage
 			item.anchors.centerIn = thePage
+
+			manager.reparent(item, thePage)
 		}
 	}
 }

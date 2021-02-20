@@ -41,6 +41,11 @@ auto translate(
 
 auto translate(const std::string& source) -> QString { return translate(QString::fromStdString(source)); }
 
+void LoginManager::reparent(QQuickItem *child, QQuickItem *to)
+{
+	child->setParent(to);
+}
+
 void LoginManager::customEvent(QEvent* event)
 {
 	if (auto ev = dynamic_cast<SessionEvent*>(event))
@@ -78,6 +83,8 @@ void LoginManager::customEvent(QEvent* event)
 					qmlContext(this)
 				);
 
+				button->setObjectName(QStringLiteral("LoginScreen-Choice-%1").arg(QString::fromStdString(opt)));
+				button->setParent(column);
 				setProp(button, "Layout.alignment", Qt::AlignHCenter);
 				setProp(button, "Layout.fillWidth", true);
 
@@ -126,7 +133,7 @@ void LoginManager::customEvent(QEvent* event)
 				if (field.type() == "password" || field.type() == "new-password") {
 					item = (QQuickItem*) d->passwordFieldComponent->createWithInitialProperties(
 						{
-							{"parent", QVariant::fromValue(formLayout)}
+							{"parent", QVariant::fromValue(formLayout)},
 						},
 						qmlContext(this)
 					);
@@ -138,6 +145,7 @@ void LoginManager::customEvent(QEvent* event)
 						qmlContext(this)
 					);
 				}
+				item->setObjectName(QStringLiteral("LoginScreen-%1-%2").arg(QString::fromStdString(field.type())).arg(QString::fromStdString(field.name())));
 				setProp(item, "Kirigami.FormData.label", translate(field.name()));
 				if (field.type() == "email") {
 					setProp(item, "placeholderText", tr("address@email.com"));
@@ -153,6 +161,7 @@ void LoginManager::customEvent(QEvent* event)
 				},
 				qmlContext(this)
 			);
+			button->setObjectName(QStringLiteral("LoginScreen-SubmitButton"));
 
 			setProp(button, "Layout.alignment", Qt::AlignRight);
 
