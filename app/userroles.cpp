@@ -1,3 +1,4 @@
+#include "chat/v1/guilds.pb.h"
 #include "chat/v1/permissions.pb.h"
 
 #include "client.hpp"
@@ -51,12 +52,9 @@ UserRolesModel::UserRolesModel(
 	protocol::chat::v1::QueryPermissionsRequest req3;
 	req3.set_guild_id(guildID);
 
-	auto result3 = d->client->chatKit->QueryHasPermission(req3, theHeaders);
-	if (!resultOk(result3)) {
-		d->editable = false;
-	} else {
-		d->editable = unwrap(result3).ok();
-	}
+	d->editable = d->client->hasPermission("roles.user.manage", guildID);
+	d->canKick = d->client->hasPermission("user.manage.kick", guildID);
+	d->canBan = d->client->hasPermission("user.manage.ban", guildID);
 
 	for (auto guildrole : resp2.roles()) {
 		d->guildRoles[guildrole.role_id()] = RoleData {
@@ -75,6 +73,8 @@ UserRolesModel::UserRolesModel(
 
 bool UserRolesModel::errored() { return d->errored; }
 bool UserRolesModel::editable() { return d->editable; }
+bool UserRolesModel::canKick() { return d->canKick; }
+bool UserRolesModel::canBan() { return d->canBan; }
 
 int UserRolesModel::rowCount(const QModelIndex& parent) const
 {
@@ -159,6 +159,36 @@ void UserRolesModel::remove(const QModelIndex& idx)
 				endRemoveRows();
 			});
 		}
+	});
+}
+
+void UserRolesModel::kick(QJSValue then)
+{
+	QtConcurrent::run([this, then] {
+		protocol::chat::v1::KickUserRequest req;
+		req.set_guild_id(d->guildID);
+		req.set_user_id(d->guildID);
+
+		bool resultOK = resultOk(d->client->chatKit->KickUser(req, theHeaders));
+
+		runOnMainThread([then, resultOK] {
+			const_cast<QJSValue&>(then).call({resultOK});
+		});
+	});
+}
+
+void UserRolesModel::ban(QJSValue then)
+{
+	QtConcurrent::run([this, then] {
+		protocol::chat::v1::BanUserRequest req;
+		req.set_guild_id(d->guildID);
+		req.set_user_id(d->guildID);
+
+		bool resultOK = resultOk(d->client->chatKit->BanUser(req, theHeaders));
+
+		runOnMainThread([then, resultOK] {
+			const_cast<QJSValue&>(then).call({resultOK});
+		});
 	});
 }
 

@@ -22,6 +22,8 @@ struct UserRolesModel::Private
 
 	bool errored = false;
 	bool editable = false;
+	bool canKick = false;
+	bool canBan = false;
 
 	quint64 userID = 0;
 	quint64 guildID = 0;

@@ -34,7 +34,7 @@ auto MediaProxyServiceServiceClient::FetchLinkMetadata(const protocol::mediaprox
 	for (const auto& item : headers.keys()) {
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
-	req.setRawHeader("content-type", "application/octet-stream");
+	req.setRawHeader("content-type", "application/hrpc");
 	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
 	auto nam = globalNam.localData();
@@ -73,7 +73,7 @@ auto MediaProxyServiceServiceClient::InstantView(const protocol::mediaproxy::v1:
 	for (const auto& item : headers.keys()) {
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
-	req.setRawHeader("content-type", "application/octet-stream");
+	req.setRawHeader("content-type", "application/hrpc");
 	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
 	auto nam = globalNam.localData();
@@ -112,7 +112,7 @@ auto MediaProxyServiceServiceClient::CanInstantView(const protocol::mediaproxy::
 	for (const auto& item : headers.keys()) {
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
-	req.setRawHeader("content-type", "application/octet-stream");
+	req.setRawHeader("content-type", "application/hrpc");
 	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
 	auto nam = globalNam.localData();

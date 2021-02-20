@@ -34,7 +34,7 @@ auto ChatServiceServiceClient::CreateGuild(const protocol::chat::v1::CreateGuild
 	for (const auto& item : headers.keys()) {
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
-	req.setRawHeader("content-type", "application/octet-stream");
+	req.setRawHeader("content-type", "application/hrpc");
 	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
 	auto nam = globalNam.localData();
@@ -73,7 +73,7 @@ auto ChatServiceServiceClient::CreateInvite(const protocol::chat::v1::CreateInvi
 	for (const auto& item : headers.keys()) {
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
-	req.setRawHeader("content-type", "application/octet-stream");
+	req.setRawHeader("content-type", "application/hrpc");
 	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
 	auto nam = globalNam.localData();
@@ -112,7 +112,7 @@ auto ChatServiceServiceClient::CreateChannel(const protocol::chat::v1::CreateCha
 	for (const auto& item : headers.keys()) {
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
-	req.setRawHeader("content-type", "application/octet-stream");
+	req.setRawHeader("content-type", "application/hrpc");
 	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
 	auto nam = globalNam.localData();
@@ -151,7 +151,7 @@ auto ChatServiceServiceClient::CreateEmotePack(const protocol::chat::v1::CreateE
 	for (const auto& item : headers.keys()) {
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
-	req.setRawHeader("content-type", "application/octet-stream");
+	req.setRawHeader("content-type", "application/hrpc");
 	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
 	auto nam = globalNam.localData();
@@ -190,7 +190,7 @@ auto ChatServiceServiceClient::GetGuildList(const protocol::chat::v1::GetGuildLi
 	for (const auto& item : headers.keys()) {
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
-	req.setRawHeader("content-type", "application/octet-stream");
+	req.setRawHeader("content-type", "application/hrpc");
 	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
 	auto nam = globalNam.localData();
@@ -229,7 +229,7 @@ auto ChatServiceServiceClient::AddGuildToGuildList(const protocol::chat::v1::Add
 	for (const auto& item : headers.keys()) {
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
-	req.setRawHeader("content-type", "application/octet-stream");
+	req.setRawHeader("content-type", "application/hrpc");
 	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
 	auto nam = globalNam.localData();
@@ -268,7 +268,7 @@ auto ChatServiceServiceClient::RemoveGuildFromGuildList(const protocol::chat::v1
 	for (const auto& item : headers.keys()) {
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
-	req.setRawHeader("content-type", "application/octet-stream");
+	req.setRawHeader("content-type", "application/hrpc");
 	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
 	auto nam = globalNam.localData();
@@ -307,7 +307,7 @@ auto ChatServiceServiceClient::GetGuild(const protocol::chat::v1::GetGuildReques
 	for (const auto& item : headers.keys()) {
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
-	req.setRawHeader("content-type", "application/octet-stream");
+	req.setRawHeader("content-type", "application/hrpc");
 	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
 	auto nam = globalNam.localData();
@@ -346,7 +346,7 @@ auto ChatServiceServiceClient::GetGuildInvites(const protocol::chat::v1::GetGuil
 	for (const auto& item : headers.keys()) {
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
-	req.setRawHeader("content-type", "application/octet-stream");
+	req.setRawHeader("content-type", "application/hrpc");
 	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
 	auto nam = globalNam.localData();
@@ -385,7 +385,7 @@ auto ChatServiceServiceClient::GetGuildMembers(const protocol::chat::v1::GetGuil
 	for (const auto& item : headers.keys()) {
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
-	req.setRawHeader("content-type", "application/octet-stream");
+	req.setRawHeader("content-type", "application/hrpc");
 	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
 	auto nam = globalNam.localData();
@@ -424,7 +424,7 @@ auto ChatServiceServiceClient::GetGuildChannels(const protocol::chat::v1::GetGui
 	for (const auto& item : headers.keys()) {
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
-	req.setRawHeader("content-type", "application/octet-stream");
+	req.setRawHeader("content-type", "application/hrpc");
 	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
 	auto nam = globalNam.localData();
@@ -463,7 +463,7 @@ auto ChatServiceServiceClient::GetChannelMessages(const protocol::chat::v1::GetC
 	for (const auto& item : headers.keys()) {
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
-	req.setRawHeader("content-type", "application/octet-stream");
+	req.setRawHeader("content-type", "application/hrpc");
 	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
 	auto nam = globalNam.localData();
@@ -502,7 +502,7 @@ auto ChatServiceServiceClient::GetMessage(const protocol::chat::v1::GetMessageRe
 	for (const auto& item : headers.keys()) {
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
-	req.setRawHeader("content-type", "application/octet-stream");
+	req.setRawHeader("content-type", "application/hrpc");
 	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
 	auto nam = globalNam.localData();
@@ -541,7 +541,7 @@ auto ChatServiceServiceClient::GetEmotePacks(const protocol::chat::v1::GetEmoteP
 	for (const auto& item : headers.keys()) {
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
-	req.setRawHeader("content-type", "application/octet-stream");
+	req.setRawHeader("content-type", "application/hrpc");
 	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
 	auto nam = globalNam.localData();
@@ -580,7 +580,7 @@ auto ChatServiceServiceClient::GetEmotePackEmotes(const protocol::chat::v1::GetE
 	for (const auto& item : headers.keys()) {
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
-	req.setRawHeader("content-type", "application/octet-stream");
+	req.setRawHeader("content-type", "application/hrpc");
 	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
 	auto nam = globalNam.localData();
@@ -619,7 +619,7 @@ auto ChatServiceServiceClient::UpdateGuildInformation(const protocol::chat::v1::
 	for (const auto& item : headers.keys()) {
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
-	req.setRawHeader("content-type", "application/octet-stream");
+	req.setRawHeader("content-type", "application/hrpc");
 	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
 	auto nam = globalNam.localData();
@@ -658,7 +658,7 @@ auto ChatServiceServiceClient::UpdateChannelInformation(const protocol::chat::v1
 	for (const auto& item : headers.keys()) {
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
-	req.setRawHeader("content-type", "application/octet-stream");
+	req.setRawHeader("content-type", "application/hrpc");
 	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
 	auto nam = globalNam.localData();
@@ -697,7 +697,7 @@ auto ChatServiceServiceClient::UpdateChannelOrder(const protocol::chat::v1::Upda
 	for (const auto& item : headers.keys()) {
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
-	req.setRawHeader("content-type", "application/octet-stream");
+	req.setRawHeader("content-type", "application/hrpc");
 	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
 	auto nam = globalNam.localData();
@@ -736,7 +736,7 @@ auto ChatServiceServiceClient::UpdateMessage(const protocol::chat::v1::UpdateMes
 	for (const auto& item : headers.keys()) {
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
-	req.setRawHeader("content-type", "application/octet-stream");
+	req.setRawHeader("content-type", "application/hrpc");
 	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
 	auto nam = globalNam.localData();
@@ -775,7 +775,7 @@ auto ChatServiceServiceClient::AddEmoteToPack(const protocol::chat::v1::AddEmote
 	for (const auto& item : headers.keys()) {
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
-	req.setRawHeader("content-type", "application/octet-stream");
+	req.setRawHeader("content-type", "application/hrpc");
 	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
 	auto nam = globalNam.localData();
@@ -814,7 +814,7 @@ auto ChatServiceServiceClient::DeleteGuild(const protocol::chat::v1::DeleteGuild
 	for (const auto& item : headers.keys()) {
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
-	req.setRawHeader("content-type", "application/octet-stream");
+	req.setRawHeader("content-type", "application/hrpc");
 	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
 	auto nam = globalNam.localData();
@@ -853,7 +853,7 @@ auto ChatServiceServiceClient::DeleteInvite(const protocol::chat::v1::DeleteInvi
 	for (const auto& item : headers.keys()) {
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
-	req.setRawHeader("content-type", "application/octet-stream");
+	req.setRawHeader("content-type", "application/hrpc");
 	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
 	auto nam = globalNam.localData();
@@ -892,7 +892,7 @@ auto ChatServiceServiceClient::DeleteChannel(const protocol::chat::v1::DeleteCha
 	for (const auto& item : headers.keys()) {
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
-	req.setRawHeader("content-type", "application/octet-stream");
+	req.setRawHeader("content-type", "application/hrpc");
 	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
 	auto nam = globalNam.localData();
@@ -931,7 +931,7 @@ auto ChatServiceServiceClient::DeleteMessage(const protocol::chat::v1::DeleteMes
 	for (const auto& item : headers.keys()) {
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
-	req.setRawHeader("content-type", "application/octet-stream");
+	req.setRawHeader("content-type", "application/hrpc");
 	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
 	auto nam = globalNam.localData();
@@ -970,7 +970,7 @@ auto ChatServiceServiceClient::DeleteEmoteFromPack(const protocol::chat::v1::Del
 	for (const auto& item : headers.keys()) {
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
-	req.setRawHeader("content-type", "application/octet-stream");
+	req.setRawHeader("content-type", "application/hrpc");
 	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
 	auto nam = globalNam.localData();
@@ -1009,7 +1009,7 @@ auto ChatServiceServiceClient::DeleteEmotePack(const protocol::chat::v1::DeleteE
 	for (const auto& item : headers.keys()) {
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
-	req.setRawHeader("content-type", "application/octet-stream");
+	req.setRawHeader("content-type", "application/hrpc");
 	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
 	auto nam = globalNam.localData();
@@ -1048,7 +1048,7 @@ auto ChatServiceServiceClient::DequipEmotePack(const protocol::chat::v1::DequipE
 	for (const auto& item : headers.keys()) {
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
-	req.setRawHeader("content-type", "application/octet-stream");
+	req.setRawHeader("content-type", "application/hrpc");
 	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
 	auto nam = globalNam.localData();
@@ -1087,7 +1087,7 @@ auto ChatServiceServiceClient::JoinGuild(const protocol::chat::v1::JoinGuildRequ
 	for (const auto& item : headers.keys()) {
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
-	req.setRawHeader("content-type", "application/octet-stream");
+	req.setRawHeader("content-type", "application/hrpc");
 	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
 	auto nam = globalNam.localData();
@@ -1126,7 +1126,7 @@ auto ChatServiceServiceClient::LeaveGuild(const protocol::chat::v1::LeaveGuildRe
 	for (const auto& item : headers.keys()) {
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
-	req.setRawHeader("content-type", "application/octet-stream");
+	req.setRawHeader("content-type", "application/hrpc");
 	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
 	auto nam = globalNam.localData();
@@ -1165,7 +1165,7 @@ auto ChatServiceServiceClient::TriggerAction(const protocol::chat::v1::TriggerAc
 	for (const auto& item : headers.keys()) {
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
-	req.setRawHeader("content-type", "application/octet-stream");
+	req.setRawHeader("content-type", "application/hrpc");
 	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
 	auto nam = globalNam.localData();
@@ -1204,7 +1204,7 @@ auto ChatServiceServiceClient::SendMessage(const protocol::chat::v1::SendMessage
 	for (const auto& item : headers.keys()) {
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
-	req.setRawHeader("content-type", "application/octet-stream");
+	req.setRawHeader("content-type", "application/hrpc");
 	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
 	auto nam = globalNam.localData();
@@ -1243,7 +1243,7 @@ auto ChatServiceServiceClient::QueryHasPermission(const protocol::chat::v1::Quer
 	for (const auto& item : headers.keys()) {
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
-	req.setRawHeader("content-type", "application/octet-stream");
+	req.setRawHeader("content-type", "application/hrpc");
 	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
 	auto nam = globalNam.localData();
@@ -1282,7 +1282,7 @@ auto ChatServiceServiceClient::SetPermissions(const protocol::chat::v1::SetPermi
 	for (const auto& item : headers.keys()) {
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
-	req.setRawHeader("content-type", "application/octet-stream");
+	req.setRawHeader("content-type", "application/hrpc");
 	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
 	auto nam = globalNam.localData();
@@ -1321,7 +1321,7 @@ auto ChatServiceServiceClient::GetPermissions(const protocol::chat::v1::GetPermi
 	for (const auto& item : headers.keys()) {
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
-	req.setRawHeader("content-type", "application/octet-stream");
+	req.setRawHeader("content-type", "application/hrpc");
 	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
 	auto nam = globalNam.localData();
@@ -1360,7 +1360,7 @@ auto ChatServiceServiceClient::MoveRole(const protocol::chat::v1::MoveRoleReques
 	for (const auto& item : headers.keys()) {
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
-	req.setRawHeader("content-type", "application/octet-stream");
+	req.setRawHeader("content-type", "application/hrpc");
 	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
 	auto nam = globalNam.localData();
@@ -1399,7 +1399,7 @@ auto ChatServiceServiceClient::GetGuildRoles(const protocol::chat::v1::GetGuildR
 	for (const auto& item : headers.keys()) {
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
-	req.setRawHeader("content-type", "application/octet-stream");
+	req.setRawHeader("content-type", "application/hrpc");
 	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
 	auto nam = globalNam.localData();
@@ -1438,7 +1438,7 @@ auto ChatServiceServiceClient::AddGuildRole(const protocol::chat::v1::AddGuildRo
 	for (const auto& item : headers.keys()) {
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
-	req.setRawHeader("content-type", "application/octet-stream");
+	req.setRawHeader("content-type", "application/hrpc");
 	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
 	auto nam = globalNam.localData();
@@ -1477,7 +1477,7 @@ auto ChatServiceServiceClient::ModifyGuildRole(const protocol::chat::v1::ModifyG
 	for (const auto& item : headers.keys()) {
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
-	req.setRawHeader("content-type", "application/octet-stream");
+	req.setRawHeader("content-type", "application/hrpc");
 	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
 	auto nam = globalNam.localData();
@@ -1516,7 +1516,7 @@ auto ChatServiceServiceClient::DeleteGuildRole(const protocol::chat::v1::DeleteG
 	for (const auto& item : headers.keys()) {
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
-	req.setRawHeader("content-type", "application/octet-stream");
+	req.setRawHeader("content-type", "application/hrpc");
 	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
 	auto nam = globalNam.localData();
@@ -1555,7 +1555,7 @@ auto ChatServiceServiceClient::ManageUserRoles(const protocol::chat::v1::ManageU
 	for (const auto& item : headers.keys()) {
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
-	req.setRawHeader("content-type", "application/octet-stream");
+	req.setRawHeader("content-type", "application/hrpc");
 	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
 	auto nam = globalNam.localData();
@@ -1594,7 +1594,7 @@ auto ChatServiceServiceClient::GetUserRoles(const protocol::chat::v1::GetUserRol
 	for (const auto& item : headers.keys()) {
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
-	req.setRawHeader("content-type", "application/octet-stream");
+	req.setRawHeader("content-type", "application/hrpc");
 	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
 	auto nam = globalNam.localData();
@@ -1661,7 +1661,7 @@ auto ChatServiceServiceClient::GetUser(const protocol::chat::v1::GetUserRequest&
 	for (const auto& item : headers.keys()) {
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
-	req.setRawHeader("content-type", "application/octet-stream");
+	req.setRawHeader("content-type", "application/hrpc");
 	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
 	auto nam = globalNam.localData();
@@ -1700,7 +1700,7 @@ auto ChatServiceServiceClient::GetUserMetadata(const protocol::chat::v1::GetUser
 	for (const auto& item : headers.keys()) {
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
-	req.setRawHeader("content-type", "application/octet-stream");
+	req.setRawHeader("content-type", "application/hrpc");
 	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
 	auto nam = globalNam.localData();
@@ -1739,7 +1739,7 @@ auto ChatServiceServiceClient::ProfileUpdate(const protocol::chat::v1::ProfileUp
 	for (const auto& item : headers.keys()) {
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
-	req.setRawHeader("content-type", "application/octet-stream");
+	req.setRawHeader("content-type", "application/hrpc");
 	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
 	auto nam = globalNam.localData();
@@ -1778,7 +1778,7 @@ auto ChatServiceServiceClient::Typing(const protocol::chat::v1::TypingRequest& i
 	for (const auto& item : headers.keys()) {
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
-	req.setRawHeader("content-type", "application/octet-stream");
+	req.setRawHeader("content-type", "application/hrpc");
 	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
 	auto nam = globalNam.localData();
@@ -1817,7 +1817,7 @@ auto ChatServiceServiceClient::PreviewGuild(const protocol::chat::v1::PreviewGui
 	for (const auto& item : headers.keys()) {
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
-	req.setRawHeader("content-type", "application/octet-stream");
+	req.setRawHeader("content-type", "application/hrpc");
 	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
 	auto nam = globalNam.localData();
@@ -1834,6 +1834,123 @@ auto ChatServiceServiceClient::PreviewGuild(const protocol::chat::v1::PreviewGui
 	auto response = val->readAll();
 
 	protocol::chat::v1::PreviewGuildResponse ret;
+	if (!ret.ParseFromArray(response.constData(), response.length())) {
+		return {QStringLiteral("error parsing response into protobuf")};
+	}
+
+	return {ret};
+
+}
+auto ChatServiceServiceClient::BanUser(const protocol::chat::v1::BanUserRequest& in, QMap<QByteArray,QString> headers) -> ChatServiceServiceClient::Result<google::protobuf::Empty>
+{
+	std::string strData;
+	if (!in.SerializeToString(&strData)) { return {QStringLiteral("failed to serialize protobuf")}; }
+	QByteArray data = QByteArray::fromStdString(strData);
+
+	initialiseGlobalNam(secure, host);
+
+	QUrl serviceURL = QUrl(httpProtocol()+host);
+	serviceURL.setPath(QStringLiteral("/protocol.chat.v1.ChatService/BanUser"));
+
+	QNetworkRequest req(serviceURL);
+	for (const auto& item : headers.keys()) {
+		req.setRawHeader(item, headers[item].toLocal8Bit());
+	}
+	req.setRawHeader("content-type", "application/hrpc");
+	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
+
+	auto nam = globalNam.localData();
+	auto val = nam->post(req, data);
+
+	while (!val->isFinished()) {
+		QCoreApplication::processEvents();
+	}
+
+	if (val->error() != QNetworkReply::NoError) {
+		return {QStringLiteral("network failure(%1): %2").arg(val->error()).arg(val->errorString())};
+	}
+
+	auto response = val->readAll();
+
+	google::protobuf::Empty ret;
+	if (!ret.ParseFromArray(response.constData(), response.length())) {
+		return {QStringLiteral("error parsing response into protobuf")};
+	}
+
+	return {ret};
+
+}
+auto ChatServiceServiceClient::KickUser(const protocol::chat::v1::KickUserRequest& in, QMap<QByteArray,QString> headers) -> ChatServiceServiceClient::Result<google::protobuf::Empty>
+{
+	std::string strData;
+	if (!in.SerializeToString(&strData)) { return {QStringLiteral("failed to serialize protobuf")}; }
+	QByteArray data = QByteArray::fromStdString(strData);
+
+	initialiseGlobalNam(secure, host);
+
+	QUrl serviceURL = QUrl(httpProtocol()+host);
+	serviceURL.setPath(QStringLiteral("/protocol.chat.v1.ChatService/KickUser"));
+
+	QNetworkRequest req(serviceURL);
+	for (const auto& item : headers.keys()) {
+		req.setRawHeader(item, headers[item].toLocal8Bit());
+	}
+	req.setRawHeader("content-type", "application/hrpc");
+	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
+
+	auto nam = globalNam.localData();
+	auto val = nam->post(req, data);
+
+	while (!val->isFinished()) {
+		QCoreApplication::processEvents();
+	}
+
+	if (val->error() != QNetworkReply::NoError) {
+		return {QStringLiteral("network failure(%1): %2").arg(val->error()).arg(val->errorString())};
+	}
+
+	auto response = val->readAll();
+
+	google::protobuf::Empty ret;
+	if (!ret.ParseFromArray(response.constData(), response.length())) {
+		return {QStringLiteral("error parsing response into protobuf")};
+	}
+
+	return {ret};
+
+}
+auto ChatServiceServiceClient::UnbanUser(const protocol::chat::v1::UnbanUserRequest& in, QMap<QByteArray,QString> headers) -> ChatServiceServiceClient::Result<google::protobuf::Empty>
+{
+	std::string strData;
+	if (!in.SerializeToString(&strData)) { return {QStringLiteral("failed to serialize protobuf")}; }
+	QByteArray data = QByteArray::fromStdString(strData);
+
+	initialiseGlobalNam(secure, host);
+
+	QUrl serviceURL = QUrl(httpProtocol()+host);
+	serviceURL.setPath(QStringLiteral("/protocol.chat.v1.ChatService/UnbanUser"));
+
+	QNetworkRequest req(serviceURL);
+	for (const auto& item : headers.keys()) {
+		req.setRawHeader(item, headers[item].toLocal8Bit());
+	}
+	req.setRawHeader("content-type", "application/hrpc");
+	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
+
+	auto nam = globalNam.localData();
+	auto val = nam->post(req, data);
+
+	while (!val->isFinished()) {
+		QCoreApplication::processEvents();
+	}
+
+	if (val->error() != QNetworkReply::NoError) {
+		return {QStringLiteral("network failure(%1): %2").arg(val->error()).arg(val->errorString())};
+	}
+
+	auto response = val->readAll();
+
+	google::protobuf::Empty ret;
 	if (!ret.ParseFromArray(response.constData(), response.length())) {
 		return {QStringLiteral("error parsing response into protobuf")};
 	}

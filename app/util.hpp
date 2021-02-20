@@ -71,7 +71,7 @@ template <typename T>
 [[nodiscard]] bool resultOkImpl(const T& t, const char* file, int line) {
 	auto result = !std::holds_alternative<QString>(t);
 	if (!result) {
-		qDebug() << "Result not OK at" << file << ":" << line << (*(std::get_if<QString>(&t)));
+		qDebug() << "Result not OK at" << QStringLiteral("%1:%2").arg(file).arg(line) << (*(std::get_if<QString>(&t)));
 	}
 	return result;
 }

@@ -129,4 +129,7 @@ public:
 	[[ nodiscard ]] Result<google::protobuf::Empty> ProfileUpdate(const protocol::chat::v1::ProfileUpdateRequest& in, QMap<QByteArray,QString> headers = {});
 	[[ nodiscard ]] Result<google::protobuf::Empty> Typing(const protocol::chat::v1::TypingRequest& in, QMap<QByteArray,QString> headers = {});
 	[[ nodiscard ]] Result<protocol::chat::v1::PreviewGuildResponse> PreviewGuild(const protocol::chat::v1::PreviewGuildRequest& in, QMap<QByteArray,QString> headers = {});
+	[[ nodiscard ]] Result<google::protobuf::Empty> BanUser(const protocol::chat::v1::BanUserRequest& in, QMap<QByteArray,QString> headers = {});
+	[[ nodiscard ]] Result<google::protobuf::Empty> KickUser(const protocol::chat::v1::KickUserRequest& in, QMap<QByteArray,QString> headers = {});
+	[[ nodiscard ]] Result<google::protobuf::Empty> UnbanUser(const protocol::chat::v1::UnbanUserRequest& in, QMap<QByteArray,QString> headers = {});
 };

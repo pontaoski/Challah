@@ -84,22 +84,30 @@ Kirigami.OverlaySheet {
 		Kirigami.Heading {
 			text: qsTr("Manage User")
 			level: 4
+
+			visible: [userPopupRoot.model.canBan, userPopupRoot.model.canKick].some(x => x)
 		}
 
 		Kirigami.BasicListItem {
 			text: qsTr("Kick User")
+			visible: (userPopupRoot.model || {}).canKick || false
 
 			topPadding: Kirigami.Units.largeSpacing
 			bottomPadding: Kirigami.Units.largeSpacing
+
+			onClicked: userPopupRoot.model.ban(ok => console.log(ok))
 
 			Layout.fillWidth: true
 		}
 
 		Kirigami.BasicListItem {
 			text: qsTr("Ban User")
+			visible: (userPopupRoot.model || {}).canBan || false
 
 			topPadding: Kirigami.Units.largeSpacing
 			bottomPadding: Kirigami.Units.largeSpacing
+
+			onClicked: userPopupRoot.model.ban(ok => console.log(ok))
 
 			Layout.fillWidth: true
 		}

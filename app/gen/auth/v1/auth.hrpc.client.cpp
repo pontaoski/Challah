@@ -34,7 +34,7 @@ auto AuthServiceServiceClient::Federate(const protocol::auth::v1::FederateReques
 	for (const auto& item : headers.keys()) {
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
-	req.setRawHeader("content-type", "application/octet-stream");
+	req.setRawHeader("content-type", "application/hrpc");
 	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
 	auto nam = globalNam.localData();
@@ -73,7 +73,7 @@ auto AuthServiceServiceClient::LoginFederated(const protocol::auth::v1::LoginFed
 	for (const auto& item : headers.keys()) {
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
-	req.setRawHeader("content-type", "application/octet-stream");
+	req.setRawHeader("content-type", "application/hrpc");
 	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
 	auto nam = globalNam.localData();
@@ -112,7 +112,7 @@ auto AuthServiceServiceClient::Key(const google::protobuf::Empty& in, QMap<QByte
 	for (const auto& item : headers.keys()) {
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
-	req.setRawHeader("content-type", "application/octet-stream");
+	req.setRawHeader("content-type", "application/hrpc");
 	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
 	auto nam = globalNam.localData();
@@ -151,7 +151,7 @@ auto AuthServiceServiceClient::BeginAuth(const google::protobuf::Empty& in, QMap
 	for (const auto& item : headers.keys()) {
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
-	req.setRawHeader("content-type", "application/octet-stream");
+	req.setRawHeader("content-type", "application/hrpc");
 	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
 	auto nam = globalNam.localData();
@@ -190,7 +190,7 @@ auto AuthServiceServiceClient::NextStep(const protocol::auth::v1::NextStepReques
 	for (const auto& item : headers.keys()) {
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
-	req.setRawHeader("content-type", "application/octet-stream");
+	req.setRawHeader("content-type", "application/hrpc");
 	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
 	auto nam = globalNam.localData();
@@ -229,7 +229,7 @@ auto AuthServiceServiceClient::StepBack(const protocol::auth::v1::StepBackReques
 	for (const auto& item : headers.keys()) {
 		req.setRawHeader(item, headers[item].toLocal8Bit());
 	}
-	req.setRawHeader("content-type", "application/octet-stream");
+	req.setRawHeader("content-type", "application/hrpc");
 	req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
 
 	auto nam = globalNam.localData();
