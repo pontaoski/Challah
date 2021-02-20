@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
 #endif
 
 	QQmlApplicationEngine engine;
-	setupQML();
+	setupQML(&engine);
 
 	QTranslator qtTranslator;
 	qtTranslator.load("qt_" + QLocale::system().name(), QLibraryInfo::location(QLibraryInfo::TranslationsPath));

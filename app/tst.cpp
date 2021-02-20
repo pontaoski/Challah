@@ -14,7 +14,7 @@ public:
 public slots:
 	void qmlEngineAvailable(QQmlEngine *engine)
 	{
-		setupQML();
+		setupQML(engine);
 	}
 };
 

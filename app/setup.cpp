@@ -23,10 +23,12 @@ Q_IMPORT_PLUGIN(KirigamiPlugin)
 
 #endif
 
-void setupQML()
+void setupQML(QQmlEngine* engine)
 {
 #if defined(CHALLAH_VENDORED_DEPS)
-	KirigamiPlugin::getInstance().registerTypes(&engine);
+	KirigamiPlugin::getInstance().registerTypes(engine);
+#else
+	Q_UNUSED(engine)
 #endif
 
 	qmlRegisterType<OverlappingPanels>("com.github.HarmonyDevelopment.Staccato", 1, 0, "OverlappingPanels");

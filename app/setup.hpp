@@ -1,3 +1,5 @@
 #pragma once
 
-void setupQML();
+class QQmlEngine;
+
+void setupQML(QQmlEngine*);
