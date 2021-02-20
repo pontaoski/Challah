@@ -114,7 +114,7 @@
     <message>
       <location filename="../resources/GuildRoute.qml" line="23"/>
       <source>Select a channel to get chatting.</source>
-      <translation>Wähle einen Kanal, um mit zu chatten.</translation>
+      <translation>Wählen Sie einen Kanal, um mit zu chatten.</translation>
     </message>
   </context>
   <context>
@@ -733,12 +733,12 @@ the start of a list, for example &quot;%1, %2, and C&quot;</extracomment>
     <message>
       <location filename="../resources/UserPopup.qml" line="92"/>
       <source>Kick User</source>
-      <translation>Nutzer Entfernen</translation>
+      <translation>Nutzer entfernen</translation>
     </message>
     <message>
       <location filename="../resources/UserPopup.qml" line="104"/>
       <source>Ban User</source>
-      <translation>Nutzer Permanent Sperren</translation>
+      <translation>Nutzer permanent sperren</translation>
     </message>
   </context>
 </TS>
