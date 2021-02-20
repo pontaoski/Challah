@@ -259,7 +259,7 @@
     <message>
       <location filename="../resources/LoginRoute.qml" line="38"/>
       <source>Welcome to Challah</source>
-      <translation type="unfinished">Welcome to Challah</translation>
+      <translation>Bienvenido a Challah</translation>
     </message>
     <message>
       <location filename="../resources/LoginRoute.qml" line="44"/>
@@ -313,12 +313,12 @@
     <message>
       <location filename="../resources/MessageDelegate.qml" line="82"/>
       <source>Unselect</source>
-      <translation type="unfinished">Unselect</translation>
+      <translation>Deseleccionar</translation>
     </message>
     <message>
       <location filename="../resources/MessageDelegate.qml" line="328"/>
       <source>Instant View</source>
-      <translation type="unfinished">Instant View</translation>
+      <translation>Vista rápida</translation>
     </message>
   </context>
   <context>
@@ -328,7 +328,7 @@
       <source>%1 are typing...</source>
       <comment>Lists</comment>
       <translation type="unfinished">
-        <numerusform>%1 are typing...</numerusform>
+        <numerusform>%1 están escribiendo...</numerusform>
         <numerusform>%1 are typing...</numerusform>
       </translation>
     </message>
