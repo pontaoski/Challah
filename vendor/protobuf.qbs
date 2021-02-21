@@ -1,3 +1,5 @@
+import qbs.File
+
 Product {
 	name: "vendored_protobuf"
 
@@ -14,23 +16,25 @@ Product {
 		inputs: ["cmake_project"]
 		auxiliaryInputs: ["cmake_sources"]
 
-		Artifact { filePath: product.sourceDirectory+"/protobuf/cmake/libprotobuf.a"; fileTags: ["staticlibrary"] }
+		Artifact { filePath: product.buildDirectory+"/libprotobuf.a"; fileTags: ["staticlibrary"] }
 
 		prepare: {
 			var args = [
 				"-DCMAKE_BUILD_TYPE=Release",
 				"-Dprotobuf_BUILD_TESTS=OFF",
 				"-Dprotobuf_BUILD_PROTOC_BINARIES=OFF",
-				".",
+				product.sourceDirectory + "/protobuf/cmake",
 			]
+
+			File.makePath(product.buildDirectory)
 
 			var config = new Command("cmake", args);
 			config.description = "configuring protobuf...";
-			config.workingDirectory = product.sourceDirectory + "/protobuf/cmake"
+			config.workingDirectory = product.buildDirectory
 
-			var build = new Command("cmake", ["--build", ".", "-j10"]);
+			var build = new Command("cmake", ["--build", ".", "-j4"]);
 			build.description = "building protobuf...";
-			build.workingDirectory = product.sourceDirectory + "/protobuf/cmake"
+			build.workingDirectory = product.buildDirectory
 
 			return [config, build];
 		}
