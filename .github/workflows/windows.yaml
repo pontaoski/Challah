@@ -40,4 +40,4 @@ jobs:
       - name: Build
         shell: msys2 {0}
         run: |
-          qbs project.vendoredKirigami:true project.vendoredProtobuf:true -j4
+          qbs project.vendoredKirigami:true project.vendoredProtobuf:true qbs.buildVariant:'release' -j4
