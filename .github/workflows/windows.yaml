@@ -22,6 +22,7 @@ jobs:
             mingw64/mingw-w64-x86_64-gcc
             mingw64/mingw-w64-x86_64-qbs
             mingw64/mingw-w64-x86_64-protobuf
+            mingw64/mingw-w64-x86_64-cmake
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v2
