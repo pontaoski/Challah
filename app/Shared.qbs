@@ -3,6 +3,12 @@ StaticLibrary {
 
 	protobuf.cpp.importPaths: ["protocol"]
 
+	Properties {
+		condition: project.vendoredProtobuf
+		protobuf.cpp.includePath: "/"
+		protobuf.cpp.libraryPath: "/"
+	}
+
 	cpp.defines: project.vendoredKirigami ? ["CHALLAH_VENDORED_DEPS"] : []
 	cpp.cppFlags: ['-Werror=return-type']
 	cpp.cxxLanguageVersion: "c++17"
