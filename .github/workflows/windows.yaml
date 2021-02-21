@@ -21,16 +21,12 @@ jobs:
             msys/autoconf
             mingw64/mingw-w64-x86_64-gcc
             mingw64/mingw-w64-x86_64-qbs
+            mingw64/mingw-w64-x86_64-protobuf
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v2
         with:
           arch: win64_mingw81
-
-      - name: Install Protoc
-        uses: arduino/setup-protoc@v1
-        with:
-          version: '3.12.x'
 
       - name: Setup Qbs toolchains
         shell: msys2 {0}
