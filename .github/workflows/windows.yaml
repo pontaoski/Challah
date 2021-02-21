@@ -20,6 +20,7 @@ jobs:
           install: >-
             msys/autoconf
             mingw64/mingw-w64-x86_64-gcc
+            mingw64/mingw-w64-x86_64-qbs
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v2
