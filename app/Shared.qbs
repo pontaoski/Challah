@@ -1,8 +1,7 @@
-QtApplication {
-	name: "Challah"
+StaticLibrary {
+	name: "ChallahShared"
 
 	protobuf.cpp.importPaths: ["protocol"]
-	// protobuf.cpp._linkLibraries: !project.vendoredProtobuf
 
 	cpp.defines: project.vendoredKirigami ? ["CHALLAH_VENDORED_DEPS"] : []
 	cpp.cppFlags: ['-Werror=return-type']
@@ -29,45 +28,13 @@ QtApplication {
 		"gen/auth/v1/*.h",
 		"gen/mediaproxy/v1/*.h",
 		"gen/voice/v1/*.h",
-		"resources/data.qrc"
 	].concat(
 		project.vendoredKirigami ? ["../vendor/kirigami/kirigami.qrc"] : []
 	)
 	excludeFiles: [
 		"tst.cpp",
+		"main.cpp",
 	]
-
-	Group {
-		files: ["resources/io.harmonyapp.Challah.svg"]
-		qbs.install: qbs.targetOS.contains("linux")
-		qbs.installDir: "share/icons/hicolor/scalable/apps"
-	}
-
-	Group {
-		files: ["io.harmonyapp.Challah.appdata.xml"]
-		qbs.install: qbs.targetOS.contains("linux")
-		qbs.installDir: "share/metainfo"
-	}
-
-	Group {
-		files: ["io.harmonyapp.Challah.desktop"]
-		qbs.install: qbs.targetOS.contains("linux")
-		qbs.installDir: "share/applications"
-	}
-
-	install: qbs.targetOS.contains("linux")
-	installDir: "bin"
-
-	Group {
-		name: "Translation files"
-		files: ["po/*.ts"]
-	}
-	Group {
-		name: "QRC"
-		fileTagsFilter: "qm"
-		fileTags: "qt.core.resource_data"
-		Qt.core.resourcePrefix: "/po"
-	}
 
 	Group {
 		files: [

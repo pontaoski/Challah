@@ -1,6 +1,7 @@
 Project {
 	references: [
-		"app/Source.qbs",
+		"app/App.qbs",
+		"app/Shared.qbs",
 		"app/Test.qbs",
 	]
 
