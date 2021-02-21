@@ -1,42 +1,42 @@
 on:
-	push:
-		branches: [main]
+  push:
+    branches: [main]
 
 name: Windows Build
 jobs:
-	windows:
-		runs-on: windows-latest
+  windows:
+    runs-on: windows-latest
 
-		steps:
-			- name: Checkout
-				uses: actions/checkout@v1
-				with:
-					submodules: recursive
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+        with:
+          submodules: recursive
 
-			- name: Install msys2
-				uses: msys2/setup-msys2@v2
-				with:
-					update: true
-					install: >-
-						msys/autoconf
-						mingw64/mingw-w64-x86_64-gcc
+      - name: Install msys2
+        uses: msys2/setup-msys2@v2
+        with:
+          update: true
+          install: >-
+            msys/autoconf
+            mingw64/mingw-w64-x86_64-gcc
 
-			- name: Install Qt
-				uses: jurplel/install-qt-action@v2
-				with:
-					arch: win64_mingw81
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v2
+        with:
+          arch: win64_mingw81
 
-			- name: Install Protoc
-				uses: arduino/setup-protoc@v1
-				with:
-					version: '3.12.x'
+      - name: Install Protoc
+        uses: arduino/setup-protoc@v1
+        with:
+          version: '3.12.x'
 
-			- name: Setup Qbs toolchains
-				shell: msys2 {0}
-				run: |
-					qbs setup-toolchains --detect
+      - name: Setup Qbs toolchains
+        shell: msys2 {0}
+        run: |
+          qbs setup-toolchains --detect
 
-			- name: Build
-				shell: msys2 {0}
-				run: |
-					qbs project.vendoredKirigami:true project.vendoredProtobuf:true -j4
+      - name: Build
+        shell: msys2 {0}
+        run: |
+          qbs project.vendoredKirigami:true project.vendoredProtobuf:true -j4
