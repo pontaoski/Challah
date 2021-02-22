@@ -282,7 +282,7 @@ void Client::customEvent(QEvent *event)
 	} else if (auto ev = dynamic_cast<Subscribe*>(event)) {
 		if (subscribedGuilds.contains(ev->gid)) return;
 
-		if (eventStream->isValid()) {
+		if (eventStream && eventStream->isValid()) {
 		before:
 			qCDebug(STREAM_LIFECYCLE) << "Subscribing to guild" << ev->gid << "on homeserver" << homeserver;
 			subscribedGuilds << ev->gid;
