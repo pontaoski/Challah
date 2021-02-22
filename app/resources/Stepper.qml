@@ -16,6 +16,13 @@ Kirigami.Page {
 	property Item current: Item {}
 	Kirigami.Theme.colorSet: Kirigami.Theme.View
 
+	property Connections conns: Connections {
+		target: HState
+		function onLoggedIn() {
+			root.layers.pop()
+		}
+	}
+
 	property LoginManager manager: LoginManager {
 		onPlaceItem: {
 			thePage.current.visible = false
