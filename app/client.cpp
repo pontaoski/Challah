@@ -393,9 +393,38 @@ void Client::runEvents()
 		[=] {
 			qCDebug(STREAM_LIFECYCLE) << "Stream finished for homeserver" << homeserver;
 			if (shouldRestartStreams) {
-				qCDebug(STREAM_LIFECYCLE) << "Posting loop finished event" << homeserver;
-				QCoreApplication::postEvent(this, new LoopFinished());
+				qCDebug(STREAM_LIFECYCLE) << "Reconnecting in 500ms";
+				QTimer::singleShot(500, [=] {
+					qCDebug(STREAM_LIFECYCLE) << "Posting loop finished event" << homeserver;
+					QCoreApplication::postEvent(this, new LoopFinished());
+				});
 			}
+		}
+	);
+	connect(
+		eventStream.get(),
+		QOverload<QAbstractSocket::SocketError>::of(&QWebSocket::error),
+		[=](QAbstractSocket::SocketError error) {
+			if (error != QAbstractSocket::SocketError::ConnectionRefusedError) {
+				qCDebug(STREAM_LIFECYCLE) << "Unknown error:" << error;
+				return;
+			}
+			if (shouldRestartStreams) {
+				qCDebug(STREAM_LIFECYCLE) << "Stream errored for homeserver, reconnecting in 500ms" << homeserver;
+				QTimer::singleShot(500, [=] {
+					qCDebug(STREAM_LIFECYCLE) << "Posting loop finished event" << homeserver;
+					QCoreApplication::postEvent(this, new LoopFinished());
+				});
+			} else {
+				qCDebug(STREAM_LIFECYCLE) << "Stream errored for homeserver, not reconnecting" << homeserver;
+			}
+		}
+	);
+	connect(
+		eventStream.get(),
+		&QWebSocket::stateChanged,
+		[=](QAbstractSocket::SocketState state) {
+			qCDebug(STREAM_LIFECYCLE) << "State changed for homeserver" << homeserver << ":" << state;
 		}
 	);
 }
