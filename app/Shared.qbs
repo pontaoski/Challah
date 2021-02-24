@@ -3,12 +3,6 @@ StaticLibrary {
 
 	protobuf.cpp.importPaths: ["protocol"]
 
-	// Properties {
-	// 	condition: qbs.targetOS.contains("windows") && project.vendoredProtobuf
-	// 	protobuf.cpp.includePath: sourceDirectory
-	// 	protobuf.cpp.libraryPath: sourceDirectory
-	// }
-
 	cpp.defines: project.vendoredKirigami ? ["CHALLAH_VENDORED_DEPS"] : []
 	cpp.cppFlags: ['-Werror=return-type']
 	cpp.cxxLanguageVersion: "c++17"

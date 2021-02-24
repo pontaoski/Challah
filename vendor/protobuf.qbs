@@ -3,6 +3,13 @@ import qbs.File
 Product {
 	name: "vendored_protobuf"
 
+	Export {
+		Depends { name: "protobuf.cpp" }
+
+		protobuf.cpp.includePath: product.sourceDirectory + "/protobuf/src/"
+		protobuf.cpp.libraryPath: product.buildDirectory
+	}
+
 	type: ["staticlibrary"]
 	Group {
 		files: ["protobuf/cmake/CMakeLists.txt"]
