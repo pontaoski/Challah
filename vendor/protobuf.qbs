@@ -1,4 +1,5 @@
 import qbs.File
+import qbs.FileInfo
 
 Product {
 	name: "vendored_protobuf"
@@ -6,7 +7,7 @@ Product {
 	Export {
 		Depends { name: "protobuf.cpp" }
 
-		protobuf.cpp.includePath: product.sourceDirectory + "/protobuf/src/"
+		protobuf.cpp.includePath: FileInfo.toNativeSeparators(FileInfo.joinPaths(product.sourceDirectory, "/protobuf/src/"))
 		protobuf.cpp.libraryPath: product.buildDirectory
 	}
 
