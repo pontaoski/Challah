@@ -11,6 +11,8 @@
 #include "state.hpp"
 #include "channels.hpp"
 #include "userroles.hpp"
+#include "util.hpp"
+#include "logging.hpp"
 
 State* State::s_instance;
 
@@ -123,6 +125,13 @@ void State::customEvent(QEvent *event)
 		}
 
 		ev->data.func.call(data);
+		break;
+	}
+	case ExecuteEvent::typeID: {
+		auto ev = reinterpret_cast<ExecuteEvent*>(event);
+		qCDebug(MAIN_THREAD_TASKS) << "Executing main thread task" << ev->data.first;
+		ev->data.second();
+		break;
 	}
 	}
 }

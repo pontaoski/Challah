@@ -14,6 +14,7 @@
 #include "messages.hpp"
 #include "qcoreapplication.h"
 #include "util.hpp"
+#include "state.hpp"
 
 #define theHeaders {{"Authorization", client->userToken}}
 
@@ -126,9 +127,6 @@ void MessagesModel::customEvent(QEvent *event)
 			messageData.removeAt(idx);
 			endRemoveRows();
 		}
-	} else if (event->type() == ExecuteEvent::typeID) {
-		auto ev = reinterpret_cast<ExecuteEvent*>(event);
-		ev->data();
 	} else if (event->type() == TypingEvent::typeID) {
 		auto ev = reinterpret_cast<TypingEvent*>(event);
 		auto& data = ev->data;
@@ -150,6 +148,21 @@ void MessagesModel::customEvent(QEvent *event)
 			}
 			typingIndicatorChanged();
 		});
+	} else if (event->type() == FetchMessagesEvent::typeID) {
+		auto resp = reinterpret_cast<FetchMessagesEvent*>(event)->data;
+
+		if (resp.messages_size() == 0) {
+			atEnd = true;
+			return;
+		}
+
+		beginInsertRows(QModelIndex(), messageData.count(), (messageData.count()+resp.messages_size())-1);
+		for (auto item : resp.messages()) {
+			messageData << MessageData::fromProtobuf(item);
+		}
+		endInsertRows();
+
+		isReadingMore = false;
 	}
 }
 
@@ -462,24 +475,12 @@ void MessagesModel::fetchMore(const QModelIndex& parent)
 		auto result = client->chatKit->GetChannelMessages(req, theHeaders);
 		if (resultOk(result)) {
 			auto resp = unwrap(result);
-			QCoreApplication::postEvent(this, new ExecuteEvent([resp, this] {
-				if (resp.messages_size() == 0) {
-					atEnd = true;
-					return;
-				}
-
-				beginInsertRows(QModelIndex(), messageData.count(), (messageData.count()+resp.messages_size())-1);
-				for (auto item : resp.messages()) {
-					messageData << MessageData::fromProtobuf(item);
-				}
-				endInsertRows();
-
-				isReadingMore = false;
-			}));
+			qDebug() << "posting got more messages";
+			QCoreApplication::postEvent(this, new FetchMessagesEvent(resp));
 		} else {
-			QCoreApplication::postEvent(this, new ExecuteEvent([this] {
+			runOnMainThread("failed to get more messages", [this] {
 				isReadingMore = false;
-			}));
+			});
 		}
 	});
 }

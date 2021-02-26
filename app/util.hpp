@@ -38,14 +38,16 @@ using MemberJoinedEvent = CarrierEvent<12,protocol::chat::v1::Event_MemberJoined
 using MemberLeftEvent = CarrierEvent<13,protocol::chat::v1::Event_MemberLeft>;
 using TypingEvent = CarrierEvent<50, protocol::chat::v1::Event_Typing>;
 
+using FetchMessagesEvent = CarrierEvent<100, protocol::chat::v1::GetChannelMessagesResponse>;
+
 struct PleaseCall {
 	QJSValue func;
 	QVariantList args;
 };
 using PleaseCallEvent = CarrierEvent<14,PleaseCall>;
 
-using ExecuteEvent = CarrierEvent<15,std::function<void()>>;
-void runOnMainThread(std::function<void()>);
+using ExecuteEvent = CarrierEvent<15,std::pair<QString,std::function<void()>>>;
+void runOnMainThread(QString, std::function<void()>);
 
 struct GuildUpdate {
 	QString homeserver;

@@ -5,7 +5,7 @@
 #include "util.hpp"
 #include "state.hpp"
 
-void runOnMainThread(std::function<void ()> f)
+void runOnMainThread(QString s, std::function<void ()> f)
 {
-	QCoreApplication::postEvent(State::instance(), new ExecuteEvent(f));
+	QCoreApplication::postEvent(State::instance(), new ExecuteEvent({s, f}));
 }

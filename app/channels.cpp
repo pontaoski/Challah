@@ -23,6 +23,15 @@ MembersModel::MembersModel(QString homeserver, quint64 guildID, ChannelsModel* m
 {
 	client = Client::instanceForHomeserver(homeServer);
 
+	connect(model, &ChannelsModel::avatarURLChanged, [=](quint64 id) {
+		auto idx = members.indexOf(id);
+		Q_EMIT dataChanged(index(idx), index(idx), {MemberAvatarRole});
+	});
+	connect(model, &ChannelsModel::usernameChanged, [=](quint64 id) {
+		auto idx = members.indexOf(id);
+		Q_EMIT dataChanged(index(idx), index(idx), {MemberNameRole});
+	});
+
 	QtConcurrent::run([=] {
 		protocol::chat::v1::GetGuildMembersRequest req;
 		req.set_guild_id(guildID);
@@ -72,9 +81,6 @@ void MembersModel::customEvent(QEvent *event)
 			_picture = State::instance()->transformHMCURL(QString::fromStdString(ev->data.picture()), homeServer);
 			Q_EMIT pictureChanged();
 		}
-	} else if (event->type() == ExecuteEvent::typeID) {
-		auto ev = reinterpret_cast<ExecuteEvent*>(event);
-		ev->data();
 	}
 }
 
@@ -128,7 +134,7 @@ ChannelsModel::ChannelsModel(QString homeServer, quint64 guildID) : QAbstractLis
 		}
 		auto resp = unwrap(result);
 
-		QCoreApplication::postEvent(this, new ExecuteEvent([resp, this]{
+		runOnMainThread("received initial channels fetch", [resp, this]{
 			beginResetModel();
 			for (auto chan : resp.channels()) {
 				channels << Channel {
@@ -138,7 +144,7 @@ ChannelsModel::ChannelsModel(QString homeServer, quint64 guildID) : QAbstractLis
 				};
 			}
 			endResetModel();
-		}));
+		});
 	});
 
 	client->subscribeGuild(guildID);
@@ -306,9 +312,6 @@ void ChannelsModel::customEvent(QEvent *event)
 
 		QCoreApplication::postEvent(members, new GuildUpdatedEvent(ev->data));
 		QCoreApplication::postEvent(State::instance()->getGuildModel(), new GuildListUpdateEvent(upd));
-	} else if (event->type() == ExecuteEvent::typeID) {
-		auto ev = reinterpret_cast<ExecuteEvent*>(event);
-		ev->data();
 	} else if (event->type() == TypingEvent::typeID) {
 		auto ev = reinterpret_cast<TypingEvent*>(event);
 
@@ -416,17 +419,23 @@ void ChannelsModel::createChannel(const QString& name, QJSValue then, QJSValue e
 QString ChannelsModel::userName(quint64 id)
 {
 	if (!users.contains(id)) {
-		protocol::chat::v1::GetUserRequest req;
-		req.set_user_id(id);
+		QtConcurrent::run([=] {
+			protocol::chat::v1::GetUserRequest req;
+			req.set_user_id(id);
 
-		auto result = client->chatKit->GetUser(req, theHeaders);
-		if (!resultOk(result)) {
-			return "...";
-		}
-		auto resp = unwrap(result);
+			auto result = client->chatKit->GetUser(req, theHeaders);
+			if (!resultOk(result)) {
+				return;
+			}
 
-		users[id] = QString::fromStdString(resp.user_name());
-		avatars[id] = QString::fromStdString(resp.user_avatar());
+			auto resp = unwrap(result);
+			runOnMainThread("update username", [=] {
+				users[id] = QString::fromStdString(resp.user_name());
+				avatars[id] = QString::fromStdString(resp.user_avatar());
+				Q_EMIT usernameChanged(id);
+			});
+		});
+		return "...";
 	}
 	return users[id];
 }
@@ -434,17 +443,23 @@ QString ChannelsModel::userName(quint64 id)
 QString ChannelsModel::avatarURL(quint64 id)
 {
 	if (!users.contains(id)) {
-		protocol::chat::v1::GetUserRequest req;
-		req.set_user_id(id);
+		QtConcurrent::run([=] {
+			protocol::chat::v1::GetUserRequest req;
+			req.set_user_id(id);
 
-		auto result = client->chatKit->GetUser(req, theHeaders);
-		if (!resultOk(result)) {
-			return "";
-		}
-		auto resp = unwrap(result);
+			auto result = client->chatKit->GetUser(req, theHeaders);
+			if (!resultOk(result)) {
+				return;
+			}
+			auto resp = unwrap(result);
 
-		users[id] = QString::fromStdString(resp.user_name());
-		avatars[id] = QString::fromStdString(resp.user_avatar());
+			runOnMainThread("update avatar", [=] {
+				users[id] = QString::fromStdString(resp.user_name());
+				avatars[id] = QString::fromStdString(resp.user_avatar());
+				Q_EMIT avatarURLChanged(id);
+			});
+		});
+		return "";
 	}
 	return State::instance()->transformHMCURL(avatars[id], homeServer);
 }

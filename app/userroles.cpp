@@ -153,7 +153,7 @@ void UserRolesModel::remove(const QModelIndex& idx)
 				return;
 			}
 
-			runOnMainThread([this, idx] {
+			runOnMainThread("successfully removed user role", [this, idx] {
 				beginRemoveRows(QModelIndex(), idx.row(), idx.row());
 				d->userRoles.removeAt(idx.row());
 				endRemoveRows();
@@ -171,7 +171,7 @@ void UserRolesModel::kick(QJSValue then)
 
 		bool resultOK = resultOk(d->client->chatKit->KickUser(req, theHeaders));
 
-		runOnMainThread([then, resultOK] {
+		runOnMainThread("successfully kicked", [then, resultOK] {
 			const_cast<QJSValue&>(then).call({resultOK});
 		});
 	});
@@ -186,7 +186,7 @@ void UserRolesModel::ban(QJSValue then)
 
 		bool resultOK = resultOk(d->client->chatKit->BanUser(req, theHeaders));
 
-		runOnMainThread([then, resultOK] {
+		runOnMainThread("succesfully banned", [then, resultOK] {
 			const_cast<QJSValue&>(then).call({resultOK});
 		});
 	});
@@ -207,7 +207,7 @@ void UserRolesModel::add(const QString &role)
 				return;
 			}
 
-			runOnMainThread([this, id] {
+			runOnMainThread("successfully added user role", [this, id] {
 				beginInsertRows(QModelIndex(), d->userRoles.length(), d->userRoles.length());
 				d->userRoles << id;
 				endInsertRows();

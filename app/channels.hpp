@@ -107,6 +107,9 @@ public:
 	}
 	MessagesModel* messagesModel(quint64 channelID);
 
+	Q_SIGNAL void usernameChanged(quint64 id);
+	Q_SIGNAL void avatarURLChanged(quint64 id);
+
 	Q_INVOKABLE void deleteChannel(const QString& id);
 	Q_INVOKABLE void createChannel(const QString& name, QJSValue then, QJSValue elseDo);
 	Q_INVOKABLE void moveChannelFromTo(int from, int to);
