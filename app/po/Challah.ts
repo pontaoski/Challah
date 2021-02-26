@@ -239,12 +239,12 @@
 <context>
     <name>LoginManager</name>
     <message>
-        <location filename="../loginmanager.cpp" line="143"/>
+        <location filename="../loginmanager.cpp" line="151"/>
         <source>address@email.com</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../loginmanager.cpp" line="151"/>
+        <location filename="../loginmanager.cpp" line="159"/>
         <source>Submit</source>
         <translation type="unfinished"></translation>
     </message>
@@ -267,7 +267,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../resources/LoginRoute.qml" line="61"/>
+        <location filename="../resources/LoginRoute.qml" line="63"/>
         <source>Continue</source>
         <translation type="unfinished"></translation>
     </message>
