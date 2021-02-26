@@ -7,7 +7,7 @@ Product {
 	Export {
 		Depends { name: "protobuf.cpp" }
 
-		protobuf.cpp.includePath: FileInfo.toNativeSeparators(FileInfo.joinPaths(product.sourceDirectory, "/protobuf/src/"))
+		protobuf.cpp.includePath: FileInfo.toNativeSeparators(FileInfo.joinPaths(product.sourceDirectory, "protobuf", "src"))
 		protobuf.cpp.libraryPath: product.buildDirectory
 	}
 
