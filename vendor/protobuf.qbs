@@ -9,12 +9,12 @@ Product {
 
 		protobuf.cpp.includePath: {
 			var inf = FileInfo.toNativeSeparators(FileInfo.joinPaths(product.sourceDirectory, "protobuf", "src"))
-			console.info("protobuf vendored include path:" + inf)
+			console.info("protobuf vendored include path: " + inf)
 			return inf
 		}
 		protobuf.cpp.libraryPath: {
-			var inf = product.buildDirectory
-			console.info("protobuf vendored library path:" + inf)
+			var inf = FileInfo.toNativeSeparators(product.buildDirectory)
+			console.info("protobuf vendored library path: " + inf)
 			return inf
 		}
 	}
