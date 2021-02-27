@@ -44,7 +44,6 @@ bool Client::refreshGuilds()
 	auto resp = unwrap(result);
 
 	State::instance()->guildModel->guilds.clear();
-	State::instance()->guildModel->beginResetModel();
 
 	auto guilds = resp.guilds();
 	for (auto guild : guilds)
@@ -60,7 +59,6 @@ bool Client::refreshGuilds()
 		};
 	}
 
-	State::instance()->guildModel->endResetModel();
 	return true;
 }
 

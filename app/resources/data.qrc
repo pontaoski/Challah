@@ -29,6 +29,7 @@
         <file>Stepper.qml</file>
         <file>UserPopup.qml</file>
         <file>GuildRoute.qml</file>
+        <file>LoadingRoute.qml</file>
         <file>qmldir</file>
     </qresource>
     <qresource prefix="/img">

@@ -40,7 +40,7 @@ public:
 	Q_SIGNAL void loggedOut();
 
 	Q_INVOKABLE void logOut();
-	Q_INVOKABLE bool startupLogin();
+	Q_INVOKABLE void startupLogin(QJSValue then);
 	Q_INVOKABLE bool createGuild(const QString& name);
 	Q_INVOKABLE bool joinGuild(const QString& inviteLink);
 	Q_INVOKABLE bool leaveGuild(const QString& homeserver, const QString& id, bool isOwner);

@@ -58,16 +58,7 @@ Kirigami.ApplicationWindow {
 				Kirigami.PageRouter {
 					id: routerInstance
 
-					initialRoute: {
-						if (root.testing) return "login"
-
-						if (HState.startupLogin()) {
-							leftHandDrawer.shouldShow = true
-							return "no-guild"
-						} else {
-							return "login"
-						}
-					}
+					initialRoute: root.testing ? "login" : "loading"
 					pageStack: colView.columnView
 
 					property var guildSheet: GuildSheet {
@@ -78,6 +69,7 @@ Kirigami.ApplicationWindow {
 					GuildRoute {}
 					NoGuildRoute {}
 					MessagesRoute {}
+					LoadingRoute {}
 				}
 			}
 		}

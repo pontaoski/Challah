@@ -5,6 +5,7 @@
 #include <QSettings>
 #include <QJSEngine>
 #include <QQuickTextDocument>
+#include <QtConcurrent>
 
 #include "messages.hpp"
 #include "richtexter.hpp"
@@ -65,19 +66,27 @@ UserRolesModel* State::userRoles(const QString &userID, const QString &guildID, 
 {
 	return new UserRolesModel(userID.toULongLong(), guildID.toULongLong(), homeserver, nullptr);
 }
-bool State::startupLogin()
+void State::startupLogin(QJSValue then)
 {
-	QSettings settings;
-	QVariant token = settings.value("state/token");
-	QVariant hs = settings.value("state/homeserver");
-	QVariant userID = settings.value("state/userid");
-	if (token.isValid() && hs.isValid() && userID.isValid()) {
-		if (client->consumeToken(token.toString(), userID.value<quint64>(), hs.toString())) {
-			return true;
-		}
-	}
+	State::instance()->guildModel->beginResetModel();
 
-	return false;
+	QtConcurrent::run([then, this] {
+		QSettings settings;
+		QVariant token = settings.value("state/token");
+		QVariant hs = settings.value("state/homeserver");
+		QVariant userID = settings.value("state/userid");
+		auto ok = false;
+		if (token.isValid() && hs.isValid() && userID.isValid()) {
+			if (client->consumeToken(token.toString(), userID.value<quint64>(), hs.toString())) {
+				ok = true;
+			}
+		}
+
+		runOnMainThread("startupLogin completed", [then, ok] {
+			State::instance()->guildModel->endResetModel();
+			const_cast<QJSValue&>(then).call({ok});
+		});
+	});
 }
 ChannelsModel* State::channelsModel(const QString& guildID, const QString& homeserver)
 {

@@ -36,6 +36,7 @@ class GuildModel : public QAbstractListModel
 	QList<Guild> guilds;
 	friend class Client;
 	friend class ChannelsModel;
+	friend class State;
 
 	Q_SIGNAL void addGuild(Guild data);
 	Q_SLOT void addGuildHandler(Guild data);
