@@ -7,8 +7,16 @@ Product {
 	Export {
 		Depends { name: "protobuf.cpp" }
 
-		protobuf.cpp.includePath: FileInfo.toNativeSeparators(FileInfo.joinPaths(product.sourceDirectory, "protobuf", "src"))
-		protobuf.cpp.libraryPath: product.buildDirectory
+		protobuf.cpp.includePath: {
+			var inf = FileInfo.toNativeSeparators(FileInfo.joinPaths(product.sourceDirectory, "protobuf", "src"))
+			console.info("protobuf vendored include path:" + inf)
+			return inf
+		}
+		protobuf.cpp.libraryPath: {
+			var inf = product.buildDirectory
+			console.info("protobuf vendored library path:" + inf)
+			return inf
+		}
 	}
 
 	type: ["staticlibrary"]
