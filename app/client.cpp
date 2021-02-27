@@ -238,7 +238,9 @@ bool Client::consumeToken(const QString& token, quint64 userID, const QString& h
 		return false;
 	}
 
-	runEvents();
+	runOnMainThread("running events...", [=] {
+		runEvents();
+	});
 
 	return true;
 }
