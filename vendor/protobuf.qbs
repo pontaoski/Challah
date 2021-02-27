@@ -35,7 +35,7 @@ Product {
 		auxiliaryInputs: ["cmake_sources"]
 
 		Artifact {
-			filePath: product.buildDirectory + "/libprotobuf.a"
+			filePath: product.buildDirectory + (product.qbs.targetOS.contains("windows") ? "\\Debug\\libprotobuf-lited.lib" : "/libprotobuf.a")
 			fileTags: ["staticlibrary"]
 		}
 
