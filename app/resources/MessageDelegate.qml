@@ -142,7 +142,6 @@ QQC2.Control {
 			Layout.preferredWidth: theThing.data.length > 0 ? Layout.maximumWidth : -1
 			Layout.leftMargin: Kirigami.Units.gridUnit * 2 + Kirigami.Units.largeSpacing
 			Layout.alignment: (isOwnMessage && (!applicationWindow().wideScreen)) ? Qt.AlignRight : Qt.AlignLeft
-			Kirigami.Theme.colorSet: messagesRoute.model.userID() == authorID ? Kirigami.Theme.Button : Kirigami.Theme.Window
 
 			implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset, implicitContentWidth + leftPadding + rightPadding)
 			implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset, implicitContentHeight + topPadding + bottomPadding)
@@ -364,36 +363,93 @@ QQC2.Control {
 		}
 		Repeater {
 			model: Array.from(attachments).filter(item => item["type"].startsWith("image"))
-			delegate: Image {
-				source: HState.transformHMCURL(modelData["id"], messagesRoute.model.homeserver)
-				fillMode: Image.PreserveAspectCrop
-				smooth: true
-				mipmap: true
+			delegate: Item {
+				id: imgDel
 
-				Component {
-					id: imagePopupComponent
+				property bool showTimestamp: index === (attachments.length-1)
 
-					ImagePopup {
-						source: HState.transformHMCURL(modelData["id"], messagesRoute.model.homeserver)
-						onClosed: {
-							this.destroy()
+				Kirigami.Theme.colorSet: messageDelegate.Kirigami.Theme.colorSet
+				Kirigami.Theme.inherit: false
+
+				Layout.leftMargin: Kirigami.Units.gridUnit * 2 + Kirigami.Units.largeSpacing
+				Layout.preferredWidth: img.implicitWidth
+				Layout.preferredHeight: img.implicitHeight
+				Layout.maximumHeight: Layout.maximumWidth
+				Layout.maximumWidth: (applicationWindow().wideScreen ? Math.max(messagesView.width / 3, Kirigami.Units.gridUnit * 15) : (messagesView.width * 0.9)) - Layout.leftMargin
+
+				Rectangle {
+					color: "white"
+					anchors.fill: img
+					radius: 4
+				}
+				Image {
+					id: img
+
+					anchors.fill: parent
+					anchors.margins: 3
+
+					source: HState.transformHMCURL(modelData["id"], messagesRoute.model.homeserver)
+					fillMode: Image.PreserveAspectCrop
+					smooth: true
+					mipmap: true
+
+					Component {
+						id: imagePopupComponent
+
+						ImagePopup {
+							source: HState.transformHMCURL(modelData["id"], messagesRoute.model.homeserver)
+							onClosed: {
+								this.destroy()
+							}
+						}
+					}
+
+					MouseArea {
+						id: mArea
+						hoverEnabled: true
+						anchors.fill: parent
+						cursorShape: Qt.PointingHandCursor
+						onClicked: {
+							let item = imagePopupComponent.createObject(messageDelegate)
+							item.open()
+						}
+					}
+
+					layer.enabled: true
+					layer.effect: OpacityMask {
+						maskSource: Item {
+							width: img.width
+							height: img.height
+							Rectangle {
+								objectName: "huuu"
+
+								anchors.fill: parent
+								radius: 4
+							}
 						}
 					}
 				}
+				QQC2.Label {
+					visible: mArea.containsMouse
 
-				MouseArea {
-					anchors.fill: parent
-					onClicked: {
-						let item = imagePopupComponent.createObject(messageDelegate)
-						item.open()
+					Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
+					Kirigami.Theme.inherit: false
+
+					text: `${("0"+date.getHours()).slice(-2)}:${("0"+date.getMinutes()).slice(-2)}`
+					color: Kirigami.Theme.textColor
+					padding: Kirigami.Units.smallSpacing
+
+					anchors {
+						bottom: parent.bottom
+						right: parent.right
+						margins: Kirigami.Units.largeSpacing
+					}
+					background: Rectangle {
+						color: Kirigami.Theme.backgroundColor
+						opacity: 0.7
+						radius: 3
 					}
 				}
-
-				Layout.leftMargin: Kirigami.Units.gridUnit * 2 + Kirigami.Units.largeSpacing
-				Layout.preferredWidth: implicitWidth
-				Layout.preferredHeight: implicitHeight
-				Layout.maximumHeight: Layout.maximumWidth
-				Layout.maximumWidth: (applicationWindow().wideScreen ? Math.max(messagesView.width / 3, Kirigami.Units.gridUnit * 15) : (messagesView.width * 0.9)) - Layout.leftMargin
 			}
 		}
 		Repeater {
