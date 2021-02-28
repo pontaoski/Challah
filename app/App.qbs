@@ -15,7 +15,9 @@ QtApplication {
 	files: [
 		"main.cpp",
 		"resources/data.qrc",
-	]
+	].concat(
+		project.vendoredKirigami ? ["../vendor/kirigami/kirigami.qrc"] : []
+	)
 
 	Group {
 		files: ["resources/io.harmonyapp.Challah.svg"]
