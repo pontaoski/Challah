@@ -23,6 +23,14 @@ class State : public QObject
 
 	static State* s_instance;
 
+	QString m_ownUsername;
+	QString m_ownAvatar;
+
+	Q_PROPERTY(QString ownUsername READ ownUsername NOTIFY ownUsernameChanged)
+	Q_PROPERTY(QString ownAvatar READ ownAvatar NOTIFY ownAvatarChanged)
+
+	void fetchOwnProfile();
+
 protected:
 	void customEvent(QEvent *event) override;
 
@@ -35,10 +43,16 @@ public:
 
 	static State* instance();
 
+	QString ownUsername() const;
+	QString ownAvatar() const;
+	Q_SIGNAL void ownUsernameChanged();
+	Q_SIGNAL void ownAvatarChanged();
+
 	Q_SIGNAL void loggedIn();
 	Q_SIGNAL void loginFailure();
 	Q_SIGNAL void loggedOut();
 
+	Q_INVOKABLE void setProfile(QJsonObject obj, QJSValue then);
 	Q_INVOKABLE void logOut();
 	Q_INVOKABLE void startupLogin(QJSValue then);
 	Q_INVOKABLE bool createGuild(const QString& name);

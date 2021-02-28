@@ -18,7 +18,48 @@ Kirigami.Page {
 	Kirigami.SwipeNavigator {
 		anchors.fill: parent
 
+		Kirigami.ScrollablePage {
+			//: Alternate identities; e.g. for roleplay reasons
+			title: qsTr("General")
 
+			ColumnLayout {
+				Kirigami.InlineMessage {
+					id: errorMessage
+					visible: false
+					type: Kirigami.MessageType.Error
+					Layout.fillWidth: true
+				}
+				RowLayout {
+					Layout.alignment: Qt.AlignHCenter
+					Kirigami.Avatar {
+						source: "mu"
+						cache: false
+						name: "mu"
+
+						readonly property int size: 6 * Kirigami.Units.gridUnit
+
+						Layout.preferredWidth: size
+						Layout.preferredHeight: size
+
+						actions {
+							main: Kirigami.Action {
+								text: i18n("Change avatar")
+								onTriggered: {
+									picturesSheet.open()
+									stackSwitcher.forceActiveFocus()
+								}
+							}
+						}
+					}
+					QQC2.TextField {
+						id: realNametextField
+						focus: true
+						text: "mu"
+						placeholderText: qsTr("mu")
+					}
+				}
+			}
+		}
 		Kirigami.ScrollablePage {
 			//: Alternate identities; e.g. for roleplay reasons
 			title: qsTr("Identities")

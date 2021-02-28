@@ -15,6 +15,8 @@
 #include "util.hpp"
 #include "logging.hpp"
 
+#define theHeaders {{"Authorization", client->userToken}}
+
 State* State::s_instance;
 
 State::State()
@@ -65,6 +67,52 @@ void State::logOut()
 UserRolesModel* State::userRoles(const QString &userID, const QString &guildID, const QString &homeserver)
 {
 	return new UserRolesModel(userID.toULongLong(), guildID.toULongLong(), homeserver, nullptr);
+}
+QString State::ownAvatar() const
+{
+	return m_ownAvatar;
+}
+QString State::ownUsername() const
+{
+	return m_ownUsername;
+}
+void State::fetchOwnProfile()
+{
+	QtConcurrent::run([this] {
+		protocol::chat::v1::GetUserRequest req;
+		req.set_user_id(client->userID);
+		auto result = client->chatKit->GetUser(req, theHeaders);
+		if (!resultOk(result)) {
+			return;
+		}
+		auto v = unwrap(result);
+		runOnMainThread("fetch own profile", [v, this] {
+			m_ownAvatar = QString::fromStdString(v.user_avatar());
+			m_ownUsername = QString::fromStdString(v.user_name());
+			Q_EMIT ownAvatarChanged();
+			Q_EMIT ownUsernameChanged();
+		});
+	});
+}
+void State::setProfile(QJsonObject obj, QJSValue then)
+{
+	QtConcurrent::run([this, obj, then] {
+		protocol::chat::v1::ProfileUpdateRequest req;
+		if (obj.contains("username")) {
+			req.set_update_username(true);
+			req.set_new_username(obj["username"].toString().toStdString());
+		}
+		if (obj.contains("avatar")) {
+			req.set_update_avatar(true);
+			req.set_new_avatar(obj["avatar"].toString().toStdString());
+		}
+
+		auto result = client->chatKit->ProfileUpdate(req, theHeaders);
+		if (!resultOk(result)) {
+			return;
+		}
+		auto v = unwrap(result);
+	});
 }
 void State::startupLogin(QJSValue then)
 {
