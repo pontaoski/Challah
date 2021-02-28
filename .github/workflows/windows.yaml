@@ -33,7 +33,7 @@ jobs:
       - name: Screw with Qbs
         shell: msys2 {0}
         run: |
-          sed -i "s|var libraryName = FileInfo.baseName(libraryProbe.fileName);|var libraryName; if (libraryProbe.found) { libraryName = FileInfo.baseName(libraryProbe.fileName) };" /mingw64/share/qbs/modules/protobuf/cpp/protobufcpp.qbs
+          sed -i "s|var libraryName = FileInfo.baseName(libraryProbe.fileName);|var libraryName; if (libraryProbe.found) { libraryName = FileInfo.baseName(libraryProbe.fileName) };|g" /mingw64/share/qbs/modules/protobuf/cpp/protobufcpp.qbs
 
       - name: Setup Qbs toolchains
         shell: msys2 {0}
