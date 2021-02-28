@@ -33,6 +33,7 @@ jobs:
         with:
           repository: qbs/qbs
           path: qbs-build
+          submodules: recursive
 
       - name: Build and install Qbs
         run: |
