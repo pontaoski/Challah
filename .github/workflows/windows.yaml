@@ -20,7 +20,6 @@ jobs:
           install: >-
             msys/autoconf
             mingw64/mingw-w64-x86_64-gcc
-            mingw64/mingw-w64-x86_64-qbs
             mingw64/mingw-w64-x86_64-protobuf
             mingw64/mingw-w64-x86_64-cmake
 
@@ -28,6 +27,17 @@ jobs:
         uses: jurplel/install-qt-action@v2
         with:
           arch: win64_mingw81
+
+      - name: Build Qbs
+        uses: actions/checkout@v2
+        with:
+          repository: qbs/qbs
+          path: qbs-build
+        run: |
+          cd qbs-build
+          qmake -r qbs.pro
+          mingw32-make -j10 install
+          cd ..
 
       - name: Setup Qbs toolchains
         shell: msys2 {0}
