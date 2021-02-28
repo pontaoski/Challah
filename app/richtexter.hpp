@@ -17,6 +17,7 @@ struct CharacterStyle {
 	OptionalFontWeight weight;
 	OptionalBoolean underline;
 	OptionalBoolean italic;
+	OptionalBoolean strikethrough;
 };
 
 using ImageStyle = QImage;

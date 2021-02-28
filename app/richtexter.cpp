@@ -33,6 +33,7 @@ public:
 				{},
 				true, // underline
 				{},
+				{},
 			}
 		};
 	}
@@ -54,7 +55,8 @@ public:
 				{},
 				{},
 				{},
-				true // italic
+				true, // italic
+				{},
 			}
 		};
 	}
@@ -79,6 +81,29 @@ public:
 	}
 };
 
+class StrikethroughFormatter : public ITextEntityFormatter {
+public:
+	StrikethroughFormatter() {}
+	~StrikethroughFormatter() {}
+
+	const QRegularExpression regexp = QRegularExpression("(~~.*~~)");
+
+	QRegularExpression matches() const override {
+		return regexp;
+	}
+	TextStyle styleFor(const QString&) const override {
+		return TextStyle {
+			CharacterStyle {
+				{},
+				{},
+				{},
+				{},
+				true, // strikethrough
+			}
+		};
+	}
+};
+
 TextFormatter::TextFormatter(QTextDocument* parent, QObject* field)
 {
 	p = new Private;
@@ -91,6 +116,7 @@ TextFormatter::TextFormatter(QTextDocument* parent, QObject* field)
 	registerFormatter(new UnderlineFormatter);
 	registerFormatter(new ItalicFormatter);
 	registerFormatter(new EmojiFormatter);
+	registerFormatter(new StrikethroughFormatter);
 
 	connect(parent, &QTextDocument::contentsChange, this, &TextFormatter::handleTextChanged);
 }
@@ -170,6 +196,9 @@ void TextFormatter::handleTextChanged(int position, int charsRemoved, int charsA
 				}
 				if (style->underline.has_value()) {
 					fmt.setFontUnderline(*style->underline);
+				}
+				if (style->strikethrough.has_value()) {
+					fmt.setFontStrikeOut(*style->strikethrough);
 				}
 				if (style->font.has_value()) {
 					fmt.setFont(*style->font);
