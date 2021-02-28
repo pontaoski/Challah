@@ -97,6 +97,7 @@ QQC2.Control {
 			}
 			return messagesRoute.model.userID() == authorID ? Kirigami.Theme.Button : Kirigami.Theme.Window
 		}
+		Kirigami.Theme.inherit: false
 		spacing: 0
 
 		Item {
