@@ -19,10 +19,10 @@ Kirigami.Page {
 		anchors.fill: parent
 
 		Kirigami.ScrollablePage {
-			//: Personas are alternate identities; e.g. for roleplay reasons
-			title: qsTr("Personas")
+			//: Alternate identities; e.g. for roleplay reasons
+			title: qsTr("Identity")
 			actions.main: Kirigami.Action {
-				text: qsTr("New Persona")
+				text: qsTr("New Identity")
 				iconName: "list-add"
 				onTriggered: personaAddSheet.begin()
 			}
@@ -35,7 +35,7 @@ Kirigami.Page {
 					QQC2.TextField {
 						id: nameField
 
-						Kirigami.FormData.label: qsTr("Persona Name:")
+						Kirigami.FormData.label: qsTr("Identity Name:")
 					}
 					QQC2.ComboBox {
 						id: reasonField
@@ -50,7 +50,7 @@ Kirigami.Page {
 							}
 						]
 						textRole: "uiString"
-						Kirigami.FormData.label: qsTr("Persona Kind:")
+						Kirigami.FormData.label: qsTr("Identity Kind:")
 					}
 					QQC2.Button {
 						text: qsTr("Create")

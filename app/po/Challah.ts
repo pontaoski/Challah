@@ -10,28 +10,28 @@
     </message>
     <message>
         <location filename="../resources/ChallahSettings.qml" line="23"/>
-        <source>Personas</source>
-        <extracomment>Personas are alternate identities; e.g. for roleplay reasons</extracomment>
+        <source>Identity</source>
+        <extracomment>Alternate identities; e.g. for roleplay reasons</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../resources/ChallahSettings.qml" line="25"/>
-        <source>New Persona</source>
+        <source>New Identity</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../resources/ChallahSettings.qml" line="38"/>
-        <source>Persona Name:</source>
+        <source>Identity Name:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../resources/ChallahSettings.qml" line="53"/>
+        <source>Identity Kind:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../resources/ChallahSettings.qml" line="44"/>
         <source>Roleplay</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../resources/ChallahSettings.qml" line="53"/>
-        <source>Persona Kind:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -316,7 +316,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../resources/MessageDelegate.qml" line="328"/>
+        <location filename="../resources/MessageDelegate.qml" line="329"/>
         <source>Instant View</source>
         <translation type="unfinished"></translation>
     </message>
@@ -324,7 +324,7 @@
 <context>
     <name>MessagesModel</name>
     <message numerus="yes">
-        <location filename="../messages.cpp" line="211"/>
+        <location filename="../messages.cpp" line="224"/>
         <source>%1 are typing...</source>
         <comment>Lists</comment>
         <translation type="unfinished">
@@ -535,14 +535,14 @@
 <context>
     <name>QCoreApplication</name>
     <message>
-        <location filename="../messages.cpp" line="166"/>
+        <location filename="../messages.cpp" line="179"/>
         <source>%1 and %2</source>
         <comment>Lists</comment>
         <translation type="unfinished">%1 und %2</translation>
     </message>
     <message>
-        <location filename="../messages.cpp" line="185"/>
-        <location filename="../messages.cpp" line="189"/>
+        <location filename="../messages.cpp" line="198"/>
+        <location filename="../messages.cpp" line="202"/>
         <source>%1, %2</source>
         <comment>Lists</comment>
         <extracomment>the middle of a list with 4 or more items: &quot;A, %1, %2, D, and E&quot;
@@ -551,7 +551,7 @@ the start of a list, for example &quot;%1, %2, and C&quot;</extracomment>
         <translation type="unfinished">%1, %2</translation>
     </message>
     <message>
-        <location filename="../messages.cpp" line="192"/>
+        <location filename="../messages.cpp" line="205"/>
         <source>%1, and %2</source>
         <comment>Lists</comment>
         <extracomment>the end of a list, for example &quot;A, %1, and %2&quot;</extracomment>
