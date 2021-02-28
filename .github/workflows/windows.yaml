@@ -23,7 +23,7 @@ jobs:
             mingw64/mingw-w64-x86_64-protobuf
             mingw64/mingw-w64-x86_64-cmake
             mingw64/mingw-w64-x86_64-qbs
-            mingw64/mingw-w64-x86_64-wget
+            mingw64/mingw-w64-x86_64-sed
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v2
@@ -33,8 +33,7 @@ jobs:
       - name: Screw with Qbs
         shell: msys2 {0}
         run: |
-          wget https://gist.githubusercontent.com/pontaoski/2086ef66f04c728cf6241b39ee77ed04/raw/e576267632f76c0b7b035a5dc9e7d55775ded1ec/eep -o /mingw64/share/qbs/modules/protobuf/cpp/protobufcpp.qbs
-          cat /mingw64/share/qbs/modules/protobuf/cpp/protobufcpp.qbs
+          sed -i "s|var libraryName = FileInfo.baseName(libraryProbe.fileName);|var libraryName; if (libraryProbe.found) { libraryName = FileInfo.baseName(libraryProbe.fileName) };" /mingw64/share/qbs/modules/protobuf/cpp/protobufcpp.qbs
 
       - name: Setup Qbs toolchains
         shell: msys2 {0}
