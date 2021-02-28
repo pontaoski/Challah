@@ -22,25 +22,18 @@ jobs:
             mingw64/mingw-w64-x86_64-gcc
             mingw64/mingw-w64-x86_64-protobuf
             mingw64/mingw-w64-x86_64-cmake
+            mingw64/mingw-w64-x86_64-qbs
+            mingw64/mingw-w64-x86_64-wget
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v2
         with:
           arch: win64_mingw81
 
-      - name: Checkout Qbs
-        uses: actions/checkout@v2
-        with:
-          repository: qbs/qbs
-          path: qbs-build
-          submodules: recursive
-
-      - name: Build and install Qbs
+      - name: Screw with Qbs
+        shell: msys2 {0}
         run: |
-          cd qbs-build
-          qmake -r qbs.pro
-          mingw32-make -j10 install
-          cd ..
+          wget https://gist.githubusercontent.com/pontaoski/2086ef66f04c728cf6241b39ee77ed04/raw/e576267632f76c0b7b035a5dc9e7d55775ded1ec/eep -o /mingw64/share/qbs/modules/protobuf/cpp/protobufcpp.qbs
 
       - name: Setup Qbs toolchains
         shell: msys2 {0}
