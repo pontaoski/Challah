@@ -18,9 +18,10 @@ Kirigami.Page {
 	Kirigami.SwipeNavigator {
 		anchors.fill: parent
 
+
 		Kirigami.ScrollablePage {
 			//: Alternate identities; e.g. for roleplay reasons
-			title: qsTr("Identity")
+			title: qsTr("Identities")
 			actions.main: Kirigami.Action {
 				text: qsTr("New Identity")
 				iconName: "list-add"

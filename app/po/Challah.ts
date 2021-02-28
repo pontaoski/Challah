@@ -9,33 +9,33 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../resources/ChallahSettings.qml" line="23"/>
-        <source>Identity</source>
-        <extracomment>Alternate identities; e.g. for roleplay reasons</extracomment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../resources/ChallahSettings.qml" line="25"/>
+        <location filename="../resources/ChallahSettings.qml" line="26"/>
         <source>New Identity</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../resources/ChallahSettings.qml" line="38"/>
+        <location filename="../resources/ChallahSettings.qml" line="39"/>
         <source>Identity Name:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../resources/ChallahSettings.qml" line="53"/>
+        <location filename="../resources/ChallahSettings.qml" line="54"/>
         <source>Identity Kind:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../resources/ChallahSettings.qml" line="44"/>
+        <location filename="../resources/ChallahSettings.qml" line="45"/>
         <source>Roleplay</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../resources/ChallahSettings.qml" line="56"/>
+        <location filename="../resources/ChallahSettings.qml" line="24"/>
+        <source>Identities</source>
+        <extracomment>Alternate identities; e.g. for roleplay reasons</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../resources/ChallahSettings.qml" line="57"/>
         <source>Create</source>
         <translation type="unfinished"></translation>
     </message>
