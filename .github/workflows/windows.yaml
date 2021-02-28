@@ -28,11 +28,13 @@ jobs:
         with:
           arch: win64_mingw81
 
-      - name: Build Qbs
+      - name: Checkout Qbs
         uses: actions/checkout@v2
         with:
           repository: qbs/qbs
           path: qbs-build
+
+      - name: Build and install Qbs
         run: |
           cd qbs-build
           qmake -r qbs.pro
