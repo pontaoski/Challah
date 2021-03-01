@@ -50,7 +50,7 @@ modules:
     sources:
       - type: git
         url: https://invent.kde.org/frameworks/kirigami
-        branch: work/janb/crash
+        branch: master
 # stuff we modify
   - name: qbs
     buildsystem: qmake
