@@ -34,8 +34,8 @@ modules:
     buildsystem: autotools
     sources:
       - type: archive
-        url: https://github.com/protocolbuffers/protobuf/releases/download/v3.14.0/protobuf-cpp-3.14.0.tar.gz
-        sha256: 50ec5a07c0c55d4ec536dd49021f2e194a26bfdbc531d03d1e9d4d3e27175659
+        url: https://github.com/protocolbuffers/protobuf/releases/download/v3.12.4/protobuf-cpp-3.12.4.tar.gz
+        sha256: ccfbaaba52f67e0e6536a05f3df3f6618620d255513cfca3a07f5935b624e26b
 
   - name: kf5-extra-cmake-modules
     buildsystem: cmake
