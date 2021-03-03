@@ -3,7 +3,13 @@ StaticLibrary {
 
 	protobuf.cpp.importPaths: ["protocol"]
 
-	cpp.defines: project.vendoredKirigami ? ["CHALLAH_VENDORED_DEPS"] : []
+	Export {
+		Depends { name: "cpp" }
+
+		cpp.defines: [].concat(project.vendoredKirigami ? ["CHALLAH_VENDORED_KIRIGAMI"] : []).concat(project.vendoredQQC2BreezeStyle ? ["CHALLAH_VENDORED_QQC2_BREEZE_STYLE"] : [])
+	}
+
+	cpp.defines: [].concat(project.vendoredKirigami ? ["CHALLAH_VENDORED_KIRIGAMI"] : []).concat(project.vendoredQQC2BreezeStyle ? ["CHALLAH_VENDORED_QQC2_BREEZE_STYLE"] : [])
 	cpp.cppFlags: ['-Werror=return-type']
 	cpp.cxxLanguageVersion: "c++17"
 	cpp.debugInformation: true
@@ -60,5 +66,6 @@ StaticLibrary {
 	Depends { name: "protobuf.cpp" }
 	Depends { name: "vendored_protobuf"; condition: project.vendoredProtobuf }
 	Depends { name: "vendored_kirigami"; condition: project.vendoredKirigami }
+	Depends { name: "vendored_qqc2_breeze_style"; condition: project.vendoredQQC2BreezeStyle }
 	Depends { name: "Qt"; submodules: ["gui", "concurrent", "widgets", "websockets", "quick", "quickcontrols2", "qml"] }
 }

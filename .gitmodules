@@ -7,3 +7,9 @@
 [submodule "vendor/protobuf"]
 	path = vendor/protobuf
 	url = https://github.com/protocolbuffers/protobuf.git
+[submodule "vendor/qqc2-breeze-style"]
+	path = vendor/qqc2-breeze-style
+	url = https://invent.kde.org/plasma/qqc2-breeze-style.git
+[submodule "vendor/kguiaddons"]
+	path = vendor/kguiaddons
+	url = https://invent.kde.org/frameworks/kguiaddons.git

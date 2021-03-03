@@ -7,6 +7,7 @@ Project {
 
 	property bool vendoredProtobuf: false
 	property bool vendoredKirigami: false
+	property bool vendoredQQC2BreezeStyle: false
 
 	AutotestRunner { }
 
@@ -17,5 +18,13 @@ Project {
 	SubProject {
 		filePath: "vendor/protobuf.qbs"
 		condition: project.vendoredProtobuf
+	}
+	SubProject {
+		filePath: "vendor/qqc2breezestyle.qbs"
+		condition: project.vendoredQQC2BreezeStyle
+	}
+	SubProject {
+		filePath: "vendor/kguiaddons.qbs"
+		condition: project.vendoredQQC2BreezeStyle
 	}
 }

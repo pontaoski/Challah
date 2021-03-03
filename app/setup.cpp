@@ -11,7 +11,7 @@
 
 #include "setup.hpp"
 
-#ifdef CHALLAH_VENDORED_DEPS
+#ifdef CHALLAH_VENDORED_KIRIGAMI
 
 #define KIRIGAMI_BUILD_TYPE_STATIC
 
@@ -23,9 +23,17 @@ Q_IMPORT_PLUGIN(KirigamiPlugin)
 
 #endif
 
+#ifdef CHALLAH_VENDORED_QQC2_BREEZE_STYLE
+
+#include "../vendor/qqc2-breeze-style/style/qqc2breezestyleplugin.h"
+#include <QtPlugin>
+Q_IMPORT_PLUGIN(QQC2BreezeStylePlugin)
+
+#endif
+
 void setupQML(QQmlEngine* engine)
 {
-#if defined(CHALLAH_VENDORED_DEPS)
+#if defined(CHALLAH_VENDORED_KIRIGAMI)
 	KirigamiPlugin::getInstance().registerTypes(engine);
 #else
 	Q_UNUSED(engine)

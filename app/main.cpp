@@ -44,12 +44,22 @@ int main(int argc, char *argv[])
 	auto app = new QApplication(argc, argv);
 #endif
 
-#ifdef Q_OS_ANDROID
+#if defined(Q_OS_ANDROID)
 	QQuickStyle::setStyle(QStringLiteral("Material"));
-#elif defined(Q_OS_LINUX) && !defined(CHALLAH_VENDORED_DEPS)
+#elif defined(Q_OS_LINUX) && !defined(CHALLAH_VENDORED_KIRIGAMI)
 	QApplication::setStyle("Breeze");
 	QIcon::setThemeName("breeze");
 	QQuickStyle::setStyle("org.kde.desktop");
+#endif
+
+#ifdef CHALLAH_VENDORED_QQC2_BREEZE_STYLE
+	qDebug() << "vendored";
+#else
+	qDebug() << "not vendored";
+#endif
+
+#ifdef CHALLAH_VENDORED_QQC2_BREEZE_STYLE
+	QQuickStyle::setStyle("org.kde.breeze");
 #endif
 
 	QQmlApplicationEngine engine;

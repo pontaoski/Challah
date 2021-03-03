@@ -1,0 +1,1 @@
+#define KGUIADDONS_EXPORT
