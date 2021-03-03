@@ -60,7 +60,6 @@ modules:
       - type: git
         url: https://code.qt.io/qbs/qbs.git
         branch: 1.18
-        commit: 87fdf5002673a15f76981302fc9b024bd542b4f4
 # the app
   - name: challah
     buildsystem: simple
