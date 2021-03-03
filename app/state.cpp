@@ -34,9 +34,11 @@ State* State::instance()
 }
 void State::logOut()
 {
+	Client::mainClient->stopEvents();
 	delete Client::mainClient;
+
 	auto copy = Client::mainClient;
-	copy->stopEvents();
+
 	Client::mainClient = nullptr;
 	client = nullptr;
 

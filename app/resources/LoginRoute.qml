@@ -63,6 +63,7 @@ Kirigami.PageRoute {
 				text: qsTr("Continue")
 
 				objectName: "LoginRoute-Homeserver-Continue"
+				enabled: homeserver.text !== "" && homeserver.text.includes(":")
 
 				Layout.alignment: Qt.AlignHCenter
 
