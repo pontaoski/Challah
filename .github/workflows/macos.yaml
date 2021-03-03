@@ -34,7 +34,7 @@ jobs:
       - name: Build app
         run: |
           export QML2_IMPORT_PATH=/usr/local/lib/qt5/qml
-          qbs project.vendoredKirigami:true
+          qbs project.vendoredKirigami:true project.vendoredQQC2BreezeStyle:true
           mkdir -p ./default/Challah.81be376b/Challah.app/PlugIns/
           cp -r /usr/local/Cellar/qt/5.15.2/plugins/platforms ./default/Challah.81be376b/Challah.app/PlugIns/
           macdeployqt default/Challah.81be376b/Challah.app -qmldir=app/resources -dmg -verbose=3 $(find default/Challah.81be376b/Challah.app -name '*.dylib' -exec echo -n "-executable={} " \;)
