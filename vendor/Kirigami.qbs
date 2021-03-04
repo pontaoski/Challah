@@ -10,6 +10,7 @@ StaticLibrary {
 		"kirigami/src/scenegraph/*.h",
 		"kirigami/src/libkirigami/*.cpp",
 		"kirigami/src/libkirigami/*.h",
+		"loggingcategory.cpp",
 	]
 
 	Qt.core.pluginMetaData: ["uri=org.kde.kirigami"]
