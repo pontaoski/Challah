@@ -34,6 +34,7 @@ public:
 	std::unique_ptr<AuthServiceServiceClient> authKit;
 	std::unique_ptr<MediaProxyServiceServiceClient> mediaProxyKit;
 	QSet<quint64> subscribedGuilds;
+	QSet<quint64> pendingSubscribeGuilds;
 	bool shouldRestartStreams = true;
 
 private:

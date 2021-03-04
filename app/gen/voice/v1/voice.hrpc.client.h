@@ -28,7 +28,7 @@ class Receive__protocol_voice_v1_Signal__Send__protocol_voice_v1_ClientSignal__S
 	}
 
 
-	public: bool send(const protocol::voice::v1::ClientSignal& in) {
+	public: [[nodiscard]] bool send(const protocol::voice::v1::ClientSignal& in) {
 		std::string strData;
 		if (!in.SerializeToString(&strData)) {
 			return false;

@@ -268,13 +268,12 @@ void Client::customEvent(QEvent *event)
 		Q_UNUSED(ev);
 
 		qCDebug(STREAM_LIFECYCLE) << "Posting start loop request for homeserver" << homeserver;
-		QCoreApplication::postEvent(this, new StartLoop());
-		qCDebug(STREAM_LIFECYCLE) << "Reposting guild subscribe requests for homeserver" << homeserver;
-		for (auto guild : subscribedGuilds) {
-			qCDebug(STREAM_LIFECYCLE) << "Reposting subscribe" << guild << homeserver;
-			QCoreApplication::postEvent(this, new Subscribe(guild));
-		}
+
+		pendingSubscribeGuilds = subscribedGuilds;
 		subscribedGuilds.clear();
+
+		QCoreApplication::postEvent(this, new StartLoop());
+
 	} else if (auto ev = dynamic_cast<StartLoop*>(event)) {
 		Q_UNUSED(ev);
 
@@ -282,16 +281,21 @@ void Client::customEvent(QEvent *event)
 	} else if (auto ev = dynamic_cast<Subscribe*>(event)) {
 		if (subscribedGuilds.contains(ev->gid)) return;
 
-		if (eventStream && eventStream->isValid()) {
+		if (eventStream && eventStream->isValid() && eventStream->state() == QAbstractSocket::SocketState::ConnectedState) {
 		before:
 			qCDebug(STREAM_LIFECYCLE) << "Subscribing to guild" << ev->gid << "on homeserver" << homeserver;
-			subscribedGuilds << ev->gid;
 			protocol::chat::v1::StreamEventsRequest req;
 			auto subReq = new protocol::chat::v1::StreamEventsRequest_SubscribeToGuild;
 			subReq->set_guild_id(ev->gid);
 			req.set_allocated_subscribe_to_guild(subReq);
-			eventStream->send(req);
 
+			if (!eventStream->send(req)) {
+				qCDebug(STREAM_LIFECYCLE) << "Failed to subscribe to guild; reposting subscribe" << eventStream->state() << eventStream->errorString() << ev->gid << homeserver;
+				QCoreApplication::postEvent(this, new Subscribe(ev->gid));
+				goto after;
+			}
+
+			subscribedGuilds << ev->gid;
 			qCDebug(STREAM_LIFECYCLE) << "Now subscribed to guilds" << subscribedGuilds << "on homeserver" << homeserver;
 
 			goto after;
@@ -312,11 +316,31 @@ void Client::runEvents()
 	qCDebug(STREAM_LIFECYCLE) << "Creating new stream for homeserver" << homeserver;
 	eventStream = std::unique_ptr<Receive__protocol_chat_v1_Event__Send__protocol_chat_v1_StreamEventsRequest__Stream>(chatKit->StreamEvents(theHeaders));
 
-	protocol::chat::v1::StreamEventsRequest req;
-	req.set_allocated_subscribe_to_homeserver_events(new protocol::chat::v1::StreamEventsRequest_SubscribeToHomeserverEvents);
+	connect(
+		eventStream.get(),
+		&QWebSocket::connected,
+		[=] {
+			protocol::chat::v1::StreamEventsRequest req;
+			req.set_allocated_subscribe_to_homeserver_events(new protocol::chat::v1::StreamEventsRequest_SubscribeToHomeserverEvents);
 
-	qCDebug(STREAM_LIFECYCLE) << "Subscribing to homeserver events" << homeserver;
-	eventStream->send(req);
+			qCDebug(STREAM_LIFECYCLE) << "Events stream opened; subscribing to homeserver events" << homeserver << eventStream->send(req);
+
+			for (auto item : pendingSubscribeGuilds) {
+				protocol::chat::v1::StreamEventsRequest req;
+				auto subReq = new protocol::chat::v1::StreamEventsRequest_SubscribeToGuild;
+				subReq->set_guild_id(item);
+				req.set_allocated_subscribe_to_guild(subReq);
+
+				if (!eventStream->send(req)) {
+					qCDebug(STREAM_LIFECYCLE) << "Failed to resubscribe to guild; reposting subscribe" << eventStream->state() << eventStream->errorString() << item << homeserver;
+					QCoreApplication::postEvent(this, new Subscribe(item));
+				}
+
+				subscribedGuilds << item;
+			}
+			pendingSubscribeGuilds.clear();
+		}
+	);
 
 	connect(
 		eventStream.get(),

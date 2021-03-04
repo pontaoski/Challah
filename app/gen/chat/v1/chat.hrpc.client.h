@@ -40,7 +40,7 @@ class Receive__protocol_chat_v1_Event__Send__protocol_chat_v1_StreamEventsReques
 	}
 
 
-	public: bool send(const protocol::chat::v1::StreamEventsRequest& in) {
+	public: [[nodiscard]] bool send(const protocol::chat::v1::StreamEventsRequest& in) {
 		std::string strData;
 		if (!in.SerializeToString(&strData)) {
 			return false;
