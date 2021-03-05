@@ -222,7 +222,9 @@ QQC2.Control {
 				}
 				GridLayout {
 					TextEdit {
-						text: readOnly ? content + "     ⠀" : content
+						readonly property string paddingT: "     ⠀"
+
+						text: readOnly ? content + paddingT : content
 						textFormat: TextEdit.MarkdownText
 						readOnly: !messageBlock.edit
 
@@ -239,14 +241,31 @@ QQC2.Control {
 						Layout.alignment: Qt.AlignBottom
 						Layout.maximumWidth: messageBlock.Layout.maximumWidth * 0.9
 
+						function clamp() {
+							if (!readOnly) {
+								return
+							}
+							const l = length - paddingT.length
+							if (selectionEnd >= l && selectionStart >= l) {
+								select(0, 0)
+							} else if (selectionEnd >= l) {
+								select(selectionStart, l)
+							} else if (selectionStart >= l) {
+								select(l, selectionEnd)
+							}
+						}
+
+						onSelectionStartChanged: clamp()
+						onSelectionEndChanged: clamp()
+
 						Keys.onEscapePressed: {
 							messageBlock.edit = false
-							text = Qt.binding(function() { return readOnly ? content + "     ⠀" : content })
+							text = Qt.binding(function() { return readOnly ? content + paddingT : content })
 						}
 						Keys.onReturnPressed: {
 							messageBlock.edit = false
 							messagesRoute.model.editMessage(messageID, text)
-							text = Qt.binding(function() { return readOnly ? content + "     ⠀" : content })
+							text = Qt.binding(function() { return readOnly ? content + paddingT : content })
 						}
 					}
 				}
