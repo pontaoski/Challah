@@ -19,6 +19,7 @@ jobs:
           update: true
           install: >-
             msys/autoconf
+            msys/patch
             mingw64/mingw-w64-x86_64-gcc
             mingw64/mingw-w64-x86_64-protobuf
             mingw64/mingw-w64-x86_64-cmake
@@ -29,6 +30,14 @@ jobs:
         uses: jurplel/install-qt-action@v2
         with:
           arch: win64_mingw81
+
+      - name: Patch Qbs
+        shell: msys2 {0}
+        run: |
+          cp windows-qbs.diff /mingw64
+          pushd /mingw64
+          patch -p1 < windows-qbs.diff
+          popd
 
       - name: Setup Qbs toolchains
         shell: msys2 {0}

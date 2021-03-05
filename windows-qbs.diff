@@ -1,0 +1,15 @@
+diff --git a/share/qbs/modules/protobuf/cpp/protobufcpp.qbs b/share/qbs/modules/protobuf/cpp/protobufcpp.qbs
+index 47d1a60..50caf05 100644
+--- a/share/qbs/modules/protobuf/cpp/protobufcpp.qbs
++++ b/share/qbs/modules/protobuf/cpp/protobufcpp.qbs
+@@ -16,7 +16,9 @@
+     property string grpcLibraryPath: grpcLibraryProbe.path
+ 
+     readonly property string _libraryName: {
+-        var libraryName = FileInfo.baseName(libraryProbe.fileName);
++        var libraryName;
++        if (libraryProbe.found)
++            libraryName = FileInfo.baseName(libraryProbe.fileName);
+         if (libraryName.startsWith("lib"))
+             libraryName = libraryName.substring(3);
+         return libraryName;
