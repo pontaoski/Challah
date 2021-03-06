@@ -19,7 +19,7 @@ void initialiseGlobalNam(bool secure, const QString& host) {
 	}
 }
 }
-auto MediaProxyServiceServiceClient::FetchLinkMetadata(const protocol::mediaproxy::v1::FetchLinkMetadataRequest& in, QMap<QByteArray,QString> headers) -> MediaProxyServiceServiceClient::Result<protocol::mediaproxy::v1::SiteMetadata>
+auto MediaProxyServiceServiceClient::FetchLinkMetadata(const protocol::mediaproxy::v1::FetchLinkMetadataRequest& in, QMap<QByteArray,QString> headers) -> MediaProxyServiceServiceClient::Result<protocol::mediaproxy::v1::FetchLinkMetadataResponse>
 {
 	std::string strData;
 	if (!in.SerializeToString(&strData)) { return {QStringLiteral("failed to serialize protobuf")}; }
@@ -50,7 +50,7 @@ auto MediaProxyServiceServiceClient::FetchLinkMetadata(const protocol::mediaprox
 
 	auto response = val->readAll();
 
-	protocol::mediaproxy::v1::SiteMetadata ret;
+	protocol::mediaproxy::v1::FetchLinkMetadataResponse ret;
 	if (!ret.ParseFromArray(response.constData(), response.length())) {
 		return {QStringLiteral("error parsing response into protobuf")};
 	}

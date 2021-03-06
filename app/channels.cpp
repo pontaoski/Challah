@@ -220,9 +220,9 @@ void ChannelsModel::checkCanInstantView(const QStringList& url, QJSValue then)
 					obj["instant_view_ok"] = false;
 				}
 			}
+
 			{
 				protocol::mediaproxy::v1::FetchLinkMetadataRequest req;
-				protocol::mediaproxy::v1::SiteMetadata resp;
 
 				req.set_url(item.toStdString());
 
@@ -230,11 +230,18 @@ void ChannelsModel::checkCanInstantView(const QStringList& url, QJSValue then)
 				if (resultOk(result)) {
 					auto resp = unwrap(result);
 
-					obj["page_title"] = QString::fromStdString(resp.page_title());
-					obj["site_title"] = QString::fromStdString(resp.site_title());
-					obj["description"] = QString::fromStdString(resp.description());
-					obj["preview_image"] = QString::fromStdString(resp.image());
-					obj["url"] = QString::fromStdString(resp.url());
+					if (resp.has_is_site()) {
+						obj["page_title"] = QString::fromStdString(resp.is_site().page_title());
+						obj["site_title"] = QString::fromStdString(resp.is_site().site_title());
+						obj["description"] = QString::fromStdString(resp.is_site().description());
+						obj["preview_image"] = QString::fromStdString(resp.is_site().image());
+						obj["url"] = QString::fromStdString(resp.is_site().url());
+					} else {
+						continue;
+					}
+
+				} else {
+					continue;
 				}
 			}
 

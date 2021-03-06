@@ -19,7 +19,7 @@ class MediaProxyServiceServiceClient {
 	public: explicit MediaProxyServiceServiceClient(const QString& host, bool secure) : host(host), secure(secure) {}
 public:
 	template<typename T> using Result = std::variant<T, QString>;
-	[[ nodiscard ]] Result<protocol::mediaproxy::v1::SiteMetadata> FetchLinkMetadata(const protocol::mediaproxy::v1::FetchLinkMetadataRequest& in, QMap<QByteArray,QString> headers = {});
+	[[ nodiscard ]] Result<protocol::mediaproxy::v1::FetchLinkMetadataResponse> FetchLinkMetadata(const protocol::mediaproxy::v1::FetchLinkMetadataRequest& in, QMap<QByteArray,QString> headers = {});
 	[[ nodiscard ]] Result<protocol::mediaproxy::v1::InstantViewResponse> InstantView(const protocol::mediaproxy::v1::InstantViewRequest& in, QMap<QByteArray,QString> headers = {});
 	[[ nodiscard ]] Result<protocol::mediaproxy::v1::CanInstantViewResponse> CanInstantView(const protocol::mediaproxy::v1::InstantViewRequest& in, QMap<QByteArray,QString> headers = {});
 };
