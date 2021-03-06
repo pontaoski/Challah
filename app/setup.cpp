@@ -8,6 +8,7 @@
 #include "roles.hpp"
 #include "state.hpp"
 #include "userroles.hpp"
+#include "conditional.hpp"
 
 #include "setup.hpp"
 
@@ -41,6 +42,7 @@ void setupQML(QQmlEngine* engine)
 
 	qmlRegisterType<OverlappingPanels>("com.github.HarmonyDevelopment.Staccato", 1, 0, "OverlappingPanels");
 	qmlRegisterType<LoginManager>("com.github.HarmonyDevelopment.Staccato", 1, 0, "LoginManager");
+	qmlRegisterType<Conditional>("com.github.HarmonyDevelopment.Staccato", 1, 0, "Conditional");
 	qRegisterMetaType<MessagesModel*>();
 	qRegisterMetaType<UserRolesModel*>();
 	qmlRegisterType(QUrl("qrc:/Main.qml"), "com.github.HarmonyDevelopment.Staccato.Tests", 1, 0, "MainWindow");
