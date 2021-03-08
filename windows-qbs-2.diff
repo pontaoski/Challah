@@ -1,0 +1,36 @@
+diff --git a/share/qbs/modules/protobuf/cpp/protobufcpp.qbs b/share/qbs/modules/protobuf/cpp/protobufcpp.qbs
+index 50caf05..3dfb39a 100644
+--- a/share/qbs/modules/protobuf/cpp/protobufcpp.qbs
++++ b/share/qbs/modules/protobuf/cpp/protobufcpp.qbs
+@@ -8,7 +8,7 @@
+ 
+ ProtobufBase {
+     property string includePath: includeProbe.path
+-    property string libraryPath: libraryProbe.path
++    property string libraryPath: libraryProbe.found ? libraryProbe.path : undefined
+ 
+     property bool useGrpc: false
+ 
+@@ -17,10 +17,11 @@
+ 
+     readonly property string _libraryName: {
+         var libraryName;
+-        if (libraryProbe.found)
++        if (libraryProbe.found) {
+             libraryName = FileInfo.baseName(libraryProbe.fileName);
+-        if (libraryName.startsWith("lib"))
+-            libraryName = libraryName.substring(3);
++            if (libraryName.startsWith("lib"))
++                libraryName = libraryName.substring(3);
++        }
+         return libraryName;
+     }
+ 
+@@ -104,6 +105,7 @@
+             "protobuf",
+             "protobufd",
+         ]
++        searchPaths: libraryPath ? [libraryPath] : []
+     }
+ 
+     Probes.IncludeProbe {
