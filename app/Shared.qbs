@@ -1,8 +1,6 @@
 StaticLibrary {
 	name: "ChallahShared"
 
-	protobuf.cpp.importPaths: ["protocol"]
-
 	Export {
 		Depends { name: "cpp" }
 
@@ -63,9 +61,8 @@ StaticLibrary {
 
 	Depends { name: "bundle" }
 	Depends { name: "cpp" }
-	Depends { name: "protobuf.cpp" }
 	Depends { name: "vendored_protobuf"; condition: project.vendoredProtobuf }
 	Depends { name: "vendored_kirigami"; condition: project.vendoredKirigami }
 	Depends { name: "vendored_qqc2_breeze_style"; condition: project.vendoredQQC2BreezeStyle }
-	Depends { name: "Qt"; submodules: ["gui", "concurrent", "widgets", "websockets", "quick", "quickcontrols2", "qml"] }
+	Depends { name: "Qt"; submodules: ["gui", "concurrent", "widgets", "websockets", "quick", "quickcontrols2", "qml"].concat(qbs.targetOS.contains("android") ? ["androidextras"] : []) }
 }

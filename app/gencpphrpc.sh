@@ -8,6 +8,7 @@ for dir in $(find "protocol" -name '*.proto' -print0 | xargs -0 -n1 dirname | so
 
     protoc \
     --proto_path=protocol \
+    --cpp_out=./gen \
     --hrpc_out=./gen \
     --hrpc_opt="qt_cpp_client" \
     $(find "${dir}" -name '*.proto')

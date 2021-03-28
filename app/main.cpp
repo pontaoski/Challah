@@ -4,9 +4,19 @@
 
 #include "setup.hpp"
 
+#include <QCoreApplication>
+#include <QIcon>
+#include <QQmlApplicationEngine>
+#include <QQmlContext>
+#include <QQuickStyle>
+#include <QThreadPool>
+#include <QLibraryInfo>
+#include <QTranslator>
+
 #ifdef Q_OS_ANDROID
 
 #include <QtAndroid>
+#include <QAndroidJniObject>
 #include <QGuiApplication>
 #include <QQuickStyle>
 
@@ -21,15 +31,6 @@
 #include <QApplication>
 
 #endif
-
-#include <QCoreApplication>
-#include <QIcon>
-#include <QQmlApplicationEngine>
-#include <QQmlContext>
-#include <QQuickStyle>
-#include <QThreadPool>
-#include <QLibraryInfo>
-#include <QTranslator>
 
 int main(int argc, char *argv[])
 {
@@ -73,10 +74,12 @@ int main(int argc, char *argv[])
 	ChallahTranslator.load("Challah_" + QLocale::system().name(), ":/po/");
 	app->installTranslator(&ChallahTranslator);
 
+#ifndef Q_OS_ANDROID
 	QApplication::setWindowIcon(QIcon::fromTheme(QString("io.harmonyapp.Challah")));
-	QApplication::setDesktopFileName("io.harmonyapp.Challah.desktop");
-	QApplication::setOrganizationName("Harmony Development");
-	QApplication::setOrganizationDomain("io.harmonyapp");
+#endif
+	QGuiApplication::setDesktopFileName("io.harmonyapp.Challah.desktop");
+	QCoreApplication::setOrganizationName("Harmony Development");
+	QCoreApplication::setOrganizationDomain("io.harmonyapp");
 
 	const QUrl url(QStringLiteral("qrc:/Main.qml"));
 	QObject::connect(
@@ -100,5 +103,5 @@ int main(int argc, char *argv[])
 	});
 #endif
 
-	return QApplication::exec();
+	return QCoreApplication::exec();
 }

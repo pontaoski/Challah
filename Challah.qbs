@@ -2,15 +2,19 @@ Project {
 	references: [
 		"app/App.qbs",
 		"app/Shared.qbs",
-		"app/Test.qbs",
 	]
 
-	property bool vendoredProtobuf: false
+	property bool vendoredProtobuf: true
 	property bool vendoredKirigami: false
 	property bool vendoredQQC2BreezeStyle: false
+	property bool withTests: false
 
 	AutotestRunner { }
 
+	SubProject {
+		filePath: "app/Test.qbs"
+		condition: project.withTests
+	}
 	SubProject {
 		filePath: "vendor/Kirigami.qbs"
 		condition: project.vendoredKirigami
