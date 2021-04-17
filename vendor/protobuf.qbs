@@ -3,9 +3,16 @@ StaticLibrary {
 
 	files: [
 		"protobuf/src/google/protobuf/*.cc",
+		"protobuf/src/google/protobuf/io/*.cc",
+		"protobuf/src/google/protobuf/util/*.cc",
 		"protobuf/src/google/protobuf/stubs/*.cc",
+		"protobuf/src/google/protobuf/util/internal/*.cc",
 	]
 	excludeFiles: [
+		"protobuf/src/google/protobuf/io/*test.cc",
+		"protobuf/src/google/protobuf/util/*test.cc",
+		"protobuf/src/google/protobuf/util/internal/*test.cc",
+		"protobuf/src/google/protobuf/stubs/*test.cc",
 		"protobuf/src/google/protobuf/*_unittest.cc",
 		"protobuf/src/google/protobuf/*_test.cc",
 		"protobuf/src/google/protobuf/*_test_util.cc",
