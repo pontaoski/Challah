@@ -1,0 +1,23 @@
+imports = [ "language.c" ]
+
+[language.c]
+compiler = "gcc"
+libraries = ["libsForQt5.full", "libsForQt5.kirigami2", "protobuf3_12"]
+includes = ["libsForQt5.full", "libsForQt5.kirigami2", "protobuf3_12"]
+
+[devshell]
+name = "challah-devshell"
+packages = [ "cmake", "binutils" ]
+
+[devshell.interactive.setupQbs]
+text = """
+qbs setup-toolchains --detect
+qbs resolve profile:gcc project.vendoredProtobuf:true
+"""
+
+[[env]]
+name = "LIBRARY_PATH"
+eval = "$DEVSHELL_DIR/lib"
+
+[[commands]]
+package = "qbs"
