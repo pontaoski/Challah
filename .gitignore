@@ -7,3 +7,5 @@ _flatpak_builder
 .vscode
 output
 /.cache
+result*
+.direnv

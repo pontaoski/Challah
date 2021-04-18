@@ -1,5 +1,22 @@
 {
   "nodes": {
+    "challahSrc": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1618704552,
+        "narHash": "sha256-sHU9fhcmobJ8TDZOGwvuSoj4L7gmcu4vVYogJlLuLjM=",
+        "owner": "harmony-development",
+        "repo": "Challah",
+        "rev": "0f65c04603be27e19a1ece6c894afdcd03c1d978",
+        "type": "github"
+      },
+      "original": {
+        "owner": "harmony-development",
+        "ref": "oven",
+        "repo": "Challah",
+        "type": "github"
+      }
+    },
     "devshell": {
       "locked": {
         "lastModified": 1618523768,
@@ -46,13 +63,29 @@
         "type": "github"
       }
     },
+    "gitignore": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1611672876,
+        "narHash": "sha256-qHu3uZ/o9jBHiA3MEKHJ06k7w4heOhA+4HCSIvflRxo=",
+        "owner": "hercules-ci",
+        "repo": "gitignore.nix",
+        "rev": "211907489e9f198594c0eb0ca9256a1949c9d412",
+        "type": "github"
+      },
+      "original": {
+        "owner": "hercules-ci",
+        "repo": "gitignore.nix",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1618530127,
-        "narHash": "sha256-jQPk7XpabppYa+GIO5LVTtUFhHq/VqHhPggwIKhTCnQ=",
+        "lastModified": 1618587490,
+        "narHash": "sha256-NnTlWVB7S8j1YXvzLMs6EUPWnYgw6Lz2IP24VGH0fTQ=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "294d1925af6462e55c76b49624b983036f0093b9",
+        "rev": "f0efbe21f9ae1e17d1aca922708f1bdef605039d",
         "type": "github"
       },
       "original": {
@@ -64,9 +97,11 @@
     },
     "root": {
       "inputs": {
+        "challahSrc": "challahSrc",
         "devshell": "devshell",
         "flakeCompat": "flakeCompat",
         "flakeUtils": "flakeUtils",
+        "gitignore": "gitignore",
         "nixpkgs": "nixpkgs"
       }
     }
