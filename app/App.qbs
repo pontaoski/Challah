@@ -20,6 +20,23 @@ QtApplication {
 	)
 
 	Group {
+		files: [
+			"../vendor/qqc2-breeze-style/style/qtquickcontrols/*.qml",
+			"../vendor/qqc2-breeze-style/style/qtquickcontrols/qmldir",
+		]
+		fileTags: "qt.core.resource_data"
+		Qt.core.resourcePrefix: "/org/kde/breeze"
+	}
+	Group {
+		files: [
+			"../vendor/qqc2-breeze-style/style/impl/*.qml",
+			"../vendor/qqc2-breeze-style/style/impl/qmldir",
+		]
+		fileTags: "qt.core.resource_data"
+		Qt.core.resourcePrefix: "/org/kde/breeze/impl"
+	}
+
+	Group {
 		files: ["resources/io.harmonyapp.Challah.svg"]
 		qbs.install: qbs.targetOS.contains("linux")
 		qbs.installDir: "share/icons/hicolor/scalable/apps"

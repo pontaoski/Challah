@@ -60,7 +60,9 @@ int main(int argc, char *argv[])
 #endif
 
 #ifdef CHALLAH_VENDORED_QQC2_BREEZE_STYLE
-	QQuickStyle::setStyle("org.kde.breeze");
+	// this works awfully
+	// QQuickStyle::setStyle("qrc:/org/kde/breeze");
+	QQuickStyle::setStyle("Material");
 #endif
 
 	QQmlApplicationEngine engine;

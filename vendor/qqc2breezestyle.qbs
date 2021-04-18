@@ -14,7 +14,7 @@ StaticLibrary {
 			"qqc2-breeze-style/style/qtquickcontrols/qmldir",
 		]
 		fileTags: "qt.core.resource_data"
-		Qt.core.resourcePrefix: "/org.kde.breeze"
+		Qt.core.resourcePrefix: "/org/kde/breeze"
 	}
 	Group {
 		files: [
@@ -22,7 +22,7 @@ StaticLibrary {
 			"qqc2-breeze-style/style/impl/qmldir",
 		]
 		fileTags: "qt.core.resource_data"
-		Qt.core.resourcePrefix: "/org.kde.breeze/impl"
+		Qt.core.resourcePrefix: "/org/kde/breeze/impl"
 	}
 
 	Qt.core.pluginMetaData: ["uri=org.kde.breeze"]
