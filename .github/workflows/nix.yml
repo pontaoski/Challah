@@ -1,9 +1,9 @@
 name: "Nix"
 on:
   pull_request:
-    branches: [ master ]
+    branches: [ oven ]
   push:
-    branches: [ master ]
+    branches: [ oven ]
 jobs:
   nix-build:
     runs-on: ubuntu-latest
