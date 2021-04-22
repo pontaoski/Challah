@@ -69,5 +69,5 @@ QtApplication {
 	}
 
 	Depends { name: "ChallahShared" }
-	Depends { name: "Qt"; submodules: ["gui", "concurrent", "widgets", "websockets", "quick", "quickcontrols2", "qml"].concat(qbs.targetOS.contains("android") ? ["androidextras"] : []) }
+	Depends { name: "Qt"; submodules: ["gui", "network", "concurrent", "widgets", "websockets", "quick", "quickcontrols2", "qml"].concat(qbs.targetOS.contains("android") ? ["androidextras"] : []) }
 }

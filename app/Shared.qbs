@@ -40,5 +40,5 @@ StaticLibrary {
 	Depends { name: "vendored_protobuf"; condition: project.vendoredProtobuf }
 	Depends { name: "vendored_kirigami"; condition: project.vendoredKirigami }
 	Depends { name: "vendored_qqc2_breeze_style"; condition: project.vendoredQQC2BreezeStyle }
-	Depends { name: "Qt"; submodules: ["gui", "concurrent", "widgets", "websockets", "quick", "quickcontrols2", "qml"].concat(qbs.targetOS.contains("android") ? ["androidextras"] : []) }
+	Depends { name: "Qt"; submodules: ["gui", "network", "concurrent", "widgets", "websockets", "quick", "quickcontrols2", "qml"].concat(qbs.targetOS.contains("android") ? ["androidextras"] : []) }
 }
