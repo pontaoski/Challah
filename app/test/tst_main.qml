@@ -1,4 +1,4 @@
-import com.github.HarmonyDevelopment.Staccato.Tests 1.0
+import com.github.HarmonyDevelopment.Challah.Tests 1.0
 import QtTest 1.15
 import QtQuick 2.0
 

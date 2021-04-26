@@ -8,21 +8,23 @@ StaticLibrary {
 		"qqc2-breeze-style/style/impl/*.h",
 	]
 
-	Group {
-		files: [
-			"qqc2-breeze-style/style/qtquickcontrols/*.qml",
-			"qqc2-breeze-style/style/qtquickcontrols/qmldir",
-		]
-		fileTags: "qt.core.resource_data"
-		Qt.core.resourcePrefix: "/org/kde/breeze"
-	}
-	Group {
-		files: [
-			"qqc2-breeze-style/style/impl/*.qml",
-			"qqc2-breeze-style/style/impl/qmldir",
-		]
-		fileTags: "qt.core.resource_data"
-		Qt.core.resourcePrefix: "/org/kde/breeze/impl"
+	Export {
+		Group {
+			files: [
+				"qqc2-breeze-style/style/qtquickcontrols/*.qml",
+				"qqc2-breeze-style/style/qtquickcontrols/qmldir",
+			]
+			fileTags: "qt.core.resource_data"
+			Qt.core.resourcePrefix: "/org/kde/breeze"
+		}
+		Group {
+			files: [
+				"qqc2-breeze-style/style/impl/*.qml",
+				"qqc2-breeze-style/style/impl/qmldir",
+			]
+			fileTags: "qt.core.resource_data"
+			Qt.core.resourcePrefix: "/org/kde/breeze/impl"
+		}
 	}
 
 	Qt.core.pluginMetaData: ["uri=org.kde.breeze"]

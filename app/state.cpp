@@ -1,159 +1,139 @@
-// SPDX-FileCopyrightText: 2020 Carson Black <uhhadd@gmail.com>
-//
-// SPDX-License-Identifier: AGPL-3.0-or-later
-
 #include <QSettings>
-#include <QJSEngine>
-#include <QQuickTextDocument>
-#include <QtConcurrent>
+#include <QQmlEngine>
 
-#include "messages.hpp"
-#include "richtexter.hpp"
-#include "state.hpp"
-#include "channels.hpp"
-#include "userroles.hpp"
-#include "util.hpp"
-#include "logging.hpp"
+#include "state_p.h"
 
-State* State::s_instance;
-
-State::State()
+State::State(QQmlEngine* object) : QObject(object), d(new Private)
 {
-	s_instance = this;
-	client = Client::mainInstance();
-	guildModel = new GuildModel;
-}
-State::~State()
-{
-	delete client;
-	delete guildModel;
-}
-State* State::instance()
-{
-	return s_instance;
-}
-void State::logOut()
-{
-	Client::mainClient->stopEvents();
-	delete Client::mainClient;
+	d->eng = object;
+	createComponents();
 
-	auto copy = Client::mainClient;
-
-	Client::mainClient = nullptr;
-	client = nullptr;
-
-	delete guildModel;
-
-	for (auto cli : Client::clients) {
-		if (cli != copy) {
-			cli->stopEvents();
-			delete cli;
-		}
-	}
-	Client::clients.clear();
-
-	for (auto channelsModel : ChannelsModel::instances) {
-		delete channelsModel;
-	}
-	ChannelsModel::instances.clear();
-
-	this->guildModel = new GuildModel;
-	this->client = Client::mainInstance();
-
-	guildModelChanged();
-
-	Q_EMIT loggedOut();
-}
-UserRolesModel* State::userRoles(const QString &userID, const QString &guildID, const QString &homeserver)
-{
-	return new UserRolesModel(userID.toULongLong(), guildID.toULongLong(), homeserver, nullptr);
-}
-void State::startupLogin(QJSValue then)
-{
-	State::instance()->guildModel->beginResetModel();
-
-	QtConcurrent::run([then, this] {
+	connect(d->sdk.get(), &SDK::ClientManager::authEvent, this, &State::handleStep);
+	connect(d->sdk.get(), &SDK::ClientManager::ready, this, &State::endLogin);
+	connect(d->sdk.get(), &SDK::ClientManager::ready, this, [](const QString& hs, quint64 userID, const QString& tok) {
 		QSettings settings;
-		QVariant token = settings.value("state/token");
-		QVariant hs = settings.value("state/homeserver");
-		QVariant userID = settings.value("state/userid");
-		auto ok = false;
-		if (token.isValid() && hs.isValid() && userID.isValid()) {
-			if (client->consumeToken(token.toString(), userID.value<quint64>(), hs.toString())) {
-				ok = true;
-			}
-		}
 
-		runOnMainThread("startupLogin completed", [then, ok] {
-			State::instance()->guildModel->endResetModel();
-			const_cast<QJSValue&>(then).call({ok});
-		});
+		settings.setValue("state/homeserver", hs);
+		settings.setValue("state/userid", userID);
+		settings.setValue("state/token", tok);
+	});
+	connect(this, &State::endLogin, this, [this]() {
+		createModels();
 	});
 }
-ChannelsModel* State::channelsModel(const QString& guildID, const QString& homeserver)
-{
-	return guildModel->channelsModel(guildID.toULongLong(), homeserver);
-}
-MessagesModel* State::messagesModel(const QString& guildID, const QString& channelID, const QString& homeserver)
-{
-	return channelsModel(guildID, homeserver)->messagesModel(channelID.toULongLong());
-}
-bool State::createGuild(const QString &name)
-{
-	return client->createGuild(name);
-}
-bool State::joinGuild(const QString &inviteLink)
-{
-	auto str = inviteLink;
-	str.remove(0, 10);
-	auto split = str.split("/");
-	if (split.length() != 2) {
-		return false;
-	}
-	auto homeserver = split[0];
-	auto invite = split[1];
 
-	auto client = Client::instanceForHomeserver(homeserver);
-	return client->joinInvite(invite);
-}
-bool State::leaveGuild(const QString &homeserver, const QString &id, bool isOwner)
+State::~State() {}
+
+void State::doInitialLogin()
 {
-	auto actualID = id.toULongLong();
+	QSettings settings;
 
-	return Client::instanceForHomeserver(homeserver)->leaveGuild(actualID, isOwner);
-}
+	QVariant token = settings.value("state/token");
+	QVariant hs = settings.value("state/homeserver");
+	QVariant userID = settings.value("state/userid");
 
-void State::customEvent(QEvent *event)
-{
-	switch (event->type()) {
-	case PleaseCallEvent::typeID: {
-		auto ev = reinterpret_cast<PleaseCallEvent*>(event);
-
-		QList<QJSValue> data;
-
-		for (auto arg : ev->data.args) {
-			data << ev->data.func.engine()->toScriptValue(arg);
-		}
-
-		ev->data.func.call(data);
-		break;
-	}
-	case ExecuteEvent::typeID: {
-		auto ev = reinterpret_cast<ExecuteEvent*>(event);
-		qCDebug(MAIN_THREAD_TASKS) << "Executing main thread task" << ev->data.first;
-		ev->data.second();
-		break;
-	}
+	if (token.isValid() && hs.isValid() && userID.isValid()) {
+		d->sdk->checkLogin([this](bool ok) {
+			if (!ok) {
+				Q_EMIT beginHomeserver();
+			}
+		}, token.toString(), hs.toString(), userID.toULongLong());
+	} else {
+		Q_EMIT beginHomeserver();
 	}
 }
 
-void State::bindTextDocument(QQuickTextDocument* doc, QObject* field)
+void State::doLogin(const QString& homeserver)
 {
-	new TextFormatter(doc->textDocument(), field);
+	d->sdk->beginAuthentication(homeserver);
+	Q_EMIT beginLogin();
 }
 
-void callJS(QJSValue func, QList<QVariant> args)
+SDK::ClientManager* State::api()
 {
-	auto call = PleaseCall{func, args};
-	QCoreApplication::postEvent(State::instance(), new PleaseCallEvent(call));
+	return d->sdk.get();
+}
+
+GuildList* State::guildList()
+{
+	return d->list;
+}
+
+GuildsStore* State::guildsStore()
+{
+	return d->store;
+}
+
+MembersStore* State::membersStore()
+{
+	return d->membersStore;
+}
+
+void State::createModels()
+{
+	d->list = new GuildList(this);
+	Q_EMIT guildListChanged();
+
+	d->store = new GuildsStore(this);
+	Q_EMIT guildsStoreChanged();
+
+	d->membersStore = new MembersStore(this);
+}
+
+ChannelsModel* State::channelsModelFor(const QString& host, const QString& guildID, QObject *it)
+{
+	auto eng = qmlEngine(it);
+
+	auto c = d->sdk->clientForHomeserver(host);
+	auto id = guildID.toULongLong();
+	auto tup = qMakePair(c, id);
+
+	if (d->channelsModels.contains(tup) and not d->channelsModels[tup].isNull()) {
+		return d->channelsModels[tup];
+	}
+
+	auto mod = new ChannelsModel(c, id, this);
+	eng->setObjectOwnership(mod, QQmlEngine::JavaScriptOwnership);
+	d->channelsModels[tup] = mod;
+
+	return mod;
+}
+
+MembersModel* State::membersModelFor(const QString& host, const QString& guildID, QObject *it)
+{
+	auto eng = qmlEngine(it);
+
+	auto c = d->sdk->clientForHomeserver(host);
+	auto id = guildID.toULongLong();
+	auto tup = qMakePair(c, id);
+
+	if (d->membersModels.contains(tup) and not d->membersModels[tup].isNull()) {
+		return d->membersModels[tup];
+	}
+
+	auto mod = new MembersModel(c, id, this);
+	eng->setObjectOwnership(mod, QQmlEngine::JavaScriptOwnership);
+	d->membersModels[tup] = mod;
+
+	return mod;
+}
+
+MessagesModel* State::messagesModelFor(const QString& host, const QString& guildID, const QString& channelID, QObject* it)
+{
+	auto eng = qmlEngine(it);
+
+	auto c = d->sdk->clientForHomeserver(host);
+	auto gid = guildID.toULongLong();
+	auto cid = channelID.toULongLong();
+	auto tup = qMakePair(c, qMakePair(gid, cid));
+
+	if (d->messagesModels.contains(tup) and not d->messagesModels[tup].isNull()) {
+		return d->messagesModels[tup];
+	}
+
+	auto mod = new MessagesModel(c, gid, cid, this);
+	eng->setObjectOwnership(mod, QQmlEngine::JavaScriptOwnership);
+	d->messagesModels[tup] = mod;
+
+	return mod;
 }

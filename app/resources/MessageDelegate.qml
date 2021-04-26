@@ -8,7 +8,7 @@ import QtQuick.Layouts 1.10
 import org.kde.kirigami 2.14 as Kirigami
 import QtQuick.Controls 2.10 as QQC2
 import QtGraphicalEffects 1.0
-import com.github.HarmonyDevelopment.Staccato 1.0
+import com.github.HarmonyDevelopment.Challah 1.0
 import QtQml.Models 2.15
 
 QQC2.Control {

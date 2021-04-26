@@ -9,7 +9,7 @@ import org.kde.kirigami 2.13 as Kirigami
 import QtQuick.Controls 2.10 as QQC2
 import QtQuick.Dialogs 1.3
 import QtQml.Models 2.15
-import com.github.HarmonyDevelopment.Staccato 1.0
+import com.github.HarmonyDevelopment.Challah 1.0
 
 Kirigami.ScrollablePage {
 	title: qsTr("Roles")

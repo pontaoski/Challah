@@ -1,15 +1,12 @@
-[submodule "protocol"]
-	path = app/protocol
-	url = https://github.com/harmony-development/protocol.git
 [submodule "vendor/kirigami"]
 	path = vendor/kirigami
 	url = https://invent.kde.org/frameworks/kirigami
-[submodule "vendor/protobuf"]
-	path = vendor/protobuf
-	url = https://github.com/protocolbuffers/protobuf.git
 [submodule "vendor/qqc2-breeze-style"]
 	path = vendor/qqc2-breeze-style
 	url = https://invent.kde.org/plasma/qqc2-breeze-style.git
 [submodule "vendor/kguiaddons"]
 	path = vendor/kguiaddons
 	url = https://invent.kde.org/frameworks/kguiaddons.git
+[submodule "vendor/Chometz"]
+	path = vendor/Chometz
+	url = https://github.com/harmony-development/Chometz.git

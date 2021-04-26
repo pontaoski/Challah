@@ -7,7 +7,7 @@ import QtQuick.Layouts 1.1
 import QtQuick.Controls 2.10
 import org.kde.kirigami 2.13 as Kirigami
 import QtQml.Models 2.15
-import com.github.HarmonyDevelopment.Staccato 1.0
+import com.github.HarmonyDevelopment.Challah 1.0
 
 Item {
 	id: drawer
@@ -96,58 +96,6 @@ Item {
 						}
 
 						Layout.alignment: Qt.AlignTop | Qt.AlignHCenter
-					}
-
-					Repeater {
-						model: HState.guildModel
-						delegate: Kirigami.Avatar {
-							implicitWidth: 48
-							implicitHeight: 48
-
-							name: guildName
-							source: picture
-
-							Layout.alignment: Qt.AlignTop | Qt.AlignHCenter
-
-							ToolTip.text: guildName
-							ToolTip.visible: maus.containsMouse
-
-							MouseArea {
-								id: maus
-								anchors.fill: parent
-								hoverEnabled: true
-								acceptedButtons: Qt.LeftButton | Qt.RightButton
-								onClicked: {
-									if (mouse.button === Qt.RightButton) {
-										guildMenu.open()
-										return
-									}
-
-									routerInstance.navigateToRoute({
-										"route": "guild",
-										"guildID": model['guildID'],
-										"homeserver": model['homeserver'],
-									})
-								}
-							}
-
-							ResponsiveMenu {
-								id: guildMenu
-
-								ResponsiveMenuItem {
-									text: model['isOwner'] ? qsTr("Delete") : qsTr("Leave")
-									onTriggered: {
-										if (HState.leaveGuild(model['homeserver'], model['guildID'], model['isOwner'])) {
-											//: guild leaving succeeded
-											root.showPassiveNotification(qsTr("Left guild"))
-										} else {
-											//: guild leaving failed
-											root.showPassiveNotification(qsTr("Failed to leave guild"))
-										}
-									}
-								}
-							}
-						}
 					}
 				}
 			}

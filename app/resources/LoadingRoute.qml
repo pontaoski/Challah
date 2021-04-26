@@ -7,7 +7,7 @@ import QtQuick.Layouts 1.10
 import QtQuick.Window 2.10
 import org.kde.kirigami 2.13 as Kirigami
 import QtQuick.Controls 2.10 as QQC2
-import com.github.HarmonyDevelopment.Staccato 1.0
+import com.github.HarmonyDevelopment.Challah 1.0
 
 Kirigami.PageRoute {
 	name: "loading"
@@ -15,18 +15,6 @@ Kirigami.PageRoute {
 
 	Kirigami.Page {
 		globalToolBarStyle: Kirigami.ApplicationHeaderStyle.None
-
-		Component.onCompleted: {
-			HState.startupLogin(then => {
-				if (then) {
-					routerInstance.navigateToRoute("no-guild")
-					leftHandDrawer.shouldShow = true
-				} else {
-					routerInstance.navigateToRoute("login")
-					leftHandDrawer.shouldShow = false
-				}
-			})
-		}
 
 		QQC2.BusyIndicator {
 			anchors.centerIn: parent

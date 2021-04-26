@@ -2,12 +2,30 @@ StaticLibrary {
 	name: "ChallahShared"
 
 	Export {
-		Depends { name: "cpp" }
+		Group {
+			condition: project.vendoredKirigami
+			files: ["../vendor/kirigami/kirigami.qrc"]
+		}
 
-		cpp.defines: [].concat(project.vendoredKirigami ? ["CHALLAH_VENDORED_KIRIGAMI"] : []).concat(project.vendoredQQC2BreezeStyle ? ["CHALLAH_VENDORED_QQC2_BREEZE_STYLE"] : [])
+		Depends { name: "bundle" }
+		Depends { name: "cpp" }
+		Depends { name: "vendored_protobuf"; condition: project.vendoredProtobuf }
+		Depends { name: "vendored_kirigami"; condition: project.vendoredKirigami }
+		Depends { name: "vendored_qqc2_breeze_style"; condition: project.vendoredQQC2BreezeStyle }
+		Depends { name: "Qt"; submodules: ["core", "gui", "network", "concurrent", "widgets", "websockets", "quick", "quickcontrols2", "qml"].concat(qbs.targetOS.contains("android") ? ["androidextras"] : []) }
+
+		cpp.defines: ["QT_NO_KEYWORDS"].concat(project.vendoredKirigami ? ["CHALLAH_VENDORED_KIRIGAMI"] : []).concat(project.vendoredQQC2BreezeStyle ? ["CHALLAH_VENDORED_QQC2_BREEZE_STYLE"] : [])
+		cpp.cppFlags: ['-Werror=return-type']
+		cpp.cxxLanguageVersion: "c++17"
+		cpp.debugInformation: true
+		cpp.separateDebugInformation: true
+		cpp.enableExceptions: true
+		cpp.enableReproducibleBuilds: true
+		cpp.enableRtti: true
+		cpp.includePaths: ["gen", "relationallib", "stores", "ui", "."]
 	}
 
-	cpp.defines: [].concat(project.vendoredKirigami ? ["CHALLAH_VENDORED_KIRIGAMI"] : []).concat(project.vendoredQQC2BreezeStyle ? ["CHALLAH_VENDORED_QQC2_BREEZE_STYLE"] : [])
+	cpp.defines: ["QT_NO_KEYWORDS"].concat(project.vendoredKirigami ? ["CHALLAH_VENDORED_KIRIGAMI"] : []).concat(project.vendoredQQC2BreezeStyle ? ["CHALLAH_VENDORED_QQC2_BREEZE_STYLE"] : [])
 	cpp.cppFlags: ['-Werror=return-type']
 	cpp.cxxLanguageVersion: "c++17"
 	cpp.debugInformation: true
@@ -19,17 +37,21 @@ StaticLibrary {
 	debugInformationInstallDir: "bin"
 	installDebugInformation: true
 
-	cpp.includePaths: ["gen"]
+	cpp.includePaths: ["gen", "relationallib", "stores", "ui", "."]
 
 	files: [
 		"*.cpp",
-		"*.hpp",
+		"*.h",
+		"stores/*.cpp",
+		"stores/*.h",
+		"ui/*.cpp",
+		"ui/*.h",
+		"relationallib/*.cpp",
+		"relationallib/*.h",
 		"gen/*/*/*.cpp",
 		"gen/*/*/*.cc",
 		"gen/*/*/*.h",
-	].concat(
-		project.vendoredKirigami ? ["../vendor/kirigami/kirigami.qrc"] : []
-	)
+	]
 	excludeFiles: [
 		"tst.cpp",
 		"main.cpp",
@@ -37,8 +59,8 @@ StaticLibrary {
 
 	Depends { name: "bundle" }
 	Depends { name: "cpp" }
-	Depends { name: "vendored_protobuf"; condition: project.vendoredProtobuf }
+	Depends { name: "harmony-qt-sdk" }
 	Depends { name: "vendored_kirigami"; condition: project.vendoredKirigami }
 	Depends { name: "vendored_qqc2_breeze_style"; condition: project.vendoredQQC2BreezeStyle }
-	Depends { name: "Qt"; submodules: ["gui", "network", "concurrent", "widgets", "websockets", "quick", "quickcontrols2", "qml"].concat(qbs.targetOS.contains("android") ? ["androidextras"] : []) }
+	Depends { name: "Qt"; submodules: ["core", "gui", "network", "concurrent", "widgets", "websockets", "quick", "quickcontrols2", "qml"].concat(qbs.targetOS.contains("android") ? ["androidextras"] : []) }
 }

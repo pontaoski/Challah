@@ -10,7 +10,7 @@ import QtQuick.Controls 2.10 as QQC2
 import QtQuick.Dialogs 1.3
 import QtQml.Models 2.15
 import org.kde.kitemmodels 1.0
-import com.github.HarmonyDevelopment.Staccato 1.0
+import com.github.HarmonyDevelopment.Challah 1.0
 
 Kirigami.ScrollablePage {
 	id: permsPage

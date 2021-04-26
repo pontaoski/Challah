@@ -7,7 +7,7 @@ import QtQuick.Layouts 1.1
 import QtQuick.Controls 2.10
 import QtQuick.Dialogs 1.3
 import org.kde.kirigami 2.13 as Kirigami
-import com.github.HarmonyDevelopment.Staccato 1.0
+import com.github.HarmonyDevelopment.Challah 1.0
 
 Item {
 	id: drawer

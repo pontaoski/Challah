@@ -14,32 +14,23 @@ QtApplication {
 
 	files: [
 		"main.cpp",
-		"resources/data.qrc",
-	].concat(
-		project.vendoredKirigami ? ["../vendor/kirigami/kirigami.qrc"] : []
-	)
+	]
 
 	Group {
-		files: [
-			"../vendor/qqc2-breeze-style/style/qtquickcontrols/*.qml",
-			"../vendor/qqc2-breeze-style/style/qtquickcontrols/qmldir",
-		]
+		files: ["resources/**"]
+		excludeFiles: ["resources/img/io.harmonyapp.Challah.svg"]
 		fileTags: "qt.core.resource_data"
-		Qt.core.resourcePrefix: "/org/kde/breeze"
-	}
-	Group {
-		files: [
-			"../vendor/qqc2-breeze-style/style/impl/*.qml",
-			"../vendor/qqc2-breeze-style/style/impl/qmldir",
-		]
-		fileTags: "qt.core.resource_data"
-		Qt.core.resourcePrefix: "/org/kde/breeze/impl"
+		Qt.core.resourceSourceBase: "resources/"
+		Qt.core.resourcePrefix: "/"
 	}
 
 	Group {
-		files: ["resources/io.harmonyapp.Challah.svg"]
+		files: ["resources/img/io.harmonyapp.Challah.svg"]
+		fileTags: "qt.core.resource_data"
 		qbs.install: qbs.targetOS.contains("linux")
 		qbs.installDir: "share/icons/hicolor/scalable/apps"
+		Qt.core.resourceSourceBase: "resources/"
+		Qt.core.resourcePrefix: "/"
 	}
 
 	Group {
@@ -69,5 +60,4 @@ QtApplication {
 	}
 
 	Depends { name: "ChallahShared" }
-	Depends { name: "Qt"; submodules: ["gui", "network", "concurrent", "widgets", "websockets", "quick", "quickcontrols2", "qml"].concat(qbs.targetOS.contains("android") ? ["androidextras"] : []) }
 }

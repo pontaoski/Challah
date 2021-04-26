@@ -2,9 +2,9 @@ Project {
 	references: [
 		"app/App.qbs",
 		"app/Shared.qbs",
+		"vendor/Chometz/Chometz.qbs",
 	]
 
-	property bool vendoredProtobuf: true
 	property bool vendoredKirigami: false
 	property bool vendoredQQC2BreezeStyle: false
 	property bool withTests: false
@@ -18,10 +18,6 @@ Project {
 	SubProject {
 		filePath: "vendor/Kirigami.qbs"
 		condition: project.vendoredKirigami
-	}
-	SubProject {
-		filePath: "vendor/protobuf.qbs"
-		condition: project.vendoredProtobuf
 	}
 	SubProject {
 		filePath: "vendor/qqc2breezestyle.qbs"
