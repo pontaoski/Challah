@@ -59,7 +59,7 @@ modules:
     - cp -r release/install-root/app/bin/Challah /app/bin/
     - cp -r release/install-root/app/share/* /app/share/
     build-commands:
-      - qbs config:release modules.cpp.treatWarningsAsErrors:false project.vendoredQQC2BreezeStyle:true installPrefix:/app -j2
+      - qbs config:release modules.cpp.treatWarningsAsErrors:false installPrefix:/app -j2
     sources:
       - type: git
         url: https://github.com/harmony-development/Challah
