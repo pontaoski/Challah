@@ -49,4 +49,4 @@ jobs:
       - name: Build
         shell: msys2 {0}
         run: |
-          qbs profile:x86_64-w64-mingw32-gcc-10_2_0 project.vendoredKirigami:true project.vendoredProtobuf:true project.vendoredQQC2BreezeStyle:true qbs.buildVariant:'release' -j4
+          qbs profile:x86_64-w64-mingw32-gcc-10_2_0 project.vendoredKirigami:true project.vendoredQQC2BreezeStyle:true qbs.buildVariant:'release' -j4
