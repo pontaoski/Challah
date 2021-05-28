@@ -29,14 +29,6 @@ cleanup:
   - /share/qbs
 
 modules:
-# stuff we don't modify
-  - name: protobuf
-    buildsystem: autotools
-    sources:
-      - type: archive
-        url: https://github.com/protocolbuffers/protobuf/releases/download/v3.12.4/protobuf-cpp-3.12.4.tar.gz
-        sha256: ccfbaaba52f67e0e6536a05f3df3f6618620d255513cfca3a07f5935b624e26b
-
   - name: kf5-extra-cmake-modules
     buildsystem: cmake
     builddir: true
@@ -67,7 +59,7 @@ modules:
     - cp -r release/install-root/app/bin/Challah /app/bin/
     - cp -r release/install-root/app/share/* /app/share/
     build-commands:
-      - qbs config:release modules.cpp.treatWarningsAsErrors:false project.vendoredProtobuf:true project.vendoredQQC2BreezeStyle:true installPrefix:/app -j2
+      - qbs config:release modules.cpp.treatWarningsAsErrors:false project.vendoredQQC2BreezeStyle:true installPrefix:/app -j2
     sources:
       - type: git
         url: https://github.com/harmony-development/Challah
