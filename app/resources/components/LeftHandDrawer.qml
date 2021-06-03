@@ -122,6 +122,23 @@ Control {
 			ToolBar {
 				id: rhToolbar
 				z: 2
+
+				contentItem: ToolButton {
+					icon.name: "application-menu"
+					onClicked: guildMenu.open()
+
+					Layout.fillWidth: true
+
+					Menu {
+						id: guildMenu
+
+						MenuItem {
+							text: qsTr("Settings")
+							onTriggered: root.pageStack.layers.push(Qt.resolvedUrl("qrc:/routes/guild/Invites.qml"), {invitesModel: CState.inviteModelFor(routerInstance.guildHomeserver, routerInstance.guildID, this)})
+						}
+					}
+				}
+
 				Layout.fillWidth: true
 			}
 			ListView {

@@ -9,6 +9,7 @@
 #include "members_model.h"
 #include "members_store.h"
 #include "messages_model.h"
+#include "invites.h"
 
 struct State::Private
 {

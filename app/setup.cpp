@@ -12,6 +12,7 @@
 #include "members_store.h"
 #include "messages_model.h"
 #include "messages.h"
+#include "invites.h"
 
 #ifdef CHALLAH_VENDORED_KIRIGAMI
 
@@ -48,6 +49,7 @@ void setupQML(QQmlEngine* engine)
 	qRegisterMetaType<MembersStore*>();
 	qRegisterMetaType<MessagesModel*>();
 	qRegisterMetaType<MessagesStore*>();
+	qRegisterMetaType<InviteModel*>();
 
 	qmlRegisterSingletonType<State>("com.github.HarmonyDevelopment.Challah", 1, 0, "CState", [](QQmlEngine* q, QJSEngine*) -> QObject* { return new State(q); });
 	qmlRegisterType<OverlappingPanels>("com.github.HarmonyDevelopment.Challah", 1, 0, "OverlappingPanels");

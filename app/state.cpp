@@ -99,6 +99,19 @@ ChannelsModel* State::channelsModelFor(const QString& host, const QString& guild
 	return mod;
 }
 
+InviteModel* State::inviteModelFor(const QString& host, const QString& guildID, QObject *it)
+{
+	auto eng = qmlEngine(it);
+
+	auto c = d->sdk->clientForHomeserver(host);
+	auto id = guildID.toULongLong();
+
+	auto mod = new InviteModel(c, id, this);
+	eng->setObjectOwnership(mod, QQmlEngine::JavaScriptOwnership);
+
+	return mod;
+}
+
 MembersModel* State::membersModelFor(const QString& host, const QString& guildID, QObject *it)
 {
 	auto eng = qmlEngine(it);

@@ -12,7 +12,7 @@ StaticLibrary {
 		Depends { name: "vendored_protobuf"; condition: project.vendoredProtobuf }
 		Depends { name: "vendored_kirigami"; condition: project.vendoredKirigami }
 		Depends { name: "vendored_qqc2_breeze_style"; condition: project.vendoredQQC2BreezeStyle }
-		Depends { name: "Qt"; submodules: ["core", "gui", "network", "concurrent", "widgets", "websockets", "quick", "quickcontrols2", "qml"].concat(qbs.targetOS.contains("android") ? ["androidextras"] : []) }
+		Depends { name: "Qt"; submodules: ["core", "core-private", "gui", "network", "concurrent", "widgets", "websockets", "quick", "quickcontrols2", "qml", "qml-private"].concat(qbs.targetOS.contains("android") ? ["androidextras"] : []) }
 
 		cpp.defines: ["QT_NO_KEYWORDS"].concat(project.vendoredKirigami ? ["CHALLAH_VENDORED_KIRIGAMI"] : []).concat(project.vendoredQQC2BreezeStyle ? ["CHALLAH_VENDORED_QQC2_BREEZE_STYLE"] : [])
 		cpp.cppFlags: ['-Werror=return-type']
@@ -22,7 +22,7 @@ StaticLibrary {
 		cpp.enableExceptions: true
 		cpp.enableReproducibleBuilds: true
 		cpp.enableRtti: true
-		cpp.includePaths: ["gen", "relationallib", "stores", "ui", "."]
+		cpp.includePaths: ["yoinked from qt ivi", "gen", "relationallib", "stores", "ui", "."]
 	}
 
 	cpp.defines: ["QT_NO_KEYWORDS"].concat(project.vendoredKirigami ? ["CHALLAH_VENDORED_KIRIGAMI"] : []).concat(project.vendoredQQC2BreezeStyle ? ["CHALLAH_VENDORED_QQC2_BREEZE_STYLE"] : [])
@@ -37,7 +37,7 @@ StaticLibrary {
 	debugInformationInstallDir: "bin"
 	installDebugInformation: true
 
-	cpp.includePaths: ["gen", "relationallib", "stores", "ui", "."]
+	cpp.includePaths: ["yoinked from qt ivi", "gen", "relationallib", "stores", "ui", "."]
 
 	files: [
 		"*.cpp",
@@ -46,6 +46,8 @@ StaticLibrary {
 		"stores/*.h",
 		"ui/*.cpp",
 		"ui/*.h",
+		"yoinked from qt ivi/*.cpp",
+		"yoinked from qt ivi/*.h",
 		"relationallib/*.cpp",
 		"relationallib/*.h",
 		"gen/*/*/*.cpp",
@@ -62,5 +64,5 @@ StaticLibrary {
 	Depends { name: "harmony-qt-sdk" }
 	Depends { name: "vendored_kirigami"; condition: project.vendoredKirigami }
 	Depends { name: "vendored_qqc2_breeze_style"; condition: project.vendoredQQC2BreezeStyle }
-	Depends { name: "Qt"; submodules: ["core", "gui", "network", "concurrent", "widgets", "websockets", "quick", "quickcontrols2", "qml"].concat(qbs.targetOS.contains("android") ? ["androidextras"] : []) }
+	Depends { name: "Qt"; submodules: ["core", "core-private", "gui", "network", "concurrent", "widgets", "websockets", "quick", "quickcontrols2", "qml", "qml-private"].concat(qbs.targetOS.contains("android") ? ["androidextras"] : []) }
 }

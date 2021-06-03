@@ -10,6 +10,8 @@ import QtQuick.Controls 2.10 as QQC2
 import com.github.HarmonyDevelopment.Challah 1.0
 
 Kirigami.ScrollablePage {
+	id: pageRoot
+
 	title: qsTr("Invites")
 
 	actions {
@@ -25,12 +27,14 @@ Kirigami.ScrollablePage {
 		}
 	}
 
+	property var invitesModel: null
+
 	Kirigami.Theme.colorSet: Kirigami.Theme.View
 
 	Kirigami.OverlaySheet {
 		id: createInvitesSheet
 
-		parent: applicationWindow().overlay
+		parent: QQC2.Overlay.overlay
 
 		Kirigami.FormLayout {
 			QQC2.TextField {
@@ -53,26 +57,29 @@ Kirigami.ScrollablePage {
 				text: qsTr("Create Invite")
 
 				onClicked: {
-					if (settingsPage.invitesModel.createInvite(inviteField.text, inviteCount.Kirigami.FormData.checked ? inviteCount.value : -1)) {
-						//: the invite was created successfully
-						applicationWindow().showPassiveNotification(qsTr("Created invite"))
-					} else {
-						//: the invite couldn't be created successfully
-						applicationWindow().showPassiveNotification(qsTr("Failed to create invite"))
-					}
-					createInvitesSheet.close()
+					pageRoot.
+						invitesModel.
+						createInvite(inviteField.text, inviteCount.Kirigami.FormData.checked ? inviteCount.value : -1).
+						then((ok) => {
+							if (ok) {
+								applicationWindow().showPassiveNotification(qsTr("Created invite"))
+							} else {
+								applicationWindow().showPassiveNotification(qsTr("Failed to create invite"))
+							}
+							createInvitesSheet.close()
+						})
 				}
 			}
 		}
 	}
 
 	ListView {
-		model: settingsPage.invitesModel
+		model: pageRoot.invitesModel
 
 		delegate: Kirigami.SwipeListItem {
 			contentItem: ColumnLayout {
 				QQC2.Label {
-					text: qsTr("Invite ID: %1").arg(inviteID)
+					text: qsTr("Invite ID: %1").arg(name)
 					verticalAlignment: Text.AlignVCenter
 				}
 				QQC2.Label {
@@ -85,7 +92,7 @@ Kirigami.ScrollablePage {
 			actions: [
 				Kirigami.Action {
 					icon.name: "edit-delete"
-					onTriggered: settingsPage.invitesModel.deleteInvite(inviteID)
+					onTriggered: pageRoot.invitesModel.deleteInvite(name)
 				}
 			]
 		}
