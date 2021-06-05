@@ -46,6 +46,8 @@ public:
 	Q_INVOKABLE MessagesModel* messagesModelFor(const QString& host, const QString& guildID, const QString& channelID, QObject* it);
 	Q_INVOKABLE InviteModel* inviteModelFor(const QString& host, const QString& guildID, QObject* it);
 
+	Q_INVOKABLE QString mediaURL(const QString& id, const QString& homeserver);
+
 	Q_SIGNAL void beginHomeserver();
 	Q_SIGNAL void beginLogin();
 	Q_SIGNAL void placeItem(QQuickItem* item);

@@ -20,6 +20,7 @@ struct State::Private
 	GuildList* list = nullptr;
 	GuildsStore* store = nullptr;
 	MembersStore* membersStore = nullptr;
+	QString homeserver;
 
 	QQmlEngine* eng = nullptr;
 	QQmlComponent* kirigamiHeadingComponent = nullptr;

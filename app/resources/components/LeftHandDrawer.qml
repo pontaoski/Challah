@@ -87,6 +87,9 @@ Control {
 					ToolTip.text: guildData.data.name
 					ToolTip.visible: maus.containsMouse
 
+					name: guildData.data.name
+					source: guildData.data.picture
+
 					MouseArea {
 						id: maus
 						hoverEnabled: true

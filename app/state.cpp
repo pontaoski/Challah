@@ -10,8 +10,10 @@ State::State(QQmlEngine* object) : QObject(object), d(new Private)
 
 	connect(d->sdk.get(), &SDK::ClientManager::authEvent, this, &State::handleStep);
 	connect(d->sdk.get(), &SDK::ClientManager::ready, this, &State::endLogin);
-	connect(d->sdk.get(), &SDK::ClientManager::ready, this, [](const QString& hs, quint64 userID, const QString& tok) {
+	connect(d->sdk.get(), &SDK::ClientManager::ready, this, [this](const QString& hs, quint64 userID, const QString& tok) {
 		QSettings settings;
+
+		d->homeserver = hs;
 
 		settings.setValue("state/homeserver", hs);
 		settings.setValue("state/userid", userID);
@@ -45,6 +47,7 @@ void State::doInitialLogin()
 
 void State::doLogin(const QString& homeserver)
 {
+	auto it = QUrl::fromUserInput(homeserver);
 	d->sdk->beginAuthentication(homeserver);
 	Q_EMIT beginLogin();
 }
@@ -149,4 +152,30 @@ MessagesModel* State::messagesModelFor(const QString& host, const QString& guild
 	d->messagesModels[tup] = mod;
 
 	return mod;
+}
+
+QString State::mediaURL(const QString& url, const QString& homeserver) {
+	auto hs = homeserver;
+	if (hs.isEmpty()) {
+		hs = d->homeserver;
+	}
+
+	QString port;
+	if (homeserver.contains(":")) {
+		port = homeserver.split(":")[1];
+	} else {
+		port = "2289";
+	}
+
+	if (!url.startsWith("hmc://")) {
+		return QString("https://%1:%2/_harmony/media/download/%3").arg(hs).arg(port).arg(url);
+	}
+
+	QString trimmed = url.mid(QString("hmc://").length());
+	auto split = trimmed.split("/");
+	if (split.length() != 2) {
+		qWarning() << "Malformed HMC URL:" << url;
+		return QString("");
+	}
+	return QString("https://%1/_harmony/media/download/%2").arg(split[0]).arg(split[1]);
 }
