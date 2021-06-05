@@ -137,7 +137,7 @@ Control {
 
 						MenuItem {
 							text: qsTr("Settings")
-							onTriggered: root.pageStack.layers.push(Qt.resolvedUrl("qrc:/routes/guild/Invites.qml"), {invitesModel: CState.inviteModelFor(routerInstance.guildHomeserver, routerInstance.guildID, this)})
+							onTriggered: root.pageStack.layers.push(Qt.resolvedUrl("qrc:/routes/guild/settings/Settings.qml"))
 						}
 					}
 				}

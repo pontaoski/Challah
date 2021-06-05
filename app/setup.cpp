@@ -13,6 +13,7 @@
 #include "messages_model.h"
 #include "messages.h"
 #include "invites.h"
+#include "roles.h"
 
 #ifdef CHALLAH_VENDORED_KIRIGAMI
 
@@ -42,6 +43,7 @@ void setupQML(QQmlEngine* engine)
 	Q_UNUSED(engine)
 #endif
 
+	qRegisterMetaType<RolesModel*>();
 	qRegisterMetaType<GuildList*>();
 	qRegisterMetaType<GuildsStore*>();
 	qRegisterMetaType<ChannelsModel*>();

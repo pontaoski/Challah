@@ -16,6 +16,7 @@ class MembersModel;
 class MembersStore;
 class MessagesModel;
 class InviteModel;
+class RolesModel;
 
 class State : public QObject
 {
@@ -45,6 +46,7 @@ public:
 	Q_INVOKABLE MembersModel* membersModelFor(const QString& host, const QString& guildID, QObject* it);
 	Q_INVOKABLE MessagesModel* messagesModelFor(const QString& host, const QString& guildID, const QString& channelID, QObject* it);
 	Q_INVOKABLE InviteModel* inviteModelFor(const QString& host, const QString& guildID, QObject* it);
+	Q_INVOKABLE RolesModel* rolesModelFor(const QString& host, const QString& guildID, QObject* it);
 
 	Q_INVOKABLE QString mediaURL(const QString& id, const QString& homeserver);
 

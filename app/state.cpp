@@ -115,6 +115,19 @@ InviteModel* State::inviteModelFor(const QString& host, const QString& guildID, 
 	return mod;
 }
 
+RolesModel* State::rolesModelFor(const QString& host, const QString& guildID, QObject* it)
+{
+	auto eng = qmlEngine(it);
+
+	auto c = d->sdk->clientForHomeserver(host);
+	auto id = guildID.toULongLong();
+
+	auto mod = new RolesModel(c, id, this);
+	eng->setObjectOwnership(mod, QQmlEngine::JavaScriptOwnership);
+
+	return mod;
+}
+
 MembersModel* State::membersModelFor(const QString& host, const QString& guildID, QObject *it)
 {
 	auto eng = qmlEngine(it);
