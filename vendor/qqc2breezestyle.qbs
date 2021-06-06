@@ -25,6 +25,7 @@ StaticLibrary {
 			fileTags: "qt.core.resource_data"
 			Qt.core.resourcePrefix: "/org/kde/breeze/impl"
 		}
+		Depends { name: "Qt"; submodules: ["core"] }
 	}
 
 	Qt.core.pluginMetaData: ["uri=org.kde.breeze"]

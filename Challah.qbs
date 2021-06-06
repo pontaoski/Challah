@@ -20,6 +20,10 @@ Project {
 		condition: project.vendoredKirigami
 	}
 	SubProject {
+		filePath: "vendor/android_openssl.qbs"
+		condition: qbs.targetOS.contains("android")
+	}
+	SubProject {
 		filePath: "vendor/qqc2breezestyle.qbs"
 		condition: project.vendoredQQC2BreezeStyle
 	}

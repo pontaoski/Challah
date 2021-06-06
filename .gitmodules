@@ -10,3 +10,6 @@
 [submodule "vendor/Chometz"]
 	path = vendor/Chometz
 	url = https://github.com/harmony-development/Chometz.git
+[submodule "vendor/android_openssl"]
+	path = vendor/android_openssl
+	url = https://github.com/KDAB/android_openssl.git

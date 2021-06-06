@@ -11,6 +11,7 @@ StaticLibrary {
 		Depends { name: "cpp" }
 		Depends { name: "vendored_protobuf"; condition: project.vendoredProtobuf }
 		Depends { name: "vendored_kirigami"; condition: project.vendoredKirigami }
+		Depends { name: "android_openssl"; condition: qbs.targetOS.contains("android") }
 		Depends { name: "vendored_qqc2_breeze_style"; condition: project.vendoredQQC2BreezeStyle }
 		Depends { name: "Qt"; submodules: ["core", "core-private", "gui", "network", "concurrent", "widgets", "websockets", "quick", "quickcontrols2", "qml", "qml-private"].concat(qbs.targetOS.contains("android") ? ["androidextras"] : []) }
 
@@ -62,6 +63,7 @@ StaticLibrary {
 	Depends { name: "bundle" }
 	Depends { name: "cpp" }
 	Depends { name: "harmony-qt-sdk" }
+	Depends { name: "android_openssl"; condition: qbs.targetOS.contains("android") }
 	Depends { name: "vendored_kirigami"; condition: project.vendoredKirigami }
 	Depends { name: "vendored_qqc2_breeze_style"; condition: project.vendoredQQC2BreezeStyle }
 	Depends { name: "Qt"; submodules: ["core", "core-private", "gui", "network", "concurrent", "widgets", "websockets", "quick", "quickcontrols2", "qml", "qml-private"].concat(qbs.targetOS.contains("android") ? ["androidextras"] : []) }
