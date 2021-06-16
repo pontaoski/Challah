@@ -23,7 +23,7 @@ StaticLibrary {
 		cpp.enableExceptions: true
 		cpp.enableReproducibleBuilds: true
 		cpp.enableRtti: true
-		cpp.includePaths: ["yoinked from qt ivi", "gen", "relationallib", "stores", "ui", "."]
+		cpp.includePaths: ["gen", "relationallib", "stores", "ui", "."]
 	}
 
 	cpp.defines: ["QT_NO_KEYWORDS"].concat(project.vendoredKirigami ? ["CHALLAH_VENDORED_KIRIGAMI"] : []).concat(project.vendoredQQC2BreezeStyle ? ["CHALLAH_VENDORED_QQC2_BREEZE_STYLE"] : [])
@@ -38,7 +38,7 @@ StaticLibrary {
 	debugInformationInstallDir: "bin"
 	installDebugInformation: true
 
-	cpp.includePaths: ["yoinked from qt ivi", "gen", "relationallib", "stores", "ui", "."]
+	cpp.includePaths: ["gen", "relationallib", "stores", "ui", "."]
 
 	files: [
 		"*.cpp",
@@ -47,8 +47,6 @@ StaticLibrary {
 		"stores/*.h",
 		"ui/*.cpp",
 		"ui/*.h",
-		"yoinked from qt ivi/*.cpp",
-		"yoinked from qt ivi/*.h",
 		"relationallib/*.cpp",
 		"relationallib/*.h",
 		"gen/*/*/*.cpp",

@@ -3,7 +3,6 @@
 #include <QAbstractListModel>
 
 #include "state.h"
-#include "yoinked from qt ivi/qivipendingreply.h"
 
 class PermissionsModel : public QAbstractListModel
 {
@@ -31,5 +30,6 @@ public:
 
 	Q_INVOKABLE void addPermission(const QString& node, bool allow);
 	Q_INVOKABLE void deletePermission(int index);
-	Q_INVOKABLE void save();
+
+	Q_INVOKABLE FutureBase save();
 };

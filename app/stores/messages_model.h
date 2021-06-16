@@ -25,7 +25,7 @@ public:
 
 	MessagesStore* store();
 
-	Q_INVOKABLE void send(const QString& txt);
+	Q_INVOKABLE FutureBase send(const QString& txt);
 
 	bool canFetchMore(const QModelIndex &parent) const override;
 	void fetchMore(const QModelIndex &parent) override;

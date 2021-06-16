@@ -35,11 +35,9 @@ void State::doInitialLogin()
 	QVariant userID = settings.value("state/userid");
 
 	if (token.isValid() && hs.isValid() && userID.isValid()) {
-		d->sdk->checkLogin([this](bool ok) {
-			if (!ok) {
-				Q_EMIT beginHomeserver();
-			}
-		}, token.toString(), hs.toString(), userID.toULongLong());
+		d->sdk->checkLogin(token.toString(), hs.toString(), userID.toULongLong()).then([this](bool ok) {
+			if (!ok) Q_EMIT beginHomeserver();
+		});
 	} else {
 		Q_EMIT beginHomeserver();
 	}

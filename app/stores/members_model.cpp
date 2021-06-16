@@ -12,7 +12,7 @@ MembersModel::MembersModel(SDK::Client* client, quint64 guildID, State* state) :
 	auto req = protocol::chat::v1::GetGuildMembersRequest{};
 	req.set_guild_id(guildID);
 
-	c->chatKit()->GetGuildMembers([this](auto r) {
+	c->chatKit()->GetGuildMembers(req).then([this](auto r) {
 		if (!resultOk(r)) {
 			return;
 		}
@@ -23,7 +23,7 @@ MembersModel::MembersModel(SDK::Client* client, quint64 guildID, State* state) :
 			d->id << c;
 		}
 		endResetModel();
-	}, req);
+	});
 }
 
 MembersModel::~MembersModel()

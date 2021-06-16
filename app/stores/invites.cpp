@@ -14,11 +14,12 @@ InviteModel::InviteModel(SDK::Client* client, quint64 guildID, State* state) : Q
 	protocol::chat::v1::GetGuildInvitesRequest req;
 	req.set_guild_id(guildID);
 
-	c->chatKit()->GetGuildInvites([this](auto r) {
-		if (!resultOk(r)) {
+	c->chatKit()->GetGuildInvites(req).then([this](auto r) {
+		if (!r.ok()) {
 			return;
 		}
-		auto resp = unwrap(r);
+		auto resp = r.value();
+
 		beginResetModel();
 		for (const auto& invite : resp.invites()) {
 			d->invites << Invite {
@@ -28,7 +29,7 @@ InviteModel::InviteModel(SDK::Client* client, quint64 guildID, State* state) : Q
 			};
 		}
 		endResetModel();
-	}, req);
+	});
 }
 
 InviteModel::~InviteModel()
@@ -73,60 +74,49 @@ QHash<int,QByteArray> InviteModel::roleNames() const
 }
 
 
-QIviPendingReply<bool> InviteModel::createInvite(const QString& id, qint32 possibleUses)
+FutureBase InviteModel::createInvite(const QString& id, qint32 possibleUses)
 {
-	QIviPendingReply<bool> reply;
-
 	protocol::chat::v1::CreateInviteRequest req;
 	req.set_guild_id(d->guildID);
 	req.set_name(id.toStdString());
 	req.set_possible_uses(possibleUses);
 
-	c->chatKit()->CreateInvite([this, reply, possibleUses](auto r) {
-		auto repl = reply;
-		if (!resultOk(r)) {
-			repl.setSuccess(false);
-			return;
-		}
+	auto reply = co_await c->chatKit()->CreateInvite(req);
 
-		auto resp = unwrap(r);
+	if (!reply.ok()) {
+		co_return false;
+	}
 
-		beginInsertRows(QModelIndex(), d->invites.length(), d->invites.length());
-		d->invites << Invite {
-			QString::fromStdString(resp.name()),
-			possibleUses,
-			0
-		};
-		endInsertRows();
+	auto resp = reply.value();
 
-		repl.setSuccess(true);
-	}, req);
+	beginInsertRows(QModelIndex(), d->invites.length(), d->invites.length());
+	d->invites << Invite {
+		QString::fromStdString(resp.name()),
+		possibleUses,
+		0
+	};
+	endInsertRows();
 
-	return reply;
+	co_return true;
 }
 
-QIviPendingReply<bool> InviteModel::deleteInvite(const QString& id)
+FutureBase InviteModel::deleteInvite(const QString& id)
 {
-	QIviPendingReply<bool> reply;
-
 	protocol::chat::v1::DeleteInviteRequest req;
 	req.set_guild_id(d->guildID);
 	req.set_invite_id(id.toStdString());
 
-	c->chatKit()->DeleteInvite([this, reply, id](auto r) {
-		auto repl = reply;
-		if (!resultOk(r)) {
-			repl.setSuccess(false);
-			return;
-		}
+	auto reply = co_await c->chatKit()->DeleteInvite(req);
 
-		auto idx = (std::find_if(d->invites.constBegin(), d->invites.constEnd(), [=](const Invite& inv) { return inv.id == id; }) - d->invites.begin());
+	if (!reply.ok()) {
+		co_return false;
+	}
 
-		beginRemoveRows(QModelIndex(), idx, idx);
-		d->invites.removeAt(idx);
-		endRemoveRows();
-		repl.setSuccess(true);
-	}, req);
+	auto idx = (std::find_if(d->invites.constBegin(), d->invites.constEnd(), [=](const Invite& inv) { return inv.id == id; }) - d->invites.begin());
 
-	return reply;
+	beginRemoveRows(QModelIndex(), idx, idx);
+	d->invites.removeAt(idx);
+	endRemoveRows();
+
+	co_return true;
 }

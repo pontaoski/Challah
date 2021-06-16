@@ -13,19 +13,19 @@ ChannelsModel::ChannelsModel(SDK::Client* c, quint64 gid, State* state) : QAbstr
 	auto req = protocol::chat::v1::GetGuildChannelsRequest{};
 	req.set_guild_id(gid);
 
-	c->chatKit()->GetGuildChannels([this](auto r) {
-		if (!resultOk(r)) {
+	c->chatKit()->GetGuildChannels(req).then([this](auto r) {
+		if (!r.ok()) {
 			return;
 		}
 
-		protocol::chat::v1::GetGuildChannelsResponse it = unwrap(r);
+		protocol::chat::v1::GetGuildChannelsResponse it = r.value();
 		beginResetModel();
 		for (const auto& c : it.channels()) {
 			d->id << c.channel_id();
 			d->store->d->data[c.channel_id()] = c;
 		}
 		endResetModel();
-	}, req);
+	});
 }
 
 ChannelsModel::~ChannelsModel()

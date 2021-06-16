@@ -7,20 +7,17 @@ enum Roles {
 
 GuildList::GuildList(State* parent) : QAbstractListModel(parent), d(new Private), s(parent)
 {
-	s->api()->chatKit()->GetGuildList(
-		[this](auto resp) {
-			if (!resultOk(resp)) {
-				return;
-			}
-			protocol::chat::v1::GetGuildListResponse it = unwrap(resp);
-			beginResetModel();
-			for (const auto& g : it.guilds()) {
-				d->guilds << qMakePair(QString::fromStdString(g.host()), g.guild_id());
-			}
-			endResetModel();
-		},
-		protocol::chat::v1::GetGuildListRequest{}
-	);
+	s->api()->chatKit()->GetGuildList(protocol::chat::v1::GetGuildListRequest{}).then([this](auto resp) {
+		if (!resp.ok()) {
+			return;
+		}
+		protocol::chat::v1::GetGuildListResponse it = resp.value();
+		beginResetModel();
+		for (const auto& g : it.guilds()) {
+			d->guilds << qMakePair(QString::fromStdString(g.host()), g.guild_id());
+		}
+		endResetModel();
+	});
 	connect(s->api(), &SDK::ClientManager::hsEvent, this, [this](protocol::chat::v1::Event ev) {
 		if (ev.has_guild_added_to_list()) {
 			auto it = ev.guild_added_to_list();

@@ -27,23 +27,21 @@ PermissionsModel::PermissionsModel(SDK::Client* client, quint64 guildID, quint64
 	req.set_guild_id(guildID);
 	req.set_role_id(roleID);
 
-	c->chatKit()->GetPermissions(
-		[=](auto r) {
-			if (!resultOk(r)) {
-				qWarning("TODO: implement error handling");
-				isDirty = false;
-				return;
-			}
-			auto resp = unwrap(r);
-
-			auto perms = resp.perms().permissions();
-			for (auto perm : perms) {
-				d->perms << perm;
-			}
-
+	c->chatKit()->GetPermissions(req).then([this](auto result) {
+		if (!result.ok()) {
+			qWarning("TODO: implement error handling");
 			isDirty = false;
-		}, req
-	);
+			return;
+		}
+
+		auto resp = result.value();
+		auto perms = resp.perms().permissions();
+		for (auto perm : perms) {
+			d->perms << perm;
+		}
+
+		isDirty = false;
+	});
 }
 
 PermissionsModel::~PermissionsModel()
@@ -122,7 +120,7 @@ void PermissionsModel::addPermission(const QString& node, bool allow)
 	endInsertRows();
 }
 
-void PermissionsModel::save()
+FutureBase PermissionsModel::save()
 {
 	protocol::chat::v1::SetPermissionsRequest req;
 	req.set_guild_id(d->guildID);
@@ -135,15 +133,13 @@ void PermissionsModel::save()
 	}
 	req.set_allocated_perms(list);
 
-	c->chatKit()->SetPermissions(
-		[=](auto r) {
-			if (resultOk(r)) {
-				isDirty = false;
-				Q_EMIT isDirtyChanged();
-			}
-		},
-		req
-	);
+	auto res = co_await c->chatKit()->SetPermissions(req);
+	if (res.ok()) {
+		isDirty = false;
+		Q_EMIT isDirtyChanged();
+	}
+
+	co_return res.ok();
 }
 
 void PermissionsModel::deletePermission(int idx)

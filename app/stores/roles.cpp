@@ -23,28 +23,25 @@ RolesModel::RolesModel(SDK::Client* client, quint64 guildID, State* state) : QAb
 	protocol::chat::v1::GetGuildRolesRequest req;
 	req.set_guild_id(guildID);
 
-	c->chatKit()->GetGuildRoles(
-		[=](auto r) {
-			if (!resultOk(r)) {
-				return;
-			}
-			auto resp = unwrap(r);
+	c->chatKit()->GetGuildRoles(req).then([this](auto r) {
+		if (!r.ok()) {
+			return;
+		}
 
-			beginResetModel();
-			auto roles = resp.roles();
-			for (auto role : roles) {
-				d->roles << role;
-			}
-			endResetModel();
-		},
-		req
-	);
+		auto resp = r.value();
+		beginResetModel();
+		auto roles = resp.roles();
+		for (auto role : roles) {
+			d->roles << role;
+		}
+		endResetModel();
+	});
 }
 
 RolesModel::~RolesModel() {
 }
 
-void RolesModel::moveRoleFromTo(int from, int to)
+FutureBase RolesModel::moveRoleFromTo(int from, int to)
 {
 	auto fromRole = d->roles[from];
 
@@ -61,10 +58,8 @@ void RolesModel::moveRoleFromTo(int from, int to)
 		req.set_before_id(d->roles[to+1].role_id());
 	}
 
-	c->chatKit()->MoveRole(
-		[=](auto r) {
-			Q_UNUSED(r)
-		}, req);
+	auto r = co_await c->chatKit()->MoveRole(req);
+	co_return r.ok();
 }
 
 int RolesModel::rowCount(const QModelIndex& parent) const
@@ -112,7 +107,8 @@ bool RolesModel::setData(const QModelIndex& index, const QVariant& value, int ro
 			req.set_modify_name(true);
 			req.mutable_role()->set_name(value.toString().toStdString());
 
-			c->chatKit()->ModifyGuildRole([](auto) {}, req);
+			(void) c->chatKit()->ModifyGuildRole(req);
+
 			return true;
 		}
 	}
@@ -120,37 +116,27 @@ bool RolesModel::setData(const QModelIndex& index, const QVariant& value, int ro
 	return false;
 }
 
-QIviPendingReply<bool> RolesModel::createRole(const QString& name, const QColor& colour)
+FutureBase RolesModel::createRole(const QString& name, const QColor& colour)
 {
-	auto reply = QIviPendingReply<bool>();
-
 	protocol::chat::v1::AddGuildRoleRequest req;
 	req.set_guild_id(d->guildID);
 	req.set_allocated_role(new protocol::chat::v1::Role);
 	req.mutable_role()->set_name(name.toStdString());
 	req.mutable_role()->set_color(colour.rgba());
 
-	c->chatKit()->AddGuildRole(
-		[this, k = reply, role = req.role()](auto r) {
-			auto reply = k;
-			if (!resultOk(r)) {
-				reply.setSuccess(false);
-				return;
-			}
-			auto resp = unwrap(r);
+	auto response = co_await c->chatKit()->AddGuildRole(req);
+	if (!response.ok()) {
+		co_return false;
+	}
+	auto resp = response.value();
 
-			beginInsertRows(QModelIndex(), d->roles.length(), d->roles.length());
-			auto cp = role;
-			cp.set_role_id(resp.role_id());
-			d->roles << cp;
-			endInsertRows();
+	beginInsertRows(QModelIndex(), d->roles.length(), d->roles.length());
+	auto cp = req.role();
+	cp.set_role_id(resp.role_id());
+	d->roles << cp;
+	endInsertRows();
 
-			reply.setSuccess(true);
-		},
-		req
-	);
-
-	return reply;
+	co_return true;
 }
 
 QHash<int,QByteArray> RolesModel::roleNames() const

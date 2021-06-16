@@ -63,25 +63,22 @@ void MessagesModel::fetchMore(const QModelIndex &parent)
 
 	d->isFetching = true;
 
-	c->chatKit()->GetChannelMessages(
-		[this](auto r)
-		{
-			d->isFetching = false;
+	c->chatKit()->GetChannelMessages(req).then([this](auto r) {
+		d->isFetching = false;
 
-			if (!resultOk(r)) {
-				return;
-			}
+		if (!resultOk(r)) {
+			return;
+		}
 
-			protocol::chat::v1::GetChannelMessagesResponse resp = unwrap(r);
+		protocol::chat::v1::GetChannelMessagesResponse resp = unwrap(r);
 
-			beginInsertRows(QModelIndex(), d->messageIDs.length(), (d->messageIDs.length()+resp.messages_size())-1);
-			for (auto item : resp.messages()) {
-				d->messageIDs << item.message_id();
-				d->store->newMessage(item.message_id(), item);
-			}
-			endInsertRows();
-		}, req
-	);
+		beginInsertRows(QModelIndex(), d->messageIDs.length(), (d->messageIDs.length()+resp.messages_size())-1);
+		for (auto item : resp.messages()) {
+			d->messageIDs << item.message_id();
+			d->store->newMessage(item.message_id(), item);
+		}
+		endInsertRows();
+	});
 }
 
 int MessagesModel::rowCount(const QModelIndex& parent) const
@@ -121,7 +118,7 @@ MessagesStore* MessagesModel::store()
 	return d->store.get();
 }
 
-void MessagesModel::send(const QString& txt)
+FutureBase MessagesModel::send(const QString& txt)
 {
 	protocol::chat::v1::SendMessageRequest req;
 	req.set_guild_id(d->guildID);
@@ -129,11 +126,8 @@ void MessagesModel::send(const QString& txt)
 	req.set_allocated_content(new protocol::harmonytypes::v1::Content);
 	req.mutable_content()->set_allocated_text_message(new protocol::harmonytypes::v1::ContentText);
 	req.mutable_content()->mutable_text_message()->set_content(txt.toStdString());
-	c->chatKit()->SendMessage([](auto r) {
-		if (!resultOk(r)) {
-			return;
-		}
-	}, req);
+	co_await c->chatKit()->SendMessage(req);
+	co_return QVariant();
 }
 
 QHash<int,QByteArray> MessagesModel::roleNames() const
