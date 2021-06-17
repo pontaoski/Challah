@@ -81,88 +81,108 @@ void State::createModels()
 	d->membersStore = new MembersStore(this);
 }
 
-ChannelsModel* State::channelsModelFor(const QString& host, const QString& guildID, QObject *it)
+Future<ChannelsModel*> State::channelsModelFor(QString host, QString guildID, QObject *it)
 {
 	auto eng = qmlEngine(it);
 
-	auto c = d->sdk->clientForHomeserver(host);
+	auto r = co_await d->sdk->clientForHomeserver(host);
+	if (!r.ok()) {
+		co_return nullptr;
+	}
+	auto c = r.value();
 	auto id = guildID.toULongLong();
 	auto tup = qMakePair(c, id);
 
 	if (d->channelsModels.contains(tup) and not d->channelsModels[tup].isNull()) {
-		return d->channelsModels[tup];
+		co_return d->channelsModels[tup];
 	}
 
 	auto mod = new ChannelsModel(c, id, this);
 	eng->setObjectOwnership(mod, QQmlEngine::JavaScriptOwnership);
 	d->channelsModels[tup] = mod;
 
-	return mod;
+	co_return mod;
 }
 
-InviteModel* State::inviteModelFor(const QString& host, const QString& guildID, QObject *it)
+Future<InviteModel*> State::inviteModelFor(QString host, QString guildID, QObject *it)
 {
 	auto eng = qmlEngine(it);
 
-	auto c = d->sdk->clientForHomeserver(host);
+	auto r = co_await d->sdk->clientForHomeserver(host);
+	if (!r.ok()) {
+		co_return nullptr;
+	}
+	auto c = r.value();
 	auto id = guildID.toULongLong();
 
 	auto mod = new InviteModel(c, id, this);
 	eng->setObjectOwnership(mod, QQmlEngine::JavaScriptOwnership);
 
-	return mod;
+	co_return mod;
 }
 
-RolesModel* State::rolesModelFor(const QString& host, const QString& guildID, QObject* it)
+Future<RolesModel*> State::rolesModelFor(QString host, QString guildID, QObject* it)
 {
 	auto eng = qmlEngine(it);
 
-	auto c = d->sdk->clientForHomeserver(host);
+	auto r = co_await d->sdk->clientForHomeserver(host);
+	if (!r.ok()) {
+		co_return nullptr;
+	}
+	auto c = r.value();
 	auto id = guildID.toULongLong();
 
 	auto mod = new RolesModel(c, id, this);
 	eng->setObjectOwnership(mod, QQmlEngine::JavaScriptOwnership);
 
-	return mod;
+	co_return mod;
 }
 
-MembersModel* State::membersModelFor(const QString& host, const QString& guildID, QObject *it)
+Future<MembersModel*> State::membersModelFor(QString host, QString guildID, QObject *it)
 {
 	auto eng = qmlEngine(it);
 
-	auto c = d->sdk->clientForHomeserver(host);
+	auto r = co_await d->sdk->clientForHomeserver(host);
+	if (!r.ok()) {
+		co_return nullptr;
+	}
+	auto c = r.value();
 	auto id = guildID.toULongLong();
 	auto tup = qMakePair(c, id);
 
 	if (d->membersModels.contains(tup) and not d->membersModels[tup].isNull()) {
-		return d->membersModels[tup];
+		co_return d->membersModels[tup];
 	}
 
 	auto mod = new MembersModel(c, id, this);
 	eng->setObjectOwnership(mod, QQmlEngine::JavaScriptOwnership);
 	d->membersModels[tup] = mod;
 
-	return mod;
+	co_return mod;
 }
 
-MessagesModel* State::messagesModelFor(const QString& host, const QString& guildID, const QString& channelID, QObject* it)
+Future<MessagesModel*> State::messagesModelFor(QString host, QString guildID, QString channelID, QObject* it)
 {
 	auto eng = qmlEngine(it);
 
-	auto c = d->sdk->clientForHomeserver(host);
+	auto r = co_await d->sdk->clientForHomeserver(host);
+	if (!r.ok()) {
+		co_return nullptr;
+	}
+	auto c = r.value();
 	auto gid = guildID.toULongLong();
 	auto cid = channelID.toULongLong();
 	auto tup = qMakePair(c, qMakePair(gid, cid));
 
 	if (d->messagesModels.contains(tup) and not d->messagesModels[tup].isNull()) {
-		return d->messagesModels[tup];
+		co_return d->messagesModels[tup];
 	}
 
 	auto mod = new MessagesModel(c, gid, cid, this);
 	eng->setObjectOwnership(mod, QQmlEngine::JavaScriptOwnership);
 	d->messagesModels[tup] = mod;
 
-	return mod;
+	co_return mod;
 }
 
 QString State::mediaURL(const QString& url, const QString& homeserver) {

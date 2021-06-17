@@ -35,6 +35,12 @@ Q_IMPORT_PLUGIN(QQC2BreezeStylePlugin)
 
 #endif
 
+Q_DECLARE_METATYPE(Future<ChannelsModel*>)
+Q_DECLARE_METATYPE(Future<MembersModel*>)
+Q_DECLARE_METATYPE(Future<MessagesModel*>)
+Q_DECLARE_METATYPE(Future<InviteModel*>)
+Q_DECLARE_METATYPE(Future<RolesModel*>)
+
 void setupQML(QQmlEngine* engine)
 {
 #if defined(CHALLAH_VENDORED_KIRIGAMI)
@@ -52,6 +58,12 @@ void setupQML(QQmlEngine* engine)
 	qRegisterMetaType<MessagesModel*>();
 	qRegisterMetaType<MessagesStore*>();
 	qRegisterMetaType<InviteModel*>();
+
+	qRegisterMetaType<Future<ChannelsModel*>>();
+	qRegisterMetaType<Future<MembersModel*>>();
+	qRegisterMetaType<Future<MessagesModel*>>();
+	qRegisterMetaType<Future<InviteModel*>>();
+	qRegisterMetaType<Future<RolesModel*>>();
 
 	qmlRegisterSingletonType<State>("com.github.HarmonyDevelopment.Challah", 1, 0, "CState", [](QQmlEngine* q, QJSEngine*) -> QObject* { return new State(q); });
 	qmlRegisterType<OverlappingPanels>("com.github.HarmonyDevelopment.Challah", 1, 0, "OverlappingPanels");

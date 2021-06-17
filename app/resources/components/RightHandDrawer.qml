@@ -32,9 +32,24 @@ Control {
 	}
 	contentItem: RowLayout {
 		ListView {
+			id: listView
 			z: 1
 
-			model: CState.membersModelFor(routerInstance.guildHomeserver, routerInstance.guildID, this)
+			model: null
+			Connections {
+				id: conns
+				target: routerInstance
+
+				function update() {
+					listView.model = CState.membersModelFor(routerInstance.guildHomeserver, routerInstance.guildID, this).valueOr(null)
+				}
+				function onGuildHomeserverChanged() {
+					update()
+				}
+				function onGuildIDChanged() {
+					update()
+				}
+			}
 
 			Layout.fillHeight: true
 			Layout.fillWidth: true

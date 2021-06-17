@@ -54,13 +54,21 @@ void MembersStore::fetchKey(const QVariant& key)
 	protocol::chat::v1::GetUserRequest req;
 	req.set_user_id(it.second);
 
-	s->api()->clientForHomeserver(it.first)->chatKit()->GetUser(req).then([this, it](auto r) {
-		if (!resultOk(r)) {
+	s->api()->clientForHomeserver(it.first).then([req, it, this](auto r) {
+		if (!r.ok()) {
 			return;
 		}
-		protocol::chat::v1::GetUserResponse resp = unwrap(r);
-		d->data[it.first][it.second] = resp;
-		Q_EMIT keyAdded(to(it));
+
+		auto c = r.value();
+
+		c->chatKit()->GetUser(req).then([this, it](auto r) {
+			if (!resultOk(r)) {
+				return;
+			}
+			protocol::chat::v1::GetUserResponse resp = unwrap(r);
+			d->data[it.first][it.second] = resp;
+			Q_EMIT keyAdded(to(it));
+		});
 	});
 }
 

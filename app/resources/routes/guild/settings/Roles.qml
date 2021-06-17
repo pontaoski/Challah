@@ -16,7 +16,8 @@ Kirigami.ScrollablePage {
 	title: qsTr("Roles")
 
 	Kirigami.Theme.colorSet: Kirigami.Theme.View
-	property var rolesModel: CState.rolesModelFor(routerInstance.guildHomeserver, routerInstance.guildID, this)
+	property var rolesModel: null
+	Component.onCompleted: rolesModel = CState.rolesModelFor(routerInstance.guildHomeserver, routerInstance.guildID, this).valueOr(null)
 
 	actions {
 		main: Kirigami.Action {

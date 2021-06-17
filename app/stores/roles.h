@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QAbstractListModel>
+#include <QColor>
 
 #include "state.h"
 
@@ -19,7 +20,7 @@ public:
 	~RolesModel();
 
 	Q_INVOKABLE FutureBase moveRoleFromTo(int from, int to);
-	Q_INVOKABLE FutureBase createRole(const QString& name, const QColor& colour);
+	Q_INVOKABLE FutureBase createRole(QString name, QColor colour);
 	Q_INVOKABLE QVariant everyonePermissions() const;
 
 	int rowCount(const QModelIndex& parent = QModelIndex()) const override;

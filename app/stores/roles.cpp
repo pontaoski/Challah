@@ -116,7 +116,7 @@ bool RolesModel::setData(const QModelIndex& index, const QVariant& value, int ro
 	return false;
 }
 
-FutureBase RolesModel::createRole(const QString& name, const QColor& colour)
+FutureBase RolesModel::createRole(QString name, QColor colour)
 {
 	protocol::chat::v1::AddGuildRoleRequest req;
 	req.set_guild_id(d->guildID);

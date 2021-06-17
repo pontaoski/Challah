@@ -57,16 +57,27 @@ bool GuildsStore::canFetchKey(const QVariant& key)
 
 void GuildsStore::fetchKey(const QVariant& key)
 {
-	auto [hs, id] = fromVariant(key);
-	auto req = protocol::chat::v1::GetGuildRequest{};
-	req.set_guild_id(id);
-	s->api()->clientForHomeserver(hs)->chatKit()->GetGuild(req).then([this, id = qMakePair(hs, id)](auto resp) {
-		if (!resultOk(resp)) {
+	const auto [hs, id] = fromVariant(key);
+
+	s->api()->clientForHomeserver(hs).then([key, this](auto r) {
+		if (!r.ok()) {
 			return;
 		}
-		auto it = unwrap(resp);
-		d->guilds[id] = it;
-		Q_EMIT keyAdded(toVariant(id));
+
+		auto c = r.value();
+		const auto [hs, id] = fromVariant(key);
+
+		auto req = protocol::chat::v1::GetGuildRequest{};
+		req.set_guild_id(id);
+
+		c->chatKit()->GetGuild(req).then([this, id = qMakePair(hs, id)](auto resp) {
+			if (!resultOk(resp)) {
+				return;
+			}
+			auto it = unwrap(resp);
+			d->guilds[id] = it;
+			Q_EMIT keyAdded(toVariant(id));
+		});
 	});
 }
 

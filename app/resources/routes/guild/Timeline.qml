@@ -68,7 +68,7 @@ Kirigami.ScrollablePage {
 	ListView {
 		id: timelineView
 
-		model: CState.messagesModelFor(page.homeserver, page.guildID, page.channelID, this)
+		Component.onCompleted: model = CState.messagesModelFor(page.homeserver, page.guildID, page.channelID, this).valueOr(null)
 
 		reuseItems: true
 		verticalLayoutDirection: ListView.BottomToTop

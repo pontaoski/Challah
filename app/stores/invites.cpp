@@ -74,7 +74,7 @@ QHash<int,QByteArray> InviteModel::roleNames() const
 }
 
 
-FutureBase InviteModel::createInvite(const QString& id, qint32 possibleUses)
+FutureBase InviteModel::createInvite(QString id, qint32 possibleUses)
 {
 	protocol::chat::v1::CreateInviteRequest req;
 	req.set_guild_id(d->guildID);
@@ -100,7 +100,7 @@ FutureBase InviteModel::createInvite(const QString& id, qint32 possibleUses)
 	co_return true;
 }
 
-FutureBase InviteModel::deleteInvite(const QString& id)
+FutureBase InviteModel::deleteInvite(QString id)
 {
 	protocol::chat::v1::DeleteInviteRequest req;
 	req.set_guild_id(d->guildID);

@@ -118,7 +118,7 @@ MessagesStore* MessagesModel::store()
 	return d->store.get();
 }
 
-FutureBase MessagesModel::send(const QString& txt)
+FutureBase MessagesModel::send(QString txt)
 {
 	protocol::chat::v1::SendMessageRequest req;
 	req.set_guild_id(d->guildID);

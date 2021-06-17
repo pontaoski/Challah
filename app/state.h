@@ -42,11 +42,11 @@ public:
 	Q_INVOKABLE void doLogin(const QString& homeserver);
 	void handleStep(protocol::auth::v1::AuthStep step);
 
-	Q_INVOKABLE ChannelsModel* channelsModelFor(const QString& host, const QString& guildID, QObject* it);
-	Q_INVOKABLE MembersModel* membersModelFor(const QString& host, const QString& guildID, QObject* it);
-	Q_INVOKABLE MessagesModel* messagesModelFor(const QString& host, const QString& guildID, const QString& channelID, QObject* it);
-	Q_INVOKABLE InviteModel* inviteModelFor(const QString& host, const QString& guildID, QObject* it);
-	Q_INVOKABLE RolesModel* rolesModelFor(const QString& host, const QString& guildID, QObject* it);
+	Q_INVOKABLE Future<ChannelsModel*> channelsModelFor(QString host, QString guildID, QObject* it);
+	Q_INVOKABLE Future<MembersModel*> membersModelFor(QString host, QString guildID, QObject* it);
+	Q_INVOKABLE Future<MessagesModel*> messagesModelFor(QString host, QString guildID, QString channelID, QObject* it);
+	Q_INVOKABLE Future<InviteModel*> inviteModelFor(QString host, QString guildID, QObject* it);
+	Q_INVOKABLE Future<RolesModel*> rolesModelFor(QString host, QString guildID, QObject* it);
 
 	Q_INVOKABLE QString mediaURL(const QString& id, const QString& homeserver);
 
