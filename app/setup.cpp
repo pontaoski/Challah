@@ -49,6 +49,8 @@ void setupQML(QQmlEngine* engine)
 	Q_UNUSED(engine)
 #endif
 
+	qRegisterMetaType<FutureBase>();
+
 	qRegisterMetaType<RolesModel*>();
 	qRegisterMetaType<GuildList*>();
 	qRegisterMetaType<GuildsStore*>();

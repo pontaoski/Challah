@@ -17,7 +17,8 @@ Kirigami.ScrollablePage {
 
 	Kirigami.Theme.colorSet: Kirigami.Theme.View
 	property var rolesModel: null
-	Component.onCompleted: rolesModel = CState.rolesModelFor(routerInstance.guildHomeserver, routerInstance.guildID, this).valueOr(null)
+	onRolesModelChanged: console.warn(rolesModel)
+	Component.onCompleted: this.rolesModel = CState.rolesModelFor(routerInstance.guildHomeserver, routerInstance.guildID, this).valueOr(null)
 
 	actions {
 		main: Kirigami.Action {
