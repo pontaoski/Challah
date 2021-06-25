@@ -99,7 +99,7 @@ QVariant MessagesModel::data(const QModelIndex& index, int role) const
 	case Roles::ID:
 		return QString::number(d->messageIDs[r]);
 	case Roles::Next:
-		if (r-1 < d->messageIDs.length() and r-1 > 0) {
+		if (r-1 < d->messageIDs.length() and r-1 >= 0) {
 			return QString::number(d->messageIDs[r-1]);
 		}
 		return QString();
