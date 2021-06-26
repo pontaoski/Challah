@@ -97,6 +97,7 @@ Control {
 						onClicked: {
 							routerInstance.guildHomeserver = del.guildHost
 							routerInstance.guildID = del.guildID
+							routerInstance.guildIDChanged()
 							otherListView.model = CState.channelsModelFor(del.guildHost, del.guildID, this).valueOr(null)
 						}
 					}

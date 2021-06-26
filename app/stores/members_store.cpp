@@ -49,7 +49,7 @@ void MembersStore::fetchKey(const QVariant& key)
 {
 	auto it = from(key);
 
-	if (it.second == 0 || it.first.isEmpty()) return;
+	if (it.second == 0) return;
 
 	protocol::chat::v1::GetUserRequest req;
 	req.set_user_id(it.second);
