@@ -13,11 +13,14 @@ QQC2.Control {
 	required property string messageID
 	required property string nextMessageID
 
+	readonly property string resolvedAvatar: messageData.data.overrideAvatar || userData.data.avatarURL
+	readonly property string resolvedName: messageData.data.overrideName || userData.data.name
+
 	readonly property int recommendedSize: Math.max(del.width / 3, Kirigami.Units.gridUnit * 15) // (rootRow.wideMode ? Math.max(del.width / 3, Kirigami.Units.gridUnit * 15) : (del.width * 0.8))
 
 	// readonly property bool isOwnMessage: messageData.data.authorID === tClient.ownID
-	readonly property bool showAvatar: del.nextMessageID == "" || (nextData.data.author != messageData.data.author) // && (!(Kirigami.Settings.isMobile && isOwnMessage))
-	readonly property bool separateFromPrevious: del.previousMessageID == "" || previousData.data.author != messageData.data.author
+	readonly property bool showAvatar: del.nextMessageID == "" || (nextData.data.author != messageData.data.author) || (nextData.data.overrideAvatar != messageData.data.overrideAvatar) || (nextData.data.overrideName != messageData.data.overrideName) // && (!(Kirigami.Settings.isMobile && isOwnMessage))
+	readonly property bool separateFromPrevious: del.previousMessageID == "" || (previousData.data.author != messageData.data.author) || (previousData.data.overrideAvatar != messageData.data.overrideAvatar) || (previousData.data.overrideName != messageData.data.overrideName)
 	// readonly property bool canDeleteMessage: isOwnMessage
 
 	// topPadding: del.separateFromPrevious ? Kirigami.Units.largeSpacing : Kirigami.Units.smallSpacing
@@ -47,8 +50,8 @@ QQC2.Control {
 
 	contentItem: RowLayout {
 		Kirigami.Avatar {
-			name: userData.data.name
-			source: userData.data.avatarURL
+			name: del.resolvedName
+			source: del.resolvedAvatar
 
 			implicitWidth: Kirigami.Units.gridUnit*2
 			implicitHeight: Kirigami.Units.gridUnit*2
@@ -104,6 +107,8 @@ QQC2.Control {
 			required property string author
 			required property string contentType
 			required property string timestamp
+			required property string overrideAvatar
+			required property string overrideName
 		}
 	}
 	RelationalListener {
@@ -114,6 +119,8 @@ QQC2.Control {
 		key: del.previousMessageID
 		shape: QtObject {
 			required property string author
+			required property string overrideAvatar
+			required property string overrideName
 		}
 	}
 	RelationalListener {
@@ -124,6 +131,8 @@ QQC2.Control {
 		key: del.previousMessageID
 		shape: QtObject {
 			required property string author
+			required property string overrideAvatar
+			required property string overrideName
 		}
 	}
 	RelationalListener {

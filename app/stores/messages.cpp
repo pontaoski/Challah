@@ -12,6 +12,9 @@ enum Roles {
 	Author,
 	Timestamp,
 
+	OverrideAvatar,
+	OverrideName,
+
 	// type tag
 	ContentType,
 
@@ -58,6 +61,17 @@ QVariant MessagesStore::data(const QVariant& key, int role)
 		return QString::number(d->messages[idx].in_reply_to());
 	case Roles::Timestamp:
 		return QDateTime::fromTime_t(d->messages[idx].created_at().seconds()).toString("hh:mm");
+
+	case Roles::OverrideAvatar: {
+		const auto& overrides = d->messages[idx].overrides();
+
+		return QString::fromStdString(overrides.avatar());
+	}
+	case Roles::OverrideName: {
+		const auto& overrides = d->messages[idx].overrides();
+
+		return QString::fromStdString(overrides.name());
+	}
 
 	case Roles::Author:
 		return QString::number(d->messages[idx].author_id());
@@ -116,6 +130,9 @@ QHash<int, QByteArray> MessagesStore::roleNames()
 		{ InReplyTo, "inReplyTo" },
 		{ Author,    "author" },
 		{ Timestamp, "timestamp" },
+
+		{ OverrideAvatar, "overrideAvatar" },
+		{ OverrideName, "overrideName" },
 
 		{ ContentType, "contentType" },
 
