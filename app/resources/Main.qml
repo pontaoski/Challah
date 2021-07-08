@@ -58,6 +58,7 @@ Kirigami.ApplicationWindow {
 				clip: true
 				columnView {
 					columnResizeMode: Kirigami.ColumnView.SingleColumn
+					interactive: false
 				}
 				globalToolBar {
 					style: Kirigami.ApplicationHeaderStyle.ToolBar
