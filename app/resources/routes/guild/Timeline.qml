@@ -58,6 +58,7 @@ Kirigami.ScrollablePage {
 				QQC2.Button {
 					Accessible.name: qsTr("Send message")
 					icon.name: "document-send"
+					onClicked: composeRow.send(txtField.text)
 				}
 
 				Layout.fillWidth: true
