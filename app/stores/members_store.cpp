@@ -83,8 +83,13 @@ QVariant MembersStore::data(const QVariant& key, int role)
 	switch (role) {
 	case Role::Name:
 		return QString::fromStdString(d->data[it.first][it.second].user_name());
-	case Role::AvatarURL:
-		return QString::fromStdString(d->data[it.first][it.second].user_avatar());
+	case Role::AvatarURL: {
+		auto hmc = QString::fromStdString(d->data[it.first][it.second].user_avatar());
+		if (hmc.isEmpty()) {
+			return QString();
+		}
+		return s->mediaURL(hmc, s->api()->clientForHomeserver("local").result().value()->homeserver());
+	}
 	}
 
 	return QVariant();

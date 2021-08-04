@@ -186,20 +186,13 @@ Future<MessagesModel*> State::messagesModelFor(QString host, QString guildID, QS
 }
 
 QString State::mediaURL(const QString& url, const QString& homeserver) {
-	auto hs = homeserver;
-	if (hs.isEmpty()) {
-		hs = d->homeserver;
-	}
+	QUrl it(homeserver);
 
-	QString port;
-	if (homeserver.contains(":")) {
-		port = homeserver.split(":")[1];
-	} else {
-		port = "2289";
-	}
+	auto host = it.host();
+	auto port = it.port(2289);
 
 	if (!url.startsWith("hmc://")) {
-		return QString("https://%1:%2/_harmony/media/download/%3").arg(hs).arg(port).arg(url);
+		return QString("https://%1:%2/_harmony/media/download/%3").arg(host).arg(port).arg(url);
 	}
 
 	QString trimmed = url.mid(QString("hmc://").length());
