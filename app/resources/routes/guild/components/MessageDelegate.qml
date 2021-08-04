@@ -127,8 +127,8 @@ QQC2.Control {
 		id: nextData
 
 		model: timelineView.model.store
-		enabled: del.previousMessageID != "0"
-		key: del.previousMessageID
+		enabled: del.nextMessageID != "0"
+		key: del.nextMessageID
 		shape: QtObject {
 			required property string author
 			required property string overrideAvatar
