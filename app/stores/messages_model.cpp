@@ -72,6 +72,11 @@ void MessagesModel::fetchMore(const QModelIndex &parent)
 
 		protocol::chat::v1::GetChannelMessagesResponse resp = unwrap(r);
 
+		if (resp.messages().size() == 0) {
+			d->canFetchMore = false;
+			return;
+		}
+
 		beginInsertRows(QModelIndex(), d->messageIDs.length(), (d->messageIDs.length()+resp.messages_size())-1);
 		for (auto item : resp.messages()) {
 			d->messageIDs << item.message_id();

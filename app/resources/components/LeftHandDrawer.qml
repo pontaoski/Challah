@@ -8,6 +8,7 @@ import QtQuick.Controls 2.10
 import org.kde.kirigami 2.15 as Kirigami
 import QtQml.Models 2.15
 import com.github.HarmonyDevelopment.Challah 1.0
+import Qt.labs.platform 1.1 as Labs
 
 Control {
 	leftPadding: 0
@@ -182,6 +183,34 @@ Control {
 						key: del.channelID
 						shape: QtObject {
 							required property string name
+						}
+					}
+				}
+			}
+			ToolBar {
+				z: 2
+
+				position: ToolBar.Footer
+
+				Layout.fillWidth: true
+
+				contentItem: RowLayout {
+					Item { Layout.fillWidth: true }
+					Button {
+						icon.name: "list-add"
+						onClicked: channelMenu.open()
+					}
+
+					Labs.Menu {
+						id: channelMenu
+
+						Labs.MenuItem {
+							text: qsTr("New Channel")
+							onTriggered: textAsker.ask(qsTr("What do you want to call the new channel?")).then((name) => otherListView.model.newChannel(name))
+						}
+						Labs.MenuItem {
+							text: qsTr("New Category")
+							enabled: false
 						}
 					}
 				}
