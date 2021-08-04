@@ -14,10 +14,14 @@ Control {
 	rightPadding: 0
 	topPadding: 0
 	bottomPadding: 0
+
+	Kirigami.Theme.inherit: false
+	Kirigami.Theme.colorSet: Kirigami.Theme.View
+
 	background: Rectangle {
 		anchors.fill: parent
 
-		Kirigami.Theme.inherit: true
+		Kirigami.Theme.inherit: false
 		Kirigami.Theme.colorSet: Kirigami.Theme.View
 
 		color: Kirigami.Theme.backgroundColor
@@ -62,6 +66,13 @@ Control {
 
 				text: userData.data.name
 				reserveSpaceForSubtitle: true
+
+				leading: Kirigami.Avatar {
+					name: userData.data.name
+					source: userData.data.avatarURL
+
+					width: height
+				}
 
 				RelationalListener {
 					id: userData
