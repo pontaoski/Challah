@@ -17,11 +17,17 @@ MessagesModel::MessagesModel(SDK::Client* client, quint64 guildID, quint64 chann
 	state->api()->subscribeToGuild(client->homeserver(), guildID);
 	connect(state->api(), &SDK::ClientManager::chatEvent, this, [=](QString hs, protocol::chat::v1::Event ev) {
 		using namespace protocol::chat::v1;
+		if (hs != c->homeserver()) {
+			return;
+		}
 
 		switch (ev.event_case()) {
 		case Event::kSentMessage: {
 			beginInsertRows(QModelIndex(), 0, 0);
 			auto it = ev.sent_message().message();
+			if (it.guild_id() != d->guildID || it.channel_id() != d->channelID) {
+				return;
+			}
 			d->messageIDs.prepend(it.message_id());
 			d->store->newMessage(it.message_id(), it);
 			endInsertRows();
@@ -63,7 +69,7 @@ void MessagesModel::fetchMore(const QModelIndex &parent)
 
 	d->isFetching = true;
 
-	c->chatKit()->GetChannelMessages(req).then([this](auto r) {
+	c->chatKit()->GetChannelMessages(req).then([this, req](auto r) {
 		d->isFetching = false;
 
 		if (!resultOk(r)) {
@@ -72,10 +78,7 @@ void MessagesModel::fetchMore(const QModelIndex &parent)
 
 		protocol::chat::v1::GetChannelMessagesResponse resp = unwrap(r);
 
-		if (resp.messages().size() == 0) {
-			d->canFetchMore = false;
-			return;
-		}
+		d->canFetchMore = !resp.reached_top();
 
 		beginInsertRows(QModelIndex(), d->messageIDs.length(), (d->messageIDs.length()+resp.messages_size())-1);
 		for (auto item : resp.messages()) {
