@@ -128,28 +128,6 @@ Control {
 			visible: routerInstance.guildID != ""
 			spacing: 0
 
-			ToolBar {
-				id: rhToolbar
-				z: 2
-
-				contentItem: ToolButton {
-					icon.name: "application-menu"
-					onClicked: guildMenu.open()
-
-					Layout.fillWidth: true
-
-					Menu {
-						id: guildMenu
-
-						MenuItem {
-							text: qsTr("Settings")
-							onTriggered: root.pageStack.layers.push(Qt.resolvedUrl("qrc:/routes/guild/settings/Settings.qml"))
-						}
-					}
-				}
-
-				Layout.fillWidth: true
-			}
 			ListView {
 				z: 1
 
@@ -195,6 +173,10 @@ Control {
 				Layout.fillWidth: true
 
 				contentItem: RowLayout {
+					Button {
+						text: qsTr("Guild Configuration")
+						onClicked: root.pageStack.layers.push(Qt.resolvedUrl("qrc:/routes/guild/settings/Settings.qml"))
+					}
 					Item { Layout.fillWidth: true }
 					Button {
 						icon.name: "list-add"
