@@ -1,4 +1,5 @@
 #include <QJsonDocument>
+#include <QJsonObject>
 
 #include "messages_p.h"
 #include "messages_model.h"
@@ -93,7 +94,7 @@ QVariant MessagesStore::data(const QVariant& key, int role)
 	case Roles::ContentEmbed:
 		return conv(d->messages[idx].content().embed_message().embeds());
 	case Roles::ContentAttachments:
-		return conv(d->messages[idx].content().files_message());
+		return conv(d->messages[idx].content().files_message()).object();
 	}
 
 	return QVariant();

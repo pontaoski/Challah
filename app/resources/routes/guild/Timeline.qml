@@ -26,45 +26,7 @@ Kirigami.ScrollablePage {
 	property string guildID
 	property string channelID
 
-	footer: QQC2.ToolBar {
-		contentItem: ColumnLayout {
-			RowLayout {
-				id: composeRow
-
-				function send(text) {
-					timelineView.model.send(txtField.text)
-					txtField.text = ""
-				}
-
-				QQC2.TextArea {
-					id: txtField
-
-					background: null
-					wrapMode: Text.Wrap
-
-					placeholderText: enabled ? qsTr("Write your message…") : qsTr("You cannot send messages.")
-
-					Keys.onReturnPressed: (event) => {
-						if (!(event.modifiers & Qt.ShiftModifier)) {
-							composeRow.send(txtField.text)
-							event.accepted = true
-						} else {
-							event.accepted = false
-						}
-					}
-					Keys.onTabPressed: nextItemInFocusChain().forceActiveFocus(Qt.TabFocusReason)
-					Layout.fillWidth: true
-				}
-				QQC2.Button {
-					Accessible.name: qsTr("Send message")
-					icon.name: "document-send"
-					onClicked: composeRow.send(txtField.text)
-				}
-
-				Layout.fillWidth: true
-			}
-		}
-	}
+	footer: ComposeBar { }
 
 	ListView {
 		id: timelineView

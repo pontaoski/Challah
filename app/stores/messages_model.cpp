@@ -1,6 +1,10 @@
 #include "state.h"
 
+#include <QtConcurrent>
+#include <QHttpMultiPart>
+
 #include "messages_model_p.h"
+#include "coroutine_integration_network.h"
 
 enum Roles {
 	ID,
@@ -134,6 +138,53 @@ FutureBase MessagesModel::send(QString txt)
 	req.set_allocated_content(new protocol::harmonytypes::v1::Content);
 	req.mutable_content()->set_allocated_text_message(new protocol::harmonytypes::v1::ContentText);
 	req.mutable_content()->mutable_text_message()->set_content(txt.toStdString());
+	co_await c->chatKit()->SendMessage(req);
+	co_return QVariant();
+}
+
+FutureBase MessagesModel::sendFiles(const QList<QUrl>& urls)
+{
+	QStringList ids;
+
+	for (const auto& url : urls) {
+		QHttpMultiPart *mp = new QHttpMultiPart(QHttpMultiPart::FormDataType);
+
+		QFile* file(new QFile(url.toLocalFile()));
+		file->open(QIODevice::ReadOnly);
+
+		QHttpPart filePart;
+		filePart.setBodyDevice(file);
+		filePart.setHeader(QNetworkRequest::ContentDispositionHeader, QString("form-data; name=\"file\""));
+		filePart.setHeader(QNetworkRequest::ContentTypeHeader, "multipart/form-data");
+
+		mp->append(filePart);
+
+		QUrlQuery query;
+		query.addQueryItem("filename", url.fileName());
+		query.addQueryItem("contentType", QMimeDatabase().mimeTypeForFile(url.toLocalFile()).name());
+
+		QUrl reqUrl(c->homeserver() + "/_harmony/media/upload?" + query.query());
+		QNetworkRequest req(reqUrl);
+		req.setRawHeader("Authorization", QByteArray::fromStdString(c->session()));
+		QNetworkAccessManager nam;
+
+		const auto reply = co_await nam.post(req, mp);
+		const auto id = QJsonDocument::fromJson(reply->readAll())["id"].toString();
+		ids << id;
+	}
+
+	protocol::chat::v1::SendMessageRequest req;
+	req.set_allocated_content(new protocol::harmonytypes::v1::Content);
+	req.mutable_content()->set_allocated_files_message(new protocol::harmonytypes::v1::ContentFiles);
+	for (const auto& it : ids) {
+		protocol::harmonytypes::v1::Attachment attach;
+		attach.set_id(it.toStdString());
+		req.mutable_content()->mutable_files_message()->mutable_attachments()->Add(std::move(attach));
+	}
+
+	req.set_guild_id(d->guildID);
+	req.set_channel_id(d->channelID);
+
 	co_await c->chatKit()->SendMessage(req);
 	co_return QVariant();
 }

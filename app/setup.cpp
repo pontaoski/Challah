@@ -1,6 +1,7 @@
 #include "copyinterceptor.h"
 #include "overlappingpanels.h"
 #include "conditional.h"
+#include "utils.h"
 
 #include "qquickrelationallistener.h"
 #include "setup.h"
@@ -60,6 +61,7 @@ void setupQML(QQmlEngine* engine)
 	qRegisterMetaType<MessagesModel*>();
 	qRegisterMetaType<MessagesStore*>();
 	qRegisterMetaType<InviteModel*>();
+	qRegisterMetaType<Utils*>();
 
 	qRegisterMetaType<Future<ChannelsModel*>>();
 	qRegisterMetaType<Future<MembersModel*>>();
@@ -68,6 +70,7 @@ void setupQML(QQmlEngine* engine)
 	qRegisterMetaType<Future<RolesModel*>>();
 
 	qmlRegisterSingletonType<State>("com.github.HarmonyDevelopment.Challah", 1, 0, "CState", [](QQmlEngine* q, QJSEngine*) -> QObject* { return new State(q); });
+	qmlRegisterSingletonType<Utils>("com.github.HarmonyDevelopment.Challah", 1, 0, "UIUtils", [](QQmlEngine* q, QJSEngine*) -> QObject* { return new Utils(q); });
 	qmlRegisterType<OverlappingPanels>("com.github.HarmonyDevelopment.Challah", 1, 0, "OverlappingPanels");
 	qmlRegisterType<Conditional>("com.github.HarmonyDevelopment.Challah", 1, 0, "Conditional");
 	qmlRegisterType<ChallahQmlRelationalListener>("com.github.HarmonyDevelopment.Challah", 1, 0, "RelationalListener");
