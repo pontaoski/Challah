@@ -17,6 +17,7 @@ class MembersStore;
 class MessagesModel;
 class InviteModel;
 class RolesModel;
+class OwnPermissionsStore;
 
 class State : public QObject
 {
@@ -26,6 +27,7 @@ class State : public QObject
 	Q_PROPERTY(GuildList* guildList READ guildList NOTIFY guildListChanged)
 	Q_PROPERTY(GuildsStore* guildsStore READ guildsStore NOTIFY guildsStoreChanged)
 	Q_PROPERTY(MembersStore* membersStore READ membersStore NOTIFY membersStoreChanged)
+	Q_PROPERTY(OwnPermissionsStore* ownPermissionsStore READ ownPermissionsStore NOTIFY ownPermissionsStoreChanged)
 
 	struct Private;
 	QSharedPointer<Private> d;
@@ -65,5 +67,8 @@ public:
 
 	MembersStore* membersStore();
 	Q_SIGNAL void membersStoreChanged();
+
+	OwnPermissionsStore* ownPermissionsStore();
+	Q_SIGNAL void ownPermissionsStoreChanged();
 
 };

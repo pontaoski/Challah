@@ -11,6 +11,7 @@
 #include "messages_model.h"
 #include "roles.h"
 #include "invites.h"
+#include "own_permissions.h"
 
 struct State::Private
 {
@@ -21,6 +22,7 @@ struct State::Private
 	GuildList* list = nullptr;
 	GuildsStore* store = nullptr;
 	MembersStore* membersStore = nullptr;
+	OwnPermissionsStore* ownPermissionsStore = nullptr;
 	QString homeserver;
 
 	QQmlEngine* eng = nullptr;

@@ -20,6 +20,16 @@ QQC2.ToolBar {
 		txtField.text = ""
 	}
 
+	RelationalListener {
+		id: canSendPermissions
+
+		model: CState.ownPermissionsStore
+		key: [routerInstance.params.homeserver, routerInstance.params.guildID, routerInstance.params.channelID, "messages.send"]
+		shape: QtObject {
+			required property bool has
+		}
+	}
+
 	Dialogs.FileDialog {
 		id: fileDialog
 		selectMultiple: true
@@ -35,6 +45,8 @@ QQC2.ToolBar {
 			}
 			QQC2.TextArea {
 				id: txtField
+
+				enabled: canSendPermissions.data.has
 
 				background: null
 				wrapMode: Text.Wrap

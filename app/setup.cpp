@@ -12,6 +12,7 @@
 #include "members_model.h"
 #include "members_store.h"
 #include "messages_model.h"
+#include "own_permissions.h"
 #include "messages.h"
 #include "invites.h"
 #include "roles.h"
@@ -62,6 +63,7 @@ void setupQML(QQmlEngine* engine)
 	qRegisterMetaType<MessagesStore*>();
 	qRegisterMetaType<InviteModel*>();
 	qRegisterMetaType<Utils*>();
+	qRegisterMetaType<OwnPermissionsStore*>();
 
 	qRegisterMetaType<Future<ChannelsModel*>>();
 	qRegisterMetaType<Future<MembersModel*>>();

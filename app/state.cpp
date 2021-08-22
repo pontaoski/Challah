@@ -70,6 +70,11 @@ MembersStore* State::membersStore()
 	return d->membersStore;
 }
 
+OwnPermissionsStore* State::ownPermissionsStore()
+{
+	return d->ownPermissionsStore;
+}
+
 void State::createModels()
 {
 	d->list = new GuildList(this);
@@ -79,6 +84,10 @@ void State::createModels()
 	Q_EMIT guildsStoreChanged();
 
 	d->membersStore = new MembersStore(this);
+	Q_EMIT membersStoreChanged();
+
+	d->ownPermissionsStore = new OwnPermissionsStore(this);
+	Q_EMIT ownPermissionsStoreChanged();
 }
 
 Future<ChannelsModel*> State::channelsModelFor(QString host, QString guildID, QObject *it)
