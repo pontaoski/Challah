@@ -89,7 +89,15 @@ void OwnPermissionsStore::fetchKey(const QVariant& key)
 
 	auto node = Node::from(key);
 
+	if (d->fetching.contains(node)) {
+		return;
+	}
+
+	d->fetching << node;
+
 	state->api()->clientForHomeserver(node.homeserver).then([=](Result<SDK::Client*, Error> r) {
+		d->fetching.removeAll(node);
+
 		if (!r.ok()) {
 			return;
 		}

@@ -28,6 +28,16 @@ Kirigami.ScrollablePage {
 
 	footer: ComposeBar { }
 
+	RelationalListener {
+		id: canDeletePermissions
+
+		model: CState.ownPermissionsStore
+		key: [routerInstance.params.homeserver, routerInstance.params.guildID, routerInstance.params.channelID, "messages.manage.delete"]
+		shape: QtObject {
+			required property bool has
+		}
+	}
+
 	ListView {
 		id: timelineView
 

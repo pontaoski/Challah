@@ -7,16 +7,6 @@ import com.github.HarmonyDevelopment.Challah 1.0
 QQC2.Menu {
 	id: messageMenu
 
-	RelationalListener {
-		id: canDeletePermissions
-
-		model: CState.ownPermissionsStore
-		key: [routerInstance.params.homeserver, routerInstance.params.guildID, routerInstance.params.channelID, "messages.manage.delete"]
-		shape: QtObject {
-			required property bool has
-		}
-	}
-
 	// QQC2.MenuItem {
 	// 	text: qsTr("Edit")
 	// 	enabled: messagesRoute.model.permissions.canSendAndEdit && messagesRoute.model.userID() == authorID

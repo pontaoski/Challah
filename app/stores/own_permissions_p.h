@@ -17,6 +17,7 @@ struct Node
 			li[0].toString(),
 			li[1].toString().toULongLong(),
 			li[2].toString().toULongLong(),
+			li[3].toString(),
 		};
 	}
 	auto into() -> QVariant
@@ -33,9 +34,20 @@ struct Node
 			|| lhs->channel < rhs.channel
 			|| lhs->node < rhs.node;
 	}
+
+	bool operator==(const Node& rhs) const
+	{
+		auto lhs = this;
+
+		return lhs->homeserver == rhs.homeserver
+			&& lhs->guild == rhs.guild
+			&& lhs->channel == rhs.guild
+			&& lhs->node == rhs.node;
+	}
 };
 
 struct OwnPermissionsStore::Private
 {
 	QMap<Node, bool> data;
+	QList<Node> fetching;
 };
