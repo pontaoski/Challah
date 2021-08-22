@@ -68,7 +68,8 @@ void MessagesModel::fetchMore(const QModelIndex &parent)
 	req.set_guild_id(d->guildID);
 	req.set_channel_id(d->channelID);
 	if (!d->messageIDs.isEmpty()) {
-		req.set_before_message(d->messageIDs.last());
+		req.set_message_id(d->messageIDs.last());
+		req.set_direction(protocol::chat::v1::GetChannelMessagesRequest::Direction::GetChannelMessagesRequest_Direction_before);
 	}
 
 	d->isFetching = true;
