@@ -198,3 +198,17 @@ QHash<int,QByteArray> MessagesModel::roleNames() const
 		{ Previous, "previousMessageID" },
 	};
 }
+
+FutureBase MessagesModel::deleteMessage(const QString& id)
+{
+	using namespace protocol::chat::v1;
+
+	DeleteMessageRequest req;
+	req.set_guild_id(d->guildID);
+	req.set_channel_id(d->channelID);
+	req.set_message_id(id.toULongLong());
+
+	auto it = co_await c->chatKit()->DeleteMessage(req);
+
+	co_return it.ok();
+}

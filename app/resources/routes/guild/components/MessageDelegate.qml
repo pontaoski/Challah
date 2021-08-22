@@ -48,6 +48,15 @@ QQC2.Control {
 	}
 	Kirigami.Theme.inherit: false
 
+	MessageMenu {
+		id: messageMenu
+	}
+
+	TapHandler {
+		acceptedButtons: Kirigami.Settings.isMobile ? Qt.LeftButton : Qt.RightButton
+		onTapped: messageMenu.popup()
+	}
+
 	contentItem: RowLayout {
 		Kirigami.Avatar {
 			name: del.resolvedName

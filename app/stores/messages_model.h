@@ -27,6 +27,7 @@ public:
 
 	Q_INVOKABLE FutureBase send(QString txt);
 	Q_INVOKABLE FutureBase sendFiles(const QList<QUrl>& txt);
+	Q_INVOKABLE FutureBase deleteMessage(const QString& id);
 
 	bool canFetchMore(const QModelIndex &parent) const override;
 	void fetchMore(const QModelIndex &parent) override;
