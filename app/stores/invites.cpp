@@ -1,4 +1,6 @@
+#include "chat/v1/guilds.pb.h"
 #include "invites_p.h"
+#include "coroutine_integration.h"
 
 enum Roles
 {
@@ -14,7 +16,7 @@ InviteModel::InviteModel(SDK::Client* client, quint64 guildID, State* state) : Q
 	protocol::chat::v1::GetGuildInvitesRequest req;
 	req.set_guild_id(guildID);
 
-	c->chatKit()->GetGuildInvites(req).then([this](auto r) {
+	c->chatKit()->GetGuildInvites(req).then([this](Result<protocol::chat::v1::GetGuildInvitesResponse, QString> r) {
 		if (!r.ok()) {
 			return;
 		}
@@ -24,8 +26,8 @@ InviteModel::InviteModel(SDK::Client* client, quint64 guildID, State* state) : Q
 		for (const auto& invite : resp.invites()) {
 			d->invites << Invite {
 				QString::fromStdString(invite.invite_id()),
-				invite.possible_uses(),
-				invite.use_count()
+				qint32(invite.invite().possible_uses()),
+				qint32(invite.invite().use_count())
 			};
 		}
 		endResetModel();
@@ -91,7 +93,7 @@ FutureBase InviteModel::createInvite(QString id, qint32 possibleUses)
 
 	beginInsertRows(QModelIndex(), d->invites.length(), d->invites.length());
 	d->invites << Invite {
-		QString::fromStdString(resp.name()),
+		QString::fromStdString(resp.invite_id()),
 		possibleUses,
 		0
 	};

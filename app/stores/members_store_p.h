@@ -4,5 +4,5 @@
 
 struct MembersStore::Private
 {
-	QMap<QString,QMap<quint64, protocol::chat::v1::GetUserResponse>> data;
+	QMap<QString,QMap<quint64, protocol::profile::v1::Profile>> data;
 };

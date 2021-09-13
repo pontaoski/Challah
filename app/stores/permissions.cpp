@@ -1,5 +1,6 @@
 #include "permissions.h"
 
+#include "chat/v1/permissions.pb.h"
 #include "client.h"
 #include "state.h"
 
@@ -27,7 +28,7 @@ PermissionsModel::PermissionsModel(SDK::Client* client, quint64 guildID, quint64
 	req.set_guild_id(guildID);
 	req.set_role_id(roleID);
 
-	c->chatKit()->GetPermissions(req).then([this](auto result) {
+	c->chatKit()->GetPermissions(req).then([this](Result<protocol::chat::v1::GetPermissionsResponse, QString> result) {
 		if (!result.ok()) {
 			qWarning("TODO: implement error handling");
 			isDirty = false;
@@ -35,7 +36,7 @@ PermissionsModel::PermissionsModel(SDK::Client* client, quint64 guildID, quint64
 		}
 
 		auto resp = result.value();
-		auto perms = resp.perms().permissions();
+		auto perms = resp.perms();
 		for (auto perm : perms) {
 			d->perms << perm;
 		}
@@ -66,7 +67,7 @@ QVariant PermissionsModel::data(const QModelIndex& index, int role) const
 	case NodeName:
 		return QString::fromStdString(d->perms[index.row()].matches());
 	case Enabled:
-		return d->perms[index.row()].mode() == protocol::chat::v1::Permission_Mode_Allow;
+		return d->perms[index.row()].ok();
 	}
 
 	return QVariant();
@@ -87,7 +88,7 @@ bool PermissionsModel::setData(const QModelIndex& index, const QVariant& value, 
 		isDirty = true;
 		Q_EMIT isDirtyChanged();
 
-		d->perms[index.row()].set_mode(value.toBool() ? protocol::chat::v1::Permission_Mode_Allow : protocol::chat::v1::Permission_Mode_Deny);
+		d->perms[index.row()].set_ok(value.toBool());
 		return true;
 	}
 
@@ -110,7 +111,7 @@ void PermissionsModel::addPermission(const QString& node, bool allow)
 
 	protocol::chat::v1::Permission perm;
 	perm.set_matches(node.toStdString());
-	perm.set_mode(allow ? protocol::chat::v1::Permission_Mode_Allow : protocol::chat::v1::Permission_Mode_Deny);
+	perm.set_ok(allow);
 
 	d->perms << perm;
 
@@ -126,12 +127,10 @@ FutureBase PermissionsModel::save()
 	req.set_guild_id(d->guildID);
 	req.set_role_id(d->roleID);
 
-	auto list = new protocol::chat::v1::PermissionList;
-	list->add_permissions();
+	req.add_perms_to_give();
 	for (auto perm : d->perms) {
-		*(list->mutable_permissions()->Add()) = perm;
+		*(req.mutable_perms_to_give()->Add()) = perm;
 	}
-	req.set_allocated_perms(list);
 
 	auto res = co_await c->chatKit()->SetPermissions(req);
 	if (res.ok()) {

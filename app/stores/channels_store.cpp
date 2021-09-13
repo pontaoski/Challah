@@ -24,7 +24,7 @@ QVariant ChannelsStore::data(const QVariant& key, int role)
 
 	switch (role) {
 	case Roles::Name:
-		return QString::fromStdString(d->data[id].channel_name());
+		return QString::fromStdString(d->data[id].channel().channel_name());
 	}
 
 	return QVariant();

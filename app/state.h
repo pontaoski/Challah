@@ -6,6 +6,8 @@
 
 #include "clientmanager.h"
 #include "protos.h"
+#include "coroutine_integration.h"
+#include "coroutine_integration_network.h"
 
 class QQuickItem;
 class QQmlEngine;

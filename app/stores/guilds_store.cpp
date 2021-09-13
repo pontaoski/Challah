@@ -89,10 +89,9 @@ QVariant GuildsStore::data(const QVariant& key, int role)
 
 	switch (Roles(role)) {
 	case Roles::Name:
-		return QString::fromStdString(d->guilds[fromVariant(key)].guild_name());
+		return QString::fromStdString(d->guilds[fromVariant(key)].guild().name());
 	case Roles::Picture:
-		qDebug() << s->mediaURL(QString::fromStdString(d->guilds[fromVariant(key)].guild_picture()), fromVariant(key).first);
-		return s->mediaURL(QString::fromStdString(d->guilds[fromVariant(key)].guild_picture()), fromVariant(key).first);
+		return s->mediaURL(QString::fromStdString(d->guilds[fromVariant(key)].guild().picture()), fromVariant(key).first);
 	}
 
 	return QVariant();

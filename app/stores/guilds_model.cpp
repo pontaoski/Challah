@@ -18,7 +18,7 @@ GuildList::GuildList(State* parent) : QAbstractListModel(parent), d(new Private)
 		}
 		endResetModel();
 	});
-	connect(s->api(), &SDK::ClientManager::hsEvent, this, [this](protocol::chat::v1::Event ev) {
+	connect(s->api(), &SDK::ClientManager::hsEvent, this, [this](protocol::chat::v1::StreamEvent ev) {
 		if (ev.has_guild_added_to_list()) {
 			auto it = ev.guild_added_to_list();
 

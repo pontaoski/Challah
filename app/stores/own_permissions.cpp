@@ -9,7 +9,7 @@ enum Roles
 
 OwnPermissionsStore::OwnPermissionsStore(State* state) : ChallahAbstractRelationalModel(state), d(new Private), state(state)
 {
-	connect(state->api(), &SDK::ClientManager::chatEvent, this, [=](QString hs, protocol::chat::v1::Event ev) {
+	connect(state->api(), &SDK::ClientManager::chatEvent, this, [=](QString hs, protocol::chat::v1::StreamEvent ev) {
 		if (!ev.has_permission_updated()) {
 			return;
 		}
@@ -95,22 +95,24 @@ void OwnPermissionsStore::fetchKey(const QVariant& key)
 
 	d->fetching << node;
 
-	state->api()->clientForHomeserver(node.homeserver).then([=](Result<SDK::Client*, Error> r) {
-		d->fetching.removeAll(node);
-
-		if (!r.ok()) {
+	state->api()->clientForHomeserver(node.homeserver).then([=](Result<SDK::Client*, Error> res) {
+		if (!res.ok()) {
 			return;
 		}
 
-		auto c = r.value();
+		auto c = res.value();
 
-		auto req = QueryPermissionsRequest{};
+		d->fetching.removeAll(node);
+
+		auto req = QueryHasPermissionRequest{};
 		req.set_guild_id(node.guild);
 		req.set_channel_id(node.channel);
 		req.set_check_for(node.node.toStdString());
 
-		c->chatKit()->QueryHasPermission(req).then([=](Result<QueryPermissionsResponse, QString> r) {
-			if (!resultOk(r)) {
+		c->chatKit();
+
+		c->chatKit()->QueryHasPermission(req).then([=](Result<QueryHasPermissionResponse, QString> r) {
+			if (!r.ok()) {
 				return;
 			}
 

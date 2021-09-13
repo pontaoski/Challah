@@ -51,7 +51,7 @@ void MembersStore::fetchKey(const QVariant& key)
 
 	if (it.second == 0) return;
 
-	protocol::chat::v1::GetUserRequest req;
+	protocol::profile::v1::GetProfileRequest req;
 	req.set_user_id(it.second);
 
 	s->api()->clientForHomeserver(it.first).then([req, it, this](auto r) {
@@ -61,12 +61,12 @@ void MembersStore::fetchKey(const QVariant& key)
 
 		auto c = r.value();
 
-		c->chatKit()->GetUser(req).then([this, it](auto r) {
+		c->profileKit()->GetProfile(req).then([this, it](Result<protocol::profile::v1::GetProfileResponse, QString> r) {
 			if (!resultOk(r)) {
 				return;
 			}
-			protocol::chat::v1::GetUserResponse resp = unwrap(r);
-			d->data[it.first][it.second] = resp;
+			auto res = r.value();
+			d->data[it.first][it.second] = res.profile();;
 			Q_EMIT keyAdded(to(it));
 		});
 	});

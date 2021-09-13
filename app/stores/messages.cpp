@@ -71,7 +71,7 @@ QVariant MessagesStore::data(const QVariant& key, int role)
 	case Roles::OverrideName: {
 		const auto& overrides = d->messages[idx].overrides();
 
-		return QString::fromStdString(overrides.name());
+		return QString::fromStdString(overrides.username());
 	}
 
 	case Roles::Author:
@@ -79,22 +79,22 @@ QVariant MessagesStore::data(const QVariant& key, int role)
 
 	case Roles::ContentType:
 		switch (d->messages[idx].content().content_case()) {
-		case protocol::harmonytypes::v1::Content::kTextMessage:
+		case protocol::chat::v1::Content::kTextMessage:
 			return "textMessage";
-		case protocol::harmonytypes::v1::Content::kEmbedMessage:
+		case protocol::chat::v1::Content::kEmbedMessage:
 			return "embedMessage";
-		case protocol::harmonytypes::v1::Content::kFilesMessage:
+		case protocol::chat::v1::Content::kAttachmentMessage:
 			return "filesMessage";
 		default:
 			return "unsupporteed";
 		}
 
 	case Roles::ContentText:
-		return QString::fromStdString(d->messages[idx].content().text_message().content());
+		return QString::fromStdString(d->messages[idx].content().text_message().content().text());
 	case Roles::ContentEmbed:
-		return conv(d->messages[idx].content().embed_message().embeds());
+		return conv(d->messages[idx].content().embed_message().embed());
 	case Roles::ContentAttachments:
-		return conv(d->messages[idx].content().files_message()).object();
+		return conv(d->messages[idx].content().attachment_message()).object();
 	}
 
 	return QVariant();
@@ -116,7 +116,7 @@ void MessagesStore::fetchKey(const QVariant& key)
 	Q_UNUSED(key)
 }
 
-void MessagesStore::newMessage(quint64 id, protocol::harmonytypes::v1::Message cont)
+void MessagesStore::newMessage(quint64 id, protocol::chat::v1::Message cont)
 {
 	d->messages[id] = cont;
 	Q_EMIT keyAdded(QString::number(id));

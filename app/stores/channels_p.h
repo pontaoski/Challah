@@ -9,5 +9,5 @@ struct ChannelsModel::Private {
 };
 
 struct ChannelsStore::Private {
-	QMap<quint64,protocol::chat::v1::GetGuildChannelsResponse::Channel> data;
+	QMap<quint64,protocol::chat::v1::ChannelWithId> data;
 };

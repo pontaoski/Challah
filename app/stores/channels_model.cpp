@@ -28,7 +28,7 @@ ChannelsModel::ChannelsModel(SDK::Client* c, quint64 gid, State* state) : QAbstr
 		endResetModel();
 	});
 
-	connect(s->api(), &SDK::ClientManager::chatEvent, this, [=](QString it, protocol::chat::v1::Event ev) {
+	connect(s->api(), &SDK::ClientManager::chatEvent, this, [=](QString it, protocol::chat::v1::StreamEvent ev) {
 		if (it != c->homeserver()) {
 			return;
 		}
@@ -37,14 +37,28 @@ ChannelsModel::ChannelsModel(SDK::Client* c, quint64 gid, State* state) : QAbstr
 			auto cc = ev.created_channel();
 			if (cc.guild_id() != d->gid) return;
 
-			auto idx = std::find(d->id.begin(), d->id.end(), cc.previous_id()) - d->id.begin();
+			int idx = -1;
+
+			switch (cc.position().position_case()) {
+			case protocol::harmonytypes::v1::ItemPosition::PositionCase::kTop:
+				idx = 0; break;
+			case protocol::harmonytypes::v1::ItemPosition::PositionCase::kBottom:
+				idx = d->id.length() - 1; break;
+			case protocol::harmonytypes::v1::ItemPosition::PositionCase::kBetween:
+				idx = std::find(d->id.begin(), d->id.end(), cc.position().between().previous_id()) - d->id.begin();
+				break;
+			default:
+				;
+			}
+
 			beginInsertRows(QModelIndex(), idx, idx);
-			d->store->d->data[cc.channel_id()] = protocol::chat::v1::GetGuildChannelsResponse::Channel { };
+
+			d->store->d->data[cc.channel_id()] = protocol::chat::v1::ChannelWithId { };
 			auto& ref = d->store->d->data[cc.channel_id()];
 
 			ref.set_channel_id(cc.channel_id());
-			ref.set_channel_name(cc.name());
-			ref.set_is_category(cc.is_category());
+			ref.mutable_channel()->set_channel_name(cc.name());
+			ref.mutable_channel()->set_is_category(cc.is_category());
 
 			d->id.insert(idx, cc.channel_id());
 			endInsertRows();
@@ -52,20 +66,17 @@ ChannelsModel::ChannelsModel(SDK::Client* c, quint64 gid, State* state) : QAbstr
 			auto cc = ev.edited_channel();
 			if (cc.guild_id() != d->gid) return;
 
-			if (cc.update_name()) {
-				d->store->d->data[cc.channel_id()].set_channel_name(cc.name());
+			if (cc.has_new_name()) {
+				d->store->d->data[cc.channel_id()].mutable_channel()->set_channel_name(cc.new_name());
 				d->store->keyDataChanged(QString::number(cc.channel_id()), {});
 			}
-
-			if (cc.update_order()) {
-				auto before = cc.previous_id();
-
-				auto bidx = std::find(d->id.begin(), d->id.end(), before) - d->id.begin();
-				auto idx = std::find(d->id.begin(), d->id.end(), cc.channel_id()) - d->id.begin();
-				beginMoveRows(QModelIndex(), idx, idx, QModelIndex(), bidx);
-				d->id.swapItemsAt(idx, bidx);
-				endMoveRows();
+		} else if (ev.has_channels_reordered()) {
+			beginResetModel();
+			d->id.clear();
+			for (auto id : ev.channels_reordered().channel_ids()) {
+				d->id << id;
 			}
+			endResetModel();
 		} else if (ev.has_deleted_channel()) {
 			auto cc = ev.deleted_channel();
 			if (cc.guild_id() != d->gid) return;

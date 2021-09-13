@@ -19,27 +19,28 @@ MessagesModel::MessagesModel(SDK::Client* client, quint64 guildID, quint64 chann
 	d->channelID = channelID;
 
 	state->api()->subscribeToGuild(client->homeserver(), guildID);
-	connect(state->api(), &SDK::ClientManager::chatEvent, this, [=](QString hs, protocol::chat::v1::Event ev) {
+	connect(state->api(), &SDK::ClientManager::chatEvent, this, [=](QString hs, protocol::chat::v1::StreamEvent ev) {
 		using namespace protocol::chat::v1;
 		if (hs != c->homeserver()) {
 			return;
 		}
 
 		switch (ev.event_case()) {
-		case Event::kSentMessage: {
+		case StreamEvent::kSentMessage: {
 			beginInsertRows(QModelIndex(), 0, 0);
-			auto it = ev.sent_message().message();
-			if (it.guild_id() != d->guildID || it.channel_id() != d->channelID) {
+			auto sm = ev.sent_message();
+			auto it = sm.message();
+			if (sm.guild_id() != d->guildID || sm.channel_id() != d->channelID) {
 				return;
 			}
-			d->messageIDs.prepend(it.message_id());
-			d->store->newMessage(it.message_id(), it);
+			d->messageIDs.prepend(sm.message_id());
+			d->store->newMessage(sm.message_id(), it);
 			endInsertRows();
 			dataChanged(index(1), index(1));
 		}
-		case Event::kDeletedMessage:
+		case StreamEvent::kDeletedMessage:
 			;
-		case Event::kEditedMessage:
+		case StreamEvent::kEditedMessage:
 			;
 		}
 	});
@@ -69,7 +70,7 @@ void MessagesModel::fetchMore(const QModelIndex &parent)
 	req.set_channel_id(d->channelID);
 	if (!d->messageIDs.isEmpty()) {
 		req.set_message_id(d->messageIDs.last());
-		req.set_direction(protocol::chat::v1::GetChannelMessagesRequest::Direction::GetChannelMessagesRequest_Direction_before);
+		req.set_direction(protocol::chat::v1::GetChannelMessagesRequest::Direction::GetChannelMessagesRequest_Direction_DIRECTION_BEFORE_UNSPECIFIED);
 	}
 
 	d->isFetching = true;
@@ -88,7 +89,7 @@ void MessagesModel::fetchMore(const QModelIndex &parent)
 		beginInsertRows(QModelIndex(), d->messageIDs.length(), (d->messageIDs.length()+resp.messages_size())-1);
 		for (auto item : resp.messages()) {
 			d->messageIDs << item.message_id();
-			d->store->newMessage(item.message_id(), item);
+			d->store->newMessage(item.message_id(), item.message());
 		}
 		endInsertRows();
 	});
@@ -136,9 +137,10 @@ FutureBase MessagesModel::send(QString txt)
 	protocol::chat::v1::SendMessageRequest req;
 	req.set_guild_id(d->guildID);
 	req.set_channel_id(d->channelID);
-	req.set_allocated_content(new protocol::harmonytypes::v1::Content);
-	req.mutable_content()->set_allocated_text_message(new protocol::harmonytypes::v1::ContentText);
-	req.mutable_content()->mutable_text_message()->set_content(txt.toStdString());
+	req.set_allocated_content(new protocol::chat::v1::Content);
+	req.mutable_content()->set_allocated_text_message(new protocol::chat::v1::Content::TextContent);
+	req.mutable_content()->mutable_text_message()->set_allocated_content(new protocol::harmonytypes::v1::FormattedText);
+	req.mutable_content()->mutable_text_message()->mutable_content()->set_text(txt.toStdString());
 	co_await c->chatKit()->SendMessage(req);
 	co_return QVariant();
 }
@@ -175,12 +177,12 @@ FutureBase MessagesModel::sendFiles(const QList<QUrl>& urls)
 	}
 
 	protocol::chat::v1::SendMessageRequest req;
-	req.set_allocated_content(new protocol::harmonytypes::v1::Content);
-	req.mutable_content()->set_allocated_files_message(new protocol::harmonytypes::v1::ContentFiles);
+	req.set_allocated_content(new protocol::chat::v1::Content);
+	req.mutable_content()->set_allocated_attachment_message(new protocol::chat::v1::Content::AttachmentContent);
 	for (const auto& it : ids) {
-		protocol::harmonytypes::v1::Attachment attach;
+		protocol::chat::v1::Attachment attach;
 		attach.set_id(it.toStdString());
-		req.mutable_content()->mutable_files_message()->mutable_attachments()->Add(std::move(attach));
+		req.mutable_content()->mutable_attachment_message()->mutable_files()->Add(std::move(attach));
 	}
 
 	req.set_guild_id(d->guildID);

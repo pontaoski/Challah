@@ -215,7 +215,7 @@ void State::handleStep(protocol::auth::v1::AuthStep step)
 			for (auto& item : items) {
 				auto field = req.mutable_form()->mutable_fields()->Add();
 
-				if (QList<QString>{"email", "username"}.contains(item.second)) {
+				if (QList<QString>{"email", "username", "text"}.contains(item.second)) {
 					field->set_string(item.first->property("text").toString().toStdString());
 				} else if (QList<QString>{"password", "new-password"}.contains(item.second)) {
 					field->set_bytes(item.first->property("text").toString().toStdString());
