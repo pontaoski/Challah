@@ -31,5 +31,5 @@ public:
 	Q_INVOKABLE void addPermission(const QString& node, bool allow);
 	Q_INVOKABLE void deletePermission(int index);
 
-	Q_INVOKABLE FutureBase save();
+	Q_INVOKABLE Croutons::FutureBase save();
 };

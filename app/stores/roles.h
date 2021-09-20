@@ -19,8 +19,8 @@ public:
 	RolesModel(SDK::Client* client, quint64 guildID, State* state);
 	~RolesModel();
 
-	Q_INVOKABLE FutureBase moveRoleFromTo(int from, int to);
-	Q_INVOKABLE FutureBase createRole(QString name, QColor colour);
+	Q_INVOKABLE Croutons::FutureBase moveRoleFromTo(int from, int to);
+	Q_INVOKABLE Croutons::FutureBase createRole(QString name, QColor colour);
 	Q_INVOKABLE QVariant everyonePermissions() const;
 
 	int rowCount(const QModelIndex& parent = QModelIndex()) const override;

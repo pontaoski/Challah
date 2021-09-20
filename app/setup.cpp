@@ -51,7 +51,7 @@ void setupQML(QQmlEngine* engine)
 	Q_UNUSED(engine)
 #endif
 
-	qRegisterMetaType<FutureBase>();
+	qRegisterMetaType<Croutons::FutureBase>();
 
 	qRegisterMetaType<RolesModel*>();
 	qRegisterMetaType<GuildList*>();

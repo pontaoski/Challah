@@ -7,6 +7,7 @@ enum Roles {
 
 GuildList::GuildList(State* parent) : QAbstractListModel(parent), d(new Private), s(parent)
 {
+	s->api()->subscribeToHomeserver();
 	s->api()->chatKit()->GetGuildList(protocol::chat::v1::GetGuildListRequest{}).then([this](auto resp) {
 		if (!resp.ok()) {
 			return;
@@ -19,6 +20,7 @@ GuildList::GuildList(State* parent) : QAbstractListModel(parent), d(new Private)
 		endResetModel();
 	});
 	connect(s->api(), &SDK::ClientManager::hsEvent, this, [this](protocol::chat::v1::StreamEvent ev) {
+		qWarning() << "homeserver event!";
 		if (ev.has_guild_added_to_list()) {
 			auto it = ev.guild_added_to_list();
 

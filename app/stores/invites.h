@@ -24,6 +24,6 @@ public:
 	QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
 	QHash<int,QByteArray> roleNames() const override;
 
-	Q_INVOKABLE FutureBase createInvite(QString id, qint32 possibleUses);
-	Q_INVOKABLE FutureBase deleteInvite(QString id);
+	Q_INVOKABLE Croutons::FutureBase createInvite(QString id, qint32 possibleUses);
+	Q_INVOKABLE Croutons::FutureBase deleteInvite(QString id);
 };

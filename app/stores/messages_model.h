@@ -25,9 +25,9 @@ public:
 
 	MessagesStore* store();
 
-	Q_INVOKABLE FutureBase send(QString txt);
-	Q_INVOKABLE FutureBase sendFiles(const QList<QUrl>& txt);
-	Q_INVOKABLE FutureBase deleteMessage(const QString& id);
+	Q_INVOKABLE Croutons::FutureBase send(QString txt);
+	Q_INVOKABLE Croutons::FutureBase sendFiles(const QList<QUrl>& txt);
+	Q_INVOKABLE Croutons::FutureBase deleteMessage(const QString& id);
 
 	bool canFetchMore(const QModelIndex &parent) const override;
 	void fetchMore(const QModelIndex &parent) override;
