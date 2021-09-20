@@ -36,41 +36,53 @@ QQC2.ToolBar {
 		onAccepted: timelineView.model.sendFiles(this.fileUrls)
 	}
 
-	contentItem: ColumnLayout {
-		RowLayout {
-			QQC2.Button {
-				Accessible.name: qsTr("Upload files")
-				icon.name: "mail-attachment"
-				onClicked: fileDialog.open()
+	implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset, contentItem.implicitWidth + leftPadding + rightPadding)
+	implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset, contentItem.implicitHeight + topPadding + bottomPadding)
+
+	contentItem: RowLayout {
+		QQC2.Button {
+			Accessible.name: qsTr("Upload files")
+			icon.name: "mail-attachment"
+			onClicked: fileDialog.open()
+		}
+		TextEdit {
+			id: txtField
+
+			activeFocusOnTab: true
+			persistentSelection: true
+			enabled: canSendPermissions.data.has
+			selectByMouse: !Kirigami.Settings.isMobile
+			wrapMode: Text.Wrap
+
+			color: Kirigami.Theme.textColor
+			selectedTextColor: Kirigami.Theme.highlightedTextColor
+			selectionColor: Kirigami.Theme.highlightColor
+
+			QQC2.Label {
+				visible: !txtField.text
+
+				text: enabled ? qsTr("Write your message…") : qsTr("You cannot send messages.")
+
+				opacity: 0.5
 			}
-			QQC2.TextArea {
-				id: txtField
 
-				enabled: canSendPermissions.data.has
-
-				background: null
-				wrapMode: Text.Wrap
-
-				placeholderText: enabled ? qsTr("Write your message…") : qsTr("You cannot send messages.")
-
-				Keys.onReturnPressed: (event) => {
-					if (!(event.modifiers & Qt.ShiftModifier)) {
-						composeRow.send()
-						event.accepted = true
-					} else {
-						event.accepted = false
-					}
+			Keys.onReturnPressed: (event) => {
+				if (!(event.modifiers & Qt.ShiftModifier)) {
+					composeRow.send()
+					event.accepted = true
+				} else {
+					event.accepted = false
 				}
-				Keys.onTabPressed: nextItemInFocusChain().forceActiveFocus(Qt.TabFocusReason)
-				Layout.fillWidth: true
 			}
-			QQC2.Button {
-				Accessible.name: qsTr("Send message")
-				icon.name: "document-send"
-				onClicked: composeRow.send()
-			}
-
+			Keys.onTabPressed: nextItemInFocusChain().forceActiveFocus(Qt.TabFocusReason)
 			Layout.fillWidth: true
 		}
+		QQC2.Button {
+			Accessible.name: qsTr("Send message")
+			icon.name: "document-send"
+			onClicked: composeRow.send()
+		}
+
+		Layout.fillWidth: true
 	}
 }
