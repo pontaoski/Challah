@@ -95,13 +95,7 @@ void OwnPermissionsStore::fetchKey(const QVariant& key)
 
 	d->fetching << node;
 
-	state->api()->clientForHomeserver(node.homeserver).then([=](Result<SDK::Client*, Error> res) {
-		if (!res.ok()) {
-			return;
-		}
-
-		auto c = res.value();
-
+	state->api()->clientForHomeserver(node.homeserver).then([=](SDK::Client* c) {
 		d->fetching.removeAll(node);
 
 		auto req = QueryHasPermissionRequest{};

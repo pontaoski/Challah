@@ -94,11 +94,7 @@ Future<ChannelsModel*> State::channelsModelFor(QString host, QString guildID, QO
 {
 	auto eng = qmlEngine(it);
 
-	auto r = co_await d->sdk->clientForHomeserver(host);
-	if (!r.ok()) {
-		co_return nullptr;
-	}
-	auto c = r.value();
+	auto c = co_await d->sdk->clientForHomeserver(host);
 	auto id = guildID.toULongLong();
 	auto tup = qMakePair(c, id);
 
@@ -117,11 +113,7 @@ Future<InviteModel*> State::inviteModelFor(QString host, QString guildID, QObjec
 {
 	auto eng = qmlEngine(it);
 
-	auto r = co_await d->sdk->clientForHomeserver(host);
-	if (!r.ok()) {
-		co_return nullptr;
-	}
-	auto c = r.value();
+	auto c = co_await d->sdk->clientForHomeserver(host);
 	auto id = guildID.toULongLong();
 
 	auto mod = new InviteModel(c, id, this);
@@ -134,11 +126,7 @@ Future<RolesModel*> State::rolesModelFor(QString host, QString guildID, QObject*
 {
 	auto eng = qmlEngine(it);
 
-	auto r = co_await d->sdk->clientForHomeserver(host);
-	if (!r.ok()) {
-		co_return nullptr;
-	}
-	auto c = r.value();
+	auto c = co_await d->sdk->clientForHomeserver(host);
 	auto id = guildID.toULongLong();
 
 	auto mod = new RolesModel(c, id, this);
@@ -151,11 +139,7 @@ Future<MembersModel*> State::membersModelFor(QString host, QString guildID, QObj
 {
 	auto eng = qmlEngine(it);
 
-	auto r = co_await d->sdk->clientForHomeserver(host);
-	if (!r.ok()) {
-		co_return nullptr;
-	}
-	auto c = r.value();
+	auto c = co_await d->sdk->clientForHomeserver(host);
 	auto id = guildID.toULongLong();
 	auto tup = qMakePair(c, id);
 
@@ -174,11 +158,7 @@ Future<MessagesModel*> State::messagesModelFor(QString host, QString guildID, QS
 {
 	auto eng = qmlEngine(it);
 
-	auto r = co_await d->sdk->clientForHomeserver(host);
-	if (!r.ok()) {
-		co_return nullptr;
-	}
-	auto c = r.value();
+	auto c = co_await d->sdk->clientForHomeserver(host);
 	auto gid = guildID.toULongLong();
 	auto cid = channelID.toULongLong();
 	auto tup = qMakePair(c, qMakePair(gid, cid));

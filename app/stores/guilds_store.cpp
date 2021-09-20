@@ -59,12 +59,7 @@ void GuildsStore::fetchKey(const QVariant& key)
 {
 	const auto [hs, id] = fromVariant(key);
 
-	s->api()->clientForHomeserver(hs).then([key, this](auto r) {
-		if (!r.ok()) {
-			return;
-		}
-
-		auto c = r.value();
+	s->api()->clientForHomeserver(hs).then([key, this](auto c) {
 		const auto [hs, id] = fromVariant(key);
 
 		auto req = protocol::chat::v1::GetGuildRequest{};

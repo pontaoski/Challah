@@ -55,11 +55,7 @@ void MembersStore::fetchKey(const QVariant& key)
 	req.set_user_id(it.second);
 
 	s->api()->clientForHomeserver(it.first).then([req, it, this](auto r) {
-		if (!r.ok()) {
-			return;
-		}
-
-		auto c = r.value();
+		auto c = r;
 
 		c->profileKit()->GetProfile(req).then([this, it](Result<protocol::profile::v1::GetProfileResponse, QString> r) {
 			if (!resultOk(r)) {
@@ -88,7 +84,7 @@ QVariant MembersStore::data(const QVariant& key, int role)
 		if (hmc.isEmpty()) {
 			return QString();
 		}
-		return s->mediaURL(hmc, s->api()->clientForHomeserver("local").result().value()->homeserver());
+		return s->mediaURL(hmc, s->api()->clientForHomeserver("local").result()->homeserver());
 	}
 	}
 
