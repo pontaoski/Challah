@@ -58,7 +58,7 @@ ChannelsModel::ChannelsModel(SDK::Client* c, quint64 gid, State* state) : QAbstr
 
 			ref.set_channel_id(cc.channel_id());
 			ref.mutable_channel()->set_channel_name(cc.name());
-			ref.mutable_channel()->set_is_category(cc.is_category());
+			qWarning() << "TODO: kind";
 
 			d->id.insert(idx, cc.channel_id());
 			endInsertRows();

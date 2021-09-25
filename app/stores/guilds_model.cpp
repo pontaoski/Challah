@@ -15,7 +15,7 @@ GuildList::GuildList(State* parent) : QAbstractListModel(parent), d(new Private)
 		protocol::chat::v1::GetGuildListResponse it = resp.value();
 		beginResetModel();
 		for (const auto& g : it.guilds()) {
-			d->guilds << qMakePair(QString::fromStdString(g.host()), g.guild_id());
+			d->guilds << qMakePair(QString::fromStdString(g.server_id()), g.guild_id());
 		}
 		endResetModel();
 	});

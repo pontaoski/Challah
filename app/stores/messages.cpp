@@ -55,13 +55,13 @@ QVariant MessagesStore::data(const QVariant& key, int role)
 	case Roles::Overrides:
 		return conv(d->messages[idx].overrides());
 	case Roles::CreatedAt:
-		return QDateTime::fromTime_t(d->messages[idx].created_at().seconds());
+		return QDateTime::fromMSecsSinceEpoch(d->messages[idx].created_at());
 	case Roles::EditedAt:
-		return QDateTime::fromTime_t(d->messages[idx].created_at().seconds());
+		return QDateTime::fromMSecsSinceEpoch(d->messages[idx].created_at());
 	case Roles::InReplyTo:
 		return QString::number(d->messages[idx].in_reply_to());
 	case Roles::Timestamp:
-		return QDateTime::fromTime_t(d->messages[idx].created_at().seconds()).toString("hh:mm");
+		return QDateTime::fromMSecsSinceEpoch(d->messages[idx].created_at()).toString("hh:mm");
 
 	case Roles::OverrideAvatar: {
 		const auto& overrides = d->messages[idx].overrides();

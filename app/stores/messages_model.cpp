@@ -139,7 +139,7 @@ FutureBase MessagesModel::send(QString txt)
 	req.set_channel_id(d->channelID);
 	req.set_allocated_content(new protocol::chat::v1::Content);
 	req.mutable_content()->set_allocated_text_message(new protocol::chat::v1::Content::TextContent);
-	req.mutable_content()->mutable_text_message()->set_allocated_content(new protocol::harmonytypes::v1::FormattedText);
+	req.mutable_content()->mutable_text_message()->set_allocated_content(new protocol::chat::v1::FormattedText);
 	req.mutable_content()->mutable_text_message()->mutable_content()->set_text(txt.toStdString());
 	co_await c->chatKit()->SendMessage(req);
 	co_return QVariant();

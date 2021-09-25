@@ -53,10 +53,10 @@ FutureBase RolesModel::moveRoleFromTo(int from, int to)
 	auto pos = req.mutable_new_position();
 	if (to == 0) {
 		pos->set_allocated_top(new protocol::harmonytypes::v1::ItemPosition::Top);
-		pos->mutable_top()->set_next_id(d->roles[0].role_id());
+		pos->mutable_top();
 	} else if (to + 1 == d->roles.length()) {
 		pos->set_allocated_bottom(new protocol::harmonytypes::v1::ItemPosition::Bottom);
-		pos->mutable_bottom()->set_previous_id(d->roles[to].role_id());
+		pos->mutable_bottom();
 	} else {
 		pos->set_allocated_between(new protocol::harmonytypes::v1::ItemPosition::Between);
 		pos->mutable_between()->set_next_id(d->roles[to-1].role_id());
