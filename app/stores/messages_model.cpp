@@ -40,15 +40,23 @@ MessagesModel::MessagesModel(SDK::Client* client, quint64 guildID, quint64 chann
 			break;
 		}
 		case StreamEvent::kDeletedMessage: {
-			auto idx = d->messageIDs.indexOf(ev.deleted_message().message_id());
+			const auto& dm = ev.deleted_message();
+			if (dm.guild_id() != d->guildID || dm.channel_id() != d->channelID) {
+				return;
+			}
+			auto idx = d->messageIDs.indexOf(dm.message_id());
 			beginRemoveRows(QModelIndex(), idx, idx);
-			d->messageIDs.removeAll(ev.deleted_message().message_id());
-			d->store->deleteMessage(ev.deleted_message().message_id());
+			d->messageIDs.removeAll(dm.message_id());
+			d->store->deleteMessage(dm.message_id());
 			endRemoveRows();
 			break;
 		}
 		case StreamEvent::kEditedMessage: {
-			d->store->editMessage(ev.edited_message().channel_id(), ev.edited_message().new_content());
+			const auto& em = ev.edited_message();
+			if (em.guild_id() != d->guildID || em.channel_id() != d->channelID) {
+				return;
+			}
+			d->store->editMessage(em.channel_id(), em.new_content());
 			break;
 		}
 		}
