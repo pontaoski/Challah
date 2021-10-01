@@ -55,6 +55,7 @@ public:
 	Q_INVOKABLE QString mediaURL(const QString& id, const QString& homeserver);
 
 	Q_INVOKABLE Croutons::FutureBase createGuild(QString name);
+	Q_INVOKABLE Croutons::FutureBase joinGuild(QString name);
 
 	Q_SIGNAL void beginHomeserver();
 	Q_SIGNAL void beginLogin();
