@@ -122,6 +122,21 @@ void MessagesStore::newMessage(quint64 id, protocol::chat::v1::Message cont)
 	Q_EMIT keyAdded(QString::number(id));
 }
 
+void MessagesStore::deleteMessage(quint64 id)
+{
+	d->messages.remove(id);
+	Q_EMIT keyRemoved(QString::number(id));
+}
+
+void MessagesStore::editMessage(quint64 id, protocol::chat::v1::FormattedText content)
+{
+	if (d->messages[id].content().content_case() != protocol::chat::v1::Content::kTextMessage) {
+		return;
+	}
+	d->messages[id].mutable_content()->mutable_text_message()->mutable_content()->Swap(&content);
+	Q_EMIT keyDataChanged(QString::number(id), {ContentText});
+}
+
 QHash<int, QByteArray> MessagesStore::roleNames()
 {
 	return {

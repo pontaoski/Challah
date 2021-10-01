@@ -37,11 +37,20 @@ MessagesModel::MessagesModel(SDK::Client* client, quint64 guildID, quint64 chann
 			d->store->newMessage(sm.message_id(), it);
 			endInsertRows();
 			dataChanged(index(1), index(1));
+			break;
 		}
-		case StreamEvent::kDeletedMessage:
-			;
-		case StreamEvent::kEditedMessage:
-			;
+		case StreamEvent::kDeletedMessage: {
+			auto idx = d->messageIDs.indexOf(ev.deleted_message().message_id());
+			beginRemoveRows(QModelIndex(), idx, idx);
+			d->messageIDs.removeAll(ev.deleted_message().message_id());
+			d->store->deleteMessage(ev.deleted_message().message_id());
+			endRemoveRows();
+			break;
+		}
+		case StreamEvent::kEditedMessage: {
+			d->store->editMessage(ev.edited_message().channel_id(), ev.edited_message().new_content());
+			break;
+		}
 		}
 	});
 }
