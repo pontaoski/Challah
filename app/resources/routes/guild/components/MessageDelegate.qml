@@ -18,7 +18,7 @@ QQC2.Control {
 
 	readonly property int recommendedSize: Math.max(del.width / 3, Kirigami.Units.gridUnit * 15) // (rootRow.wideMode ? Math.max(del.width / 3, Kirigami.Units.gridUnit * 15) : (del.width * 0.8))
 
-	// readonly property bool isOwnMessage: messageData.data.authorID === tClient.ownID
+	readonly property bool isOwnMessage: messageData.data.author === CState.ownID
 	readonly property bool showAvatar: del.nextMessageID == "" || (nextData.data.author != messageData.data.author) || (nextData.data.overrideAvatar != messageData.data.overrideAvatar) || (nextData.data.overrideName != messageData.data.overrideName) // && (!(Kirigami.Settings.isMobile && isOwnMessage))
 	readonly property bool separateFromPrevious: del.previousMessageID == "" || (previousData.data.author != messageData.data.author) || (previousData.data.overrideAvatar != messageData.data.overrideAvatar) || (previousData.data.overrideName != messageData.data.overrideName)
 	// readonly property bool canDeleteMessage: isOwnMessage

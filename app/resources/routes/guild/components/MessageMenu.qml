@@ -16,7 +16,7 @@ QQC2.Menu {
 	// }
 	QQC2.MenuItem {
 		text: qsTr("Delete")
-		enabled: canDeletePermissions.data.has
+		enabled: canDeletePermissions.data.has || del.isOwnMessage
 		onTriggered: {
 			timelineView.model.deleteMessage(del.messageID)
 		}

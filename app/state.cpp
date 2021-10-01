@@ -14,6 +14,8 @@ State::State(QQmlEngine* object) : QObject(object), d(new Private)
 		QSettings settings;
 
 		d->homeserver = hs;
+		d->userID = QString::number(userID);
+		Q_EMIT ownIDChanged();
 
 		settings.setValue("state/homeserver", hs);
 		settings.setValue("state/userid", userID);
@@ -33,6 +35,8 @@ void State::doInitialLogin()
 	QVariant token = settings.value("state/token");
 	QVariant hs = settings.value("state/homeserver");
 	QVariant userID = settings.value("state/userid");
+	d->userID = QString::number(userID.toULongLong());
+	Q_EMIT ownIDChanged();
 
 	if (token.isValid() && hs.isValid() && userID.isValid()) {
 		d->sdk->checkLogin(token.toString(), hs.toString(), userID.toULongLong()).then([this](bool ok) {
@@ -73,6 +77,11 @@ MembersStore* State::membersStore()
 OwnPermissionsStore* State::ownPermissionsStore()
 {
 	return d->ownPermissionsStore;
+}
+
+QString State::ownID()
+{
+	return d->userID;
 }
 
 void State::createModels()

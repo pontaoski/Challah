@@ -30,6 +30,7 @@ class State : public QObject
 	Q_PROPERTY(GuildsStore* guildsStore READ guildsStore NOTIFY guildsStoreChanged)
 	Q_PROPERTY(MembersStore* membersStore READ membersStore NOTIFY membersStoreChanged)
 	Q_PROPERTY(OwnPermissionsStore* ownPermissionsStore READ ownPermissionsStore NOTIFY ownPermissionsStoreChanged)
+	Q_PROPERTY(QString ownID READ ownID NOTIFY ownIDChanged)
 
 	struct Private;
 	QSharedPointer<Private> d;
@@ -72,6 +73,9 @@ public:
 
 	MembersStore* membersStore();
 	Q_SIGNAL void membersStoreChanged();
+
+	QString ownID();
+	Q_SIGNAL void ownIDChanged();
 
 	OwnPermissionsStore* ownPermissionsStore();
 	Q_SIGNAL void ownPermissionsStoreChanged();

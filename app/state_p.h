@@ -24,6 +24,7 @@ struct State::Private
 	MembersStore* membersStore = nullptr;
 	OwnPermissionsStore* ownPermissionsStore = nullptr;
 	QString homeserver;
+	QString userID;
 
 	QQmlEngine* eng = nullptr;
 	QQmlComponent* kirigamiHeadingComponent = nullptr;
