@@ -31,6 +31,7 @@ QQC2.Control {
 
 			Layout.fillWidth: true
 		}
+		ReplyBlock {}
 		Repeater {
 			model: fileData.data.contentAttachments.attachments
 

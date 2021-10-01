@@ -26,13 +26,27 @@ Kirigami.ScrollablePage {
 	property string guildID
 	property string channelID
 
-	footer: ComposeBar { }
+	property string interactionID: ""
+	property string interactionKind: ""
+
+	footer: ComposeBar {
+		id: composeRow
+	}
 
 	RelationalListener {
 		id: canDeletePermissions
 
 		model: CState.ownPermissionsStore
 		key: [routerInstance.params.homeserver, routerInstance.params.guildID, routerInstance.params.channelID, "messages.manage.delete"]
+		shape: QtObject {
+			required property bool has
+		}
+	}
+	RelationalListener {
+		id: canSendPermissions
+
+		model: CState.ownPermissionsStore
+		key: [routerInstance.params.homeserver, routerInstance.params.guildID, routerInstance.params.channelID, "messages.send"]
 		shape: QtObject {
 			required property bool has
 		}

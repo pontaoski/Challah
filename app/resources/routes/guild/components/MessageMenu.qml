@@ -21,15 +21,14 @@ QQC2.Menu {
 			timelineView.model.deleteMessage(del.messageID)
 		}
 	}
-	// QQC2.MenuItem {
-	// 	text: qsTr("Reply")
-	// 	enabled: messagesRoute.model.permissions.canSendAndEdit
-	// 	onTriggered: {
-	// 		composeBar.replies.replyingToID = messageID
-	// 		composeBar.replies.replyingToAuthor = authorName
-	// 		composeBar.replies.replyingToContent = content
-	// 	}
-	// }
+	QQC2.MenuItem {
+		text: qsTr("Reply")
+		enabled: canSendPermissions.data.has
+		onTriggered: {
+			page.interactionID = del.messageID
+			page.interactionKind = "reply"
+		}
+	}
 	// QQC2.MenuItem {
 	// 	text: qsTr("Select")
 	// 	onTriggered: {

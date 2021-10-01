@@ -149,9 +149,10 @@ MessagesStore* MessagesModel::store()
 	return d->store.get();
 }
 
-FutureBase MessagesModel::send(QString txt)
+FutureBase MessagesModel::send(QString txt, QString inReplyTo)
 {
 	protocol::chat::v1::SendMessageRequest req;
+	req.set_in_reply_to(inReplyTo.toULongLong());
 	req.set_guild_id(d->guildID);
 	req.set_channel_id(d->channelID);
 	req.set_allocated_content(new protocol::chat::v1::Content);
