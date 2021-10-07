@@ -15,53 +15,19 @@ Kirigami.PageRoute {
 name: "Guild/Timeline"
 cache: true
 
-Kirigami.ScrollablePage {
+Kirigami.Page {
 	id: page
 
+	padding: 0
 	globalToolBarStyle: Kirigami.ApplicationHeaderStyle.None
-
 	Kirigami.Theme.colorSet: Kirigami.Theme.View
 
-	property string homeserver
-	property string guildID
-	property string channelID
+	OverlappingPanels {
+		anchors.fill: parent
 
-	property string interactionID: ""
-	property string interactionKind: ""
-
-	footer: ComposeBar {
-		id: composeRow
-	}
-
-	RelationalListener {
-		id: canDeletePermissions
-
-		model: CState.ownPermissionsStore
-		key: [routerInstance.params.homeserver, routerInstance.params.guildID, routerInstance.params.channelID, "messages.manage.delete"]
-		shape: QtObject {
-			required property bool has
-		}
-	}
-	RelationalListener {
-		id: canSendPermissions
-
-		model: CState.ownPermissionsStore
-		key: [routerInstance.params.homeserver, routerInstance.params.guildID, routerInstance.params.channelID, "messages.send"]
-		shape: QtObject {
-			required property bool has
-		}
-	}
-
-	ListView {
-		id: timelineView
-
-		Component.onCompleted: model = CState.messagesModelFor(page.homeserver, page.guildID, page.channelID, this).valueOr(null)
-
-		reuseItems: true
-		verticalLayoutDirection: ListView.BottomToTop
-		activeFocusOnTab: true
-
-		delegate: Components.MessageDelegate {}
+		leftPanel: LeftHandDrawer { }
+		centerPanel: CenterHandDrawer { }
+		rightPanel: RightHandDrawer { }
 	}
 }
 

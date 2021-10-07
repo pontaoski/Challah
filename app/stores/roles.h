@@ -13,10 +13,10 @@ class RolesModel : public QAbstractListModel
 	QScopedPointer<Private> d;
 
 	State* s;
-	SDK::Client* c;
+	QString host;
 
 public:
-	RolesModel(SDK::Client* client, quint64 guildID, State* state);
+	RolesModel(QString host, quint64 guildID, State* state);
 	~RolesModel();
 
 	Q_INVOKABLE Croutons::FutureBase moveRoleFromTo(int from, int to);

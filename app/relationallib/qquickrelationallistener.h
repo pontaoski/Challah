@@ -54,5 +54,6 @@ private:
 
     void applyChanged(const QVector<int>& roles);
     void checkKey();
+    void newRelationalModel(ChallahAbstractRelationalModel* model);
 
 };

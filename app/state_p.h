@@ -16,9 +16,9 @@
 struct State::Private
 {
 	QSharedPointer<SDK::ClientManager> sdk;
-	QMap<QPair<SDK::Client*,quint64>,QPointer<ChannelsModel>> channelsModels;
-	QMap<QPair<SDK::Client*,quint64>,QPointer<MembersModel>> membersModels;
-	QMap<QPair<SDK::Client*,QPair<quint64,quint64>>,QPointer<MessagesModel>> messagesModels;
+	QMap<QPair<QString,quint64>,QPointer<ChannelsModel>> channelsModels;
+	QMap<QPair<QString,quint64>,QPointer<MembersModel>> membersModels;
+	QMap<QPair<QString,QPair<quint64,quint64>>,QPointer<MessagesModel>> messagesModels;
 	GuildList* list = nullptr;
 	GuildsStore* store = nullptr;
 	MembersStore* membersStore = nullptr;

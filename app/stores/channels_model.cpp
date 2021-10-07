@@ -6,7 +6,7 @@ enum Roles {
 	ID,
 };
 
-ChannelsModel::ChannelsModel(SDK::Client* c, quint64 gid, State* state) : QAbstractListModel(state), d(new Private), s(state), c(c)
+ChannelsModel::ChannelsModel(QString host, quint64 gid, State* state) : QAbstractListModel(state), d(new Private), s(state), host(host)
 {
 	d->store.reset(new ChannelsStore(state, this));
 	d->gid = gid;
@@ -14,7 +14,7 @@ ChannelsModel::ChannelsModel(SDK::Client* c, quint64 gid, State* state) : QAbstr
 	auto req = protocol::chat::v1::GetGuildChannelsRequest{};
 	req.set_guild_id(gid);
 
-	c->chatKit()->GetGuildChannels(req).then([this](auto r) {
+	s->api()->dispatch(host, &SDK::R::GetGuildChannels, req).then([this](auto r) {
 		if (!r.ok()) {
 			return;
 		}
@@ -29,7 +29,7 @@ ChannelsModel::ChannelsModel(SDK::Client* c, quint64 gid, State* state) : QAbstr
 	});
 
 	connect(s->api(), &SDK::ClientManager::chatEvent, this, [=](QString it, protocol::chat::v1::StreamEvent ev) {
-		if (it != c->homeserver()) {
+		if (it != host) {
 			return;
 		}
 
@@ -37,18 +37,25 @@ ChannelsModel::ChannelsModel(SDK::Client* c, quint64 gid, State* state) : QAbstr
 			auto cc = ev.created_channel();
 			if (cc.guild_id() != d->gid) return;
 
-			int idx = -1;
+			int idx = d->id.indexOf(cc.position().item_id());
+			if (idx == -1) {
+				goto mald;
+			}
 
-			switch (cc.position().position_case()) {
-			case protocol::harmonytypes::v1::ItemPosition::PositionCase::kTop:
-				idx = 0; break;
-			case protocol::harmonytypes::v1::ItemPosition::PositionCase::kBottom:
-				idx = d->id.length() - 1; break;
-			case protocol::harmonytypes::v1::ItemPosition::PositionCase::kBetween:
-				idx = std::find(d->id.begin(), d->id.end(), cc.position().between().previous_id()) - d->id.begin();
+			switch (cc.position().position()) {
+			case protocol::harmonytypes::v1::ItemPosition::POSITION_BEFORE_UNSPECIFIED:
+				idx--;
+				break;
+			case protocol::harmonytypes::v1::ItemPosition::POSITION_AFTER:
+				idx++;
 				break;
 			default:
 				;
+			}
+
+			if (idx == -1) {
+		mald:
+				idx = 0;
 			}
 
 			beginInsertRows(QModelIndex(), idx, idx);
@@ -112,7 +119,7 @@ void ChannelsModel::newChannel(const QString &name)
 	auto it = protocol::chat::v1::CreateChannelRequest();
 	it.set_guild_id(d->gid);
 	it.set_channel_name(name.toStdString());
-	Q_UNUSED(c->chatKit()->CreateChannel(it));
+	s->api()->dispatch(host, &SDK::R::CreateChannel, it);
 }
 
 QVariant ChannelsModel::data(const QModelIndex& index, int role) const

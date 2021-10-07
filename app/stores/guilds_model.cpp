@@ -7,20 +7,26 @@ enum Roles {
 
 GuildList::GuildList(State* parent) : QAbstractListModel(parent), d(new Private), s(parent)
 {
+	auto toHost = [this](const std::string& it) {
+		if (it == "") {
+			return s->api()->mainClient()->homeserver();
+		}
+
+		return QString::fromStdString(it);
+	};
 	s->api()->subscribeToHomeserver();
-	s->api()->chatKit()->GetGuildList(protocol::chat::v1::GetGuildListRequest{}).then([this](auto resp) {
+	s->api()->mainClient()->GetGuildList(protocol::chat::v1::GetGuildListRequest{}).then([this, toHost](auto resp) {
 		if (!resp.ok()) {
 			return;
 		}
 		protocol::chat::v1::GetGuildListResponse it = resp.value();
 		beginResetModel();
 		for (const auto& g : it.guilds()) {
-			d->guilds << qMakePair(QString::fromStdString(g.server_id()), g.guild_id());
+			d->guilds << qMakePair(toHost(g.server_id()), g.guild_id());
 		}
 		endResetModel();
 	});
-	connect(s->api(), &SDK::ClientManager::hsEvent, this, [this](protocol::chat::v1::StreamEvent ev) {
-		qWarning() << "homeserver event!";
+	connect(s->api(), &SDK::ClientManager::hsEvent, this, [this, toHost](protocol::chat::v1::StreamEvent ev) {
 		if (ev.has_guild_added_to_list()) {
 			auto it = ev.guild_added_to_list();
 
@@ -29,13 +35,13 @@ GuildList::GuildList(State* parent) : QAbstractListModel(parent), d(new Private)
 				d->guilds.count(),
 				d->guilds.count()
 			);
-			d->guilds << qMakePair(QString::fromStdString(it.homeserver()), it.guild_id());
+			d->guilds << qMakePair(toHost(it.homeserver()), it.guild_id());
 			endInsertRows();
 
 		} else if (ev.has_guild_removed_from_list()) {
 			auto it = ev.guild_removed_from_list();
 			auto id = it.guild_id();
-			auto homeserver = QString::fromStdString(it.homeserver());
+			auto homeserver = toHost(it.homeserver());
 
 			auto idx = -1;
 			for (const auto& guild : d->guilds) {

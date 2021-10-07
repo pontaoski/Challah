@@ -12,10 +12,10 @@ QtObject {
 	required property string messageID
 	required property string homeserver
 
-	readonly property string authorName: universalData.data.overrideName || authorData.data.name
-	readonly property string onelinePlaintext: this.plaintext.split("\n")[0]
+	readonly property string authorName: tryit(() => universalData.data.overrideName || authorData.data.name, "")
+	readonly property string onelinePlaintext: tryit(() => this.plaintext.split("\n")[0], "")
 	readonly property string plaintext: {
-		switch ([universalData.data.contentType, universalData.dummy][0]) {
+		switch (tryit(() => [universalData.data.contentType, universalData.dummy][0], "")) {
 		case "textMessage":
 			return textData.data.contentText
 		case "embedMessage":
@@ -46,7 +46,7 @@ QtObject {
 		id: authorData
 
 		model: CState.membersStore
-		key: [plaintext.homeserver, universalData.data.author]
+		key: tryit(() => [plaintext.homeserver, universalData.data.author], ["", ""])
 
 		shape: QtObject {
 			required property string name

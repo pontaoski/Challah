@@ -54,17 +54,13 @@ void MembersStore::fetchKey(const QVariant& key)
 	protocol::profile::v1::GetProfileRequest req;
 	req.set_user_id(it.second);
 
-	s->api()->clientForHomeserver(it.first).then([req, it, this](auto r) {
-		auto c = r;
-
-		c->profileKit()->GetProfile(req).then([this, it](Result<protocol::profile::v1::GetProfileResponse, QString> r) {
-			if (!resultOk(r)) {
-				return;
-			}
-			auto res = r.value();
-			d->data[it.first][it.second] = res.profile();;
-			Q_EMIT keyAdded(to(it));
-		});
+	s->api()->dispatch(it.first, &SDK::R::GetProfile, req).then([this, it](Result<protocol::profile::v1::GetProfileResponse, QString> r) {
+		if (!resultOk(r)) {
+			return;
+		}
+		auto res = r.value();
+		d->data[it.first][it.second] = res.profile();;
+		Q_EMIT keyAdded(to(it));
 	});
 }
 

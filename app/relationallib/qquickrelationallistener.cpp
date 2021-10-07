@@ -32,10 +32,17 @@ auto normaliseVariant(const QVariant& variant) -> QVariant
     }
 }
 
-void ChallahQmlRelationalListener::componentComplete()
+void ChallahQmlRelationalListener::newRelationalModel(ChallahAbstractRelationalModel* model)
 {
-    Q_ASSERT(!d_ptr->shape.isNull());
-    Q_ASSERT(d_ptr->shape->isReady());
+    if (d_ptr->relationalModel) {
+        disconnect(d_ptr->relationalModel, &ChallahAbstractRelationalModel::keyDataChanged, this, nullptr);
+    }
+
+    d_ptr->relationalModel = model;
+
+    if (!d_ptr->relationalModel) {
+        return;
+    }
 
     connect(d_ptr->relationalModel, &ChallahAbstractRelationalModel::keyDataChanged, this, [this](const QVariant& key, const QVector<int>& roles) {
         if (d_ptr->key != normaliseVariant(key)) {
@@ -44,6 +51,12 @@ void ChallahQmlRelationalListener::componentComplete()
 
         applyChanged(roles);
     });
+}
+
+void ChallahQmlRelationalListener::componentComplete()
+{
+    Q_ASSERT(!d_ptr->shape.isNull());
+    Q_ASSERT(d_ptr->shape->isReady());
 
     checkKey();
     applyChanged({});
@@ -123,6 +136,8 @@ void ChallahQmlRelationalListener::applyChanged(const QVector<int>& roles)
 
         if (!fromScratch) {
             mo->property(i).write(d_ptr->dataObject, d_ptr->relationalModel->data(d_ptr->key, role));
+        } else {
+            props[propName] = d_ptr->relationalModel->data(d_ptr->key, role);
         }
     }
 
@@ -145,7 +160,7 @@ void ChallahQmlRelationalListener::setModel(ChallahAbstractRelationalModel* setM
         return;
     }
 
-    d_ptr->relationalModel = setModel;
+    newRelationalModel(setModel);
     Q_EMIT modelChanged();
     checkKey();
 }

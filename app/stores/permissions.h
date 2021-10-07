@@ -12,7 +12,7 @@ class PermissionsModel : public QAbstractListModel
 	QScopedPointer<Private> d;
 
 	State* s;
-	SDK::Client* c;
+	QString host;
 
 	Q_PROPERTY(bool isDirty MEMBER isDirty NOTIFY isDirtyChanged)
 
@@ -20,7 +20,7 @@ class PermissionsModel : public QAbstractListModel
 	bool isDirty = false;
 
 public:
-	PermissionsModel(SDK::Client* client, quint64 guildID, quint64 roleID, State* state);
+	PermissionsModel(QString host, quint64 guildID, quint64 roleID, State* state);
 	~PermissionsModel();
 
 	int rowCount(const QModelIndex& parent = QModelIndex()) const override;

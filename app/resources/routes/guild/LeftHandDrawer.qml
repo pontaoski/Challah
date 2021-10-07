@@ -38,11 +38,6 @@ Control {
 	contentItem: RowLayout {
 		spacing: 0
 
-		Kirigami.SizeGroup {
-			mode: Kirigami.SizeGroup.Height
-			items: [lhToolbar, rhToolbar]
-		}
-
 		ColumnLayout {
 			spacing: 0
 
@@ -103,7 +98,7 @@ Control {
 							routerInstance.guildHomeserver = del.guildHost
 							routerInstance.guildID = del.guildID
 							routerInstance.guildIDChanged()
-							otherListView.model = CState.channelsModelFor(del.guildHost, del.guildID, this).valueOr(null)
+							otherListView.model = CState.channelsModelFor(del.guildHost, del.guildID, this)
 						}
 					}
 
@@ -144,15 +139,7 @@ Control {
 					text: channelData.data.name
 					reserveSpaceForSubtitle: true
 
-					onClicked: {
-						routerInstance.channelID = del.channelID
-						routerInstance.navigateToRoute(["Guild/Blank", {
-							"route": "Guild/Timeline",
-							"homeserver": routerInstance.guildHomeserver,
-							"guildID": routerInstance.guildID,
-							"channelID": del.channelID,
-						}])
-					}
+					onClicked: routerInstance.channelID = del.channelID
 
 					RelationalListener {
 						id: channelData

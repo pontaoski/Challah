@@ -18,12 +18,12 @@ class ChannelsModel : public QAbstractListModel
 	QScopedPointer<Private> d;
 
 	State* s;
-	SDK::Client* c;
+	QString host;
 
 	friend class ChannelsStore;
 
 public:
-	ChannelsModel(SDK::Client* client, quint64 guildID, State* state);
+	ChannelsModel(QString host, quint64 guildID, State* state);
 	~ChannelsModel();
 
 	ChannelsStore* store();

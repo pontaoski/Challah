@@ -103,9 +103,7 @@ void OwnPermissionsStore::fetchKey(const QVariant& key)
 		req.set_channel_id(node.channel);
 		req.set_check_for(node.node.toStdString());
 
-		c->chatKit();
-
-		c->chatKit()->QueryHasPermission(req).then([=](Result<QueryHasPermissionResponse, QString> r) {
+		state->api()->dispatch(node.homeserver, &SDK::R::QueryHasPermission, req).then([=](Result<QueryHasPermissionResponse, QString> r) {
 			if (!r.ok()) {
 				return;
 			}

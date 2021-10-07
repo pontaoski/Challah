@@ -19,7 +19,7 @@ struct PermissionsModel::Private
 	QList<protocol::chat::v1::Permission> perms;
 };
 
-PermissionsModel::PermissionsModel(SDK::Client* client, quint64 guildID, quint64 roleID, State* state) : QAbstractListModel(client), d(new Private), s(state), c(client)
+PermissionsModel::PermissionsModel(QString host, quint64 guildID, quint64 roleID, State* state) : QAbstractListModel(state), d(new Private), s(state), host(host)
 {
 	d->guildID = guildID;
 	d->roleID = roleID;
@@ -28,7 +28,7 @@ PermissionsModel::PermissionsModel(SDK::Client* client, quint64 guildID, quint64
 	req.set_guild_id(guildID);
 	req.set_role_id(roleID);
 
-	c->chatKit()->GetPermissions(req).then([this](Result<protocol::chat::v1::GetPermissionsResponse, QString> result) {
+	s->api()->dispatch(host, &SDK::R::GetPermissions, req).then([this](Result<protocol::chat::v1::GetPermissionsResponse, QString> result) {
 		if (!result.ok()) {
 			qWarning("TODO: implement error handling");
 			isDirty = false;
@@ -132,7 +132,7 @@ FutureBase PermissionsModel::save()
 		*(req.mutable_perms_to_give()->Add()) = perm;
 	}
 
-	auto res = co_await c->chatKit()->SetPermissions(req);
+	auto res = co_await s->api()->dispatch(host, &SDK::R::SetPermissions, req);
 	if (res.ok()) {
 		isDirty = false;
 		Q_EMIT isDirtyChanged();

@@ -88,7 +88,7 @@ QQC2.ToolBar {
 
 				activeFocusOnTab: true
 				persistentSelection: true
-				enabled: canSendPermissions.data.has
+				enabled: tryit(() => canSendPermissions.data.has, false)
 				selectByMouse: !Kirigami.Settings.isMobile
 				wrapMode: Text.Wrap
 

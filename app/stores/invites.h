@@ -14,10 +14,10 @@ class InviteModel : public QAbstractListModel
 	QScopedPointer<Private> d;
 
 	State* s;
-	SDK::Client* c;
+	QString host;
 
 public:
-	InviteModel(SDK::Client* client, quint64 guildID, State* state);
+	InviteModel(QString host, quint64 guildID, State* state);
 	~InviteModel();
 
 	int rowCount(const QModelIndex& parent = QModelIndex()) const override;

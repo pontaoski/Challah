@@ -1,6 +1,7 @@
 #include "chat/v1/guilds.pb.h"
 #include "invites_p.h"
 #include "coroutine_integration.h"
+#include "state.h"
 
 enum Roles
 {
@@ -9,14 +10,14 @@ enum Roles
 	Uses,
 };
 
-InviteModel::InviteModel(SDK::Client* client, quint64 guildID, State* state) : QAbstractListModel(client), d(new Private), s(state), c(client)
+InviteModel::InviteModel(QString host, quint64 guildID, State* state) : QAbstractListModel(state), d(new Private), s(state), host(host)
 {
 	d->guildID = guildID;
 
 	protocol::chat::v1::GetGuildInvitesRequest req;
 	req.set_guild_id(guildID);
 
-	c->chatKit()->GetGuildInvites(req).then([this](Result<protocol::chat::v1::GetGuildInvitesResponse, QString> r) {
+	s->api()->dispatch(host, &SDK::R::GetGuildInvites, req).then([this](Result<protocol::chat::v1::GetGuildInvitesResponse, QString> r) {
 		if (!r.ok()) {
 			return;
 		}
@@ -83,7 +84,7 @@ FutureBase InviteModel::createInvite(QString id, qint32 possibleUses)
 	req.set_name(id.toStdString());
 	req.set_possible_uses(possibleUses);
 
-	auto reply = co_await c->chatKit()->CreateInvite(req);
+	auto reply = co_await s->api()->dispatch(host, &SDK::R::CreateInvite, req);
 
 	if (!reply.ok()) {
 		co_return false;
@@ -108,7 +109,7 @@ FutureBase InviteModel::deleteInvite(QString id)
 	req.set_guild_id(d->guildID);
 	req.set_invite_id(id.toStdString());
 
-	auto reply = co_await c->chatKit()->DeleteInvite(req);
+	auto reply = co_await s->api()->dispatch(host, &SDK::R::DeleteInvite, req);
 
 	if (!reply.ok()) {
 		co_return false;

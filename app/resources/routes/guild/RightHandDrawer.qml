@@ -45,7 +45,7 @@ Control {
 				target: routerInstance
 
 				function update() {
-					listView.model = CState.membersModelFor(routerInstance.guildHomeserver, routerInstance.guildID, this).valueOr(null)
+					listView.model = CState.membersModelFor(routerInstance.guildHomeserver, routerInstance.guildID, this)
 				}
 				function onGuildHomeserverChanged() {
 					update()

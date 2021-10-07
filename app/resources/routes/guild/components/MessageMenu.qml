@@ -16,14 +16,14 @@ QQC2.Menu {
 	// }
 	QQC2.MenuItem {
 		text: qsTr("Delete")
-		enabled: canDeletePermissions.data.has || del.isOwnMessage
+		enabled: tryit(() => canDeletePermissions.data.has || del.isOwnMessage, false)
 		onTriggered: {
 			timelineView.model.deleteMessage(del.messageID)
 		}
 	}
 	QQC2.MenuItem {
 		text: qsTr("Reply")
-		enabled: canSendPermissions.data.has
+		enabled: tryit(() => canSendPermissions.data.has, false)
 		onTriggered: {
 			page.interactionID = del.messageID
 			page.interactionKind = "reply"

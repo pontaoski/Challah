@@ -16,14 +16,14 @@ struct RolesModel::Private
 	QList<protocol::chat::v1::RoleWithId> roles;
 };
 
-RolesModel::RolesModel(SDK::Client* client, quint64 guildID, State* state) : QAbstractListModel(client), d(new Private), s(state), c(client)
+RolesModel::RolesModel(QString host, quint64 guildID, State* state) : QAbstractListModel(state), d(new Private), s(state), host(host)
 {
 	d->guildID = guildID;
 
 	protocol::chat::v1::GetGuildRolesRequest req;
 	req.set_guild_id(guildID);
 
-	c->chatKit()->GetGuildRoles(req).then([this](auto r) {
+	s->api()->dispatch(host, &SDK::R::GetGuildRoles, req).then([this](auto r) {
 		if (!r.ok()) {
 			return;
 		}
@@ -52,18 +52,17 @@ FutureBase RolesModel::moveRoleFromTo(int from, int to)
 	req.set_allocated_new_position(new protocol::harmonytypes::v1::ItemPosition);
 	auto pos = req.mutable_new_position();
 	if (to == 0) {
-		pos->set_allocated_top(new protocol::harmonytypes::v1::ItemPosition::Top);
-		pos->mutable_top();
+		pos->set_position(protocol::harmonytypes::v1::ItemPosition::POSITION_BEFORE_UNSPECIFIED);
+		pos->set_item_id(d->roles.first().role_id());
 	} else if (to + 1 == d->roles.length()) {
-		pos->set_allocated_bottom(new protocol::harmonytypes::v1::ItemPosition::Bottom);
-		pos->mutable_bottom();
+		pos->set_position(protocol::harmonytypes::v1::ItemPosition::POSITION_AFTER);
+		pos->set_item_id(d->roles.last().role_id());
 	} else {
-		pos->set_allocated_between(new protocol::harmonytypes::v1::ItemPosition::Between);
-		pos->mutable_between()->set_next_id(d->roles[to-1].role_id());
-		pos->mutable_between()->set_previous_id(d->roles[to+1].role_id());
+		pos->set_position(protocol::harmonytypes::v1::ItemPosition::POSITION_BEFORE_UNSPECIFIED);
+		pos->set_item_id(d->roles[to].role_id());
 	}
 
-	auto r = co_await c->chatKit()->MoveRole(req);
+	auto r = co_await s->api()->dispatch(host, &SDK::R::MoveRole, req);
 	co_return r.ok();
 }
 
@@ -86,7 +85,7 @@ QVariant RolesModel::data(const QModelIndex& index, int role) const
 	case ColorRole:
 		return QColor::fromRgba(d->roles[index.row()].role().color());
 	case Permissions:
-		return QVariant::fromValue(new PermissionsModel(c, d->guildID, d->roles[index.row()].role_id(), s));
+		return QVariant::fromValue(new PermissionsModel(host, d->guildID, d->roles[index.row()].role_id(), s));
 	}
 
 	return QVariant();
@@ -94,7 +93,7 @@ QVariant RolesModel::data(const QModelIndex& index, int role) const
 
 QVariant RolesModel::everyonePermissions() const
 {
-	return QVariant::fromValue(new PermissionsModel(c, d->guildID, 0, s));
+	return QVariant::fromValue(new PermissionsModel(host, d->guildID, 0, s));
 }
 
 bool RolesModel::setData(const QModelIndex& index, const QVariant& value, int role)
@@ -111,7 +110,7 @@ bool RolesModel::setData(const QModelIndex& index, const QVariant& value, int ro
 			req.set_role_id(d->roles[index.row()].role_id());
 			req.set_new_name(value.toString().toStdString());
 
-			(void) c->chatKit()->ModifyGuildRole(req);
+			(void) s->api()->dispatch("", &SDK::R::ModifyGuildRole, req);
 
 			return true;
 		}
@@ -127,7 +126,7 @@ FutureBase RolesModel::createRole(QString name, QColor colour)
 	req.set_name(name.toStdString());
 	req.set_color(colour.rgba());
 
-	auto response = co_await c->chatKit()->AddGuildRole(req);
+	auto response = co_await s->api()->dispatch(host, &SDK::R::AddGuildRole, req);
 	if (!response.ok()) {
 		co_return false;
 	}

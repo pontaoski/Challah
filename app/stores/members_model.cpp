@@ -5,14 +5,14 @@ enum Roles {
 	ID,
 };
 
-MembersModel::MembersModel(SDK::Client* client, quint64 guildID, State* state) : QAbstractListModel(state), d(new Private), s(state), c(client)
+MembersModel::MembersModel(QString host, quint64 guildID, State* state) : QAbstractListModel(state), d(new Private), s(state), host(host)
 {
 	d->gid = guildID;
 
 	auto req = protocol::chat::v1::GetGuildMembersRequest{};
 	req.set_guild_id(guildID);
 
-	c->chatKit()->GetGuildMembers(req).then([this](auto r) {
+	s->api()->dispatch(host, &SDK::R::GetGuildMembers, req).then([this](auto r) {
 		if (!resultOk(r)) {
 			return;
 		}

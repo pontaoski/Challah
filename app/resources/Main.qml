@@ -24,6 +24,14 @@ Kirigami.ApplicationWindow {
 
 	wideScreen: width > 500
 
+	function tryit(fn, def) {
+		try {
+			return fn() ?? def
+		} catch (error) {
+			return def
+		}
+	}
+
 	UISettings { id: uiSettings }
 
 	Window {
@@ -98,93 +106,90 @@ Kirigami.ApplicationWindow {
 	}
 
 	pageStack.globalToolBar.showNavigationButtons: 0
-	component PG : Kirigami.Page {}
-	pageStack.initialPage: PG {
-		padding: 0
-		globalToolBarStyle: Kirigami.ApplicationHeaderStyle.None
-		Kirigami.Theme.colorSet: Kirigami.Theme.View
 
-		OverlappingPanels {
-			anchors.fill: parent
+	Kirigami.PageRow {
+		id: colView
+		anchors.fill: parent
+		columnView {
+			columnResizeMode: Kirigami.ColumnView.SingleColumn
+			interactive: false
+		}
+		globalToolBar {
+			style: Kirigami.ApplicationHeaderStyle.ToolBar
+		}
 
-			leftPanel: Loader {
-				id: leftLoader
+		Connections {
+			target: CState
 
-				Kirigami.PageRouter.router: routerInstance
-				Kirigami.PageRouter.watchedRoute: ["Guild/Blank"]
-				active: Kirigami.PageRouter.watchedRouteActive
 
-				sourceComponent: Components.LeftHandDrawer {
-				}
+			function onBeginHomeserver() {
+				routerInstance.navigateToRoute("Login/HomeserverPrompt")
 			}
-			rightPanel: Loader {
-				id: rightLoader
-
-				active: routerInstance.guildID != ""
-
-				sourceComponent: Components.RightHandDrawer {
-				}
+			function onBeginLogin() {
+				routerInstance.navigateToRoute("Login/Stepper")
 			}
-			centerPanel: Kirigami.PageRow {
-				id: colView
-				implicitWidth: 400
-				onImplicitWidthChanged: implicitWidth = 400
-				clip: true
-				columnView {
-					columnResizeMode: Kirigami.ColumnView.SingleColumn
-					interactive: false
-				}
-				globalToolBar {
-					style: Kirigami.ApplicationHeaderStyle.ToolBar
-				}
-
-				Connections {
-					target: CState
-
-
-					function onBeginHomeserver() {
-						routerInstance.navigateToRoute("Login/HomeserverPrompt")
-					}
-					function onBeginLogin() {
-						routerInstance.navigateToRoute("Login/Stepper")
-					}
-					function onEndLogin() {
-						routerInstance.navigateToRoute("Guild/Blank")
-					}
-				}
-
-				Kirigami.PageRouter {
-					id: routerInstance
-
-					initialRoute: "loading"
-					pageStack: colView.columnView
-
-					Component.onCompleted: CState.doInitialLogin()
-					onNavigationChanged: {
-						leftLoader.active = leftLoader.Kirigami.PageRouter.watchedRouteActive
-					}
-
-					property var guildSheet: GuildSheet {
-						id: guildSheet
-					}
-					property string guildHomeserver
-					property string guildID
-					property string channelID
-
-					LoadingRoute {}
-					LoginRoutes.Homeserver {}
-					LoginRoutes.Stepper {}
-
-					GuildRoutes.Blank {}
-					GuildRoutes.Timeline {}
-
-					// LoginRoute {}
-					// GuildRoute {}
-					// NoGuildRoute {}
-					// MessagesRoute {}
-				}
+			function onEndLogin() {
+				routerInstance.navigateToRoute("Guild/Timeline")
 			}
 		}
+
+		Kirigami.PageRouter {
+			id: routerInstance
+
+			initialRoute: "loading"
+			pageStack: colView.columnView
+
+			Component.onCompleted: CState.doInitialLogin()
+
+			property var guildSheet: GuildSheet {
+				id: guildSheet
+			}
+			property string guildHomeserver
+			property string guildID
+			property string channelID
+
+			LoadingRoute {}
+			LoginRoutes.Homeserver {}
+			LoginRoutes.Stepper {}
+
+			GuildRoutes.Blank {}
+			GuildRoutes.Timeline {}
+
+			// LoginRoute {}
+			// GuildRoute {}
+			// NoGuildRoute {}
+			// MessagesRoute {}
+		}
 	}
+
+	// component PG : Kirigami.Page {}
+	// pageStack.initialPage: PG {
+	// 	padding: 0
+	// 	globalToolBarStyle: Kirigami.ApplicationHeaderStyle.None
+	// 	Kirigami.Theme.colorSet: Kirigami.Theme.View
+
+	// 	OverlappingPanels {
+	// 		anchors.fill: parent
+
+	// 		leftPanel: Loader {
+	// 			id: leftLoader
+
+	// 			Kirigami.PageRouter.router: routerInstance
+	// 			Kirigami.PageRouter.watchedRoute: ["Guild/Blank"]
+	// 			active: Kirigami.PageRouter.watchedRouteActive
+
+	// 			sourceComponent: Components.LeftHandDrawer {
+	// 			}
+	// 		}
+	// 		rightPanel: Loader {
+	// 			id: rightLoader
+
+	// 			active: routerInstance.guildID != ""
+
+	// 			sourceComponent: Components.RightHandDrawer {
+	// 			}
+	// 		}
+	// 	}
+	// }
 
 }

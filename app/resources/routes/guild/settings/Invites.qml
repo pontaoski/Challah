@@ -27,8 +27,7 @@ Kirigami.ScrollablePage {
 		}
 	}
 
-	property var invitesModel: null
-	Component.onCompleted: invitesModel = CState.inviteModelFor(routerInstance.guildHomeserver, routerInstance.guildID, this).valueOr(null)
+	property var invitesModel: CState.inviteModelFor(routerInstance.guildHomeserver, routerInstance.guildID, this)
 
 	Kirigami.Theme.colorSet: Kirigami.Theme.View
 

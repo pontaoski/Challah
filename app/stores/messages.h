@@ -7,13 +7,15 @@
 #include "client.h"
 
 class MessagesModel;
+class State;
 
 class MessagesStore : public ChallahAbstractRelationalModel
 {
 
 	Q_OBJECT
 
-	SDK::Client* c;
+	QString host;
+	State* s;
 	MessagesModel* p;
 
 	struct Private;
@@ -21,7 +23,7 @@ class MessagesStore : public ChallahAbstractRelationalModel
 
 public:
 
-	explicit MessagesStore(MessagesModel* parent, SDK::Client* client);
+	explicit MessagesStore(MessagesModel* parent, State* state, QString host);
 	~MessagesStore();
 
 	void newMessage(quint64 id, protocol::chat::v1::Message cont);

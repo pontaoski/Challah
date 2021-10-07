@@ -17,10 +17,10 @@ class MessagesModel : public QAbstractListModel
 	QScopedPointer<Private> d;
 
 	State* s;
-	SDK::Client* c;
+	QString host;
 
 public:
-	MessagesModel(SDK::Client* client, quint64 guildID, quint64 channelID, State* state);
+	MessagesModel(QString host, quint64 guildID, quint64 channelID, State* state);
 	~MessagesModel();
 
 	MessagesStore* store();

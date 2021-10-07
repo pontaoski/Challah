@@ -54,12 +54,6 @@ int main(int argc, char *argv[])
 #endif
 
 #ifdef CHALLAH_VENDORED_QQC2_BREEZE_STYLE
-	qDebug() << "vendored";
-#else
-	qDebug() << "not vendored";
-#endif
-
-#ifdef CHALLAH_VENDORED_QQC2_BREEZE_STYLE
 	// this works awfully
 	// QQuickStyle::setStyle("qrc:/org/kde/breeze");
 	QQuickStyle::setStyle("Material");

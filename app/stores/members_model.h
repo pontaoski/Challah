@@ -15,10 +15,10 @@ class MembersModel : public QAbstractListModel
 	QScopedPointer<Private> d;
 
 	State* s;
-	SDK::Client* c;
+	QString host;
 
 public:
-	MembersModel(SDK::Client* client, quint64 guildID, State* state);
+	MembersModel(QString host, quint64 guildID, State* state);
 	~MembersModel();
 
 	int rowCount(const QModelIndex& parent = QModelIndex()) const override;

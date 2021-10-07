@@ -324,7 +324,7 @@ void OverlappingPanels::setRightPanel(QQuickItem* item)
 		item->setWidth(width() - (width() / HANG_FACTOR));
 		item->setHeight(height());
 
-		item->stackBefore(m_centerPanel);
+		if (m_centerPanel) item->stackBefore(m_centerPanel);
 
 		m_rightPanelConnections << connect(item, &QQuickItem::implicitWidthChanged, [=]() {
 			if (m_expansionAnimation->state() == QAbstractAnimation::Running) {
@@ -389,7 +389,7 @@ void OverlappingPanels::setLeftPanel(QQuickItem* item)
 		item->setWidth(width() - (width() / HANG_FACTOR));
 		item->setHeight(height());
 
-		item->stackBefore(m_centerPanel);
+		if (m_centerPanel) item->stackBefore(m_centerPanel);
 
 		m_leftPanelConnections << connect(item, &QQuickItem::implicitWidthChanged, [=]() {
 			if (m_expansionAnimation->state() == QAbstractAnimation::Running) {

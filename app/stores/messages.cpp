@@ -27,7 +27,7 @@ enum Roles {
 	ContentAttachments,
 };
 
-MessagesStore::MessagesStore(MessagesModel* parent, SDK::Client* c) : ChallahAbstractRelationalModel(parent), c(c), p(parent), d(new Private)
+MessagesStore::MessagesStore(MessagesModel* parent, State* s, QString host) : ChallahAbstractRelationalModel(parent), s(s), host(host), p(parent), d(new Private)
 {
 }
 

@@ -12,16 +12,16 @@ enum Roles {
 	Previous,
 };
 
-MessagesModel::MessagesModel(SDK::Client* client, quint64 guildID, quint64 channelID, State* state) : QAbstractListModel(state), d(new Private), c(client)
+MessagesModel::MessagesModel(QString host, quint64 guildID, quint64 channelID, State* state) : QAbstractListModel(state), d(new Private), host(host), s(state)
 {
-	d->store.reset(new MessagesStore(this, client));
+	d->store.reset(new MessagesStore(this, state, host));
 	d->guildID = guildID;
 	d->channelID = channelID;
 
-	state->api()->subscribeToGuild(client->homeserver(), guildID);
+	state->api()->subscribeToGuild(host, guildID);
 	connect(state->api(), &SDK::ClientManager::chatEvent, this, [=](QString hs, protocol::chat::v1::StreamEvent ev) {
 		using namespace protocol::chat::v1;
-		if (hs != c->homeserver()) {
+		if (hs != host) {
 			return;
 		}
 
@@ -92,7 +92,7 @@ void MessagesModel::fetchMore(const QModelIndex &parent)
 
 	d->isFetching = true;
 
-	c->chatKit()->GetChannelMessages(req).then([this, req](auto r) {
+	s->api()->dispatch(host, &SDK::R::GetChannelMessages, req).then([this, req](auto r) {
 		d->isFetching = false;
 
 		if (!resultOk(r)) {
@@ -159,7 +159,7 @@ FutureBase MessagesModel::send(QString txt, QString inReplyTo)
 	req.mutable_content()->set_allocated_text_message(new protocol::chat::v1::Content::TextContent);
 	req.mutable_content()->mutable_text_message()->set_allocated_content(new protocol::chat::v1::FormattedText);
 	req.mutable_content()->mutable_text_message()->mutable_content()->set_text(txt.toStdString());
-	co_await c->chatKit()->SendMessage(req);
+	co_await s->api()->dispatch(host, &SDK::R::SendMessage, req);
 	co_return QVariant();
 }
 
@@ -184,6 +184,8 @@ FutureBase MessagesModel::sendFiles(const QList<QUrl>& urls)
 		query.addQueryItem("filename", url.fileName());
 		query.addQueryItem("contentType", QMimeDatabase().mimeTypeForFile(url.toLocalFile()).name());
 
+		auto c = co_await s->api()->clientForHomeserver(host);
+
 		QUrl reqUrl(c->homeserver() + "/_harmony/media/upload?" + query.query());
 		QNetworkRequest req(reqUrl);
 		req.setRawHeader("Authorization", QByteArray::fromStdString(c->session()));
@@ -206,7 +208,7 @@ FutureBase MessagesModel::sendFiles(const QList<QUrl>& urls)
 	req.set_guild_id(d->guildID);
 	req.set_channel_id(d->channelID);
 
-	co_await c->chatKit()->SendMessage(req);
+	co_await s->api()->dispatch(host, &SDK::R::SendMessage, req);
 	co_return QVariant();
 }
 
@@ -228,7 +230,7 @@ FutureBase MessagesModel::deleteMessage(const QString& id)
 	req.set_channel_id(d->channelID);
 	req.set_message_id(id.toULongLong());
 
-	auto it = co_await c->chatKit()->DeleteMessage(req);
+	auto it = co_await s->api()->dispatch(host, &SDK::R::DeleteMessage, req);
 
 	co_return it.ok();
 }
