@@ -82,6 +82,10 @@ void MessagesModel::fetchMore(const QModelIndex &parent)
 		return;
 	}
 
+	if (d->guildID == 0 || d->channelID == 0) {
+		return;
+	}
+
 	protocol::chat::v1::GetChannelMessagesRequest req;
 	req.set_guild_id(d->guildID);
 	req.set_channel_id(d->channelID);

@@ -12,6 +12,10 @@ MembersModel::MembersModel(QString host, quint64 guildID, State* state) : QAbstr
 	auto req = protocol::chat::v1::GetGuildMembersRequest{};
 	req.set_guild_id(guildID);
 
+	if (guildID == 0) {
+		return;
+	}
+
 	s->api()->dispatch(host, &SDK::R::GetGuildMembers, req).then([this](auto r) {
 		if (!resultOk(r)) {
 			return;

@@ -50,7 +50,11 @@ bool GuildsStore::checkKey(const QVariant& key)
 
 bool GuildsStore::canFetchKey(const QVariant& key)
 {
-	Q_UNUSED(key)
+	const auto [hs, id] = fromVariant(key);
+
+	if (hs.isEmpty() || id == 0) {
+		return false;
+	}
 
 	return true;
 }

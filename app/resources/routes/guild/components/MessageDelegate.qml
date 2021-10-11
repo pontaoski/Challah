@@ -148,7 +148,7 @@ QQC2.Control {
 		id: userData
 
 		model: CState.membersStore
-		key: [page.homeserver, messageData.data.author]
+		key: tryit(() => [page.homeserver, messageData.data.author], ["", ""])
 		shape: QtObject {
 			required property string name
 			required property string avatarURL
