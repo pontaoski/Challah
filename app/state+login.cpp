@@ -259,3 +259,8 @@ void State::handleStep(protocol::auth::v1::AuthStep step)
 		break;
 	}
 }
+
+void State::logOut()
+{
+	Q_EMIT beginHomeserver();
+}

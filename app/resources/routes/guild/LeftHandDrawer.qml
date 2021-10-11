@@ -10,6 +10,8 @@ import QtQml.Models 2.15
 import com.github.HarmonyDevelopment.Challah 1.0
 import Qt.labs.platform 1.1 as Labs
 
+import "qrc:/components" as GlobalComponents
+
 Control {
 	leftPadding: 0
 	rightPadding: 0
@@ -41,13 +43,11 @@ Control {
 		ColumnLayout {
 			spacing: 0
 
-			ToolBar {
-				id: lhToolbar
+			GlobalComponents.Header {
 				z: 2
-
 				Layout.fillWidth: true
 
-				contentItem: ToolButton {
+				ToolButton {
 					icon.name: "application-menu"
 					onClicked: appMenu.open()
 
@@ -57,16 +57,13 @@ Control {
 						id: appMenu
 
 						MenuItem {
-							text: qsTr("Settings")
-							onTriggered: root.pageStack.layers.push(Qt.resolvedUrl("ChallahSettings.qml"), {})
-						}
-						MenuItem {
 							text: qsTr("Log Out")
-							onTriggered: HState.logOut()
+							onTriggered: CState.logOut()
 						}
 					}
 				}
 			}
+
 			ListView {
 				z: 1
 
@@ -122,6 +119,26 @@ Control {
 		ColumnLayout {
 			visible: routerInstance.guildID != ""
 			spacing: 0
+
+			GlobalComponents.Header {
+				z: 2
+				Layout.fillWidth: true
+
+				Kirigami.Heading {
+					level: 4
+					text: tryit(() => guildData.data.name, "Guild")
+
+					RelationalListener {
+						id: guildData
+
+						model: CState.guildsStore
+						key: [routerInstance.guildHomeserver, routerInstance.guildID]
+						shape: QtObject {
+							required property string name
+						}
+					}
+				}
+			}
 
 			ListView {
 				z: 1

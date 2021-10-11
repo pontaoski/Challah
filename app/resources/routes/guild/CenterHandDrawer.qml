@@ -23,21 +23,21 @@ Kirigami.ScrollablePage {
 	property string guildID: routerInstance.guildID
 	property string channelID: routerInstance.channelID
 
-	RelationalListener {
-		id: guildData
 
-		model: CState.guildsStore
-		key: [page.homeserver, page.guildID]
+	RelationalListener {
+		id: channelData
+
+		model: CState.channelsModelFor(page.homeserver, page.guildID, this).store
+		key: page.channelID
 		shape: QtObject {
 			required property string name
-			required property string picture
 		}
 	}
 
 	header: GlobalComponents.Header {
 		Kirigami.Heading {
 			level: 4
-			text: tryit(() => `${guildData.data.name}`, "")
+			text: tryit(() => channelData.data.name, "Channel")
 		}
 	}
 

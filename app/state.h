@@ -45,6 +45,7 @@ public:
 
 	Q_INVOKABLE void doInitialLogin();
 	Q_INVOKABLE void doLogin(const QString& homeserver);
+	Q_INVOKABLE void logOut();
 	void handleStep(protocol::auth::v1::AuthStep step);
 
 	Q_INVOKABLE ChannelsModel* channelsModelFor(QString host, QString guildID, QObject* it);

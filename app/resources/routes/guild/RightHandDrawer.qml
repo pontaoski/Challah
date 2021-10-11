@@ -9,6 +9,8 @@ import org.kde.kirigami 2.15 as Kirigami
 import QtQml.Models 2.15
 import com.github.HarmonyDevelopment.Challah 1.0
 
+import "qrc:/components" as GlobalComponents
+
 Control {
 	leftPadding: 0
 	rightPadding: 0
@@ -34,7 +36,16 @@ Control {
 			}
 		}
 	}
-	contentItem: RowLayout {
+	contentItem: ColumnLayout {
+		GlobalComponents.Header {
+			z: 2
+			Layout.fillWidth: true
+
+			Kirigami.Heading {
+				level: 4
+				text: qsTr("Members")
+			}
+		}
 		ListView {
 			id: listView
 			z: 1
