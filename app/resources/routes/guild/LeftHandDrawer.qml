@@ -57,6 +57,11 @@ Control {
 						id: appMenu
 
 						MenuItem {
+							text: qsTr("Create or Join Guild...")
+							onTriggered: guildSheet.openAndClear()
+						}
+
+						MenuItem {
 							text: qsTr("Log Out")
 							onTriggered: CState.logOut()
 						}
@@ -91,11 +96,25 @@ Control {
 						id: maus
 						hoverEnabled: true
 						anchors.fill: parent
+						acceptedButtons: Qt.LeftButton | Qt.RightButton
 						onClicked: {
-							routerInstance.guildHomeserver = del.guildHost
-							routerInstance.guildID = del.guildID
-							routerInstance.guildIDChanged()
-							otherListView.model = CState.channelsModelFor(del.guildHost, del.guildID, this)
+							if (mouse.button == Qt.RightButton) {
+								guildMenu.popup()
+							} else {
+								routerInstance.guildHomeserver = del.guildHost
+								routerInstance.guildID = del.guildID
+								routerInstance.guildIDChanged()
+								otherListView.model = CState.channelsModelFor(del.guildHost, del.guildID, this)
+							}
+						}
+					}
+
+					Menu {
+						id: guildMenu
+
+						MenuItem {
+							text: qsTr("Leave")
+							onTriggered: CState.guildList.leave(del.guildHost, del.guildID)
 						}
 					}
 

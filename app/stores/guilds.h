@@ -44,4 +44,6 @@ public:
 	QVariant data(const QModelIndex& idx, int role = Qt::DisplayRole) const override;
 	QHash<int, QByteArray> roleNames() const override;
 
+	Q_INVOKABLE void leave(const QString& host, const QString& guildID);
+
 };

@@ -92,6 +92,15 @@ QHash<int, QByteArray> GuildList::roleNames() const
 	};
 }
 
+void GuildList::leave(const QString& host, const QString& guildID)
+{
+	auto req = protocol::chat::v1::LeaveGuildRequest {};
+	req.set_guild_id(guildID.toULongLong());
+	s->api()->dispatch(host, &SDK::R::LeaveGuild, req).then([](auto r) {
+		Q_UNUSED(resultOk(r));
+	});
+}
+
 GuildList::~GuildList()
 {
 
