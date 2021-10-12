@@ -28,6 +28,43 @@ MembersModel::MembersModel(QString host, quint64 guildID, State* state) : QAbstr
 		}
 		endResetModel();
 	});
+
+	state->api()->subscribeToGuild(host, guildID);
+	connect(state->api(), &SDK::ClientManager::chatEvent, this, [=](QString hs, protocol::chat::v1::StreamEvent ev) {
+		using namespace protocol::chat::v1;
+		if (hs != host) {
+			return;
+		}
+
+		switch (ev.event_case()) {
+		case StreamEvent::kJoinedMember: {
+			auto jm = ev.joined_member();
+			if (jm.guild_id() != d->gid) {
+				return;
+			}
+
+			beginInsertRows(QModelIndex(), d->id.length(), d->id.length());
+			d->id << jm.member_id();
+			endInsertRows();
+
+			break;
+		}
+		case StreamEvent::kLeftMember: {
+			auto lm = ev.left_member();
+			if (lm.guild_id() != d->gid) {
+				return;
+			}
+
+			auto idx = d->id.indexOf(lm.member_id());
+
+			beginRemoveRows(QModelIndex(), idx, idx);
+			d->id.removeAt(idx);
+			endRemoveRows();
+
+			break;
+		}
+		}
+	});
 }
 
 MembersModel::~MembersModel()

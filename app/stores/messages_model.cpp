@@ -27,12 +27,12 @@ MessagesModel::MessagesModel(QString host, quint64 guildID, quint64 channelID, S
 
 		switch (ev.event_case()) {
 		case StreamEvent::kSentMessage: {
-			beginInsertRows(QModelIndex(), 0, 0);
 			auto sm = ev.sent_message();
 			auto it = sm.message();
 			if (sm.guild_id() != d->guildID || sm.channel_id() != d->channelID) {
 				return;
 			}
+			beginInsertRows(QModelIndex(), 0, 0);
 			d->messageIDs.prepend(sm.message_id());
 			d->store->newMessage(sm.message_id(), it);
 			endInsertRows();
