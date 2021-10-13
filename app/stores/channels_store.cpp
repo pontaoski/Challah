@@ -1,3 +1,4 @@
+#include "state.h"
 #include "channels_p.h"
 
 enum Roles {
@@ -6,7 +7,7 @@ enum Roles {
 
 ChannelsStore::ChannelsStore(State* state, ChannelsModel* parent) : ChallahAbstractRelationalModel(parent), d(new Private), s(state)
 {
-
+	d->cm = parent;
 }
 
 ChannelsStore::~ChannelsStore()
@@ -42,4 +43,13 @@ QHash<int,QByteArray> ChannelsStore::roleNames()
 	return {
 		{ Name, "name" }
 	};
+}
+
+void ChannelsStore::setChannelName(const QString &id, const QString &name)
+{
+	auto req = protocol::chat::v1::UpdateChannelInformationRequest { };
+	req.set_guild_id(d->cm->d->gid);
+	req.set_channel_id(id.toULongLong());
+	req.set_new_name(name.toStdString());
+	s->api()->dispatch(d->cm->d->host, &SDK::R::UpdateChannelInformation, req);
 }

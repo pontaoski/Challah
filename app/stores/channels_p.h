@@ -11,5 +11,6 @@ struct ChannelsModel::Private {
 };
 
 struct ChannelsStore::Private {
+	ChannelsModel* cm;
 	QMap<quint64,protocol::chat::v1::ChannelWithId> data;
 };

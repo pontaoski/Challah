@@ -97,6 +97,14 @@ Kirigami.ScrollablePage {
 					}
 				}
 
+				trailing: RowLayout {
+					QQC2.Button {
+						enabled: tryit(() => canEditChannel.data.has, false)
+						text: qsTr("Rename")
+						onClicked: textAsker.ask(qsTr("What do you want to rename channel to?")).then((name) => delModel.model.store.setChannelName(del.channelID, name))
+					}
+				}
+
 				background: Item {
 					DropArea {
 						anchors.fill: parent
@@ -117,6 +125,15 @@ Kirigami.ScrollablePage {
 					key: del.channelID
 					shape: QtObject {
 						required property string name
+					}
+				}
+				RelationalListener {
+					id: canEditChannel
+
+					model: CState.ownPermissionsStore
+					key: [routerInstance.guildHomeserver, routerInstance.guildID, del.channelID, "channels.manage.change-information"]
+					shape: QtObject {
+						required property bool has
 					}
 				}
 			}

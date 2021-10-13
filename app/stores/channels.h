@@ -61,4 +61,6 @@ public:
 	bool checkKey(const QVariant& key) override;
 	QHash<int,QByteArray> roleNames() override;
 
+	Q_INVOKABLE void setChannelName(const QString& id, const QString& name);
+
 };
