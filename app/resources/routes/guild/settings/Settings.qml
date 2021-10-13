@@ -26,5 +26,6 @@ Kirigami.Page {
 
 		Invites {}
 		Roles {}
+		Channels {}
 	}
 }

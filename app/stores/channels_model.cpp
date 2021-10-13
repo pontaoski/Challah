@@ -4,12 +4,14 @@
 
 enum Roles {
 	ID,
+	Index,
 };
 
 ChannelsModel::ChannelsModel(QString host, quint64 gid, State* state) : QAbstractListModel(state), d(new Private), s(state), host(host)
 {
 	d->store.reset(new ChannelsStore(state, this));
 	d->gid = gid;
+	d->host = host;
 
 	auto req = protocol::chat::v1::GetGuildChannelsRequest{};
 	req.set_guild_id(gid);
@@ -93,6 +95,19 @@ ChannelsModel::ChannelsModel(QString host, quint64 gid, State* state) : QAbstrac
 			d->store->d->data.remove(cc.channel_id());
 			d->id.removeAt(idx);
 			endRemoveRows();
+		} else if (ev.has_edited_channel_position()) {
+			auto ep = ev.edited_channel_position();
+			if (ep.guild_id() != d->gid) return;
+
+			int currentIdx = d->id.indexOf(ep.channel_id());
+			int idx = d->id.indexOf(ep.new_position().item_id());
+
+			beginResetModel();
+
+			auto item = d->id.takeAt(currentIdx);
+			d->id.insert(idx, item);
+
+			endResetModel();
 		}
 	});
 }
@@ -132,15 +147,49 @@ QVariant ChannelsModel::data(const QModelIndex& index, int role) const
 	switch (role) {
 	case Roles::ID:
 		return QString::number(d->id[idx]);
+	case Roles::Index:
+		return idx;
 	}
 
 	return QVariant();
 }
 
+void ChannelsModel::moveChannel(const QString& id, int idx)
+{
+	auto req = protocol::chat::v1::UpdateChannelOrderRequest { };
+	req.set_guild_id(d->gid);
+	req.set_channel_id(id.toULongLong());
+	req.set_allocated_new_position(new protocol::harmonytypes::v1::ItemPosition);
+
+	req.mutable_new_position()->set_item_id(d->id[idx]);
+	if (idx == 0) {
+		req.mutable_new_position()->set_position(protocol::harmonytypes::v1::ItemPosition::POSITION_BEFORE_UNSPECIFIED);
+	} else {
+		req.mutable_new_position()->set_position(protocol::harmonytypes::v1::ItemPosition::POSITION_AFTER);
+	}
+
+	d->working = true;
+	Q_EMIT workingChanged();
+
+	s->api()->dispatch(d->host, &SDK::R::UpdateChannelOrder, req).then([this](auto r) {
+		d->working = false;
+		Q_EMIT workingChanged();
+
+		if (!resultOk(r)) {
+			return;
+		}
+	});
+}
+
 QHash<int,QByteArray> ChannelsModel::roleNames() const
 {
 	return {
-		{ ID, "channelID" }
+		{ ID, "channelID" },
+		{ Index, "index" }
 	};
 }
 
+bool ChannelsModel::working() const
+{
+	return d->working;
+}

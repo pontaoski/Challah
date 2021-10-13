@@ -5,6 +5,8 @@
 struct ChannelsModel::Private {
 	QScopedPointer<ChannelsStore, QScopedPointerDeleteLater> store;
 	quint64 gid;
+	QString host;
+	bool working = false;
 	QList<quint64> id;
 };
 

@@ -13,6 +13,7 @@ class ChannelsModel : public QAbstractListModel
 
 	Q_OBJECT
 	Q_PROPERTY(ChannelsStore* store READ store CONSTANT)
+	Q_PROPERTY(bool working READ working NOTIFY workingChanged)
 
 	struct Private;
 	QScopedPointer<Private> d;
@@ -32,7 +33,11 @@ public:
 	QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
 	QHash<int,QByteArray> roleNames() const override;
 
+	bool working() const;
+	Q_SIGNAL void workingChanged();
+
 	Q_INVOKABLE void newChannel(const QString& name);
+	Q_INVOKABLE void moveChannel(const QString& id, int idx);
 
 };
 

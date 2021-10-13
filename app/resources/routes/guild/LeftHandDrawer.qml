@@ -200,24 +200,6 @@ Control {
 						text: qsTr("Guild Configuration")
 						onClicked: colView.layers.push(Qt.resolvedUrl("qrc:/routes/guild/settings/Settings.qml"))
 					}
-					Item { Layout.fillWidth: true }
-					Button {
-						icon.name: "list-add"
-						onClicked: channelMenu.open()
-					}
-
-					Labs.Menu {
-						id: channelMenu
-
-						Labs.MenuItem {
-							text: qsTr("New Channel")
-							onTriggered: textAsker.ask(qsTr("What do you want to call the new channel?")).then((name) => otherListView.model.newChannel(name))
-						}
-						Labs.MenuItem {
-							text: qsTr("New Category")
-							enabled: false
-						}
-					}
 				}
 			}
 		}
