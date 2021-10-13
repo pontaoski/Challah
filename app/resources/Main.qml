@@ -154,42 +154,6 @@ Kirigami.ApplicationWindow {
 
 			GuildRoutes.Blank {}
 			GuildRoutes.Timeline {}
-
-			// LoginRoute {}
-			// GuildRoute {}
-			// NoGuildRoute {}
-			// MessagesRoute {}
 		}
 	}
-
-	// component PG : Kirigami.Page {}
-	// pageStack.initialPage: PG {
-	// 	padding: 0
-	// 	globalToolBarStyle: Kirigami.ApplicationHeaderStyle.None
-	// 	Kirigami.Theme.colorSet: Kirigami.Theme.View
-
-	// 	OverlappingPanels {
-	// 		anchors.fill: parent
-
-	// 		leftPanel: Loader {
-	// 			id: leftLoader
-
-	// 			Kirigami.PageRouter.router: routerInstance
-	// 			Kirigami.PageRouter.watchedRoute: ["Guild/Blank"]
-	// 			active: Kirigami.PageRouter.watchedRouteActive
-
-	// 			sourceComponent: Components.LeftHandDrawer {
-	// 			}
-	// 		}
-	// 		rightPanel: Loader {
-	// 			id: rightLoader
-
-	// 			active: routerInstance.guildID != ""
-
-	// 			sourceComponent: Components.RightHandDrawer {
-	// 			}
-	// 		}
-	// 	}
-	// }
-
 }
