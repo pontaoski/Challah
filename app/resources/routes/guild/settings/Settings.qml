@@ -14,8 +14,15 @@ Kirigami.Page {
 	padding: 0
 	Kirigami.Theme.colorSet: Kirigami.Theme.View
 
+	globalToolBarStyle: 0
+
 	Kirigami.SwipeNavigator {
 		anchors.fill: parent
+
+		header: QQC2.Button {
+			icon.name: "go-previous"
+			onClicked: colView.layers.pop()
+		}
 
 		Invites {}
 		Roles {}

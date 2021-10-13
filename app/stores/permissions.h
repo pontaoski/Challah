@@ -15,9 +15,13 @@ class PermissionsModel : public QAbstractListModel
 	QString host;
 
 	Q_PROPERTY(bool isDirty MEMBER isDirty NOTIFY isDirtyChanged)
+	Q_PROPERTY(bool failure MEMBER failure NOTIFY failureChanged)
 
 	Q_SIGNAL void isDirtyChanged();
 	bool isDirty = false;
+
+	Q_SIGNAL void failureChanged();
+	bool failure = false;
 
 public:
 	PermissionsModel(QString host, quint64 guildID, quint64 roleID, State* state);

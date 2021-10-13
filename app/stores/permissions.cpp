@@ -30,7 +30,8 @@ PermissionsModel::PermissionsModel(QString host, quint64 guildID, quint64 roleID
 
 	s->api()->dispatch(host, &SDK::R::GetPermissions, req).then([this](Result<protocol::chat::v1::GetPermissionsResponse, QString> result) {
 		if (!result.ok()) {
-			qWarning("TODO: implement error handling");
+			failure = true;
+			Q_EMIT failureChanged();
 			isDirty = false;
 			return;
 		}

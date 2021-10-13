@@ -198,7 +198,7 @@ Control {
 				contentItem: RowLayout {
 					Button {
 						text: qsTr("Guild Configuration")
-						onClicked: root.pageStack.layers.push(Qt.resolvedUrl("qrc:/routes/guild/settings/Settings.qml"))
+						onClicked: colView.layers.push(Qt.resolvedUrl("qrc:/routes/guild/settings/Settings.qml"))
 					}
 					Item { Layout.fillWidth: true }
 					Button {
