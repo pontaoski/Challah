@@ -179,7 +179,7 @@ MessagesModel* State::messagesModelFor(QString host, QString guildID, QString ch
 }
 
 QString State::mediaURL(const QString& url, const QString& homeserver) {
-	QUrl it(homeserver);
+	QUrl it = QUrl::fromUserInput(homeserver.isEmpty() ? api()->mainClient()->homeserver() : homeserver);
 
 	auto host = it.host();
 	auto port = it.port(2289);

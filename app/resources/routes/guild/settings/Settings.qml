@@ -24,6 +24,7 @@ Kirigami.Page {
 			onClicked: colView.layers.pop()
 		}
 
+		GuildData {}
 		Invites {}
 		Roles {}
 		Channels {}

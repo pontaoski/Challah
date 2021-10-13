@@ -4,7 +4,7 @@
 #include <QHttpMultiPart>
 
 #include "messages_model_p.h"
-#include "coroutine_integration_network.h"
+#include "uploading.h"
 
 enum Roles {
 	ID,
@@ -169,36 +169,12 @@ FutureBase MessagesModel::send(QString txt, QString inReplyTo)
 
 FutureBase MessagesModel::sendFiles(const QList<QUrl>& urls)
 {
-	QStringList ids;
-
-	for (const auto& url : urls) {
-		QHttpMultiPart *mp = new QHttpMultiPart(QHttpMultiPart::FormDataType);
-
-		QFile* file(new QFile(url.toLocalFile()));
-		file->open(QIODevice::ReadOnly);
-
-		QHttpPart filePart;
-		filePart.setBodyDevice(file);
-		filePart.setHeader(QNetworkRequest::ContentDispositionHeader, QString("form-data; name=\"file\""));
-		filePart.setHeader(QNetworkRequest::ContentTypeHeader, "multipart/form-data");
-
-		mp->append(filePart);
-
-		QUrlQuery query;
-		query.addQueryItem("filename", url.fileName());
-		query.addQueryItem("contentType", QMimeDatabase().mimeTypeForFile(url.toLocalFile()).name());
-
-		auto c = co_await s->api()->clientForHomeserver(host);
-
-		QUrl reqUrl(c->homeserver() + "/_harmony/media/upload?" + query.query());
-		QNetworkRequest req(reqUrl);
-		req.setRawHeader("Authorization", QByteArray::fromStdString(c->session()));
-		QNetworkAccessManager nam;
-
-		const auto reply = co_await nam.post(req, mp);
-		const auto id = QJsonDocument::fromJson(reply->readAll())["id"].toString();
-		ids << id;
+	auto rids = co_await uploadFiles(s, host, urls);
+	if (!rids.ok()) {
+		co_return QVariant();
 	}
+
+	auto ids = rids.value();
 
 	protocol::chat::v1::SendMessageRequest req;
 	req.set_allocated_content(new protocol::chat::v1::Content);

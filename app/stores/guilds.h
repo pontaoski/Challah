@@ -24,6 +24,9 @@ public:
 	QVariant data(const QVariant& key, int role = Qt::DisplayRole) override;
 	QHash<int, QByteArray> roleNames() override;
 
+	Q_INVOKABLE void setName(const QString& host, const QString& guildID, const QString& name);
+	Q_INVOKABLE void setPicture(const QString& host, const QString& guildID, const QUrl& photo);
+
 };
 
 class GuildList : public QAbstractListModel
