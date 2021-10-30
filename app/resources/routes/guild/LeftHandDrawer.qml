@@ -75,57 +75,64 @@ Control {
 				model: CState.guildList
 				Layout.fillHeight: true
 				Layout.fillWidth: true
-				Layout.preferredWidth: 48
+				Layout.preferredWidth: 48 + (4*2)
 
-				delegate: Kirigami.Avatar {
+				delegate: Control {
 					id: del
 
-					implicitWidth: 48
-					implicitHeight: 48
+					topPadding: 4
+					leftPadding: 4
+					rightPadding: 4
+					bottomPadding: 4
 
 					required property string guildID
 					required property string guildHost
 
-					ToolTip.text: guildData.data.name
-					ToolTip.visible: maus.containsMouse
+					contentItem: Kirigami.Avatar {
+						implicitWidth: 48
+						implicitHeight: 48
 
-					name: guildData.data.name
-					source: guildData.data.picture
+						ToolTip.text: guildData.data.name
+						ToolTip.visible: maus.containsMouse
 
-					MouseArea {
-						id: maus
-						hoverEnabled: true
-						anchors.fill: parent
-						acceptedButtons: Qt.LeftButton | Qt.RightButton
-						onClicked: {
-							if (mouse.button == Qt.RightButton) {
-								guildMenu.popup()
-							} else {
-								routerInstance.guildHomeserver = del.guildHost
-								routerInstance.guildID = del.guildID
-								routerInstance.guildIDChanged()
-								otherListView.model = CState.channelsModelFor(del.guildHost, del.guildID, this)
+						name: guildData.data.name
+						source: guildData.data.picture
+
+						MouseArea {
+							id: maus
+							hoverEnabled: true
+							anchors.fill: parent
+							acceptedButtons: Qt.LeftButton | Qt.RightButton
+							onClicked: {
+								if (mouse.button == Qt.RightButton) {
+									guildMenu.popup()
+								} else {
+									routerInstance.guildHomeserver = del.guildHost
+									routerInstance.guildID = del.guildID
+									routerInstance.guildIDChanged()
+									otherListView.model = CState.channelsModelFor(del.guildHost, del.guildID, this)
+								}
 							}
 						}
-					}
 
-					Menu {
-						id: guildMenu
+						Menu {
+							id: guildMenu
 
-						MenuItem {
-							text: qsTr("Leave")
-							onTriggered: CState.guildList.leave(del.guildHost, del.guildID)
+							MenuItem {
+								text: qsTr("Leave")
+								onTriggered: CState.guildList.leave(del.guildHost, del.guildID)
+							}
 						}
-					}
 
-					RelationalListener {
-						id: guildData
+						RelationalListener {
+							id: guildData
 
-						model: CState.guildsStore
-						key: [del.guildHost, del.guildID]
-						shape: QtObject {
-							required property string name
-							required property string picture
+							model: CState.guildsStore
+							key: [del.guildHost, del.guildID]
+							shape: QtObject {
+								required property string name
+								required property string picture
+							}
 						}
 					}
 				}
@@ -143,19 +150,29 @@ Control {
 				z: 2
 				Layout.fillWidth: true
 
-				Kirigami.Heading {
-					level: 4
-					text: tryit(() => guildData.data.name, "Guild")
+				RowLayout {
+					Kirigami.Heading {
+						level: 4
+						text: tryit(() => guildData.data.name, "Guild")
 
-					RelationalListener {
-						id: guildData
+						Layout.fillWidth: true
 
-						model: CState.guildsStore
-						key: [routerInstance.guildHomeserver, routerInstance.guildID]
-						shape: QtObject {
-							required property string name
+						RelationalListener {
+							id: guildData
+
+							model: CState.guildsStore
+							key: [routerInstance.guildHomeserver, routerInstance.guildID]
+							shape: QtObject {
+								required property string name
+							}
 						}
 					}
+					Button {
+						icon.name: "configure"
+						onClicked: colView.layers.push(Qt.resolvedUrl("qrc:/routes/guild/settings/Settings.qml"))
+					}
+					Layout.fillWidth: true
+					Layout.margins: 8
 				}
 			}
 
@@ -185,20 +202,6 @@ Control {
 						shape: QtObject {
 							required property string name
 						}
-					}
-				}
-			}
-			ToolBar {
-				z: 2
-
-				position: ToolBar.Footer
-
-				Layout.fillWidth: true
-
-				contentItem: RowLayout {
-					Button {
-						text: qsTr("Guild Configuration")
-						onClicked: colView.layers.push(Qt.resolvedUrl("qrc:/routes/guild/settings/Settings.qml"))
 					}
 				}
 			}

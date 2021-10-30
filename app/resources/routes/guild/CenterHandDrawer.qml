@@ -35,9 +35,15 @@ Kirigami.ScrollablePage {
 	}
 
 	header: GlobalComponents.Header {
-		Kirigami.Heading {
-			level: 4
-			text: tryit(() => channelData.data.name, "Channel")
+		RowLayout {
+			Kirigami.Heading {
+				level: 4
+				text: tryit(() => `#${channelData.data.name}`, "Channel")
+
+				Layout.fillWidth: true
+			}
+
+			Layout.margins: 8
 		}
 	}
 
