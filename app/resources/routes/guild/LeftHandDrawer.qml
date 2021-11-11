@@ -155,6 +155,7 @@ Control {
 						level: 4
 						text: tryit(() => guildData.data.name, "Guild")
 
+						elide: Text.ElideMiddle
 						Layout.fillWidth: true
 
 						RelationalListener {
