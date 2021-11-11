@@ -119,7 +119,7 @@ void GuildsStore::setName(const QString& host, const QString& guildID, const QSt
 {
 	auto req = protocol::chat::v1::UpdateGuildInformationRequest { };
 	req.set_guild_id(guildID.toULongLong());
-	req.set_new_guild_name(name.toStdString());
+	req.set_new_name(name.toStdString());
 	s->api()->dispatch(host, &SDK::R::UpdateGuildInformation, req);
 }
 
@@ -134,7 +134,7 @@ void GuildsStore::setPicture(const QString& host, const QString& guildID, const 
 
 		auto req = protocol::chat::v1::UpdateGuildInformationRequest { };
 		req.set_guild_id(id);
-		req.set_new_guild_picture(hmc.toStdString());
+		req.set_new_name(hmc.toStdString());
 
 		s->api()->dispatch(host, &SDK::R::UpdateGuildInformation, req);
 	});
