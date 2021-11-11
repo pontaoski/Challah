@@ -67,7 +67,7 @@ ChannelsModel::ChannelsModel(QString host, quint64 gid, State* state) : QAbstrac
 
 			ref.set_channel_id(cc.channel_id());
 			ref.mutable_channel()->set_channel_name(cc.name());
-			qWarning() << "TODO: kind";
+			ref.mutable_channel()->set_kind(cc.kind());
 
 			d->id.insert(idx, cc.channel_id());
 			endInsertRows();
@@ -129,11 +129,14 @@ int ChannelsModel::rowCount(const QModelIndex& parent) const
 	return d->id.length();
 }
 
-void ChannelsModel::newChannel(const QString &name)
+void ChannelsModel::newChannel(const QString &name, const QString& kind)
 {
 	auto it = protocol::chat::v1::CreateChannelRequest();
 	it.set_guild_id(d->gid);
 	it.set_channel_name(name.toStdString());
+	if (kind == "voice") {
+		it.set_kind(protocol::chat::v1::CHANNEL_KIND_VOICE_MEDIA);
+	}
 	s->api()->dispatch(host, &SDK::R::CreateChannel, it);
 }
 

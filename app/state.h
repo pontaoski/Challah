@@ -20,6 +20,7 @@ class MessagesModel;
 class InviteModel;
 class RolesModel;
 class OwnPermissionsStore;
+class voiceCall;
 
 class State : public QObject
 {
@@ -53,6 +54,7 @@ public:
 	Q_INVOKABLE MessagesModel* messagesModelFor(QString host, QString guildID, QString channelID, QObject* it);
 	Q_INVOKABLE InviteModel* inviteModelFor(QString host, QString guildID, QObject* it);
 	Q_INVOKABLE RolesModel* rolesModelFor(QString host, QString guildID, QObject* it);
+	Q_INVOKABLE voiceCall* makeVoiceCall(QString host, QString guildID, QString channelID, QObject* it);
 
 	Q_INVOKABLE QString mediaURL(const QString& id, const QString& homeserver);
 

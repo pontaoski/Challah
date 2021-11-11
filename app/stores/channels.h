@@ -36,7 +36,7 @@ public:
 	bool working() const;
 	Q_SIGNAL void workingChanged();
 
-	Q_INVOKABLE void newChannel(const QString& name);
+	Q_INVOKABLE void newChannel(const QString& name, const QString& type = "");
 	Q_INVOKABLE void moveChannel(const QString& id, int idx);
 
 };

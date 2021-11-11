@@ -34,6 +34,8 @@
 
 int main(int argc, char *argv[])
 {
+	setupGST(&argc, &argv);
+
 	QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 	QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 

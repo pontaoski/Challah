@@ -2,6 +2,7 @@ Project {
 	references: [
 		"app/App.qbs",
 		"app/Shared.qbs",
+		"app/GStreamerTest.qbs",
 		"vendor/Chometz/Chometz.qbs",
 	]
 

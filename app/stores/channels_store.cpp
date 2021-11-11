@@ -3,6 +3,7 @@
 
 enum Roles {
 	Name,
+	Kind,
 };
 
 ChannelsStore::ChannelsStore(State* state, ChannelsModel* parent) : ChallahAbstractRelationalModel(parent), d(new Private), s(state)
@@ -23,9 +24,19 @@ QVariant ChannelsStore::data(const QVariant& key, int role)
 
 	auto id = key.toString().toULongLong();
 
+	namespace chat = protocol::chat::v1;
+
 	switch (role) {
 	case Roles::Name:
 		return QString::fromStdString(d->data[id].channel().channel_name());
+	case Roles::Kind: {
+		switch (d->data[id].channel().kind()) {
+		case chat::CHANNEL_KIND_VOICE_MEDIA:
+			return "voice";
+		default:
+			return "text";
+		}
+	}
 	}
 
 	return QVariant();
@@ -41,7 +52,8 @@ bool ChannelsStore::checkKey(const QVariant& key)
 QHash<int,QByteArray> ChannelsStore::roleNames()
 {
 	return {
-		{ Name, "name" }
+		{ Name, "name" },
+		{ Kind, "kind" },
 	};
 }
 

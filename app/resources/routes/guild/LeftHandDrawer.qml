@@ -195,6 +195,26 @@ Control {
 
 					onClicked: routerInstance.channelID = del.channelID
 
+					leading: Item {
+						width: icon.width
+
+						Kirigami.Icon {
+							id: icon
+
+							source: {
+								switch (channelData.data.kind) {
+								case "voice":
+									return "irc-voice"
+								case "text":
+									return "irc-operator"
+								}
+							}
+							anchors.left: parent.left
+							anchors.verticalCenter: parent.verticalCenter
+							anchors.margins: 4
+						}
+					}
+
 					RelationalListener {
 						id: channelData
 
@@ -202,6 +222,7 @@ Control {
 						key: del.channelID
 						shape: QtObject {
 							required property string name
+							required property string kind
 						}
 					}
 				}

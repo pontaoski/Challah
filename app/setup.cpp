@@ -16,6 +16,9 @@
 #include "messages.h"
 #include "invites.h"
 #include "roles.h"
+#include "voice.h"
+
+#include <gst/gst.h>
 
 #ifdef CHALLAH_VENDORED_KIRIGAMI
 
@@ -43,6 +46,11 @@ Q_DECLARE_METATYPE(Future<MessagesModel*>)
 Q_DECLARE_METATYPE(Future<InviteModel*>)
 Q_DECLARE_METATYPE(Future<RolesModel*>)
 
+void setupGST(int* argc, char*** argv)
+{
+	gst_init(argc, argv);
+}
+
 void setupQML(QQmlEngine* engine)
 {
 #if defined(CHALLAH_VENDORED_KIRIGAMI)
@@ -62,6 +70,7 @@ void setupQML(QQmlEngine* engine)
 	qRegisterMetaType<MessagesModel*>();
 	qRegisterMetaType<MessagesStore*>();
 	qRegisterMetaType<InviteModel*>();
+	qRegisterMetaType<voiceCall*>();
 	qRegisterMetaType<Utils*>();
 	qRegisterMetaType<OwnPermissionsStore*>();
 

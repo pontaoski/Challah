@@ -31,6 +31,7 @@ Kirigami.ScrollablePage {
 		key: page.channelID
 		shape: QtObject {
 			required property string name
+			required property string kind
 		}
 	}
 
@@ -73,6 +74,29 @@ Kirigami.ScrollablePage {
 		}
 	}
 
+	Component {
+		id: voiceInformation
+
+		QQC2.ToolBar {
+			id: voiceInformationBar
+			property var voiceCall: null
+
+			anchors {
+				top: parent.top
+				left: parent.left
+				right: parent.right
+			}
+
+			contentItem: RowLayout {
+				Item { Layout.fillWidth: true }
+				QQC2.Button {
+					text: "Connect"
+					onClicked: voiceInformationBar.voiceCall = CState.makeVoiceCall(page.homeserver, page.guildID, page.channelID, this)
+				}
+			}
+		}
+	}
+
 	ListView {
 		id: timelineView
 
@@ -82,5 +106,21 @@ Kirigami.ScrollablePage {
 		activeFocusOnTab: true
 
 		delegate: Components.MessageDelegate {}
+
+		Loader {
+			anchors {
+				top: parent.top
+				left: parent.left
+				right: parent.right
+			}
+			sourceComponent: {
+				switch (channelData.data.kind) {
+				case "voice":
+					return voiceInformation
+				default:
+					return null
+				}
+			}
+		}
 	}
 }

@@ -16,9 +16,15 @@ Kirigami.ScrollablePage {
 	title: qsTr("Channels")
 
 	actions {
+		left: Kirigami.Action {
+			iconName: "list-add"
+			text: qsTr("Create Voice Channel...")
+			enabled: tryit(() => canCreateChannels.data.has, false)
+			onTriggered: textAsker.ask(qsTr("What do you want to call the new voice channel?")).then((name) => delModel.model.newChannel(name, "voice"))
+		}
 		main: Kirigami.Action {
 			iconName: "list-add"
-			text: qsTr("Create Channel...")
+			text: qsTr("Create Text Channel...")
 			enabled: tryit(() => canCreateChannels.data.has, false)
 			onTriggered: textAsker.ask(qsTr("What do you want to call the new channel?")).then((name) => delModel.model.newChannel(name))
 		}
