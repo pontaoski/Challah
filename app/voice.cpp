@@ -1261,6 +1261,7 @@ void voiceCall::preparedForJoinChannel(voice::TransportOptions consumer, voice::
 // easy.
 void voiceCall::joinedChannel(QList<voice::UserConsumerOptions> otherUsers)
 {
+	qWarning() << "=== joined channel!";
 	for (const auto& user : otherUsers) {
 		userJoined(user);
 	}

@@ -92,7 +92,7 @@ QVariant MessagesStore::data(const QVariant& key, int role)
 	case Roles::ContentText:
 		return QString::fromStdString(d->messages[idx].content().text_message().content().text());
 	case Roles::ContentEmbed:
-		return conv(d->messages[idx].content().embed_message().embed());
+		return conv(d->messages[idx].content().embed_message()).object();
 	case Roles::ContentAttachments:
 		return conv(d->messages[idx].content().attachment_message()).object();
 	}
