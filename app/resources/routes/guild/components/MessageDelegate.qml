@@ -88,6 +88,8 @@ QQC2.Control {
 					return Qt.resolvedUrl("FileMessage.qml")
 				case "embedMessage":
 					return Qt.resolvedUrl("EmbedMessage.qml")
+				case "photosMessage":
+					return Qt.resolvedUrl("PhotoMessage.qml")
 				}
 				return Qt.resolvedUrl("Unsupported.qml")
 			}

@@ -33,7 +33,7 @@ QQC2.Control {
 		}
 		ReplyBlock {}
 		Repeater {
-			model: fileData.data.contentAttachments.attachments
+			model: fileData.data.contentAttachments.files
 
 			delegate: RowLayout {
 				id: del
@@ -41,7 +41,7 @@ QQC2.Control {
 				required property var modelData
 
 				Kirigami.Icon {
-					source: del.modelData.type.replace("/", "-")
+					source: del.modelData.mimetype.replace("/", "-")
 					fallback: "unknown"
 				}
 

@@ -25,6 +25,8 @@ enum Roles {
 	ContentEmbed,
 
 	ContentAttachments,
+
+	ContentPhotos,
 };
 
 MessagesStore::MessagesStore(MessagesModel* parent, State* s, QString host) : ChallahAbstractRelationalModel(parent), s(s), host(host), p(parent), d(new Private)
@@ -85,6 +87,8 @@ QVariant MessagesStore::data(const QVariant& key, int role)
 			return "embedMessage";
 		case protocol::chat::v1::Content::kAttachmentMessage:
 			return "filesMessage";
+		case protocol::chat::v1::Content::kPhotoMessage:
+			return "photosMessage";
 		default:
 			return "unsupporteed";
 		}
@@ -95,6 +99,8 @@ QVariant MessagesStore::data(const QVariant& key, int role)
 		return conv(d->messages[idx].content().embed_message()).object();
 	case Roles::ContentAttachments:
 		return conv(d->messages[idx].content().attachment_message()).object();
+	case Roles::ContentPhotos:
+		return conv(d->messages[idx].content().photo_message()).object();
 	}
 
 	return QVariant();
@@ -155,5 +161,6 @@ QHash<int, QByteArray> MessagesStore::roleNames()
 		{ ContentText, "contentText" },
 		{ ContentEmbed, "contentEmbed" },
 		{ ContentAttachments, "contentAttachments" },
+		{ ContentPhotos, "contentPhotos" },
 	};
 }
