@@ -204,6 +204,13 @@ voiceCall::voiceCall(State* state, const QString& host, quint64 guildID, quint64
 void voiceCall::initialised(QString rtpCapabilities)
 {
 	auto caps = json::parse(rtpCapabilities.toStdString());
+	for (auto& codec : caps["codecs"]) {
+		codec["payloadType"] = codec["preferredPayloadType"];
+	}
+	for (auto& ext : caps["headerExtensions"]) {
+		ext["id"] = ext["preferredId"];
+		ext["encrypt"] = ext["preferredEncrypt"];
+	}
 	auto req = voice::StreamMessageRequest{};
 
 	req.set_allocated_prepare_for_join_channel(new voice::StreamMessageRequest::PrepareForJoinChannel);
@@ -1170,7 +1177,9 @@ void voiceCall::remoteDescriptionCreated(GstPromise* promise)
 	auto req = voice::StreamMessageRequest{};
 
 	req.set_allocated_join_channel(new voice::StreamMessageRequest::JoinChannel);
-	req.mutable_join_channel()->set_rtp_paramaters(d->rtpParams.dump());
+	req.mutable_join_channel()->set_rtp_paramaters(d->rtpParams.dump(4));
+	const auto dbg = d->rtpParams.dump(4);
+	qWarning() << dbg.c_str();
 	req.mutable_join_channel()->set_producer_dtls_paramaters(d->producerOptions.dtls_parameters());
 	req.mutable_join_channel()->set_consumer_dtls_paramaters(d->consumerOptions.dtls_parameters());
 

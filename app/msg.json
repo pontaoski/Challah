@@ -1,0 +1,140 @@
+{
+    "codecs": [
+        {
+            "channels": 2,
+            "clockRate": 48000,
+            "kind": "audio",
+            "mimeType": "audio/opus",
+            "parameters": {
+                "useinbandfec": 1
+            },
+            "payloadType": 100,
+            "preferredPayloadType": 100,
+            "rtcpFeedback": [
+                {
+                    "parameter": "",
+                    "type": "transport-cc"
+                }
+            ]
+        }
+    ],
+    "headerExtensions": [
+        {
+            "direction": "sendrecv",
+            "encrypt": false,
+            "id": 1,
+            "kind": "audio",
+            "preferredEncrypt": false,
+            "preferredId": 1,
+            "uri": "urn:ietf:params:rtp-hdrext:sdes:mid"
+        },
+        {
+            "direction": "sendrecv",
+            "encrypt": false,
+            "id": 1,
+            "kind": "video",
+            "preferredEncrypt": false,
+            "preferredId": 1,
+            "uri": "urn:ietf:params:rtp-hdrext:sdes:mid"
+        },
+        {
+            "direction": "recvonly",
+            "encrypt": false,
+            "id": 2,
+            "kind": "video",
+            "preferredEncrypt": false,
+            "preferredId": 2,
+            "uri": "urn:ietf:params:rtp-hdrext:sdes:rtp-stream-id"
+        },
+        {
+            "direction": "recvonly",
+            "encrypt": false,
+            "id": 3,
+            "kind": "video",
+            "preferredEncrypt": false,
+            "preferredId": 3,
+            "uri": "urn:ietf:params:rtp-hdrext:sdes:repaired-rtp-stream-id"
+        },
+        {
+            "direction": "sendrecv",
+            "encrypt": false,
+            "id": 4,
+            "kind": "audio",
+            "preferredEncrypt": false,
+            "preferredId": 4,
+            "uri": "http://www.webrtc.org/experiments/rtp-hdrext/abs-send-time"
+        },
+        {
+            "direction": "sendrecv",
+            "encrypt": false,
+            "id": 4,
+            "kind": "video",
+            "preferredEncrypt": false,
+            "preferredId": 4,
+            "uri": "http://www.webrtc.org/experiments/rtp-hdrext/abs-send-time"
+        },
+        {
+            "direction": "recvonly",
+            "encrypt": false,
+            "id": 5,
+            "kind": "audio",
+            "preferredEncrypt": false,
+            "preferredId": 5,
+            "uri": "http://www.ietf.org/id/draft-holmer-rmcat-transport-wide-cc-extensions-01"
+        },
+        {
+            "direction": "sendrecv",
+            "encrypt": false,
+            "id": 5,
+            "kind": "video",
+            "preferredEncrypt": false,
+            "preferredId": 5,
+            "uri": "http://www.ietf.org/id/draft-holmer-rmcat-transport-wide-cc-extensions-01"
+        },
+        {
+            "direction": "sendrecv",
+            "encrypt": false,
+            "id": 6,
+            "kind": "video",
+            "preferredEncrypt": false,
+            "preferredId": 6,
+            "uri": "http://tools.ietf.org/html/draft-ietf-avtext-framemarking-07"
+        },
+        {
+            "direction": "sendrecv",
+            "encrypt": false,
+            "id": 7,
+            "kind": "video",
+            "preferredEncrypt": false,
+            "preferredId": 7,
+            "uri": "urn:ietf:params:rtp-hdrext:framemarking"
+        },
+        {
+            "direction": "sendrecv",
+            "encrypt": false,
+            "id": 10,
+            "kind": "audio",
+            "preferredEncrypt": false,
+            "preferredId": 10,
+            "uri": "urn:ietf:params:rtp-hdrext:ssrc-audio-level"
+        },
+        {
+            "direction": "sendrecv",
+            "encrypt": false,
+            "id": 11,
+            "kind": "video",
+            "preferredEncrypt": false,
+            "preferredId": 11,
+            "uri": "urn:3gpp:video-orientation"
+        },
+        {
+            "direction": "sendrecv",
+            "encrypt": false,
+            "id": 12,
+            "kind": "video",
+            "preferredEncrypt": false,
+            "preferredId": 12,
+            "uri": "urn:ietf:params:rtp-hdrext:toffset"
+        }
+    ]
+}
