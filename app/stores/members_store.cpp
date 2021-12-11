@@ -4,6 +4,8 @@
 
 #include "members_store_p.h"
 
+#include "debounce.h"
+
 enum Role {
 	Name,
 	AvatarURL,
@@ -11,7 +13,7 @@ enum Role {
 
 MembersStore::MembersStore(State* state) : ChallahAbstractRelationalModel(state), d(new Private), s(state)
 {
-
+	d->debounced = QFunctionUtils::Debounce([this] { this->fetchBatched(); }, 10);
 }
 
 MembersStore::~MembersStore()
@@ -45,23 +47,54 @@ bool MembersStore::canFetchKey(const QVariant& key)
 	return true;
 }
 
+void MembersStore::fetchBatched()
+{
+	const auto items = d->toBatch;
+	d->toBatch.clear();
+
+	for (auto& hs : items.keys())
+	{
+		const auto& ids = items[hs];
+
+		QList<protocol::profile::v1::GetProfileRequest> items;
+		items.reserve(ids.size());
+
+		for (quint64 id : ids) {
+			protocol::profile::v1::GetProfileRequest req;
+			req.set_user_id(id);
+
+			items << req;
+		}
+
+		s->api()->dispatch(hs, &SDK::R::BatchGetProfile, items).then([this, hs = hs, ids = ids](Result<QList<protocol::profile::v1::GetProfileResponse>, QString> r) {
+			if (!resultOk(r)) {
+				return;
+			}
+
+			const auto res = unwrap(r);
+
+			int i = 0;
+			for (quint64 id : ids) {
+				auto res = r.value();
+				d->data[hs][id] = res[i].profile();
+				Q_EMIT keyAdded(to(qMakePair(hs, id)));
+
+				i++;
+			}
+		});
+	}
+}
+
 void MembersStore::fetchKey(const QVariant& key)
 {
 	auto it = from(key);
 
 	if (it.second == 0) return;
 
-	protocol::profile::v1::GetProfileRequest req;
-	req.set_user_id(it.second);
+	d->toBatch[it.first] = d->toBatch.value(it.first, {});
+	d->toBatch[it.first] << it.second;
 
-	s->api()->dispatch(it.first, &SDK::R::GetProfile, req).then([this, it](Result<protocol::profile::v1::GetProfileResponse, QString> r) {
-		if (!resultOk(r)) {
-			return;
-		}
-		auto res = r.value();
-		d->data[it.first][it.second] = res.profile();;
-		Q_EMIT keyAdded(to(it));
-	});
+	d->debounced();
 }
 
 QVariant MembersStore::data(const QVariant& key, int role)

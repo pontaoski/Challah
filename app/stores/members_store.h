@@ -16,6 +16,8 @@ class MembersStore : public ChallahAbstractRelationalModel
 
 	State* s;
 
+	void fetchBatched();
+
 public:
 	MembersStore(State* state);
 	~MembersStore();
