@@ -21,9 +21,10 @@
           inherit system;
         };
         packages = rec {
+          protoc-gen-hrpc = pkgs.callPackage ./build-hrpc-gen.nix { };
           harmony-protocol = pkgs.callPackage ./build-protocol.nix { };
           challah = pkgs.libsForQt5.callPackage ./build.nix {
-            protocol = harmony-protocol;
+            inherit harmony-protocol protoc-gen-hrpc;
             inherit (inputs.challahSrc) rev;
           };
         };

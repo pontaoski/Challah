@@ -3,11 +3,11 @@
     "challahSrc": {
       "flake": false,
       "locked": {
-        "lastModified": 1639271747,
-        "narHash": "sha256-sfwuw6+ZZNqWS+L9b92M/tjpwFhqu2pptUUxrC8lNXU=",
+        "lastModified": 1639304954,
+        "narHash": "sha256-zY5oaFOztqh2SQNh03UAnT024J5h4e6Noz0XcXM3Ai4=",
         "owner": "harmony-development",
         "repo": "Challah",
-        "rev": "8b1df36d51cd6e388d67b7e1a90c1fd1398ccbed",
+        "rev": "983206a2c1997154a50c4170203b2c21dc8dab10",
         "type": "github"
       },
       "original": {

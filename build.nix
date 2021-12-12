@@ -3,20 +3,21 @@
 , lib
 , wrapQtAppsHook
 , makeWrapper
-, protobuf3_12
+, protobuf
 , libsForQt5
 , gst_all_1
 , qbs
 , cmake
 , pkg-config
 , json-glib
-, protocol
+, harmony-protocol
+, protoc-gen-hrpc
 }: stdenv.mkDerivation {
   pname = "challah";
   version = builtins.substring 0 8 rev;
 
   buildInputs =
-    [ protobuf3_12 json-glib protocol ]
+    [ protobuf json-glib harmony-protocol protoc-gen-hrpc ]
     ++ (with gst_all_1; [ gst-plugins-bad gst-plugins-base gstreamer ])
     ++ (with libsForQt5; [ full kirigami2 ]);
   nativeBuildInputs = [ wrapQtAppsHook makeWrapper qbs cmake pkg-config ];
@@ -37,7 +38,7 @@
     runHook preConfigure
     
     qbs setup-toolchains --detect
-    qbs resolve profile:gcc products.HarmonyProtocol.protocolPath:"${protocol}/include"
+    qbs resolve profile:gcc products.HarmonyProtocol.protocolPath:"${harmony-protocol}/include/harmony-protocols"
   '';
 
   buildPhase = ''

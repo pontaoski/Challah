@@ -11,8 +11,8 @@
   src = fetchFromGitHub {
     owner = "harmony-development";
     repo = "protocol";
-    rev = "f8bdbeabd428d86887963267afbf38073c9dfb49";
-    sha256 = "sha256-X/Uavda3F35e4a1XLAZLNLZDfBW8C4NqlQ1ZTgY2nrY=";
+    rev = "26c057dbb77eb7349e5f645bb3d62eb0d25086cb";
+    sha256 = "sha256-4s7s0LXIitkVym3S9WqvHXQhm9CtBNufBKKa8TwZAMU=";
   };
 
   configurePhase = ''
