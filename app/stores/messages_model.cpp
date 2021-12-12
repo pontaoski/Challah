@@ -167,6 +167,121 @@ FutureBase MessagesModel::send(QString txt, QString inReplyTo)
 	co_return QVariant();
 }
 
+FutureBase MessagesModel::sendDebugMessage()
+{
+	using namespace protocol::chat::v1;
+	SendMessageRequest req;
+	req.set_allocated_content(new Content);
+	req.mutable_content()->set_allocated_text_message(new Content::TextContent);
+
+	const auto tm = req.mutable_content()->mutable_text_message();
+	tm->set_allocated_content(new FormattedText);
+
+	const auto txt = tm->mutable_content();
+	const auto cont = R"(bold text
+italic text
+underline text
+monospace text
+superscript text
+subscript text
+codeblock text
+usermention text
+rolemention text
+channelmention text
+guildmention text
+emoji text
+color dim text
+color bright text
+color negative text
+color positive text
+color info text
+color warning text
+localisation text
+)";
+	const QString content(cont);
+	txt->set_text(cont);
+	auto addfmt = [txt, &content](const QString& it, Format fmt)
+	{
+		fmt.set_start(content.indexOf(it));
+		fmt.set_length(it.length());
+		*(txt->add_format()) = fmt;
+	};
+
+	Format it;
+	it.set_allocated_bold(new Format::Bold);
+	addfmt("bold", it);
+
+	it.set_allocated_italic(new Format::Italic);
+	addfmt("italic", it);
+
+	it.set_allocated_underline(new Format::Underline);
+	addfmt("underline", it);
+
+	it.set_allocated_monospace(new Format::Monospace);
+	addfmt("monospace", it);
+
+	it.set_allocated_superscript(new Format::Superscript);
+	addfmt("superscript", it);
+
+	it.set_allocated_subscript(new Format::Subscript);
+	addfmt("subscript", it);
+
+	it.set_allocated_code_block(new Format::CodeBlock);
+	addfmt("codeblock", it);
+
+	it.set_allocated_user_mention(new Format::UserMention);
+	addfmt("usermention", it);
+
+	it.set_allocated_role_mention(new Format::RoleMention);
+	addfmt("rolemention", it);
+
+	it.set_allocated_channel_mention(new Format::ChannelMention);
+	addfmt("channelmention", it);
+
+	it.set_allocated_guild_mention(new Format::GuildMention);
+	addfmt("guildmention", it);
+
+	it.set_allocated_emoji(new Format::Emoji);
+	it.mutable_emoji()->set_image_hmc("AHyrDmaB3yGZC5UjGYO92n");
+	addfmt("emoji", it);
+
+	it.set_allocated_color(new Format::Color);
+	it.mutable_color()->set_kind(Format::Color::KIND_DIM_UNSPECIFIED);
+	addfmt("color dim", it);
+
+	it.set_allocated_color(new Format::Color);
+	it.mutable_color()->set_kind(Format::Color::KIND_BRIGHT);
+	addfmt("color bright", it);
+
+	it.set_allocated_color(new Format::Color);
+	it.mutable_color()->set_kind(Format::Color::KIND_NEGATIVE);
+	addfmt("color negative", it);
+
+	it.set_allocated_color(new Format::Color);
+	it.mutable_color()->set_kind(Format::Color::KIND_POSITIVE);
+	addfmt("color positive", it);
+
+	it.set_allocated_color(new Format::Color);
+	it.mutable_color()->set_kind(Format::Color::KIND_INFO);
+	addfmt("color info", it);
+
+	it.set_allocated_color(new Format::Color);
+	it.mutable_color()->set_kind(Format::Color::KIND_WARNING);
+	addfmt("color warning", it);
+
+	it.set_allocated_localization(new Format::Localization);
+	addfmt("localisation", it);
+
+	it.set_allocated_bold(new Format::Bold);
+	addfmt("bold", it);
+
+	req.set_guild_id(d->guildID);
+	req.set_channel_id(d->channelID);
+
+	co_await s->api()->dispatch(host, &SDK::R::SendMessage, req);
+	co_return QVariant();
+}
+
 FutureBase MessagesModel::sendFiles(const QList<QUrl>& urls)
 {
 	auto rids = co_await uploadFiles(s, host, urls);

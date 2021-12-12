@@ -60,6 +60,13 @@ QQC2.Control {
 				TextEdit {
 					id: textEdit
 					text: del.modelData.caption.text
+					Component.onCompleted: UIUtils.formatDocument(CState, textEdit.textDocument, textEdit, del.modelData.caption)
+					Connections {
+						target: del
+						function onModelDataChanged() {
+							UIUtils.formatDocument(CState, textEdit.textDocument, textEdit, del.modelData.caption)
+						}
+					}
 					visible: text !== ""
 
 					readOnly: true

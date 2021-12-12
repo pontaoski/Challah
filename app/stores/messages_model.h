@@ -28,6 +28,7 @@ public:
 	Q_INVOKABLE Croutons::FutureBase send(QString txt, QString inReplyTo = "");
 	Q_INVOKABLE Croutons::FutureBase sendFiles(const QList<QUrl>& txt);
 	Q_INVOKABLE Croutons::FutureBase deleteMessage(const QString& id);
+	Q_INVOKABLE Croutons::FutureBase sendDebugMessage();
 
 	bool canFetchMore(const QModelIndex &parent) const override;
 	void fetchMore(const QModelIndex &parent) override;

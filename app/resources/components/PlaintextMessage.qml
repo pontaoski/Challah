@@ -17,7 +17,7 @@ QtObject {
 	readonly property string plaintext: {
 		switch (tryit(() => [universalData.data.contentType, universalData.dummy][0], "")) {
 		case "textMessage":
-			return textData.data.contentText
+			return textData.data.contentText.text
 		case "embedMessage":
 			return qsTr("Embed")
 		case "filesMessage":
@@ -59,7 +59,7 @@ QtObject {
 		key: plaintext.messageID
 
 		shape: QtObject {
-			required property string contentText
+			required property var contentText
 		}
 	}
 }

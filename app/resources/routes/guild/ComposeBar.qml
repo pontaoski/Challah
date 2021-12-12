@@ -83,6 +83,10 @@ QQC2.ToolBar {
 				icon.name: "mail-attachment"
 				onClicked: fileDialog.open()
 			}
+			// QQC2.Button {
+			// 	text: "send test"
+			// 	onClicked: timelineView.model.sendDebugMessage()
+			// }
 			TextEdit {
 				id: txtField
 

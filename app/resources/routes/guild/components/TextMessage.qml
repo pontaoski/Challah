@@ -34,10 +34,18 @@ QQC2.Control {
 		ReplyBlock {}
 		TextEdit {
 			id: textEdit
-			text: textData.data.contentText + _background.textPadding
+			text: textData.data.contentText.text + _background.textPadding
+
+			Component.onCompleted: UIUtils.formatDocument(CState, textEdit.textDocument, textEdit, textData.data.contentText)
+			Connections {
+				target: textData.data
+				function onContentTextChanged() {
+					UIUtils.formatDocument(CState, textEdit.textDocument, textEdit, textData.data.contentText)
+				}
+			}
 
 			readonly property var isEmoji: /^(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])+$/
-			readonly property bool isEmojiOnly: isEmoji.test(textData.data.contentText)
+			readonly property bool isEmojiOnly: isEmoji.test(textData.data.contentText.text)
 
 			readOnly: true
 			selectByMouse: !Kirigami.Settings.isMobile
@@ -79,7 +87,7 @@ QQC2.Control {
 		model: timelineView.model.store
 		key: del.messageID
 		shape: QtObject {
-			required property string contentText
+			required property var contentText
 		}
 	}
 
