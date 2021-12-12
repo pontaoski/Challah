@@ -18,11 +18,11 @@
   configurePhase = ''
     mkdir build
     cd build
-    cmake -DCMAKE_INSTALL_PREFIX="$out/usr/include" ..
+    cmake -DCMAKE_INSTALL_PREFIX="$out" ..
   '';
 
   installPhase = ''
-    mkdir -p $out/usr/include
+    mkdir -p $out/include
     make install
   '';
 }

@@ -37,7 +37,7 @@
     runHook preConfigure
     
     qbs setup-toolchains --detect
-    qbs resolve profile:gcc
+    qbs resolve profile:gcc products.HarmonyProtocol.protocolPath:"${protocol}/include"
   '';
 
   buildPhase = ''
