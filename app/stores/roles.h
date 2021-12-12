@@ -15,11 +15,17 @@ class RolesModel : public QAbstractListModel
 	State* s;
 	QString host;
 
+	Q_PROPERTY(bool working READ working NOTIFY workingChanged)
+
 public:
 	RolesModel(QString host, quint64 guildID, State* state);
 	~RolesModel();
 
+	bool working() const;
+	Q_SIGNAL void workingChanged();
+
 	Q_INVOKABLE Croutons::FutureBase moveRoleFromTo(int from, int to);
+	Q_INVOKABLE Croutons::FutureBase moveRole(const QString& id, int to);
 	Q_INVOKABLE Croutons::FutureBase createRole(QString name, QColor colour);
 	Q_INVOKABLE QVariant everyonePermissions() const;
 

@@ -8,12 +8,14 @@ enum Roles {
 	NameRole = Qt::UserRole,
 	ColorRole,
 	Permissions,
+	IDRole,
 };
 
 struct RolesModel::Private
 {
 	quint64 guildID;
 	QList<protocol::chat::v1::RoleWithId> roles;
+	bool working = false;
 };
 
 RolesModel::RolesModel(QString host, quint64 guildID, State* state) : QAbstractListModel(state), d(new Private), s(state), host(host)
@@ -80,6 +82,8 @@ QVariant RolesModel::data(const QModelIndex& index, int role) const
 
 	switch (role)
 	{
+	case IDRole:
+		return QString::number(d->roles[index.row()].role_id());
 	case NameRole:
 		return QString::fromStdString(d->roles[index.row()].role().name());
 	case ColorRole:
@@ -144,10 +148,38 @@ FutureBase RolesModel::createRole(QString name, QColor colour)
 	co_return true;
 }
 
+Croutons::FutureBase RolesModel::moveRole(const QString& sid, int to)
+{
+	const auto id = sid.toULongLong();
+	int idx = 0;
+	bool ok = false;
+	for (const auto& role : d->roles) {
+		if (role.role_id() == id) {
+			ok = true;
+			break;
+		}
+		idx++;
+	}
+	if (ok) {
+		d->working = true;
+		Q_EMIT workingChanged();
+		co_await moveRoleFromTo(idx, to);
+		d->working = false;
+		Q_EMIT workingChanged();
+	}
+	co_return {};
+}
+
+bool RolesModel::working() const
+{
+	return d->working;
+}
+
 QHash<int,QByteArray> RolesModel::roleNames() const
 {
 	QHash<int,QByteArray> ret;
 
+	ret[IDRole] = "roleID";
 	ret[NameRole] = "roleName";
 	ret[ColorRole] = "roleColour";
 	ret[Permissions] = "permissions";

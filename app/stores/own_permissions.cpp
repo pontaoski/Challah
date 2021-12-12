@@ -94,6 +94,7 @@ void OwnPermissionsStore::fetchKey(const QVariant& key)
 	}
 
 	d->fetching << node;
+	qWarning() << "getting" << key;
 
 	state->api()->clientForHomeserver(node.homeserver).then([=](SDK::Client* c) {
 		d->fetching.removeAll(node);
@@ -110,6 +111,7 @@ void OwnPermissionsStore::fetchKey(const QVariant& key)
 
 			auto value = r.value();
 			d->data[node] = value.ok();
+			qWarning() << "got" << key << value.ok();
 			Q_EMIT keyAdded(key);
 		});
 	});

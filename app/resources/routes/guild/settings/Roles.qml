@@ -41,6 +41,16 @@ Kirigami.ScrollablePage {
 		onAccepted: roleColor.color = color
 	}
 
+	RelationalListener {
+		id: canManage
+
+		model: CState.ownPermissionsStore
+		key: [routerInstance.guildHomeserver, routerInstance.guildID, "", "roles.manage"]
+		shape: QtObject {
+			required property bool has
+		}
+	}
+
 	Kirigami.OverlaySheet {
 		id: createRolesSheet
 
@@ -84,19 +94,58 @@ Kirigami.ScrollablePage {
 
 	ListView {
 		model: DelegateModel {
-			id: rolesModel
+			id: delModel
 			model: rolesPage.rolesModel
 
 			delegate: Kirigami.BasicListItem {
 				id: del
 				required property string roleName
+				required property string roleID
 				required property color roleColour
 				required property var permissions
+
+				reserveSpaceForSubtitle: true
 
 				leading: Rectangle {
 					width: height
 					radius: height/2
 					color: del.roleColour
+				}
+
+				trailing: Item {
+					width: icon.width
+					enabled: {
+						console.warn(!rolesModel.working, canManage.data.has)
+						console.warn(!rolesModel.working, tryit(() => canManage.data.has, false))
+						return !rolesModel.working && tryit(() => canManage.data.has, false)
+					}
+					Kirigami.Icon {
+						id: icon
+						source: "handle-sort"
+						anchors {
+							right: parent.right
+							verticalCenter: parent.verticalCenter
+						}
+						MouseArea {
+							id: dragArea
+
+							anchors.fill: parent
+
+							property bool held: false
+
+							drag.target: held ? del : undefined
+							drag.axis: Drag.YAxis
+
+							onPressed: {
+								held = true
+							}
+							onReleased: {
+								held = false
+								delModel.model.moveRole(del.roleID, del.DelegateModel.itemsIndex)
+								delModel.items.move(del.DelegateModel.itemsIndex, del.DelegateModel.itemsIndex)
+							}
+						}
+					}
 				}
 
 				onClicked: root.layers.push(Qt.resolvedUrl("Permissions.qml"), { "permsModel": del.permissions })
