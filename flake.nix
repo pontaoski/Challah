@@ -12,7 +12,6 @@
       url = "github:edolstra/flake-compat";
       flake = false;
     };
-    devshell.url = "github:numtide/devshell";
   };
 
   outputs = inputs:
@@ -20,12 +19,11 @@
       let
         pkgs = import inputs.nixpkgs {
           inherit system;
-          overlays = [ inputs.devshell.overlay ];
         };
-        devShell = pkgs.devshell.fromTOML ./devshell.toml;
-        packages = {
+        packages = rec {
+          harmony-protocol = pkgs.callPackage ./build-protocol.nix { };
           challah = pkgs.libsForQt5.callPackage ./build.nix {
-            inherit devShell;
+            protocol = harmony-protocol;
             inherit (inputs.challahSrc) rev;
           };
         };
@@ -37,8 +35,9 @@
         };
       in
       {
-        inherit devShell packages apps;
+        inherit packages apps;
 
+        devShell = packages.challah;
         defaultPackage = packages.challah;
         defaultApp = apps.challah;
       }
