@@ -19,10 +19,16 @@ inline Croutons::FutureResult<QString> uploadFile(State* state, QString host, QU
 	QFile* file(new QFile(url.toLocalFile()));
 	file->open(QIODevice::ReadOnly);
 
+	const auto fname = QString::fromLocal8Bit(QUrl::toPercentEncoding(url.fileName()));
+
 	QHttpPart filePart;
 	filePart.setBodyDevice(file);
-	filePart.setHeader(QNetworkRequest::ContentDispositionHeader, QString("form-data; name=\"file\""));
-	filePart.setHeader(QNetworkRequest::ContentTypeHeader, "multipart/form-data");
+	filePart.setHeader(
+		QNetworkRequest::ContentDispositionHeader,
+		QString("form-data; name=\"file\"; filename=\"%1\"").arg(fname));
+	QMimeDatabase db;
+	const auto mt = db.mimeTypeForUrl(url);
+	filePart.setHeader(QNetworkRequest::ContentTypeHeader, mt.name());
 
 	mp->append(filePart);
 
@@ -70,6 +76,8 @@ inline Croutons::FutureResult<QStringList> uploadFiles(State* state, QString hos
 		if (!id.ok()) {
 			co_return Error{id.error()};
 		}
+
+		ids << id.value();
 	}
 
 	co_return ids;
