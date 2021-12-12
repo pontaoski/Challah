@@ -85,7 +85,10 @@ QQC2.ToolBar {
 			}
 			// QQC2.Button {
 			// 	text: "send test"
-			// 	onClicked: timelineView.model.sendDebugMessage()
+			// 	onClicked: {
+			// 		timelineView.model.sendDebugMessage()
+			// 		visible = false
+			// 	}
 			// }
 			TextEdit {
 				id: txtField

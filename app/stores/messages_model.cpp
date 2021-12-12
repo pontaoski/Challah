@@ -196,7 +196,6 @@ color negative text
 color positive text
 color info text
 color warning text
-localisation text
 )";
 	const QString content(cont);
 	txt->set_text(cont);
@@ -269,8 +268,8 @@ localisation text
 	it.mutable_color()->set_kind(Format::Color::KIND_WARNING);
 	addfmt("color warning", it);
 
-	it.set_allocated_localization(new Format::Localization);
-	addfmt("localisation", it);
+	// it.set_allocated_localization(new Format::Localization);
+	// addfmt("localisation", it);
 
 	it.set_allocated_bold(new Format::Bold);
 	addfmt("bold", it);

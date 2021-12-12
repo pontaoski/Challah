@@ -2,6 +2,7 @@ import QtQuick 2.15
 import QtQuick.Layouts 1.10
 import QtQuick.Controls 2.12 as QQC2
 import org.kde.kirigami 2.14 as Kirigami
+import QtGraphicalEffects 1.15
 import com.github.HarmonyDevelopment.Challah 1.0
 
 QQC2.Control {
@@ -39,12 +40,44 @@ QQC2.Control {
 				id: del
 
 				required property var modelData
+				readonly property string text: tryit(() => del.modelData.caption.text, "")
+				readonly property var contData: tryit(() => del.modelData.caption, {})
 
 				Image {
-					source: CState.mediaURL(del.modelData.hmc)
+					id: image
 
-					sourceHeight: del.modelData.height
-					sourceWidth: del.modelData.width
+					source: CState.mediaURL(del.modelData.hmc, routerInstance.guildHomeserver)
+
+					Rectangle {
+						color: Kirigami.Theme.backgroundColor
+						anchors.fill: image
+						visible: image.status !== Image.Ready
+
+						Loader {
+							anchors.fill: parent
+							active: image.status !== Image.Ready
+							sourceComponent: Image {
+								anchors.fill: parent
+								source: `data:img/jpeg;base64,` + del.modelData.minithumbnail.data
+
+								layer.enabled: true
+								layer.effect: FastBlur {
+									cached: true
+									radius: 32
+								}
+							}
+						}
+					}
+
+					readonly property real ratio: width / sourceSize.width
+					Layout.preferredHeight: sourceSize.height * image.ratio
+					Layout.preferredWidth: sourceSize.width
+					Layout.fillWidth: true
+					smooth: true
+					mipmap: true
+
+					sourceSize.height: del.modelData.height
+					sourceSize.width: del.modelData.width
 
 					layer.enabled: true
 					layer.effect: OpacityMask {
@@ -55,16 +88,43 @@ QQC2.Control {
 							height: image.height
 						}
 					}
+
+					QQC2.Label {
+						text: messageData.data.timestamp
+
+						Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
+						Kirigami.Theme.inherit: false
+
+						font.pointSize: -1
+						font.pixelSize: Kirigami.Units.gridUnit * (2/3)
+
+						padding: Kirigami.Units.smallSpacing
+						leftPadding: Math.floor(Kirigami.Units.smallSpacing*(3/2))
+						rightPadding: Math.floor(Kirigami.Units.smallSpacing*(3/2))
+
+						visible: !textEdit.visible
+
+						anchors {
+							bottom: parent.bottom
+							right: parent.right
+							margins: Kirigami.Units.largeSpacing
+						}
+						background: Rectangle {
+							color: Kirigami.Theme.backgroundColor
+							opacity: 0.7
+							radius: 3
+						}
+					}
 				}
 
 				TextEdit {
 					id: textEdit
-					text: del.modelData.caption.text
-					Component.onCompleted: UIUtils.formatDocument(CState, textEdit.textDocument, textEdit, del.modelData.caption)
+					text: del.text
+					Component.onCompleted: UIUtils.formatDocument(CState, textEdit.textDocument, textEdit, del.contData)
 					Connections {
 						target: del
 						function onModelDataChanged() {
-							UIUtils.formatDocument(CState, textEdit.textDocument, textEdit, del.modelData.caption)
+							UIUtils.formatDocument(CState, textEdit.textDocument, textEdit, del.contData)
 						}
 					}
 					visible: text !== ""
