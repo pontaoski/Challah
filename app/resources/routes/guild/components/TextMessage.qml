@@ -28,6 +28,8 @@ QQC2.Control {
 			visible: del.separateFromPrevious && !(del.isOwnMessage && Kirigami.Settings.isMobile)
 
 			wrapMode: Text.Wrap
+			maximumLineCount: 2
+			elide: Text.ElideRight
 
 			Layout.fillWidth: true
 		}

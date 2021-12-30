@@ -204,6 +204,13 @@ voiceCall::voiceCall(State* state, const QString& host, quint64 guildID, quint64
 void voiceCall::initialised(QString rtpCapabilities)
 {
 	auto caps = json::parse(rtpCapabilities.toStdString());
+	for (auto& codec : caps["codecs"]) {
+		codec["payloadType"] = codec["preferredPayloadType"];
+	}
+	for (auto& ext : caps["headerExtensions"]) {
+		ext["id"] = ext["preferredId"];
+		ext["encrypt"] = ext["preferredEncrypt"];
+	}
 	auto req = voice::StreamMessageRequest{};
 
 	req.set_allocated_prepare_for_join_channel(new voice::StreamMessageRequest::PrepareForJoinChannel);

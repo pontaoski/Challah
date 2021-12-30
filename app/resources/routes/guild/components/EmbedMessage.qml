@@ -21,6 +21,8 @@ ColumnLayout {
 		visible: del.separateFromPrevious && !(del.isOwnMessage && Kirigami.Settings.isMobile)
 
 		wrapMode: Text.Wrap
+		maximumLineCount: 2
+		elide: Text.ElideRight
 
 		Layout.fillWidth: true
 		Layout.leftMargin: Kirigami.Units.largeSpacing
