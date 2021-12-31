@@ -116,7 +116,7 @@ Kirigami.ScrollablePage {
 			sourceComponent: {
 				switch (channelData.data.kind) {
 				case "voice":
-					return voiceInformation
+					return null // voiceInformation
 				default:
 					return null
 				}

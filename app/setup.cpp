@@ -17,6 +17,7 @@
 #include "invites.h"
 #include "roles.h"
 #include "voice.h"
+#include "overrides_model.h"
 
 #include <gst/gst.h>
 
@@ -72,6 +73,7 @@ void setupQML(QQmlEngine* engine)
 	qRegisterMetaType<InviteModel*>();
 	qRegisterMetaType<voiceCall*>();
 	qRegisterMetaType<Utils*>();
+	qRegisterMetaType<OverridesModel*>();
 	qRegisterMetaType<OwnPermissionsStore*>();
 
 	qRegisterMetaType<Future<ChannelsModel*>>();

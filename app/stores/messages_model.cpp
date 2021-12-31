@@ -4,6 +4,7 @@
 #include <QHttpMultiPart>
 
 #include "messages_model_p.h"
+#include "overrides_model_p.h"
 #include "uploading.h"
 
 enum Roles {
@@ -153,7 +154,7 @@ MessagesStore* MessagesModel::store()
 	return d->store.get();
 }
 
-FutureBase MessagesModel::send(QString txt, QString inReplyTo)
+FutureBase MessagesModel::send(QString txt, QVariant override, QString inReplyTo)
 {
 	protocol::chat::v1::SendMessageRequest req;
 	req.set_in_reply_to(inReplyTo.toULongLong());
@@ -163,6 +164,37 @@ FutureBase MessagesModel::send(QString txt, QString inReplyTo)
 	req.mutable_content()->set_allocated_text_message(new protocol::chat::v1::Content::TextContent);
 	req.mutable_content()->mutable_text_message()->set_allocated_content(new protocol::chat::v1::FormattedText);
 	req.mutable_content()->mutable_text_message()->mutable_content()->set_text(txt.toStdString());
+	if (!override.isNull()) {
+		const auto data = override.value<OverrideData>();
+		req.set_allocated_overrides(new protocol::chat::v1::Overrides);
+		req.mutable_overrides()->set_username(data.name.toStdString());
+		if (!data.avatar.isEmpty()) {
+			req.mutable_overrides()->set_avatar(data.avatar.toStdString());
+		}
+		req.mutable_overrides()->set_allocated_system_plurality(new protocol::harmonytypes::v1::Empty);
+	}
+	for (const auto& override : s->overridesModel()->d->overrides) {
+		for (const auto& tag : override.tags()) {
+			const auto before = QString::fromStdString(tag.before());
+			const auto after = QString::fromStdString(tag.after());
+
+			if (!(txt.startsWith(before) && txt.endsWith(after))) {
+				continue;
+			}
+
+			req.set_allocated_overrides(new protocol::chat::v1::Overrides);
+			req.mutable_overrides()->set_username(override.username());
+			if (!override.avatar().empty()) {
+				req.mutable_overrides()->set_avatar(override.avatar());
+			}
+			req.mutable_overrides()->set_allocated_system_plurality(new protocol::harmonytypes::v1::Empty);
+
+			txt.remove(0, before.length());
+			txt.chop(after.length());
+
+			req.mutable_content()->mutable_text_message()->mutable_content()->set_text(txt.toStdString());
+		}
+	}
 	co_await s->api()->dispatch(host, &SDK::R::SendMessage, req);
 	co_return QVariant();
 }

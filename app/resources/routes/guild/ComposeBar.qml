@@ -17,7 +17,7 @@ QQC2.ToolBar {
 	id: composeRow
 
 	function send() {
-		timelineView.model.send(txtField.text, page.interactionID)
+		timelineView.model.send(txtField.text, overrideAvatar.overrideData, page.interactionID)
 		txtField.text = ""
 		page.interactionID = ""
 		page.interactionKind = ""
@@ -78,6 +78,85 @@ QQC2.ToolBar {
 			Layout.fillWidth: true
 		}
 		RowLayout {
+			RelationalListener {
+				id: userData
+
+				model: CState.membersStore
+				key: [routerInstance.guildHomeserver, CState.ownID]
+				shape: QtObject {
+					required property string name
+					required property string avatarURL
+				}
+			}
+
+			Kirigami.Avatar {
+				id: overrideAvatar
+
+				implicitWidth: 24
+				implicitHeight: 24
+
+				visible: CState.overridesModel.count > 0
+
+				source: tryit(() => overrideData ? overrideData.avatar : userData.data.avatarURL, overrideData ? overrideData.avatar : "")
+				name: tryit(() => overrideData ? overrideData.name : userData.data.name, overrideData ? overrideData.name : "")
+
+				property var overrideData: null
+
+				actions.main: Kirigami.Action {
+					onTriggered: {
+						overridesMenu.open()
+					}
+				}
+
+				QQC2.Menu {
+					id: overridesMenu
+
+					component AvatarItem : QQC2.MenuItem {
+						id: del
+
+						required property string name
+						required property string avatarURL
+
+						contentItem: RowLayout {
+							Kirigami.Avatar {
+								implicitWidth: 24
+								implicitHeight: 24
+
+								name: del.name
+								source: del.avatarURL
+							}
+							QQC2.Label {
+								text: del.name
+								Layout.fillWidth: true
+							}
+						}
+					}
+
+					AvatarItem {
+						name: tryit(() => userData.data.name, "")
+						avatarURL: tryit(() => userData.data.avatarURL, "")
+						onTriggered: overrideAvatar.overrideData = null
+					}
+					QQC2.MenuSeparator {
+
+					}
+					Repeater {
+						model: CState.overridesModel
+
+						delegate: AvatarItem {
+							required property string username
+							required property string avatar
+							required property var overrideData
+
+							name: username
+							avatarURL: avatar
+
+							onTriggered: overrideAvatar.overrideData = overrideData
+						}
+					}
+				}
+			}
+
 			QQC2.Button {
 				Accessible.name: qsTr("Upload files")
 				icon.name: "mail-attachment"

@@ -21,12 +21,14 @@ class InviteModel;
 class RolesModel;
 class OwnPermissionsStore;
 class voiceCall;
+class OverridesModel;
 
 class State : public QObject
 {
 
 	Q_OBJECT
 
+	Q_PROPERTY(OverridesModel* overridesModel READ overridesModel NOTIFY overridesModelChanged)
 	Q_PROPERTY(GuildList* guildList READ guildList NOTIFY guildListChanged)
 	Q_PROPERTY(GuildsStore* guildsStore READ guildsStore NOTIFY guildsStoreChanged)
 	Q_PROPERTY(MembersStore* membersStore READ membersStore NOTIFY membersStoreChanged)
@@ -55,6 +57,9 @@ public:
 	Q_INVOKABLE InviteModel* inviteModelFor(QString host, QString guildID, QObject* it);
 	Q_INVOKABLE RolesModel* rolesModelFor(QString host, QString guildID, QObject* it);
 	Q_INVOKABLE voiceCall* makeVoiceCall(QString host, QString guildID, QString channelID, QObject* it);
+
+	OverridesModel* overridesModel();
+	Q_SIGNAL void overridesModelChanged();
 
 	Q_INVOKABLE QString mediaURL(const QString& id, const QString& homeserver);
 

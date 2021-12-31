@@ -12,6 +12,7 @@ import QtQuick.Controls 2.12 as QQC2
 
 import "qrc:/routes/login" as LoginRoutes
 import "qrc:/routes/guild" as GuildRoutes
+import "qrc:/routes/settings" as SettingsRoutes
 import "qrc:/components" as Components
 
 Kirigami.ApplicationWindow {
@@ -23,6 +24,16 @@ Kirigami.ApplicationWindow {
 	width: 1000
 
 	wideScreen: width > 500
+
+	Loader {
+		id: settingsLoader
+		asynchronous: true
+		active: false
+
+		sourceComponent: SettingsRoutes.Settings {
+			visible: false
+		}
+	}
 
 	function tryit(fn, def) {
 		try {
@@ -129,6 +140,7 @@ Kirigami.ApplicationWindow {
 				routerInstance.navigateToRoute("Login/Stepper")
 			}
 			function onEndLogin() {
+				settingsLoader.active = true
 				routerInstance.navigateToRoute("Guild/Timeline")
 			}
 		}

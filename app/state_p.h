@@ -23,6 +23,7 @@ struct State::Private
 	GuildsStore* store = nullptr;
 	MembersStore* membersStore = nullptr;
 	OwnPermissionsStore* ownPermissionsStore = nullptr;
+	OverridesModel* overridesModel = nullptr;
 	QString homeserver;
 	QString userID;
 

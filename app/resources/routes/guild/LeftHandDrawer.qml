@@ -57,6 +57,11 @@ Control {
 						id: appMenu
 
 						MenuItem {
+							text: qsTr("Settings")
+							onTriggered: settingsLoader.item.visible = true
+						}
+
+						MenuItem {
 							text: qsTr("Create or Join Guild...")
 							onTriggered: guildSheet.openAndClear()
 						}

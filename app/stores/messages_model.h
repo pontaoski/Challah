@@ -25,7 +25,7 @@ public:
 
 	MessagesStore* store();
 
-	Q_INVOKABLE Croutons::FutureBase send(QString txt, QString inReplyTo = "");
+	Q_INVOKABLE Croutons::FutureBase send(QString txt, QVariant override, QString inReplyTo = "");
 	Q_INVOKABLE Croutons::FutureBase sendFiles(const QList<QUrl>& txt);
 	Q_INVOKABLE Croutons::FutureBase deleteMessage(const QString& id);
 	Q_INVOKABLE Croutons::FutureBase sendDebugMessage();
