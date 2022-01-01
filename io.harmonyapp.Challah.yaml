@@ -39,21 +39,6 @@ modules:
         path: protoc-gen-hrpc
     build-commands:
       - install -Dm755 protoc-gen-hrpc /app/bin/protoc-gen-hrpc
-# kf5
-  - name: kf5-extra-cmake-modules
-    buildsystem: cmake
-    builddir: true
-    sources:
-      - type: git
-        url: https://invent.kde.org/frameworks/extra-cmake-modules
-        branch: master
-  - name: kf5-kirigami
-    buildsystem: cmake
-    builddir: true
-    sources:
-      - type: git
-        url: https://invent.kde.org/frameworks/kirigami
-        branch: master
 # protoc
   - name: protobuf
     buildsystem: autotools
