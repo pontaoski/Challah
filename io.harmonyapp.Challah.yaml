@@ -53,13 +53,20 @@ modules:
         url: https://code.qt.io/qbs/qbs.git
         branch: 1.18
 # the app
+  - name: harmony-protocols
+    buildsystem: cmake
+    builddir: true
+    sources:
+      - type: git
+        url: https://github.com/harmony-development/protocol.git
+        branch: main
   - name: challah
     buildsystem: simple
     post-install:
     - cp -r release/install-root/app/bin/Challah /app/bin/
     - cp -r release/install-root/app/share/* /app/share/
     build-commands:
-      - qbs config:release modules.cpp.treatWarningsAsErrors:false installPrefix:/app -j2
+      - qbs config:release modules.cpp.treatWarningsAsErrors:false 'products.HarmonyProtocol.protocolPath:"/app/include/harmony-protocols"' installPrefix:/app -j2
     sources:
       - type: git
         url: https://github.com/harmony-development/Challah
