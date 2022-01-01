@@ -38,7 +38,7 @@ modules:
       - type: file
         path: protoc-gen-hrpc
     build-commands:
-      - cp protoc-gen-hrpc /app/bin/protoc-gen-hrpc
+      - install -Dm755 protoc-gen-hrpc /app/bin/protoc-gen-hrpc
 # kf5
   - name: kf5-extra-cmake-modules
     buildsystem: cmake
