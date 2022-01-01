@@ -44,12 +44,12 @@ modules:
         url: https://invent.kde.org/frameworks/kirigami
         branch: master
 # protoc
-   - name: protobuf                                                                                                                                                      
-     buildsystem: autotools                                                                                                                                              
-     sources:                                                                                                                                                            
-       - type: archive                                                                                                                                                   
-         url: https://github.com/protocolbuffers/protobuf/releases/download/v3.18.1/protobuf-cpp-3.18.1.tar.gz                                                           
-         sha256: 6ee35eda3f79e49608d2ace8d866313fdec539d8bb14c6c54e8d2a16fa4e6780 
+  - name: protobuf
+    buildsystem: autotools
+    sources:
+      - type: archive
+        url: https://github.com/protocolbuffers/protobuf/releases/download/v3.18.1/protobuf-cpp-3.18.1.tar.gz
+        sha256: 6ee35eda3f79e49608d2ace8d866313fdec539d8bb14c6c54e8d2a16fa4e6780
 # stuff we modify
   - name: qbs
     buildsystem: qmake
