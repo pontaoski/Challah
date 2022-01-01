@@ -38,8 +38,9 @@ modules:
       - type: git
         url: https://github.com/harmony-development/hrpc.git
         branch: main
+    build-options:
+      prepend-path: /usr/lib/sdk/golang/bin
     build-commands:
-      - . /usr/lib/sdk/golang/enable.sh
       - cd protoc-gen-hrpc
       - go build
       - cp protoc-gen-hrpc /app/bin/protoc-gen-hrpc
