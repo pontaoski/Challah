@@ -55,6 +55,52 @@ modules:
       - type: git
         url: https://code.qt.io/qbs/qbs.git
         branch: 1.18
+# gstreamer
+  - buildsystem: meson
+    name: gstreamer
+    sources:
+      - commit: 71c213f99ad5c8fc8f36a26238483f2bdf7d846a
+        tag: 1.18.5
+        type: git
+        url: https://gitlab.freedesktop.org/gstreamer/gstreamer.git
+  - config-opts:
+      - -Dcompositor=enabled
+      - -Dgl=enabled
+    buildsystem: meson
+    name: gstreamer-plugins-base
+    sources:
+      - commit: 57fb883b3f8c6d7a397afc0dfc4a7c2e5af05579
+        tag: 1.18.5
+        type: git
+        url: https://gitlab.freedesktop.org/gstreamer/gst-plugins-base.git
+  - config-opts:
+      - -Dpulse=enabled
+      - -Dqt5=enabled
+      - -Drtp=enabled
+      - -Drtpmanager=enabled
+      - -Dvpx=enabled
+    buildsystem: meson
+    name: gstreamer-plugins-good
+    sources:
+      - commit: 56dec037a80266add6853e4b06e2dc379de757d1
+        tag: 1.18.5
+        type: git
+        url: https://gitlab.freedesktop.org/gstreamer/gst-plugins-good.git
+  - config-opts:
+      - -Ddtls=enabled
+      - -Dgl=enabled
+      - -Dopenh264=enabled
+      - -Dopus=enabled
+      - -Dsrtp=enabled
+      - -Dwebrtc=enabled
+      - -Dflite=disabled
+    buildsystem: meson
+    name: gstreamer-plugins-bad
+    sources:
+      - commit: d3af58d5b31941caa26c3ded85d7a7b84a91f0cc
+        tag: 1.18.5
+        type: git
+        url: https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad.git
 # the app
   - name: harmony-protocols
     buildsystem: cmake
