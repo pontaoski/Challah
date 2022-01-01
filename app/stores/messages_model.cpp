@@ -176,9 +176,13 @@ FutureBase MessagesModel::send(QString txt, QVariant override, QString inReplyTo
 	for (const auto& override : s->overridesModel()->d->overrides) {
 		for (const auto& tag : override.tags()) {
 			const auto before = QString::fromStdString(tag.before());
+			const auto evalBefore = !before.isEmpty();
+			const auto beforeOK = evalBefore ? txt.startsWith(before) : true;
 			const auto after = QString::fromStdString(tag.after());
+			const auto evalAfter = !after.isEmpty();
+			const auto afterOK = evalAfter ? txt.endsWith(after) : true;
 
-			if (!(txt.startsWith(before) && txt.endsWith(after))) {
+			if (!(beforeOK && afterOK)) {
 				continue;
 			}
 
