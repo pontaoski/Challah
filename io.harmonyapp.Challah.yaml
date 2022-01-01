@@ -59,6 +59,8 @@ modules:
   - name: harmony-protocols
     buildsystem: cmake
     builddir: true
+    config-opts:
+      - -DUSE_STAGING_PROTOCOLS=on
     sources:
       - type: git
         url: https://github.com/harmony-development/protocol.git
