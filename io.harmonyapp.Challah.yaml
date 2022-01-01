@@ -40,6 +40,8 @@ modules:
         branch: main
     build-options:
       prepend-path: /usr/lib/sdk/golang/bin
+      args:
+        - --share=network
     build-commands:
       - cd protoc-gen-hrpc
       - go build
