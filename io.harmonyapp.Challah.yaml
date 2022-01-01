@@ -31,6 +31,19 @@ cleanup:
   - /share/qbs
 
 modules:
+# hrpc
+  - name: hrpc
+    buildsystem: simple
+    sources:
+      - type: git
+        url: https://github.com/harmony-development/hrpc.git
+        branch: main
+    build-commands:
+      - . /usr/lib/sdk/golang/enable.sh
+      - cd protoc-gen-hrpc
+      - go build
+      - cp protoc-gen-hrpc /app/bin/protoc-gen-hrpc
+# kf5
   - name: kf5-extra-cmake-modules
     buildsystem: cmake
     builddir: true
@@ -45,13 +58,6 @@ modules:
       - type: git
         url: https://invent.kde.org/frameworks/kirigami
         branch: master
-# hrpc
-  - name: hrpc
-    buildsystem: simple
-    sources:
-      - type: git
-        url: https://github.com/harmony-development/hrpc.git
-        branch: main
 # protoc
   - name: protobuf
     buildsystem: autotools
@@ -64,11 +70,6 @@ modules:
     buildsystem: qmake
     config-opts:
     - QBS_INSTALL_PREFIX=/app
-    build-commands:
-      - . /usr/lib/sdk/golang/enable.sh
-      - cd protoc-gen-hrpc
-      - go build
-      - cp protoc-gen-hrpc /app/bin/protoc-gen-hrpc
     sources:
       - type: git
         url: https://code.qt.io/qbs/qbs.git
