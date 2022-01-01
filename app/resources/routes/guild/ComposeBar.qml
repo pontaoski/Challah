@@ -103,9 +103,7 @@ QQC2.ToolBar {
 				property var overrideData: null
 
 				actions.main: Kirigami.Action {
-					onTriggered: {
-						overridesMenu.open()
-					}
+					onTriggered: overridesMenu.popup()
 				}
 
 				QQC2.Menu {
