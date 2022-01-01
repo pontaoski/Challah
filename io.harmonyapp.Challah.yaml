@@ -35,18 +35,10 @@ modules:
   - name: hrpc
     buildsystem: simple
     sources:
-      - type: git
-        url: https://github.com/harmony-development/hrpc.git
-        branch: main
-    build-options:
-      args:
-        - --share=network
+      - type: file
+        path: protoc-gen-hrpc
     build-commands:
-      - |
-        . /usr/lib/sdk/golang/enable.sh
-        cd protoc-gen-hrpc
-        go build
-        cp protoc-gen-hrpc /app/bin/protoc-gen-hrpc
+      - cp protoc-gen-hrpc /app/bin/protoc-gen-hrpc
 # kf5
   - name: kf5-extra-cmake-modules
     buildsystem: cmake
