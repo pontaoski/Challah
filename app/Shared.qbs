@@ -31,10 +31,10 @@ StaticLibrary {
 		cpp.enableExceptions: true
 		cpp.enableReproducibleBuilds: true
 		cpp.enableRtti: true
-		cpp.includePaths: ["gen", "relationallib", "stores", "ui", "."]
+		cpp.includePaths: ["gen", "relationallib", "stores", "ui", "voice", "."]
 	}
 
-	cpp.defines: ["QT_NO_KEYWORDS"].concat(project.vendoredKirigami ? ["CHALLAH_VENDORED_KIRIGAMI"] : []).concat(project.vendoredQQC2BreezeStyle ? ["CHALLAH_VENDORED_QQC2_BREEZE_STYLE"] : [])
+	cpp.defines: ["QT_NO_KEYWORDS"].concat(project.vendoredKirigami ? ["CHALLAH_VENDORED_KIRIGAMI"] : []).concat(project.vendoredQQC2BreezeStyle ? ["CHALLAH_VENDORED_QQC2_BREEZE_STYLE"] : []).concat(project.enableVoice ? ["CHALLAH_ENABLE_VOICE"] : [])
 	cpp.cppFlags: ['-Werror=return-type']
 	cpp.driverLinkerFlags: ['-lsdptransform']
 	cpp.cxxLanguageVersion: "c++17"
@@ -47,7 +47,7 @@ StaticLibrary {
 	debugInformationInstallDir: "bin"
 	installDebugInformation: true
 
-	cpp.includePaths: ["gen", "relationallib", "stores", "ui", "."]
+	cpp.includePaths: ["gen", "relationallib", "stores", "ui", "voice", "."]
 
 	files: [
 		"*.cpp",
@@ -66,6 +66,14 @@ StaticLibrary {
 		"tst.cpp",
 		"main.cpp",
 	]
+
+	Group {
+		files: [
+			"voice/*.cpp",
+			"voice/*.h",
+		]
+		condition: project.enableVoice
+	}
 
 	Depends { name: "bundle" }
 	Depends { name: "cpp" }

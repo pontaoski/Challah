@@ -16,7 +16,11 @@
 #include "messages.h"
 #include "invites.h"
 #include "roles.h"
+
+#if CHALLAH_ENABLE_VOICE
 #include "voice.h"
+#endif
+
 #include "overrides_model.h"
 
 #include <gst/gst.h>
@@ -71,10 +75,13 @@ void setupQML(QQmlEngine* engine)
 	qRegisterMetaType<MessagesModel*>();
 	qRegisterMetaType<MessagesStore*>();
 	qRegisterMetaType<InviteModel*>();
-	qRegisterMetaType<voiceCall*>();
 	qRegisterMetaType<Utils*>();
 	qRegisterMetaType<OverridesModel*>();
 	qRegisterMetaType<OwnPermissionsStore*>();
+
+#if CHALLAH_ENABLE_VOICE
+	qRegisterMetaType<voiceCall*>();
+#endif
 
 	qRegisterMetaType<Future<ChannelsModel*>>();
 	qRegisterMetaType<Future<MembersModel*>>();

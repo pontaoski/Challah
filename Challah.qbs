@@ -2,16 +2,20 @@ Project {
 	references: [
 		"app/App.qbs",
 		"app/Shared.qbs",
-		"app/GStreamerTest.qbs",
 		"vendor/Chometz/Chometz.qbs",
 	]
 
+	property bool enableVoice: false
 	property bool vendoredKirigami: false
 	property bool vendoredQQC2BreezeStyle: false
 	property bool withTests: false
 
 	AutotestRunner { }
 
+	SubProject {
+		filePath: "app/GStreamerTest.qbs"
+		condition: project.enableVoice
+	}
 	SubProject {
 		filePath: "app/Test.qbs"
 		condition: project.withTests
