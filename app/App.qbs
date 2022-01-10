@@ -59,5 +59,7 @@ QtApplication {
 		Qt.core.resourcePrefix: "/po"
 	}
 
+	Depends { name: "harmony-qt-sdk" }
+	Depends { name: "HarmonyProtocol" }
 	Depends { name: "ChallahShared" }
 }

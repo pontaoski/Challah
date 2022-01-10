@@ -37,7 +37,7 @@ QString Utils::formattedSize(int size)
 	return QLocale().formattedDataSize(size, 1);
 }
 
-QString operator"" _qs (const char* s, unsigned long len)
+QString operator"" _qs (const char* s, std::size_t len)
 {
 	return QString::fromUtf8( s, len );
 }

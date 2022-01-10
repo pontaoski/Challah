@@ -19,11 +19,10 @@
 
 #if CHALLAH_ENABLE_VOICE
 #include "voice.h"
+#include <gst/gst.h>
 #endif
 
 #include "overrides_model.h"
-
-#include <gst/gst.h>
 
 #ifdef CHALLAH_VENDORED_KIRIGAMI
 
@@ -53,7 +52,9 @@ Q_DECLARE_METATYPE(Future<RolesModel*>)
 
 void setupGST(int* argc, char*** argv)
 {
+#if CHALLAH_ENABLE_VOICE
 	gst_init(argc, argv);
+#endif
 }
 
 void setupQML(QQmlEngine* engine)
