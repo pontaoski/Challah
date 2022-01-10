@@ -36,6 +36,18 @@ Q_IMPORT_PLUGIN(KirigamiPlugin)
 
 #endif
 
+//
+
+#ifdef CHALLAH_VENDORED_KITEMMODELS
+
+#include "../vendor/kitemmodels/src/qml/plugin.h"
+#include <QtPlugin>
+Q_IMPORT_PLUGIN(Plugin)
+
+#endif
+
+//
+
 #ifdef CHALLAH_VENDORED_QQC2_BREEZE_STYLE
 
 #include "../vendor/qqc2-breeze-style/style/qqc2breezestyleplugin.h"
@@ -63,6 +75,10 @@ void setupQML(QQmlEngine* engine)
 	KirigamiPlugin::getInstance().registerTypes(engine);
 #else
 	Q_UNUSED(engine)
+#endif
+
+#ifdef CHALLAH_VENDORED_KITEMMODELS
+	Q_INIT_RESOURCE(kitemmodelsqml);
 #endif
 
 	qRegisterMetaType<Croutons::FutureBase>();

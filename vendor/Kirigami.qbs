@@ -16,7 +16,7 @@ StaticLibrary {
 	Qt.core.pluginMetaData: ["uri=org.kde.kirigami"]
 
 	cpp.includePaths: [buildDirectory, sourceDirectory, "kirigami/src", "kirigami/src/libkirigami"]
-	cpp.defines: ["QT_NO_CAST_FROM_ASCII", "QT_STATICPLUGIN"]
+	cpp.defines: ["QT_NO_CAST_FROM_ASCII", "QT_STATICPLUGIN", "KIRIGAMI_BUILD_TYPE_STATIC"]
 
 	Depends { name: "cpp" }
 	Depends { name: "Qt"; submodules: ["core", "qml", "quick", "gui", "svg", "network", "quickcontrols2", "concurrent"] }

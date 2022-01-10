@@ -7,6 +7,7 @@ Project {
 
 	property bool enableVoice: false
 	property bool vendoredKirigami: false
+	property bool vendoredKItemModels: false
 	property bool vendoredQQC2BreezeStyle: false
 	property bool withTests: false
 
@@ -23,6 +24,10 @@ Project {
 	SubProject {
 		filePath: "vendor/Kirigami.qbs"
 		condition: project.vendoredKirigami
+	}
+	SubProject {
+		filePath: "vendor/KItemModels.qbs"
+		condition: project.vendoredKItemModels
 	}
 	SubProject {
 		filePath: "vendor/android_openssl.qbs"

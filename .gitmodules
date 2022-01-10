@@ -13,3 +13,6 @@
 [submodule "vendor/android_openssl"]
 	path = vendor/android_openssl
 	url = https://github.com/KDAB/android_openssl.git
+[submodule "vendor/kitemmodels"]
+	path = vendor/kitemmodels
+	url = https://invent.kde.org/frameworks/kitemmodels.git

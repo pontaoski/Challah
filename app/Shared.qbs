@@ -2,10 +2,10 @@ StaticLibrary {
 	name: "ChallahShared"
 
 	Export {
-		Group {
-			condition: project.vendoredKirigami
-			files: ["../vendor/kirigami/kirigami.qrc"]
-		}
+		// Group {
+		// 	condition: project.vendoredKirigami
+		// 	files: ["../vendor/kirigami/kirigami.qrc"]
+		// }
 
 		Depends { name: "bundle" }
 		Depends { name: "cpp" }
@@ -18,6 +18,7 @@ StaticLibrary {
 		Depends { name: "json-glib-1.0"; condition: project.enableVoice }
 		Depends { name: "vendored_protobuf"; condition: project.vendoredProtobuf }
 		Depends { name: "vendored_kirigami"; condition: project.vendoredKirigami }
+		Depends { name: "vendored_kitemmodels"; condition: project.vendoredKItemModels }
 		Depends { name: "android_openssl"; condition: qbs.targetOS.contains("android") }
 		Depends { name: "vendored_qqc2_breeze_style"; condition: project.vendoredQQC2BreezeStyle }
 		Depends { name: "Qt"; submodules: ["core", "core-private", "gui", "network", "concurrent", "widgets", "websockets", "quick", "quickcontrols2", "qml", "qml-private"].concat(qbs.targetOS.contains("android") ? ["androidextras"] : []) }
@@ -34,7 +35,7 @@ StaticLibrary {
 		cpp.includePaths: ["gen", "relationallib", "stores", "ui", "voice", "."]
 	}
 
-	cpp.defines: ["QT_NO_KEYWORDS"].concat(project.vendoredKirigami ? ["CHALLAH_VENDORED_KIRIGAMI"] : []).concat(project.vendoredQQC2BreezeStyle ? ["CHALLAH_VENDORED_QQC2_BREEZE_STYLE"] : []).concat(project.enableVoice ? ["CHALLAH_ENABLE_VOICE"] : [])
+	cpp.defines: ["QT_NO_KEYWORDS"].concat(project.vendoredKItemModels ? ["CHALLAH_VENDORED_KITEMMODELS"] : []).concat(project.vendoredKirigami ? ["CHALLAH_VENDORED_KIRIGAMI"] : []).concat(project.vendoredQQC2BreezeStyle ? ["CHALLAH_VENDORED_QQC2_BREEZE_STYLE"] : []).concat(project.enableVoice ? ["CHALLAH_ENABLE_VOICE"] : [])
 	cpp.cppFlags: ['-Werror=return-type']
 	cpp.driverLinkerFlags: project.enableVoice ? ['-lsdptransform'] : []
 	cpp.cxxLanguageVersion: "c++17"
@@ -87,6 +88,7 @@ StaticLibrary {
 	Depends { name: "json-glib-1.0"; condition: project.enableVoice }
 	Depends { name: "android_openssl"; condition: qbs.targetOS.contains("android") }
 	Depends { name: "vendored_kirigami"; condition: project.vendoredKirigami }
+	Depends { name: "vendored_kitemmodels"; condition: project.vendoredKItemModels }
 	Depends { name: "vendored_qqc2_breeze_style"; condition: project.vendoredQQC2BreezeStyle }
 	Depends { name: "Qt"; submodules: ["core", "core-private", "gui", "network", "concurrent", "widgets", "websockets", "quick", "quickcontrols2", "qml", "qml-private"].concat(qbs.targetOS.contains("android") ? ["androidextras"] : []) }
 }
