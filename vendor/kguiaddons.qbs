@@ -8,7 +8,7 @@ StaticLibrary {
 
 	Export {
 		Depends { name: "cpp" }
-		cpp.includePaths: [buildDirectory, sourceDirectory, "kguiaddons/src/colors"]
+		cpp.includePaths: [exportingProduct.buildDirectory, exportingProduct.sourceDirectory, "kguiaddons/src/colors"]
 	}
 
 	cpp.includePaths: [buildDirectory, sourceDirectory, "kguiaddons/src/colors"]
