@@ -86,6 +86,18 @@ QString State::ownID()
 
 void State::createModels()
 {
+	d->status = ConnectionStatus(d->sdk->totalState());
+	Q_EMIT connectionStatusChanged();
+
+	connect(d->sdk.get(), &SDK::ClientManager::connectionStateChanged, this, [=] {
+		auto s = d->sdk->totalState();
+		if (ConnectionStatus(s) == d->status)
+			return;
+
+		d->status = ConnectionStatus(s);
+		Q_EMIT connectionStatusChanged();
+	});
+
 	d->list = new GuildList(this);
 	Q_EMIT guildListChanged();
 
@@ -115,6 +127,11 @@ ChannelsModel* State::channelsModelFor(QString host, QString guildID, QObject *i
 	d->channelsModels[tup] = mod;
 
 	return mod;
+}
+
+State::ConnectionStatus State::connectionStatus() const
+{
+	return d->status;
 }
 
 InviteModel* State::inviteModelFor(QString host, QString guildID, QObject *it)

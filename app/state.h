@@ -34,6 +34,7 @@ class State : public QObject
 	Q_PROPERTY(MembersStore* membersStore READ membersStore NOTIFY membersStoreChanged)
 	Q_PROPERTY(OwnPermissionsStore* ownPermissionsStore READ ownPermissionsStore NOTIFY ownPermissionsStoreChanged)
 	Q_PROPERTY(QString ownID READ ownID NOTIFY ownIDChanged)
+	Q_PROPERTY(ConnectionStatus connectionStatus READ connectionStatus NOTIFY connectionStatusChanged)
 
 	struct Private;
 	QSharedPointer<Private> d;
@@ -50,6 +51,17 @@ public:
 	Q_INVOKABLE void doLogin(const QString& homeserver);
 	Q_INVOKABLE void logOut();
 	void handleStep(protocol::auth::v1::AuthStep step);
+
+	enum ConnectionStatus {
+		Offline,
+		PartialOutage,
+		Connecting,
+		Connected,
+	};
+	Q_ENUM(ConnectionStatus)
+
+	ConnectionStatus connectionStatus() const;
+	Q_SIGNAL void connectionStatusChanged();
 
 	Q_INVOKABLE ChannelsModel* channelsModelFor(QString host, QString guildID, QObject* it);
 	Q_INVOKABLE MembersModel* membersModelFor(QString host, QString guildID, QObject* it);

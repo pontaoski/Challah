@@ -27,6 +27,7 @@ struct State::Private
 	QString homeserver;
 	QString userID;
 
+	ConnectionStatus status = ConnectionStatus::Offline;
 	QQmlEngine* eng = nullptr;
 	QQmlComponent* kirigamiHeadingComponent = nullptr;
 	QQmlComponent* columnLayoutComponent = nullptr;

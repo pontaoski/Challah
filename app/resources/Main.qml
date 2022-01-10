@@ -7,6 +7,7 @@ import QtQuick.Window 2.10
 import QtQuick.Layouts 1.10
 import org.kde.kirigami 2.13 as Kirigami
 import com.github.HarmonyDevelopment.Challah 1.0
+import QtGraphicalEffects 1.12
 
 import QtQuick.Controls 2.12 as QQC2
 
@@ -166,6 +167,52 @@ Kirigami.ApplicationWindow {
 
 			GuildRoutes.Blank {}
 			GuildRoutes.Timeline {}
+		}
+
+		Kirigami.Heading {
+			level: 4
+
+			visible: CState.connectionStatus != CState.Connected
+
+			text: {
+				switch (CState.connectionStatus) {
+				case CState.Offline:
+					return qsTr("Offline")
+				case CState.PartialOutage:
+					return qsTr("Partial Outage")
+				case CState.Connecting:
+					return qsTr("Connecting…")
+				case CState.Connected:
+					return qsTr("Connected")
+				}
+			}
+
+			padding: Kirigami.Units.smallSpacing
+			leftPadding: Kirigami.Units.largeSpacing
+			rightPadding: Kirigami.Units.largeSpacing
+
+			anchors.bottom: parent.bottom
+			anchors.left: parent.left
+			anchors.margins: 6
+
+			z: 99
+
+			background: Rectangle {
+				radius: height
+
+				Kirigami.Theme.colorSet: Kirigami.Theme.Window
+				color: Kirigami.Theme.backgroundColor
+
+				layer.enabled: true
+				layer.effect: DropShadow {
+					cached: true
+					horizontalOffset: 0
+					verticalOffset: 1
+					radius: 2.0
+					samples: 17
+					color: "#30000000"
+				}
+			}
 		}
 	}
 }
