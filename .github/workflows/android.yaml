@@ -23,13 +23,13 @@ jobs:
           packages: ndk;19.2.5345600
           cache: true
 
-      - runs: |
+      - run: |
           sudo dnf install qbs
 
-      - runs: |
+      - run: |
           qbs setup-android mald
 
-      - runs: |
+      - run: |
           qbs resolve profile:mald project.vendoredKirigami:true project.vendoredQQC2BreezeStyle:false products.HarmonyProtocol.install:false 'products.harmony-qt-sdk.install:false' project.vendoredKItemModels:true modules.qbs.architectures:{{ $matrix.arch }}
 
       - uses: actions/upload-artifact@v2
