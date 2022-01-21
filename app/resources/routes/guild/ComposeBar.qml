@@ -9,12 +9,15 @@ import org.kde.kirigami 2.15 as Kirigami
 import QtQuick.Controls 2.10 as QQC2
 import QtQuick.Dialogs 1.3 as Dialogs
 import com.github.HarmonyDevelopment.Challah 1.0
+import QtQuick.Controls.Material 2.12
 
 import "components" as Components
 import "qrc:/components" as GlobalComponents
 
 QQC2.ToolBar {
 	id: composeRow
+
+	Material.background: Kirigami.Theme.backgroundColor
 
 	function send() {
 		timelineView.model.send(txtField.text, overrideAvatar.overrideData, page.interactionID)
@@ -29,6 +32,7 @@ QQC2.ToolBar {
 		onAccepted: timelineView.model.sendFiles(this.fileUrls)
 	}
 
+    padding: Kirigami.Units.smallSpacing
 	implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset, contentItem.implicitWidth + leftPadding + rightPadding)
 	implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset, contentItem.implicitHeight + topPadding + bottomPadding)
 
@@ -156,6 +160,7 @@ QQC2.ToolBar {
 			}
 
 			QQC2.Button {
+			    flat: tStyleName === "Material"
 				Accessible.name: qsTr("Upload files")
 				icon.name: "mail-attachment"
 				onClicked: fileDialog.open()
@@ -200,6 +205,7 @@ QQC2.ToolBar {
 				Layout.fillWidth: true
 			}
 			QQC2.Button {
+			    flat: tStyleName === "Material"
 				Accessible.name: qsTr("Send message")
 				icon.name: "document-send"
 				onClicked: composeRow.send()

@@ -49,16 +49,6 @@ int main(int argc, char *argv[])
 
 #if defined(Q_OS_ANDROID)
 	QQuickStyle::setStyle(QStringLiteral("Material"));
-#elif defined(Q_OS_LINUX) && !defined(CHALLAH_VENDORED_KIRIGAMI)
-	QApplication::setStyle("Breeze");
-	QIcon::setThemeName("breeze");
-	QQuickStyle::setStyle("org.kde.desktop");
-#endif
-
-#ifdef CHALLAH_VENDORED_QQC2_BREEZE_STYLE
-	// this works awfully
-	// QQuickStyle::setStyle("qrc:/org/kde/breeze");
-	QQuickStyle::setStyle("Material");
 #endif
 
 	QQmlApplicationEngine engine;

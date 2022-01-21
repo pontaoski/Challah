@@ -3,6 +3,7 @@
 #include "conditional.h"
 #include "utils.h"
 
+#include <QQuickStyle>
 #include "qquickrelationallistener.h"
 #include "setup.h"
 #undef signal
@@ -99,6 +100,8 @@ void setupQML(QQmlEngine* engine)
 #if CHALLAH_ENABLE_VOICE
 	qRegisterMetaType<voiceCall*>();
 #endif
+
+	engine->rootContext()->setContextProperty("tStyleName", QQuickStyle::name());
 
 	qRegisterMetaType<Future<ChannelsModel*>>();
 	qRegisterMetaType<Future<MembersModel*>>();

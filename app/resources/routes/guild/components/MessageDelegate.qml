@@ -23,28 +23,24 @@ QQC2.Control {
 	readonly property bool separateFromPrevious: del.previousMessageID == "" || (previousData.data.author != messageData.data.author) || (previousData.data.overrideAvatar != messageData.data.overrideAvatar) || (previousData.data.overrideName != messageData.data.overrideName)
 	// readonly property bool canDeleteMessage: isOwnMessage
 
-	// topPadding: del.separateFromPrevious ? Kirigami.Units.largeSpacing : Kirigami.Units.smallSpacing
+	topPadding: del.separateFromPrevious ? Kirigami.Units.largeSpacing : Kirigami.Units.smallSpacing
 	bottomPadding: 0
 
 	Accessible.role: Accessible.ListItem
 	Accessible.name: "mu"
 
-	// Kirigami.Theme.backgroundColor: {
-	// 	if (isOwnMessage)
-	// 		return Kirigami.ColorUtils.tintWithAlpha(Kirigami.Theme.backgroundColor, Kirigami.Theme.focusColor, 0.1)
+	Kirigami.Theme.backgroundColor: {
+		if (isOwnMessage)
+			return Kirigami.ColorUtils.tintWithAlpha(Kirigami.Theme.backgroundColor, Kirigami.Theme.focusColor, 0.1)
 
-	// 	if (Kirigami.ColorUtils.brightnessForColor(messagesViewRoot.Kirigami.Theme.backgroundColor) == Kirigami.ColorUtils.Light)
-	// 		return Qt.darker(messagesViewRoot.Kirigami.Theme.backgroundColor, 1.1)
-	// 	else
-	// 		return Qt.lighter(messagesViewRoot.Kirigami.Theme.backgroundColor, 1.3)
-	// }
+		if (Kirigami.ColorUtils.brightnessForColor(page.Kirigami.Theme.backgroundColor) == Kirigami.ColorUtils.Light)
+			return Qt.darker(page.Kirigami.Theme.backgroundColor, 1.1)
+		else
+			return Qt.lighter(page.Kirigami.Theme.backgroundColor, 1.3)
+	}
 
 	Kirigami.Theme.colorSet: {
-		return Kirigami.Theme.Button
-		// if (Array.from(messagesSelectionModel.selectedIndexes).includes(modelIndex)) {
-		//     return Kirigami.Theme.Selection
-		// }
-		// return messagesRoute.model.userID() == authorID ? Kirigami.Theme.Button : Kirigami.Theme.Window
+		return isOwnMessage ? Kirigami.Theme.Button : Kirigami.Theme.Window
 	}
 	Kirigami.Theme.inherit: false
 
