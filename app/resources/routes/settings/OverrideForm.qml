@@ -16,6 +16,7 @@ Kirigami.FormLayout {
     width: 600
 
     property alias data_display: display.text
+    property alias data_avatar: avatar.text
     property alias data_before: before.text
     property alias data_after: after.text
 
@@ -52,5 +53,12 @@ Kirigami.FormLayout {
         wrapMode: Text.Wrap
         Layout.maximumWidth: 300
         Layout.fillWidth: true
+    }
+    RowLayout {
+        Kirigami.FormData.label: qsTr("Avatar URL:")
+
+        QQC2.TextField {
+            id: avatar
+        }
     }
 }

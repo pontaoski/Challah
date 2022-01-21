@@ -68,7 +68,7 @@ Item {
                 if (!ok) {
                     return
                 }
-                overridesSettings.model.addOverride(formLayout.data_display, "", formLayout.data_before, formLayout.data_after)
+                overridesSettings.model.addOverride(formLayout.data_display, formLayout.data_avatar, formLayout.data_before, formLayout.data_after)
             }
 
             width: 600
