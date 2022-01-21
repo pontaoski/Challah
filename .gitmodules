@@ -1,18 +1,6 @@
 [submodule "vendor/kirigami"]
 	path = vendor/kirigami
 	url = https://invent.kde.org/frameworks/kirigami
-[submodule "vendor/qqc2-breeze-style"]
-	path = vendor/qqc2-breeze-style
-	url = https://invent.kde.org/plasma/qqc2-breeze-style.git
-[submodule "vendor/kguiaddons"]
-	path = vendor/kguiaddons
-	url = https://invent.kde.org/frameworks/kguiaddons.git
 [submodule "vendor/Chometz"]
 	path = vendor/Chometz
 	url = https://github.com/harmony-development/Chometz.git
-[submodule "vendor/android_openssl"]
-	path = vendor/android_openssl
-	url = https://github.com/KDAB/android_openssl.git
-[submodule "vendor/kitemmodels"]
-	path = vendor/kitemmodels
-	url = https://invent.kde.org/frameworks/kitemmodels.git
