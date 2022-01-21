@@ -1,3 +1,5 @@
+import qbs.FileInfo
+
 QtApplication {
 	name: "Challah"
 
@@ -8,13 +10,24 @@ QtApplication {
 	cpp.enableExceptions: true
 	cpp.enableReproducibleBuilds: true
 	cpp.enableRtti: true
+	cpp.defines: iconsDir.length > 0 ? ["CHALLAH_BUNDLED_ICONS=1"] : []
 
 	debugInformationInstallDir: "bin"
 	installDebugInformation: true
 
+	property string iconsDir: ""
+
 	files: [
 		"main.cpp",
 	]
+
+	Group {
+		condition: product.iconsDir.length > 0
+		files: [product.iconsDir]
+		fileTags: "qt.core.resource_data"
+		Qt.core.resourceSourceBase: product.iconsDir.slice(0, -FileInfo.baseName(product.iconsDir).length)
+		Qt.core.resourcePrefix: "/"
+	}
 
 	Group {
 		files: ["resources/**"]

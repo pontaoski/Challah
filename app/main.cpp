@@ -12,6 +12,7 @@
 #include <QThreadPool>
 #include <QLibraryInfo>
 #include <QTranslator>
+#include <QResource>
 
 #ifdef Q_OS_ANDROID
 
@@ -49,6 +50,14 @@ int main(int argc, char *argv[])
 
 #if defined(Q_OS_ANDROID)
 	QQuickStyle::setStyle(QStringLiteral("Material"));
+#endif
+#if defined(CHALLAH_BUNDLED_ICONS)
+	if (!QResource::registerResource(":/breeze-icons.rcc", "/icons/bundled-breeze")) {
+		qWarning() << "failed to register icons resource!";
+	} else {
+		qDebug() << "registered icons resource!";
+	}
+	QIcon::setThemeName("bundled-breeze");
 #endif
 
 	QQmlApplicationEngine engine;

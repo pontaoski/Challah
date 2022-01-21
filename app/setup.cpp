@@ -57,6 +57,8 @@ Q_IMPORT_PLUGIN(QQC2BreezeStylePlugin)
 
 #endif
 
+#include <QtSvg>
+
 Q_DECLARE_METATYPE(Future<ChannelsModel*>)
 Q_DECLARE_METATYPE(Future<MembersModel*>)
 Q_DECLARE_METATYPE(Future<MessagesModel*>)
@@ -81,6 +83,9 @@ void setupQML(QQmlEngine* engine)
 #ifdef CHALLAH_VENDORED_KITEMMODELS
 	Q_INIT_RESOURCE(kitemmodelsqml);
 #endif
+
+	QSvgRenderer rend;
+	(void) rend;
 
 	qRegisterMetaType<Croutons::FutureBase>();
 
