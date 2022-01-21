@@ -23,6 +23,7 @@ Kirigami.ScrollablePage {
 	property string guildID: routerInstance.guildID
 	property string channelID: routerInstance.channelID
 
+	implicitWidth: 400
 
 	RelationalListener {
 		id: channelData
