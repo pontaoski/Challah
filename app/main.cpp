@@ -93,10 +93,10 @@ int main(int argc, char *argv[])
 #ifdef Q_OS_ANDROID
 	QtAndroid::runOnAndroidThread([=]() {
 		QAndroidJniObject window = QtAndroid::androidActivity().callObjectMethod("getWindow", "()Landroid/view/Window;");
-		window.callMethod<void>("addFlags", "(I)V", FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-		window.callMethod<void>("clearFlags", "(I)V", FLAG_TRANSLUCENT_STATUS);
-		window.callMethod<void>("setStatusBarColor", "(I)V", QColor("#2196f3").rgba());
-		window.callMethod<void>("setNavigationBarColor", "(I)V", QColor("#2196f3").rgba());
+		// window.callMethod<void>("addFlags", "(I)V", FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+		// window.callMethod<void>("clearFlags", "(I)V", FLAG_TRANSLUCENT_STATUS);
+		window.callMethod<void>("setStatusBarColor", "(I)V", QColor("#ffffff").rgba());
+		window.callMethod<void>("setNavigationBarColor", "(I)V", QColor("#ffffff").rgba());
 	});
 #endif
 

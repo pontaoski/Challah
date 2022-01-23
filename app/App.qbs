@@ -72,6 +72,8 @@ QtApplication {
 		Qt.core.resourcePrefix: "/po"
 	}
 
+	Android.sdk.packageName: "com.github.HarmonyDevelopment.Challah"
+
 	Depends { name: "harmony-qt-sdk" }
 	Depends { name: "HarmonyProtocol" }
 	Depends { name: "ChallahShared" }
