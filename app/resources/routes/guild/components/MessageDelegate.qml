@@ -31,7 +31,7 @@ QQC2.Control {
 
 	Kirigami.Theme.backgroundColor: {
 		if (isOwnMessage)
-			return Kirigami.ColorUtils.tintWithAlpha(Kirigami.Theme.backgroundColor, Kirigami.Theme.focusColor, 0.1)
+			return Kirigami.ColorUtils.tintWithAlpha(page.Kirigami.Theme.backgroundColor, Kirigami.Theme.focusColor, 0.1)
 
 		if (Kirigami.ColorUtils.brightnessForColor(page.Kirigami.Theme.backgroundColor) == Kirigami.ColorUtils.Light)
 			return Qt.darker(page.Kirigami.Theme.backgroundColor, 1.1)
