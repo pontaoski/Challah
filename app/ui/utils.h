@@ -20,6 +20,6 @@ public:
 	~Utils();
 
 	Q_INVOKABLE QString formattedSize(int size);
-	Q_INVOKABLE void formatDocument(State* s, QQuickTextDocument* txt, QQuickItem* field, QJsonObject obj);
+	Q_INVOKABLE void formatDocument(State* s, QQuickTextDocument* txt, QQuickItem* field, QJsonObject obj, bool hideLastChar = false);
 
 };

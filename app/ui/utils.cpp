@@ -42,7 +42,7 @@ QString operator"" _qs (const char* s, std::size_t len)
 	return QString::fromUtf8( s, len );
 }
 
-void Utils::formatDocument(State* s, QQuickTextDocument* txt, QQuickItem* field, QJsonObject obj)
+void Utils::formatDocument(State* s, QQuickTextDocument* txt, QQuickItem* field, QJsonObject obj, bool hideLastChar)
 {
 	using namespace protocol::chat::v1;
 
@@ -62,6 +62,18 @@ void Utils::formatDocument(State* s, QQuickTextDocument* txt, QQuickItem* field,
 	QColor warColor = QQmlProperty(field, "Kirigami.Theme.neutralTextColor", qmlContext(field)).read().value<QColor>();
 	QColor posColor = QQmlProperty(field, "Kirigami.Theme.positiveTextColor", qmlContext(field)).read().value<QColor>();
 	const QFont fixedFont = QFontDatabase::systemFont(QFontDatabase::FixedFont);
+
+	if (hideLastChar) {
+		QTextCursor curs(doku);
+
+		curs.movePosition(QTextCursor::End);
+		curs.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
+
+		QTextCharFormat cfmt;
+		cfmt.setForeground(Qt::transparent);
+
+		curs.mergeCharFormat(cfmt);
+	}
 
 	for (const auto& entity : fmt.format()) {
 		QTextCharFormat cfmt;

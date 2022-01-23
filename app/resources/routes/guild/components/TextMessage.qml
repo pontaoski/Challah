@@ -38,11 +38,11 @@ QQC2.Control {
 			id: textEdit
 			text: textData.data.contentText.text + _background.textPadding
 
-			Component.onCompleted: UIUtils.formatDocument(CState, textEdit.textDocument, textEdit, textData.data.contentText)
+			Component.onCompleted: UIUtils.formatDocument(CState, textEdit.textDocument, textEdit, textData.data.contentText, true)
 			Connections {
 				target: textData.data
 				function onContentTextChanged() {
-					UIUtils.formatDocument(CState, textEdit.textDocument, textEdit, textData.data.contentText)
+					UIUtils.formatDocument(CState, textEdit.textDocument, textEdit, textData.data.contentText, true)
 				}
 			}
 
