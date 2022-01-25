@@ -16,7 +16,7 @@ QQC2.Control {
 	readonly property string resolvedAvatar: messageData.data.overrideAvatar || userData.data.avatarURL
 	readonly property string resolvedName: messageData.data.overrideName || userData.data.name
 
-	readonly property int recommendedSize: Math.max(del.width / 3, Kirigami.Units.gridUnit * 15) // (rootRow.wideMode ? Math.max(del.width / 3, Kirigami.Units.gridUnit * 15) : (del.width * 0.8))
+	readonly property int recommendedSize: Math.max(del.width / 3, Kirigami.Units.gridUnit * 15) // (colView.wideMode ? Math.max(del.width / 3, Kirigami.Units.gridUnit * 15) : (del.width * 0.8))
 
 	readonly property bool isOwnMessage: messageData.data.author === CState.ownID
 	readonly property bool showAvatar: del.nextMessageID == "" || (nextData.data.author != messageData.data.author) || (nextData.data.overrideAvatar != messageData.data.overrideAvatar) || (nextData.data.overrideName != messageData.data.overrideName) // && (!(Kirigami.Settings.isMobile && isOwnMessage))

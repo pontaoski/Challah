@@ -175,7 +175,11 @@ Control {
 					}
 					Button {
 						icon.name: "configure"
-						onClicked: colView.layers.push(Qt.resolvedUrl("qrc:/routes/guild/settings/Settings.qml"))
+						onClicked: if (Kirigami.Settings.isMobile) {
+							colView.layers.push(Qt.resolvedUrl("qrc:/routes/guild/settings/mobile/Settings.qml"))
+						} else {
+							colView.layers.push(Qt.resolvedUrl("qrc:/routes/guild/settings/Settings.qml"))
+						}
 					}
 					Layout.fillWidth: true
 					Layout.margins: 8
