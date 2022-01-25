@@ -187,7 +187,7 @@ QQC2.ToolBar {
 				verticalAlignment: Qt.AlignVCenter
 
 				QQC2.Label {
-					visible: !txtField.text
+					visible: !txtField.text && !txtField.preeditText
 
 					text: enabled ? qsTr("Write your message…") : qsTr("You cannot send messages.")
 					anchors.verticalCenter: parent.verticalCenter
