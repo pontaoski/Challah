@@ -83,11 +83,6 @@ OverlappingPanels::OverlappingPanels(QQuickItem* parent) : QQuickItem(parent)
 		}
 	});
 	connect(m_animation, &QVariantAnimation::finished, [=]() {
-		if (m_state != State::Center) {
-			m_centerPanel->setOpacity(0.7);
-		} else {
-			m_centerPanel->setOpacity(1.0);
-		}
 		handlePositionChange();
 	});
 
@@ -111,7 +106,6 @@ void OverlappingPanels::handlePositionChange()
 			m_expansionFromWidth = m_centerPanel->width();
 			m_expansionFromX = m_centerPanel->x();
 
-			m_centerPanel->setOpacity(1.0);
 			m_expansionAnimation->start();
 
 			m_leftPanel->blockSignals(true);

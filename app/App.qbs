@@ -72,7 +72,10 @@ QtApplication {
 		Qt.core.resourcePrefix: "/po"
 	}
 
-	Android.sdk.packageName: "com.github.HarmonyDevelopment.Challah"
+	Properties {
+		condition: qbs.targetOS.contains("android")
+		Android.sdk.packageName: "com.github.HarmonyDevelopment.Challah"
+	}
 
 	Depends { name: "harmony-qt-sdk" }
 	Depends { name: "HarmonyProtocol" }

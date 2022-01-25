@@ -184,11 +184,13 @@ QQC2.ToolBar {
 				color: Kirigami.Theme.textColor
 				selectedTextColor: Kirigami.Theme.highlightedTextColor
 				selectionColor: Kirigami.Theme.highlightColor
+				verticalAlignment: Qt.AlignVCenter
 
 				QQC2.Label {
 					visible: !txtField.text
 
 					text: enabled ? qsTr("Write your message…") : qsTr("You cannot send messages.")
+					anchors.verticalCenter: parent.verticalCenter
 
 					opacity: 0.5
 				}
@@ -201,7 +203,9 @@ QQC2.ToolBar {
 						event.accepted = false
 					}
 				}
+
 				Keys.onTabPressed: nextItemInFocusChain().forceActiveFocus(Qt.TabFocusReason)
+				Layout.fillHeight: true
 				Layout.fillWidth: true
 			}
 			QQC2.Button {

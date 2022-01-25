@@ -189,6 +189,7 @@ Control {
 
 				Layout.preferredWidth: 200
 				Layout.fillHeight: true
+				Layout.fillWidth: true
 
 				delegate: Kirigami.BasicListItem {
 					id: del

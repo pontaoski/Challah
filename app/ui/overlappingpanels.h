@@ -48,6 +48,22 @@ public:
 		Vertical
 	};
 
+	void grab(QTouchEvent::TouchPoint* ev)
+	{
+		grabTouchPoints({ev->id()});
+	}
+
+	void grab(QMouseEvent* ev)
+	{
+		grabMouse();
+	}
+
+	void ungrab()
+	{
+		ungrabTouchPoints();
+		ungrabMouse();
+	}
+
 	template <typename T>
 	bool handlePointerEvent(EventKind kind, T event)
 	{
@@ -84,6 +100,8 @@ public:
 			return false;
 		} else if (kind == EventKind::Up) {
 			down = false;
+
+			ungrab();
 
 			if (inThreshold) {
 				m_state = State::Center;
@@ -137,6 +155,7 @@ public:
 			}
 			setPreviousPoint(event->pos());
 			m_swipeState = SwipeState::Horizontal;
+			grab(event);
 
 			inThreshold = false;
 

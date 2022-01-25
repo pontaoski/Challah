@@ -102,7 +102,8 @@ Kirigami.ScrollablePage {
 		id: timelineView
 
 		model: CState.messagesModelFor(page.homeserver, page.guildID, page.channelID, this)
-		reuseItems: true
+		// TODO: bugs
+		// reuseItems: true
 		verticalLayoutDirection: ListView.BottomToTop
 		activeFocusOnTab: true
 
