@@ -37,15 +37,36 @@ Kirigami.ScrollablePage {
 	}
 
 	header: GlobalComponents.Header {
-		RowLayout {
-			Kirigami.Heading {
-				level: 4
+		ColumnLayout {
+			QQC2.Label {
 				text: tryit(() => `#${channelData.data.name}`, "Channel")
+
+				Layout.fillWidth: true
+			}
+			RowLayout {
+				TypingDots { visible: timelineView.model.nowTyping.length > 0 }
+				QQC2.Label {
+					text: timelineView.model.nowTyping.length === 0 ?
+						qsTr("Nobody is typing") :
+						qsTr("%1 is typing...", "", timelineView.model.nowTyping.length).arg(
+						UIUtils.naturalList(
+							timelineView.model.nowTyping.map((item) =>
+								CState.membersStore.data([routerInstance.guildHomeserver, CState.ownID], 0) || "")))
+					opacity: timelineView.model.nowTyping.length == 0 ? 0.4 : 1.0
+					color: timelineView.model.nowTyping.length == 0 ?
+						Kirigami.Theme.textColor :
+						Kirigami.Theme.focusColor
+
+					font: Kirigami.Theme.smallFont
+
+					Layout.fillWidth: true
+				}
 
 				Layout.fillWidth: true
 			}
 
 			Layout.margins: 8
+			Layout.fillWidth: true
 		}
 	}
 

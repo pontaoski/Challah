@@ -12,6 +12,7 @@ class MessagesModel : public QAbstractListModel
 
 	Q_OBJECT
 	Q_PROPERTY(MessagesStore* store READ store CONSTANT)
+	Q_PROPERTY(QStringList nowTyping READ nowTyping NOTIFY nowTypingChanged)
 
 	struct Private;
 	QScopedPointer<Private> d;
@@ -25,6 +26,11 @@ public:
 
 	MessagesStore* store();
 
+	QStringList nowTyping();
+	Q_SIGNAL void nowTypingChanged();
+
+	Croutons::FutureBase typing();
+	Q_INVOKABLE void doTyping();
 	Q_INVOKABLE Croutons::FutureBase send(QString txt, QVariant override, QString inReplyTo = "");
 	Q_INVOKABLE Croutons::FutureBase sendFiles(const QList<QUrl>& txt);
 	Q_INVOKABLE Croutons::FutureBase deleteMessage(const QString& id);

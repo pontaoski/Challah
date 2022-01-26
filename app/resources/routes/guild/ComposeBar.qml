@@ -181,6 +181,9 @@ QQC2.ToolBar {
 				selectByMouse: !Kirigami.Settings.isMobile
 				wrapMode: Text.Wrap
 
+				readonly property var model: CState.messagesModelFor(page.homeserver, page.guildID, page.channelID, this)
+				onTextChanged: if (text !== "") model.doTyping()
+
 				color: Kirigami.Theme.textColor
 				selectedTextColor: Kirigami.Theme.highlightedTextColor
 				selectionColor: Kirigami.Theme.highlightColor

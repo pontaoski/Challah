@@ -2,6 +2,7 @@
 
 #include <QtConcurrent>
 #include <QHttpMultiPart>
+#include <chrono>
 
 #include "messages_model_p.h"
 #include "overrides_model_p.h"
@@ -18,6 +19,9 @@ MessagesModel::MessagesModel(QString host, quint64 guildID, quint64 channelID, S
 	d->store.reset(new MessagesStore(this, state, host));
 	d->guildID = guildID;
 	d->channelID = channelID;
+	d->typingTimer = new QTimer(this);
+	d->typingTimer->setInterval(std::chrono::milliseconds(5000));
+	d->typingTimer->setSingleShot(true);
 
 	state->api()->subscribeToGuild(host, guildID);
 	connect(state->api(), &SDK::ClientManager::chatEvent, this, [=](QString hs, protocol::chat::v1::StreamEvent ev) {
@@ -27,6 +31,36 @@ MessagesModel::MessagesModel(QString host, quint64 guildID, quint64 channelID, S
 		}
 
 		switch (ev.event_case()) {
+		case StreamEvent::kTyping: {
+			auto sm = ev.typing();
+			if (sm.guild_id() != d->guildID || sm.channel_id() != d->channelID) {
+				return;
+			}
+
+			const auto user = sm.user_id();
+			if (d->typingTimers.contains(user)) {
+				d->typingTimers[user]->start();
+
+				return;
+			}
+
+			auto timer = new QTimer(this);
+			timer->setInterval(std::chrono::milliseconds(5500));
+			timer->setSingleShot(true);
+			connect(timer, &QTimer::timeout, [timer, user, this]() {
+				d->typingTimers.remove(user);
+				d->typingUsers.removeAll(user);
+				timer->deleteLater();
+
+				Q_EMIT nowTypingChanged();
+			});
+
+			d->typingTimers[user] = timer;
+			d->typingUsers << user;
+			timer->start();
+			Q_EMIT nowTypingChanged();
+			break;
+		}
 		case StreamEvent::kSentMessage: {
 			auto sm = ev.sent_message();
 			auto it = sm.message();
@@ -73,6 +107,39 @@ bool MessagesModel::canFetchMore(const QModelIndex &parent) const
 	Q_UNUSED(parent)
 
 	return d->canFetchMore && !d->isFetching;
+}
+
+Croutons::FutureBase MessagesModel::typing()
+{
+	protocol::chat::v1::TypingRequest req;
+	req.set_guild_id(d->guildID);
+	req.set_channel_id(d->channelID);
+
+	auto resp = co_await s->api()->dispatch(host, &SDK::R::Typing, req);
+	Q_UNUSED(resultOk(resp));
+	
+	co_return {};
+}
+
+void MessagesModel::doTyping()
+{
+	if (d->typingTimer->isActive()) {
+		return;
+	}
+
+	typing();
+	d->typingTimer->start();
+}
+
+QStringList MessagesModel::nowTyping()
+{
+	QStringList ret;
+
+	for (auto user : d->typingUsers) {
+		ret << QString::number(user);
+	}
+
+	return ret;
 }
 
 void MessagesModel::fetchMore(const QModelIndex &parent)

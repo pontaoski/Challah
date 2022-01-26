@@ -187,3 +187,8 @@ void Utils::formatDocument(State* s, QQuickTextDocument* txt, QQuickItem* field,
 		}
 	}
 }
+
+QString Utils::naturalList(const QStringList& list)
+{
+	return QLocale().createSeparatedList(list);
+}

@@ -21,5 +21,6 @@ public:
 
 	Q_INVOKABLE QString formattedSize(int size);
 	Q_INVOKABLE void formatDocument(State* s, QQuickTextDocument* txt, QQuickItem* field, QJsonObject obj, bool hideLastChar = false);
+	Q_INVOKABLE QString naturalList(const QStringList& list);
 
 };

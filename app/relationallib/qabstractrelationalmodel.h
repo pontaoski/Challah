@@ -2,6 +2,7 @@
 
 #include <QHash>
 #include <QObject>
+#include <QVariant>
 
 class ChallahAbstractRelationalModel : public QObject
 {
@@ -21,21 +22,21 @@ public:
     }
     virtual ~ChallahAbstractRelationalModel() {};
 
-    virtual QVariant data(const QVariant& key, int role = Qt::DisplayRole) = 0;
+    Q_INVOKABLE virtual QVariant data(const QVariant& key, int role = Qt::DisplayRole) = 0;
 
     // check whether or not 'key' is a valid key
-    virtual bool checkKey(const QVariant& key) = 0;
+    Q_INVOKABLE virtual bool checkKey(const QVariant& key) = 0;
 
-    virtual bool canFetchKey(const QVariant& key)
+    Q_INVOKABLE virtual bool canFetchKey(const QVariant& key)
     {
         return false;
     }
-    virtual void fetchKey(const QVariant& key)
+    Q_INVOKABLE virtual void fetchKey(const QVariant& key)
     {
         Q_UNUSED(key)
     }
 
-    virtual QHash<int, QByteArray> roleNames()
+    Q_INVOKABLE virtual QHash<int, QByteArray> roleNames()
     {
         return {
             { Qt::DisplayRole, "display" },
