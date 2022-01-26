@@ -11,7 +11,7 @@ Project {
 	AutotestRunner { }
 
 	SubProject {
-		filePath: "app/GStreamerTest.qbs"
+		filePath: "app/voice/GStreamerTest.qbs"
 		condition: project.enableVoice
 	}
 	SubProject {
