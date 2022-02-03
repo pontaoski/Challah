@@ -21,21 +21,22 @@ inline Croutons::FutureResult<QString> uploadFile(State* state, QString host, QU
 	file->open(QIODevice::ReadOnly);
 
 	const auto fname = QString::fromLocal8Bit(QUrl::toPercentEncoding(url.fileName()));
+	const auto mimetype = QMimeDatabase().mimeTypeForFileNameAndData(url.fileName(), file);
+	file->seek(0);
 
 	QHttpPart filePart;
 	filePart.setBodyDevice(file);
 	filePart.setHeader(
 		QNetworkRequest::ContentDispositionHeader,
 		QString("form-data; name=\"file\"; filename=\"%1\"").arg(fname));
-	QMimeDatabase db;
-	const auto mt = db.mimeTypeForUrl(url);
-	filePart.setHeader(QNetworkRequest::ContentTypeHeader, mt.name());
+
+	filePart.setHeader(QNetworkRequest::ContentTypeHeader, mimetype.name());
 
 	mp->append(filePart);
 
 	QUrlQuery query;
 	query.addQueryItem("filename", url.fileName());
-	query.addQueryItem("contentType", QMimeDatabase().mimeTypeForFile(furl).name());
+	query.addQueryItem("contentType", mimetype.name());
 
 	auto c = co_await state->api()->clientForHomeserver(host);
 
