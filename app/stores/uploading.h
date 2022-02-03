@@ -16,7 +16,8 @@ inline Croutons::FutureResult<QString> uploadFile(State* state, QString host, QU
 {
 	QHttpMultiPart *mp = new QHttpMultiPart(QHttpMultiPart::FormDataType);
 
-	QFile* file(new QFile(url.toLocalFile()));
+	const auto furl = url.isLocalFile() ? url.toLocalFile() : url.toString();
+	QFile* file(new QFile(furl));
 	file->open(QIODevice::ReadOnly);
 
 	const auto fname = QString::fromLocal8Bit(QUrl::toPercentEncoding(url.fileName()));
@@ -34,7 +35,7 @@ inline Croutons::FutureResult<QString> uploadFile(State* state, QString host, QU
 
 	QUrlQuery query;
 	query.addQueryItem("filename", url.fileName());
-	query.addQueryItem("contentType", QMimeDatabase().mimeTypeForFile(url.toLocalFile()).name());
+	query.addQueryItem("contentType", QMimeDatabase().mimeTypeForFile(furl).name());
 
 	auto c = co_await state->api()->clientForHomeserver(host);
 
