@@ -31,6 +31,7 @@ public:
 
 	Croutons::FutureBase typing();
 	Q_INVOKABLE void doTyping();
+	void echoMessage(protocol::chat::v1::SendMessageRequest& req);
 	Q_INVOKABLE Croutons::FutureBase send(QString txt, QVariant override, QString inReplyTo = "");
 	Q_INVOKABLE Croutons::FutureBase sendFiles(const QList<QUrl>& txt);
 	Q_INVOKABLE Croutons::FutureBase deleteMessage(const QString& id);

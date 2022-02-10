@@ -2,6 +2,7 @@
 
 #include <QtConcurrent>
 #include <QHttpMultiPart>
+#include <QRandomGenerator>
 #include <chrono>
 
 #include "messages_model_p.h"
@@ -66,6 +67,13 @@ MessagesModel::MessagesModel(QString host, quint64 guildID, quint64 channelID, S
 			auto it = sm.message();
 			if (sm.guild_id() != d->guildID || sm.channel_id() != d->channelID) {
 				return;
+			}
+			if (sm.has_echo_id()) {
+				const auto eid = MessageID { MessageID::Echo, sm.echo_id() };
+				auto idx = d->messageIDs.indexOf(eid);
+				beginRemoveRows(QModelIndex(), idx, idx);
+				d->messageIDs.removeAll(eid);
+				endRemoveRows();
 			}
 			beginInsertRows(QModelIndex(), 0, 0);
 			d->messageIDs.prepend(MessageID { MessageID::Remote, sm.message_id() });
@@ -221,6 +229,17 @@ MessagesStore* MessagesModel::store()
 	return d->store.get();
 }
 
+void MessagesModel::echoMessage(protocol::chat::v1::SendMessageRequest& req)
+{
+	const auto echo = QRandomGenerator::system()->generate64();
+	req.set_echo_id(echo);
+	d->store->echoMessage(echo, req);
+
+	beginInsertRows(QModelIndex(), 0, 0);
+	d->messageIDs.prepend(MessageID { MessageID::Echo, echo });
+	endInsertRows();
+}
+
 FutureBase MessagesModel::send(QString txt, QVariant override, QString inReplyTo)
 {
 	protocol::chat::v1::SendMessageRequest req;
@@ -266,6 +285,7 @@ FutureBase MessagesModel::send(QString txt, QVariant override, QString inReplyTo
 			req.mutable_content()->mutable_text_message()->mutable_content()->set_text(txt.toStdString());
 		}
 	}
+	echoMessage(req);
 	co_await s->api()->dispatch(host, &SDK::R::SendMessage, req);
 	co_return QVariant();
 }
@@ -380,6 +400,7 @@ color warning text
 	req.set_guild_id(d->guildID);
 	req.set_channel_id(d->channelID);
 
+	echoMessage(req);
 	co_await s->api()->dispatch(host, &SDK::R::SendMessage, req);
 	co_return QVariant();
 }
@@ -405,6 +426,7 @@ FutureBase MessagesModel::sendFiles(const QList<QUrl>& urls)
 	req.set_guild_id(d->guildID);
 	req.set_channel_id(d->channelID);
 
+	echoMessage(req);
 	co_await s->api()->dispatch(host, &SDK::R::SendMessage, req);
 	co_return QVariant();
 }

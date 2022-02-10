@@ -3,6 +3,7 @@
 
 #include "messages_p.h"
 #include "messages_model.h"
+#include "state.h"
 
 enum Roles {
 	// universal
@@ -144,6 +145,20 @@ void MessagesStore::editMessage(quint64 id, protocol::chat::v1::FormattedText co
 	}
 	d->messages[mid].mutable_content()->mutable_text_message()->mutable_content()->Swap(&content);
 	Q_EMIT keyDataChanged(QString::number(id), {ContentText});
+}
+
+void MessagesStore::echoMessage(quint64 id, const protocol::chat::v1::SendMessageRequest& smr)
+{
+	const auto mid = MessageID { MessageID::Echo, id };
+
+	protocol::chat::v1::Message msg;
+	*msg.mutable_content() = smr.content();
+	*msg.mutable_overrides() = smr.overrides();
+	msg.set_author_id(s->ownID().toULongLong());
+	msg.set_in_reply_to(smr.in_reply_to());
+
+	d->messages[mid] = msg;
+	Q_EMIT keyAdded(mid.toString());
 }
 
 QHash<int, QByteArray> MessagesStore::roleNames()

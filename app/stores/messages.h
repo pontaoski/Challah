@@ -65,6 +65,7 @@ public:
 	~MessagesStore();
 
 	void newMessage(quint64 id, protocol::chat::v1::Message cont);
+	void echoMessage(quint64 id, const protocol::chat::v1::SendMessageRequest& smr);
 	void deleteMessage(quint64 id);
 	void editMessage(quint64 id, protocol::chat::v1::FormattedText content);
 
