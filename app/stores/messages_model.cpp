@@ -68,7 +68,7 @@ MessagesModel::MessagesModel(QString host, quint64 guildID, quint64 channelID, S
 				return;
 			}
 			beginInsertRows(QModelIndex(), 0, 0);
-			d->messageIDs.prepend(sm.message_id());
+			d->messageIDs.prepend(MessageID { MessageID::Remote, sm.message_id() });
 			d->store->newMessage(sm.message_id(), it);
 			endInsertRows();
 			dataChanged(index(1), index(1));
@@ -79,9 +79,9 @@ MessagesModel::MessagesModel(QString host, quint64 guildID, quint64 channelID, S
 			if (dm.guild_id() != d->guildID || dm.channel_id() != d->channelID) {
 				return;
 			}
-			auto idx = d->messageIDs.indexOf(dm.message_id());
+			auto idx = d->messageIDs.indexOf(MessageID { MessageID::Remote, dm.message_id() });
 			beginRemoveRows(QModelIndex(), idx, idx);
-			d->messageIDs.removeAll(dm.message_id());
+			d->messageIDs.removeAll(MessageID { MessageID::Remote, dm.message_id() });
 			d->store->deleteMessage(dm.message_id());
 			endRemoveRows();
 			break;
@@ -158,7 +158,7 @@ void MessagesModel::fetchMore(const QModelIndex &parent)
 	req.set_guild_id(d->guildID);
 	req.set_channel_id(d->channelID);
 	if (!d->messageIDs.isEmpty()) {
-		req.set_message_id(d->messageIDs.last());
+		req.set_message_id(d->messageIDs.last().id);
 		req.set_direction(protocol::chat::v1::GetChannelMessagesRequest::Direction::GetChannelMessagesRequest_Direction_DIRECTION_BEFORE_UNSPECIFIED);
 	}
 
@@ -177,7 +177,7 @@ void MessagesModel::fetchMore(const QModelIndex &parent)
 
 		beginInsertRows(QModelIndex(), d->messageIDs.length(), (d->messageIDs.length()+resp.messages_size())-1);
 		for (auto item : resp.messages()) {
-			d->messageIDs << item.message_id();
+			d->messageIDs << MessageID { MessageID::Remote, item.message_id() };
 			d->store->newMessage(item.message_id(), item.message());
 		}
 		endInsertRows();
@@ -200,15 +200,15 @@ QVariant MessagesModel::data(const QModelIndex& index, int role) const
 
 	switch (role) {
 	case Roles::ID:
-		return QString::number(d->messageIDs[r]);
+		return d->messageIDs[r].toString();
 	case Roles::Next:
 		if (r-1 < d->messageIDs.length() and r-1 >= 0) {
-			return QString::number(d->messageIDs[r-1]);
+			return d->messageIDs[r-1].toString();
 		}
 		return QString();
 	case Roles::Previous:
 		if (r+1 < d->messageIDs.length()) {
-			return QString::number(d->messageIDs[r+1]);
+			return d->messageIDs[r+1].toString();
 		}
 		return QString();
 	}

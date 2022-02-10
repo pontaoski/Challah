@@ -8,7 +8,7 @@
 struct MessagesModel::Private
 {
 	QScopedPointer<MessagesStore, QScopedPointerDeleteLater> store;
-	QList<quint64> messageIDs;
+	QList<MessageID> messageIDs;
 	QList<quint64> typingUsers;
 	QMap<quint64, QTimer*> typingTimers;
 	bool canFetchMore = true;

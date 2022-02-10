@@ -9,6 +9,44 @@
 class MessagesModel;
 class State;
 
+struct MessageID {
+	enum Kind {
+		Remote,
+		Echo,
+		Invalid,
+	};
+
+	Kind kind;
+	quint64 id;
+
+	bool operator<(const MessageID& rhs) const {
+		return kind < rhs.kind || id < rhs.id;
+	}
+	bool operator==(const MessageID& rhs) const {
+		return kind == rhs.kind && id == rhs.id;
+	}
+
+	static MessageID fromString(const QString& str) {
+		if (str.startsWith("echo:")) {
+			return MessageID { Echo, str.mid(5).toULongLong() };
+		} else if (str.startsWith("remote:")) {
+			return MessageID { Remote, str.mid(7).toULongLong() };
+		}
+		return MessageID { Invalid, 0 };
+	}
+	QString toString() const {
+		switch (kind) {
+		case Echo:
+			return "echo:" + QString::number(id);
+		case Remote:
+			return "remote:" + QString::number(id);
+		case Invalid:
+		default:
+			return "invalid";
+		}
+	}
+};
+
 class MessagesStore : public ChallahAbstractRelationalModel
 {
 

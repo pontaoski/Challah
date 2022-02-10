@@ -51,7 +51,7 @@ QVariant MessagesStore::data(const QVariant& key, int role)
 		return QVariant();
 	}
 
-	auto idx = key.toString().toULongLong();
+	auto idx = MessageID::fromString(key.toString());
 
 	switch (role) {
 	case Roles::Overrides:
@@ -108,7 +108,7 @@ QVariant MessagesStore::data(const QVariant& key, int role)
 
 bool MessagesStore::checkKey(const QVariant& key)
 {
-	return d->messages.contains(key.toString().toULongLong());
+	return d->messages.contains(MessageID::fromString(key.toString()));
 }
 
 bool MessagesStore::canFetchKey(const QVariant& key)
@@ -124,22 +124,25 @@ void MessagesStore::fetchKey(const QVariant& key)
 
 void MessagesStore::newMessage(quint64 id, protocol::chat::v1::Message cont)
 {
-	d->messages[id] = cont;
-	Q_EMIT keyAdded(QString::number(id));
+	const auto mid = MessageID { MessageID::Remote, id };
+	d->messages[mid] = cont;
+	Q_EMIT keyAdded(mid.toString());
 }
 
 void MessagesStore::deleteMessage(quint64 id)
 {
-	d->messages.remove(id);
-	Q_EMIT keyRemoved(QString::number(id));
+	const auto mid = MessageID { MessageID::Remote, id };
+	d->messages.remove(mid);
+	Q_EMIT keyRemoved(mid.toString());
 }
 
 void MessagesStore::editMessage(quint64 id, protocol::chat::v1::FormattedText content)
 {
-	if (d->messages[id].content().content_case() != protocol::chat::v1::Content::kTextMessage) {
+	const auto mid = MessageID { MessageID::Remote, id };
+	if (d->messages[mid].content().content_case() != protocol::chat::v1::Content::kTextMessage) {
 		return;
 	}
-	d->messages[id].mutable_content()->mutable_text_message()->mutable_content()->Swap(&content);
+	d->messages[mid].mutable_content()->mutable_text_message()->mutable_content()->Swap(&content);
 	Q_EMIT keyDataChanged(QString::number(id), {ContentText});
 }
 

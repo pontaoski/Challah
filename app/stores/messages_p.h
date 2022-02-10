@@ -7,5 +7,5 @@
 
 struct MessagesStore::Private
 {
-	QMap<quint64, protocol::chat::v1::Message> messages;
+	QMap<MessageID, protocol::chat::v1::Message> messages;
 };
